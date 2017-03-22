@@ -33,7 +33,7 @@ class SBMLTools(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
-    def filter_contigs(self, params, context=None):
+    def filter_contigs_changed(self, params, context=None):
         """
         The actual function is declared using 'funcdef' to specify the name
         and input/return arguments to the function.  For all typical KBase
@@ -71,8 +71,18 @@ class SBMLTools(object):
            Long, parameter "n_contigs_remaining" of Long
         """
         return self._client.call_method(
-            'SBMLTools.filter_contigs',
+            'SBMLTools.filter_contigs_changed',
             [params], self._service_ver, context)
+
+    def do_nothing(self, context=None):
+        return self._client.call_method(
+            'SBMLTools.do_nothing',
+            [], self._service_ver, context)
+
+    def do_nothing_but_auth(self, context=None):
+        return self._client.call_method(
+            'SBMLTools.do_nothing_but_auth',
+            [], self._service_ver, context)
 
     def status(self, context=None):
         return self._client.call_method('SBMLTools.status',

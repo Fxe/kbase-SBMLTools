@@ -82,28 +82,6 @@ public class SBMLToolsServer extends JsonServerServlet {
         //END filter_contigs_changed
         return returnVal;
     }
-
-    /**
-     * <p>Original spec-file function name: do_nothing</p>
-     * <pre>
-     * </pre>
-     */
-    @JsonServerMethod(rpc = "SBMLTools.do_nothing", async=true)
-    public void doNothing(RpcContext jsonRpcContext) throws Exception {
-        //BEGIN do_nothing
-        //END do_nothing
-    }
-
-    /**
-     * <p>Original spec-file function name: do_nothing_but_auth</p>
-     * <pre>
-     * </pre>
-     */
-    @JsonServerMethod(rpc = "SBMLTools.do_nothing_but_auth", async=true)
-    public void doNothingButAuth(RpcContext jsonRpcContext) throws Exception {
-        //BEGIN do_nothing_but_auth
-        //END do_nothing_but_auth
-    }
     @JsonServerMethod(rpc = "SBMLTools.status")
     public Map<String, Object> status() {
         Map<String, Object> returnVal = null;

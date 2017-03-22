@@ -89,14 +89,6 @@ sub new
 	    $self->{token} = $token->token;
 	    $self->{client}->{token} = $token->token;
 	}
-        else
-        {
-	    #
-	    # All methods in this module require authentication. In this case, if we
-	    # don't have a token, we can't continue.
-	    #
-	    die "Authentication failed: " . $token->error_message;
-	}
     }
 
     my $ua = $self->{client}->ua;	 
@@ -110,9 +102,9 @@ sub new
 
 
 
-=head2 filter_contigs
+=head2 filter_contigs_changed
 
-  $output = $obj->filter_contigs($params)
+  $output = $obj->filter_contigs_changed($params)
 
 =over 4
 
@@ -171,7 +163,7 @@ Apps that run in the Narrative, your function should have the
 
 =cut
 
- sub filter_contigs
+ sub filter_contigs_changed
 {
     my($self, @args) = @_;
 
@@ -180,7 +172,7 @@ Apps that run in the Narrative, your function should have the
     if ((my $n = @args) != 1)
     {
 	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
-							       "Invalid argument count for function filter_contigs (received $n, expecting 1)");
+							       "Invalid argument count for function filter_contigs_changed (received $n, expecting 1)");
     }
     {
 	my($params) = @args;
@@ -188,31 +180,165 @@ Apps that run in the Narrative, your function should have the
 	my @_bad_arguments;
         (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
         if (@_bad_arguments) {
-	    my $msg = "Invalid arguments passed to filter_contigs:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    my $msg = "Invalid arguments passed to filter_contigs_changed:\n" . join("", map { "\t$_\n" } @_bad_arguments);
 	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
-								   method_name => 'filter_contigs');
+								   method_name => 'filter_contigs_changed');
 	}
     }
 
     my $url = $self->{url};
     my $result = $self->{client}->call($url, $self->{headers}, {
-	    method => "SBMLTools.filter_contigs",
+	    method => "SBMLTools.filter_contigs_changed",
 	    params => \@args,
     });
     if ($result) {
 	if ($result->is_error) {
 	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
 					       code => $result->content->{error}->{code},
-					       method_name => 'filter_contigs',
+					       method_name => 'filter_contigs_changed',
 					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
 					      );
 	} else {
 	    return wantarray ? @{$result->result} : $result->result->[0];
 	}
     } else {
-        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method filter_contigs",
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method filter_contigs_changed",
 					    status_line => $self->{client}->status_line,
-					    method_name => 'filter_contigs',
+					    method_name => 'filter_contigs_changed',
+				       );
+    }
+}
+ 
+
+
+=head2 do_nothing
+
+  $obj->do_nothing()
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+
+</pre>
+
+=end html
+
+=begin text
+
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub do_nothing
+{
+    my($self, @args) = @_;
+
+# Authentication: none
+
+    if ((my $n = @args) != 0)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function do_nothing (received $n, expecting 0)");
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.do_nothing",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'do_nothing',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return;
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method do_nothing",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'do_nothing',
+				       );
+    }
+}
+ 
+
+
+=head2 do_nothing_but_auth
+
+  $obj->do_nothing_but_auth()
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+
+</pre>
+
+=end html
+
+=begin text
+
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub do_nothing_but_auth
+{
+    my($self, @args) = @_;
+
+# Authentication: none
+
+    if ((my $n = @args) != 0)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function do_nothing_but_auth (received $n, expecting 0)");
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.do_nothing_but_auth",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'do_nothing_but_auth',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return;
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method do_nothing_but_auth",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'do_nothing_but_auth',
 				       );
     }
 }
@@ -260,16 +386,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'filter_contigs',
+                method_name => 'do_nothing_but_auth',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method filter_contigs",
+            error => "Error invoking method do_nothing_but_auth",
             status_line => $self->{client}->status_line,
-            method_name => 'filter_contigs',
+            method_name => 'do_nothing_but_auth',
         );
     }
 }
