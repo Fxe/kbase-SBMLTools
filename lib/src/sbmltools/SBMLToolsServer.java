@@ -25,11 +25,11 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
-import net.sf.jfasta.FASTAElement;
-import net.sf.jfasta.FASTAFileReader;
-import net.sf.jfasta.impl.FASTAElementIterator;
-import net.sf.jfasta.impl.FASTAFileReaderImpl;
-import net.sf.jfasta.impl.FASTAFileWriter;
+//import net.sf.jfasta.FASTAElement;
+//import net.sf.jfasta.FASTAFileReader;
+//import net.sf.jfasta.impl.FASTAElementIterator;
+//import net.sf.jfasta.impl.FASTAFileReaderImpl;
+//import net.sf.jfasta.impl.FASTAFileWriter;
 //END_HEADER
 
 /**

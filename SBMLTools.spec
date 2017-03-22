@@ -60,4 +60,7 @@ module SBMLTools {
         returns (FilterContigsResults output) authentication required;
     funcdef do_nothing() returns ();
     funcdef do_nothing_but_auth() returns () authentication required;
+    
+    
+    funcdef import_sbml_model() returns () authentication required;
 };
