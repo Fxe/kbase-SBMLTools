@@ -43,7 +43,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "45b0b66aa976d6c0174eb69b9103c29d6d12d3f3";
+    private static final String gitCommitHash = "d9971cd4095a083209df6193020b0d554f9c6764";
 
     //BEGIN_CLASS_HEADER
     private final URL callbackURL;
@@ -100,7 +100,7 @@ public class SBMLToolsServer extends JsonServerServlet {
      * </pre>
      */
     @JsonServerMethod(rpc = "SBMLTools.do_nothing_but_auth", async=true)
-    public void doNothingButAuth(AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    public void doNothingButAuth(RpcContext jsonRpcContext) throws Exception {
         //BEGIN do_nothing_but_auth
         //END do_nothing_but_auth
     }

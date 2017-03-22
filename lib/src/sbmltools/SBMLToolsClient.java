@@ -207,7 +207,7 @@ public class SBMLToolsClient {
     public void doNothingButAuth(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<Object> retType = new TypeReference<Object>() {};
-        caller.jsonrpcCall("SBMLTools.do_nothing_but_auth", args, retType, false, false, jsonRpcContext, this.serviceVersion);
+        caller.jsonrpcCall("SBMLTools.do_nothing_but_auth", args, retType, false, true, jsonRpcContext, this.serviceVersion);
     }
 
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {

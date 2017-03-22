@@ -59,5 +59,5 @@ module SBMLTools {
     funcdef filter_contigs_changed(FilterContigsParams params)
         returns (FilterContigsResults output) authentication required;
     funcdef do_nothing() returns ();
-    funcdef do_nothing_but_auth() returns ();
+    funcdef do_nothing_but_auth() returns () authentication required;
 };

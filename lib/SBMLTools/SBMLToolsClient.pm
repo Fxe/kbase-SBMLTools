@@ -312,7 +312,7 @@ Apps that run in the Narrative, your function should have the
 {
     my($self, @args) = @_;
 
-# Authentication: none
+# Authentication: required
 
     if ((my $n = @args) != 0)
     {
