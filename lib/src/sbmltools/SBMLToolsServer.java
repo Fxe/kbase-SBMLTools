@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import us.kbase.auth.AuthToken;
+import us.kbase.common.service.JsonClientCaller;
 import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
@@ -98,13 +99,23 @@ public class SBMLToolsServer extends JsonServerServlet {
     final String newRef = assemblyUtilClient.saveAssemblyFromFasta(new SaveAssemblyParams().withAssemblyName(
         fastaAssemblyFile.getAssemblyName())
         .withWorkspaceName(workspaceName).withFile(fastaAssemblyFile));
-    
+//    JsonClientCaller caller = new JsonClientCaller(callbackURL, authPart);
+//    caller.ca
     final KBaseReportClient reportClient = new KBaseReportClient(callbackURL, authPart);
-    reportClient.create(new CreateParams().withWorkspaceName(workspaceName)
+    final ReportInfo reportInfo = reportClient.create(new CreateParams().withWorkspaceName(workspaceName)
         .withReport(new Report()
             .withTextMessage("message")
             .withObjectsCreated(Arrays.asList(new WorkspaceObject()
                 .withDescription("the object").withRef(newRef)))));
+    
+    
+    returnVal = new FilterContigsResults()
+        .withAssemblyOutput(newRef)
+        .withNContigsRemaining(10L)
+        .withNContigsRemoved(5L)
+        .withNInitialContigs(15L)
+        .withReportName(reportInfo.getName())
+        .withReportRef(reportInfo.getRef());
     
     return returnVal;
   }
