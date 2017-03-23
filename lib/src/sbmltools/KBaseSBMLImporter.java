@@ -13,6 +13,9 @@ import kbasereport.ReportInfo;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
+import us.kbase.workspace.ObjectSaveData;
+import us.kbase.workspace.SaveObjectsParams;
+import us.kbase.workspace.WorkspaceClient;
 
 public class KBaseSBMLImporter {
 
@@ -42,6 +45,9 @@ public class KBaseSBMLImporter {
 //            .withName(id).withType("GenomeComparison.ProteomeComparison")
 //            .withData(new UObject(res))))).get(0));
 //    scratch.re
+    
+
+    
     final KBaseReportClient reportClient = new KBaseReportClient(callbackUrl, token);
     reportClient.setIsInsecureHttpConnectionAllowed(true);
     final CreateParams reportParams = new CreateParams()
@@ -49,6 +55,12 @@ public class KBaseSBMLImporter {
         .withReport(new Report().withTextMessage(params.getWorkspaceName()));
     final ReportInfo report = reportClient.create(reportParams);
     
+    final WorkspaceClient client = new WorkspaceClient(callbackUrl, token);
+//  client.
+  client.saveObjects(new SaveObjectsParams()
+      .withWorkspace(params.getWorkspaceName())
+      .withObjects(Arrays.asList(new ObjectSaveData().withData(
+          new UObject(report)).withName("wut"))));
     //BEGIN read_sbml_model
     //END read_sbml_model
     ReadSBMLResults returnVal = new ReadSBMLResults();
