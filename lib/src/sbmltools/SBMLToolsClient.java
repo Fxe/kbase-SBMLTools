@@ -210,6 +210,23 @@ public class SBMLToolsClient {
         caller.jsonrpcCall("SBMLTools.do_nothing_but_auth", args, retType, false, true, jsonRpcContext, this.serviceVersion);
     }
 
+    /**
+     * <p>Original spec-file function name: read_sbml_model</p>
+     * <pre>
+     * </pre>
+     * @param   params   instance of type {@link sbmltools.ReadSBMLParams ReadSBMLParams}
+     * @return   parameter "result" of type {@link sbmltools.ReadSBMLResults ReadSBMLResults}
+     * @throws IOException if an IO exception occurs
+     * @throws JsonClientException if a JSON RPC exception occurs
+     */
+    public ReadSBMLResults readSbmlModel(ReadSBMLParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+        List<Object> args = new ArrayList<Object>();
+        args.add(params);
+        TypeReference<List<ReadSBMLResults>> retType = new TypeReference<List<ReadSBMLResults>>() {};
+        List<ReadSBMLResults> res = caller.jsonrpcCall("SBMLTools.read_sbml_model", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        return res.get(0);
+    }
+
     public Map<String, Object> status(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         TypeReference<List<Map<String, Object>>> retType = new TypeReference<List<Map<String, Object>>>() {};

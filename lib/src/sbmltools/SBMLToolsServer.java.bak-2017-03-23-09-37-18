@@ -43,7 +43,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "97afd9e5b69c872696c4e121a4f9f7fba098410c";
+    private static final String gitCommitHash = "45b0b66aa976d6c0174eb69b9103c29d6d12d3f3";
 
     //BEGIN_CLASS_HEADER
     private final URL callbackURL;
@@ -103,21 +103,6 @@ public class SBMLToolsServer extends JsonServerServlet {
     public void doNothingButAuth(AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         //BEGIN do_nothing_but_auth
         //END do_nothing_but_auth
-    }
-
-    /**
-     * <p>Original spec-file function name: read_sbml_model</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link sbmltools.ReadSBMLParams ReadSBMLParams}
-     * @return   parameter "result" of type {@link sbmltools.ReadSBMLResults ReadSBMLResults}
-     */
-    @JsonServerMethod(rpc = "SBMLTools.read_sbml_model", async=true)
-    public ReadSBMLResults readSbmlModel(ReadSBMLParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        ReadSBMLResults returnVal = null;
-        //BEGIN read_sbml_model
-        //END read_sbml_model
-        return returnVal;
     }
     @JsonServerMethod(rpc = "SBMLTools.status")
     public Map<String, Object> status() {

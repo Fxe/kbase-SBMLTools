@@ -343,6 +343,104 @@ Apps that run in the Narrative, your function should have the
     }
 }
  
+
+
+=head2 read_sbml_model
+
+  $result = $obj->read_sbml_model($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a SBMLTools.ReadSBMLParams
+$result is a SBMLTools.ReadSBMLResults
+ReadSBMLParams is a reference to a hash where the following keys are defined:
+	test_url has a value which is a string
+	workspace_name has a value which is a string
+	random_int has a value which is an int
+ReadSBMLResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	just_a_int has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a SBMLTools.ReadSBMLParams
+$result is a SBMLTools.ReadSBMLResults
+ReadSBMLParams is a reference to a hash where the following keys are defined:
+	test_url has a value which is a string
+	workspace_name has a value which is a string
+	random_int has a value which is an int
+ReadSBMLResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	just_a_int has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub read_sbml_model
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function read_sbml_model (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to read_sbml_model:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'read_sbml_model');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.read_sbml_model",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'read_sbml_model',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method read_sbml_model",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'read_sbml_model',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -386,16 +484,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'do_nothing_but_auth',
+                method_name => 'read_sbml_model',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method do_nothing_but_auth",
+            error => "Error invoking method read_sbml_model",
             status_line => $self->{client}->status_line,
-            method_name => 'do_nothing_but_auth',
+            method_name => 'read_sbml_model',
         );
     }
 }
@@ -517,6 +615,40 @@ min_length has a value which is an int
 
 
 
+=head2 ReadSBMLParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+test_url has a value which is a string
+workspace_name has a value which is a string
+random_int has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+test_url has a value which is a string
+workspace_name has a value which is a string
+random_int has a value which is an int
+
+
+=end text
+
+=back
+
+
+
 =head2 FilterContigsResults
 
 =over 4
@@ -558,6 +690,40 @@ assembly_output has a value which is a SBMLTools.assembly_ref
 n_initial_contigs has a value which is an int
 n_contigs_removed has a value which is an int
 n_contigs_remaining has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 ReadSBMLResults
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+just_a_int has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+just_a_int has a value which is an int
 
 
 =end text

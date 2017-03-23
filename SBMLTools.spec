@@ -32,7 +32,12 @@ module SBMLTools {
         string workspace_name;
         int min_length;
     } FilterContigsParams;
-
+    
+    typedef structure {
+        string test_url;
+        string workspace_name;
+        int random_int;
+    } ReadSBMLParams;
 
     /*
         Here is the definition of the output of the function.  The output
@@ -50,6 +55,12 @@ module SBMLTools {
         int n_contigs_remaining;
     } FilterContigsResults;
     
+    typedef structure {
+        string report_name;
+        string report_ref;
+        int just_a_int;
+    } ReadSBMLResults;
+
     /*
         The actual function is declared using 'funcdef' to specify the name
         and input/return arguments to the function.  For all typical KBase
@@ -60,5 +71,5 @@ module SBMLTools {
         returns (FilterContigsResults output) authentication required;
     funcdef do_nothing() returns ();
     funcdef do_nothing_but_auth() returns () authentication required;
-    funcdef read_sbml_model() returns () authentication required;
+    funcdef read_sbml_model(ReadSBMLParams params) returns (ReadSBMLResults result) authentication required;
 };

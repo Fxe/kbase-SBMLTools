@@ -109,15 +109,17 @@ public class SBMLToolsServer extends JsonServerServlet {
      * <p>Original spec-file function name: read_sbml_model</p>
      * <pre>
      * </pre>
-     * @param   params   instance of type {@link sbmltools.ReadSBMLParams ReadSBMLParams}
-     * @return   parameter "result" of type {@link sbmltools.ReadSBMLResults ReadSBMLResults}
+     * @param   modelUrlTest   instance of String
+     * @return   parameter "simpleString" of String
      */
     @JsonServerMethod(rpc = "SBMLTools.read_sbml_model", async=true)
-    public ReadSBMLResults readSbmlModel(ReadSBMLParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        ReadSBMLResults returnVal = null;
+    public String readSbmlModel(String modelUrlTest, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        System.out.println("print !" + modelUrlTest);
+        System.err.println("printe @");
+        String returnVal = null;
         //BEGIN read_sbml_model
         //END read_sbml_model
-        return returnVal;
+        return modelUrlTest;
     }
     @JsonServerMethod(rpc = "SBMLTools.status")
     public Map<String, Object> status() {
