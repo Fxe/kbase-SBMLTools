@@ -89,6 +89,23 @@ public class SBMLToolsServer extends JsonServerServlet {
     FilterContigsResults returnVal = null;
     //BEGIN filter_contigs_changed
     //END filter_contigs_changed
+    final String workspaceName = params.getWorkspaceName();
+    
+    final AssemblyUtilClient assemblyUtilClient = new AssemblyUtilClient(callbackURL, authPart);
+    assemblyUtilClient.setIsInsecureHttpConnectionAllowed(true);
+    final FastaAssemblyFile fastaAssemblyFile = assemblyUtilClient.getAssemblyAsFasta(new GetAssemblyParams().withRef(params.getAssemblyInputRef()));
+    
+    final String newRef = assemblyUtilClient.saveAssemblyFromFasta(new SaveAssemblyParams().withAssemblyName(
+        fastaAssemblyFile.getAssemblyName())
+        .withWorkspaceName(workspaceName).withFile(fastaAssemblyFile));
+    
+    final KBaseReportClient reportClient = new KBaseReportClient(callbackURL, authPart);
+    reportClient.create(new CreateParams().withWorkspaceName(workspaceName)
+        .withReport(new Report()
+            .withTextMessage("message")
+            .withObjectsCreated(Arrays.asList(new WorkspaceObject()
+                .withDescription("the object").withRef(newRef)))));
+    
     return returnVal;
   }
 
@@ -153,6 +170,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         .withWorkspaceName(params.getWorkspaceName())
         .withReport(new Report().withTextMessage(params.getWorkspaceName()));
     final ReportInfo report = reportClient.create(reportParams, jsonRpcContext);
+    
     //BEGIN read_sbml_model
     //END read_sbml_model
     ReadSBMLResults returnVal = new ReadSBMLResults();
