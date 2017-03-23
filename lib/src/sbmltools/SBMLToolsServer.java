@@ -20,16 +20,19 @@ import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
 import assemblyutil.GetAssemblyParams;
 import assemblyutil.SaveAssemblyParams;
+import datafileutil.DataFileUtilClient;
+import datafileutil.DownloadWebFileOutput;
+import datafileutil.DownloadWebFileParams;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
-import net.sf.jfasta.FASTAElement;
-import net.sf.jfasta.FASTAFileReader;
-import net.sf.jfasta.impl.FASTAElementIterator;
-import net.sf.jfasta.impl.FASTAFileReaderImpl;
-import net.sf.jfasta.impl.FASTAFileWriter;
+//import net.sf.jfasta.FASTAElement;
+//import net.sf.jfasta.FASTAFileReader;
+//import net.sf.jfasta.impl.FASTAElementIterator;
+//import net.sf.jfasta.impl.FASTAFileReaderImpl;
+//import net.sf.jfasta.impl.FASTAFileWriter;
 //END_HEADER
 
 /**
@@ -102,6 +105,15 @@ public class SBMLToolsServer extends JsonServerServlet {
     @JsonServerMethod(rpc = "SBMLTools.do_nothing_but_auth", async=true)
     public void doNothingButAuth(AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         //BEGIN do_nothing_but_auth
+      final DataFileUtilClient dataFileUtilClient = new DataFileUtilClient(callbackURL, authPart);
+      dataFileUtilClient.setIsInsecureHttpConnectionAllowed(true);
+//      dataFileUtilClient.
+      DownloadWebFileParams webFileParams = new DownloadWebFileParams();
+      webFileParams.setFileUrl("http://some_url_for_test.html");
+      DownloadWebFileOutput webFileOutput = 
+          dataFileUtilClient.downloadWebFile(webFileParams, jsonRpcContext);
+      
+      webFileOutput.getCopyFilePath();
         //END do_nothing_but_auth
     }
     @JsonServerMethod(rpc = "SBMLTools.status")
