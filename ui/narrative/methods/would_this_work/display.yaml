@@ -1,9 +1,9 @@
 #
 # define display information
 #
-name: Filter Contigssssssss
+name: Import SBML
 tooltip: |
-    Filters the contigs by removing contigs below a length threshold !!!!!
+    A SBML Import Tool
 screenshots: []
 
 icon: null
@@ -27,6 +27,11 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
+    modelUrlTest:
+        ui-name : |
+            A string
+        short-hint : |
+            A hint
     assembly_input_ref :
         ui-name : |
             Assemblyy
