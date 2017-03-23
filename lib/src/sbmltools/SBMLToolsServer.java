@@ -88,35 +88,106 @@ public class SBMLToolsServer extends JsonServerServlet {
   @JsonServerMethod(rpc = "SBMLTools.filter_contigs_changed", async=true)
   public FilterContigsResults filterContigsChanged(FilterContigsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
     FilterContigsResults returnVal = null;
-    //BEGIN filter_contigs_changed
-    //END filter_contigs_changed
+    //BEGIN filter_contigs
+    
+    // Print statements to stdout/stderr are captured and available as the App log
+    System.out.println("Starting filter contigs. Parameters:");
+    System.out.println(params);
+    
+    /* Step 1 - Parse/examine the parameters and catch any errors
+     * It is important to check that parameters exist and are defined, and that nice error
+     * messages are returned to users.  Parameter values go through basic validation when
+     * defined in a Narrative App, but advanced users or other SDK developers can call
+     * this function directly, so validation is still important.
+     */
     final String workspaceName = params.getWorkspaceName();
+    if (workspaceName == null || workspaceName.isEmpty()) {
+        throw new IllegalArgumentException(
+            "Parameter workspace_name is not set in input arguments");
+    }
+    final String assyRef = params.getAssemblyInputRef();
+    if (assyRef == null || assyRef.isEmpty()) {
+        throw new IllegalArgumentException(
+                "Parameter assembly_input_ref is not set in input arguments");
+    }
+    if (params.getMinLength() == null) {
+        throw new IllegalArgumentException(
+                "Parameter min_length is not set in input arguments");
+    }
+    final long minLength = params.getMinLength();
+    if (minLength < 0) {
+        throw new IllegalArgumentException("min_length parameter cannot be negative (" +
+                minLength + ")");
+    }
     
-    final AssemblyUtilClient assemblyUtilClient = new AssemblyUtilClient(callbackURL, authPart);
-    assemblyUtilClient.setIsInsecureHttpConnectionAllowed(true);
-    final FastaAssemblyFile fastaAssemblyFile = assemblyUtilClient.getAssemblyAsFasta(new GetAssemblyParams().withRef(params.getAssemblyInputRef()));
+    /* Step 2 - Download the input data as a Fasta file
+     * We can use the AssemblyUtils module to download a FASTA file from our Assembly data
+     * object. The return object gives us the path to the file that was created.
+     */
+    System.out.println("Downloading assembly data as FASTA file.");
+    final AssemblyUtilClient assyUtil = new AssemblyUtilClient(callbackURL, authPart);
+    /* Normally this is bad practice, but the callback server (which runs on the same machine
+     * as the docker container running the method) is http only
+     * TODO Should allow the clients to not require a token, even for auth required methods,
+     * since the callback server ignores the incoming token. No need to transmit the token
+     * here.
+     */
+    assyUtil.setIsInsecureHttpConnectionAllowed(true);
+    final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
+            .withRef(assyRef));
+
+    /* Step 3 - Actually perform the filter operation, saving the good contigs to a new
+     * fasta file.
+     */
+    final Path out = scratch.resolve("filtered.fasta");
+    long total = 0;
+    long remaining = 0;
+//    try (final FASTAFileReader fastaRead = new FASTAFileReaderImpl(
+//                new File(fileobj.getPath()));
+//            final FASTAFileWriter fastaWrite = new FASTAFileWriter(out.toFile())) {
+//        final FASTAElementIterator iter = fastaRead.getIterator();
+//        while (iter.hasNext()) {
+//            total++;
+//            final FASTAElement fe = iter.next();
+//            if (fe.getSequenceLength() >= minLength) {
+//                remaining++;
+//                fastaWrite.write(fe);
+//            }
+//        }
+//    }
+    final String resultText = String.format("Filtered assembly to %s contigs out of %s",
+            remaining, total);
+    System.out.println(resultText);
     
-    final String newRef = assemblyUtilClient.saveAssemblyFromFasta(new SaveAssemblyParams().withAssemblyName(
-        fastaAssemblyFile.getAssemblyName())
-        .withWorkspaceName(workspaceName).withFile(fastaAssemblyFile));
-//    JsonClientCaller caller = new JsonClientCaller(callbackURL, authPart);
-//    caller.ca
-    final KBaseReportClient reportClient = new KBaseReportClient(callbackURL, authPart);
-    final ReportInfo reportInfo = reportClient.create(new CreateParams().withWorkspaceName(workspaceName)
-        .withReport(new Report()
-            .withTextMessage("message")
-            .withObjectsCreated(Arrays.asList(new WorkspaceObject()
-                .withDescription("the object").withRef(newRef)))));
+    // Step 4 - Save the new Assembly back to the system
     
+    final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
+            .withAssemblyName(fileobj.getAssemblyName())
+            .withWorkspaceName(workspaceName)
+            .withFile(new FastaAssemblyFile().withPath(out.toString())));
+    
+    // Step 5 - Build a Report and return
+    
+    final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
+    // see note above about bad practice
+    kbr.setIsInsecureHttpConnectionAllowed(true);
+    final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
+            .withReport(new Report().withTextMessage(resultText)
+                    .withObjectsCreated(Arrays.asList(new WorkspaceObject()
+                            .withDescription("Filtered contigs")
+                            .withRef(newAssyRef)))));
+    // Step 6: contruct the output to send back
     
     returnVal = new FilterContigsResults()
-        .withAssemblyOutput(newRef)
-        .withNContigsRemaining(10L)
-        .withNContigsRemoved(5L)
-        .withNInitialContigs(15L)
-        .withReportName(reportInfo.getName())
-        .withReportRef(reportInfo.getRef());
-    
+            .withAssemblyOutput(newAssyRef)
+            .withNInitialContigs(total)
+            .withNContigsRemaining(remaining)
+            .withNContigsRemoved(total - remaining)
+            .withReportName(report.getName())
+            .withReportRef(report.getRef());
+
+    System.out.println("returning:\n" + returnVal);
+    //END filter_contigs
     return returnVal;
   }
 
