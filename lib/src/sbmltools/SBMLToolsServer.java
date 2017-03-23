@@ -3,6 +3,10 @@ package sbmltools;
 import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
@@ -47,6 +51,8 @@ public class SBMLToolsServer extends JsonServerServlet {
   private static final String version = "0.0.1";
   private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
   private static final String gitCommitHash = "97afd9e5b69c872696c4e121a4f9f7fba098410c";
+  
+  private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
 
   //BEGIN_CLASS_HEADER
   private final URL callbackURL;
@@ -126,13 +132,21 @@ public class SBMLToolsServer extends JsonServerServlet {
    */
   @JsonServerMethod(rpc = "SBMLTools.read_sbml_model", async=true)
   public ReadSBMLResults readSbmlModel(ReadSBMLParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    
+    if (params.getRandomInt() == null) {
+      throw new IllegalArgumentException("getRandomInt null !");
+    }
+    final long min_random_int = params.getRandomInt();
+    if (min_random_int < -10) {
+      throw new IllegalArgumentException("< -10 !! " + min_random_int);
+    }
     System.out.println("printo !");
     System.err.println("printe !");
     System.out.println(params.getWorkspaceName());
     System.out.println(params.getTestUrl());
     System.out.println(params.getRandomInt());
-
-    
+    logger.info("is this working !?");
+//    scratch.re
     final KBaseReportClient reportClient = new KBaseReportClient(callbackURL, authPart);
     reportClient.setIsInsecureHttpConnectionAllowed(true);
     final CreateParams reportParams = new CreateParams()
