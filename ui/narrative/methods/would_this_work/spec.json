@@ -10,7 +10,29 @@
         "output": "no-display"
     },
     "parameters": [
-      {"id":"modelUrlTest", "optional":false, "field_type": "text"} 
+        {
+            "id": "test_url",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "string",
+            }
+        },
+        {
+            "id": "random_int",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "int",
+                "min_integer" : 0
+            }
+        }
     ],
     "behavior": {
         "service-mapping": {
@@ -18,7 +40,18 @@
             "name":"SBMLTools",
             "method": "read_sbml_model",
             "input_mapping": [
-                { "input_parameter" : "modelUrlTest", "target_property" : "modelUrlTest" } 
+                {
+                    "narrative_system_variable": "workspace",
+                    "target_property": "workspace_name"
+                },
+                {
+                    "input_parameter": "test_url",
+                    "target_property": "test_url",
+                },
+                {
+                    "input_parameter": "random_int",
+                    "target_property": "random_int"
+                }
             ],
             "output_mapping": [
                 {

@@ -27,7 +27,7 @@ suggestions:
 # Configure the display and description of parameters
 #
 parameters :
-    modelUrlTest:
+    test_url:
         ui-name : |
             A string
         short-hint : |
@@ -37,7 +37,7 @@ parameters :
             Assemblyy
         short-hint : |
             The assembly to filter (will be overwritten)...
-    min_length :
+    random_int :
         ui-name : |
             Min Length Thresholdd
         short-hint : |
