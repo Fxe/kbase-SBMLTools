@@ -46,7 +46,7 @@
                 },
                 {
                     "input_parameter": "test_url",
-                    "target_property": "test_url",
+                    "target_property": "test_url"
                 },
                 {
                     "input_parameter": "random_int",
