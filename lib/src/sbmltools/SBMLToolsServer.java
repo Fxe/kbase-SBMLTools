@@ -131,10 +131,20 @@ public class SBMLToolsServer extends JsonServerServlet {
     System.out.println(params.getWorkspaceName());
     System.out.println(params.getTestUrl());
     System.out.println(params.getRandomInt());
-    ReadSBMLResults returnVal = new ReadSBMLResults();
-    returnVal.setJustAInt(params.getRandomInt() + 10);
+
+    
+    final KBaseReportClient reportClient = new KBaseReportClient(callbackURL, authPart);
+    reportClient.setIsInsecureHttpConnectionAllowed(true);
+    final CreateParams reportParams = new CreateParams()
+        .withWorkspaceName(params.getWorkspaceName())
+        .withReport(new Report().withTextMessage(params.getWorkspaceName()));
+    final ReportInfo report = reportClient.create(reportParams, jsonRpcContext);
     //BEGIN read_sbml_model
     //END read_sbml_model
+    ReadSBMLResults returnVal = new ReadSBMLResults();
+    returnVal.setJustAInt(params.getRandomInt() + 10);
+    returnVal.setReportName(report.getName());
+    returnVal.setReportRef(report.getRef());
     return returnVal;
   }
   @JsonServerMethod(rpc = "SBMLTools.status")
