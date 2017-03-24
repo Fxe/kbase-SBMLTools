@@ -71,5 +71,11 @@ module SBMLTools {
         returns (FilterContigsResults output) authentication required;
     funcdef do_nothing() returns ();
     funcdef do_nothing_but_auth() returns () authentication required;
+<<<<<<< HEAD
     funcdef read_sbml_model(ReadSBMLParams params) returns (ReadSBMLResults result) authentication required;
+=======
+    
+    
+    funcdef import_sbml_model() returns () authentication required;
+>>>>>>> 3b8395c23f8e0bd504782aa298b54e18591648fa
 };
