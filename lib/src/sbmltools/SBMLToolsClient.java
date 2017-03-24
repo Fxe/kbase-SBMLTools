@@ -164,7 +164,7 @@ public class SBMLToolsClient {
     }
 
     /**
-     * <p>Original spec-file function name: filter_contigs_changed</p>
+     * <p>Original spec-file function name: filter_contigs</p>
      * <pre>
      * The actual function is declared using 'funcdef' to specify the name
      * and input/return arguments to the function.  For all typical KBase
@@ -176,54 +176,11 @@ public class SBMLToolsClient {
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public FilterContigsResults filterContigsChanged(FilterContigsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public FilterContigsResults filterContigs(FilterContigsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
         TypeReference<List<FilterContigsResults>> retType = new TypeReference<List<FilterContigsResults>>() {};
-        List<FilterContigsResults> res = caller.jsonrpcCall("SBMLTools.filter_contigs_changed", args, retType, true, true, jsonRpcContext, this.serviceVersion);
-        return res.get(0);
-    }
-
-    /**
-     * <p>Original spec-file function name: do_nothing</p>
-     * <pre>
-     * </pre>
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public void doNothing(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        TypeReference<Object> retType = new TypeReference<Object>() {};
-        caller.jsonrpcCall("SBMLTools.do_nothing", args, retType, false, false, jsonRpcContext, this.serviceVersion);
-    }
-
-    /**
-     * <p>Original spec-file function name: do_nothing_but_auth</p>
-     * <pre>
-     * </pre>
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public void doNothingButAuth(RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        TypeReference<Object> retType = new TypeReference<Object>() {};
-        caller.jsonrpcCall("SBMLTools.do_nothing_but_auth", args, retType, false, true, jsonRpcContext, this.serviceVersion);
-    }
-
-    /**
-     * <p>Original spec-file function name: read_sbml_model</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link sbmltools.ReadSBMLParams ReadSBMLParams}
-     * @return   parameter "result" of type {@link sbmltools.ReadSBMLResults ReadSBMLResults}
-     * @throws IOException if an IO exception occurs
-     * @throws JsonClientException if a JSON RPC exception occurs
-     */
-    public ReadSBMLResults readSbmlModel(ReadSBMLParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
-        List<Object> args = new ArrayList<Object>();
-        args.add(params);
-        TypeReference<List<ReadSBMLResults>> retType = new TypeReference<List<ReadSBMLResults>>() {};
-        List<ReadSBMLResults> res = caller.jsonrpcCall("SBMLTools.read_sbml_model", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        List<FilterContigsResults> res = caller.jsonrpcCall("SBMLTools.filter_contigs", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

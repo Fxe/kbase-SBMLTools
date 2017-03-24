@@ -32,12 +32,7 @@ module SBMLTools {
         string workspace_name;
         int min_length;
     } FilterContigsParams;
-    
-    typedef structure {
-        string test_url;
-        string workspace_name;
-        int random_int;
-    } ReadSBMLParams;
+
 
     /*
         Here is the definition of the output of the function.  The output
@@ -55,27 +50,12 @@ module SBMLTools {
         int n_contigs_remaining;
     } FilterContigsResults;
     
-    typedef structure {
-        string report_name;
-        string report_ref;
-        int just_a_int;
-    } ReadSBMLResults;
-
     /*
         The actual function is declared using 'funcdef' to specify the name
         and input/return arguments to the function.  For all typical KBase
         Apps that run in the Narrative, your function should have the 
         'authentication required' modifier.
     */
-    funcdef filter_contigs_changed(FilterContigsParams params)
+    funcdef filter_contigs(FilterContigsParams params)
         returns (FilterContigsResults output) authentication required;
-    funcdef do_nothing() returns ();
-    funcdef do_nothing_but_auth() returns () authentication required;
-<<<<<<< HEAD
-    funcdef read_sbml_model(ReadSBMLParams params) returns (ReadSBMLResults result) authentication required;
-=======
-    
-    
-    funcdef import_sbml_model() returns () authentication required;
->>>>>>> 3b8395c23f8e0bd504782aa298b54e18591648fa
 };

@@ -38,7 +38,7 @@
         "service-mapping": {
             "url": "",
             "name":"SBMLTools",
-            "method": "filter_contigs_changed",
+            "method": "filter_contigs",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",

@@ -107,7 +107,7 @@ public class SBMLToolsServerTest {
         
     }
     
-    /*@Test
+    @Test
     public void testFilterContigsOk() throws Exception {
         // First load a test FASTA file as an KBase Assembly
         final String fastaContent = ">seq1 something something asdf\n" +
@@ -130,9 +130,9 @@ public class SBMLToolsServerTest {
         Assert.assertEquals(3L, (long)ret.getNInitialContigs());
         Assert.assertEquals(1L, (long)ret.getNContigsRemoved());
         Assert.assertEquals(2L, (long)ret.getNContigsRemaining());
-    }*/
+    }
     
-    /*@Test
+    @Test
     public void test_filter_contigs_err1() throws Exception {
         try {
             impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
@@ -142,9 +142,9 @@ public class SBMLToolsServerTest {
             Assert.assertEquals("Parameter min_length is not set in input arguments",
                     ex.getMessage());
         }
-    }*/
+    }
     
-    /*@Test
+    @Test
     public void test_filter_contigs_err2() throws Exception {
         try {
             impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
@@ -153,9 +153,9 @@ public class SBMLToolsServerTest {
         } catch (IllegalArgumentException ex) {
             Assert.assertEquals("min_length parameter cannot be negative (-10)", ex.getMessage());
         }
-    }*/
+    }
     
-    /*@Test
+    @Test
     public void test_filter_contigs_err3() throws Exception {
         try {
             impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
@@ -164,5 +164,5 @@ public class SBMLToolsServerTest {
         } catch (ServerException ex) {
             Assert.assertEquals("Invalid workspace reference string! Found fake", ex.getMessage());
         }
-    }*/
+    }
 }
