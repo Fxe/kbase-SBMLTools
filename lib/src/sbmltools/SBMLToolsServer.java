@@ -1,20 +1,17 @@
 package sbmltools;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import us.kbase.auth.AuthToken;
-import us.kbase.common.service.JsonServerMethod;
-import us.kbase.common.service.JsonServerServlet;
-import us.kbase.common.service.JsonServerSyslog;
-import us.kbase.common.service.RpcContext;
-
+import java.net.MalformedURLException;
 //BEGIN_HEADER
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.net.MalformedURLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
@@ -25,12 +22,12 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
-import net.sf.jfasta.FASTAElement;
-import net.sf.jfasta.FASTAFileReader;
-import net.sf.jfasta.impl.FASTAElementIterator;
-import net.sf.jfasta.impl.FASTAFileReaderImpl;
-import net.sf.jfasta.impl.FASTAFileWriter;
 //END_HEADER
+import us.kbase.auth.AuthToken;
+import us.kbase.common.service.JsonServerMethod;
+import us.kbase.common.service.JsonServerServlet;
+import us.kbase.common.service.JsonServerSyslog;
+import us.kbase.common.service.RpcContext;
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
@@ -40,6 +37,7 @@ import net.sf.jfasta.impl.FASTAFileWriter;
  * </pre>
  */
 public class SBMLToolsServer extends JsonServerServlet {
+  
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "";
@@ -50,6 +48,8 @@ public class SBMLToolsServer extends JsonServerServlet {
     private final Path scratch;
     //END_CLASS_HEADER
 
+    private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
+    
     public SBMLToolsServer() throws Exception {
         super("SBMLTools");
         //BEGIN_CONSTRUCTOR
@@ -130,31 +130,31 @@ public class SBMLToolsServer extends JsonServerServlet {
          * fasta file.
          */
         final Path out = scratch.resolve("filtered.fasta");
+        logger.info("test {}", out.getFileName().toAbsolutePath());
         long total = 0;
         long remaining = 0;
-        try (final FASTAFileReader fastaRead = new FASTAFileReaderImpl(
-                    new File(fileobj.getPath()));
-                final FASTAFileWriter fastaWrite = new FASTAFileWriter(out.toFile())) {
-            final FASTAElementIterator iter = fastaRead.getIterator();
-            while (iter.hasNext()) {
-                total++;
-                final FASTAElement fe = iter.next();
-                if (fe.getSequenceLength() >= minLength) {
-                    remaining++;
-                    fastaWrite.write(fe);
-                }
-            }
-        }
-        final String resultText = String.format("Filtered assembly to %s contigs out of %s",
-                remaining, total);
+//        try (final FASTAFileReader fastaRead = new FASTAFileReaderImpl(
+//                    new File(fileobj.getPath()));
+//                final FASTAFileWriter fastaWrite = new FASTAFileWriter(out.toFile())) {
+//            final FASTAElementIterator iter = fastaRead.getIterator();
+//            while (iter.hasNext()) {
+//                total++;
+//                final FASTAElement fe = iter.next();
+//                if (fe.getSequenceLength() >= minLength) {
+//                    remaining++;
+//                    fastaWrite.write(fe);
+//                }
+//            }
+//        }
+        final String resultText = "No changes";
         System.out.println(resultText);
         
         // Step 4 - Save the new Assembly back to the system
         
         final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
-                .withAssemblyName(fileobj.getAssemblyName())
+                .withAssemblyName(fileobj.getAssemblyName() + "_new")
                 .withWorkspaceName(workspaceName)
-                .withFile(new FastaAssemblyFile().withPath(out.toString())));
+                .withFile(new FastaAssemblyFile().withPath(fileobj.getPath())));
         
         // Step 5 - Build a Report and return
         
