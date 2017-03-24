@@ -13,6 +13,7 @@ import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
+import us.kbase.workspace.WorkspaceClient;
 
 //BEGIN_HEADER
 import java.net.URL;
@@ -253,6 +254,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     returnVal.put("version", version);
     returnVal.put("git_url", gitUrl);
     returnVal.put("git_commit_hash", gitCommitHash);
+    
     //END_STATUS
     return returnVal;
   }
