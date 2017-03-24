@@ -48,7 +48,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private final Path scratch;
     //END_CLASS_HEADER
 
-    private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
+//    private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
     
     public SBMLToolsServer() throws Exception {
         super("SBMLTools");
@@ -130,7 +130,7 @@ public class SBMLToolsServer extends JsonServerServlet {
          * fasta file.
          */
         final Path out = scratch.resolve("filtered.fasta");
-        logger.info("test {}", out.getFileName().toAbsolutePath());
+//        logger.info("test {}", out.getFileName().toAbsolutePath());
         long total = 0;
         long remaining = 0;
 //        try (final FASTAFileReader fastaRead = new FASTAFileReaderImpl(
