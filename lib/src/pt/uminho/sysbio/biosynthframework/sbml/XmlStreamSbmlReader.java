@@ -480,7 +480,7 @@ public class XmlStreamSbmlReader {
           case KEY_VALUE_DATA_LIST:
             List<XmlObject> kvdArray = parseKeyValueDataList(xmlEventReader);
             if (!annotation.containsKey(KEY_VALUE_DATA_LIST)) {
-              annotation.put(KEY_VALUE_DATA_LIST, new ArrayList<> ());
+              annotation.put(KEY_VALUE_DATA_LIST, new ArrayList<XmlObject> ());
             }
             annotation.get(KEY_VALUE_DATA_LIST).addAll(kvdArray);
             break;
@@ -694,14 +694,14 @@ public class XmlStreamSbmlReader {
         logger.debug("+++ {}", startElement.getName().getLocalPart());
         switch (startElement.getName().getLocalPart()) {
           case "and":
-            MultiNodeTree<Object> andTree = new MultiNodeTree<>(Operator.AND);
+            MultiNodeTree<Object> andTree = new MultiNodeTree<Object>(Operator.AND);
             if (tree != null) {
               tree.addChild(andTree);
             }
             tree = andTree;
             break;
           case "or":
-            MultiNodeTree<Object> orTree = new MultiNodeTree<>(Operator.OR);
+            MultiNodeTree<Object> orTree = new MultiNodeTree<Object>(Operator.OR);
             if (tree != null) {
               tree.addChild(orTree);
             }
@@ -709,7 +709,7 @@ public class XmlStreamSbmlReader {
             break;
           case "geneProductRef":
             MultiNodeTree<Object> leaf = 
-              new MultiNodeTree<>(getAttributes(startElement));
+              new MultiNodeTree<Object>(getAttributes(startElement));
 //            System.out.println(getAttributes(startElement));
             if (tree == null) {
               tree = leaf;

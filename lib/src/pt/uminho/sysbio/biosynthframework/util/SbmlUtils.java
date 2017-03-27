@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+//import java.util.function.Function;
 
 //import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,31 +29,31 @@ public class SbmlUtils {
     return null;
   }
   
-  public static List<String> gprTreeToString(MultiNodeTree<Object> tree, Function<Object, String> f) {
-    if (tree == null) {
-      return null;
-    }
-    if (tree.body instanceof Operator) {
-      List<String> terms = new ArrayList<> ();
-      String opStr = ((Operator) tree.body).toString().toLowerCase();
-      for (MultiNodeTree<Object> c : tree.getChilds()) {
-        terms.addAll(gprTreeToString(c, f));
-//        sb.append(gprTreeToString(c, o) + " " + op);
-      }
-      String expr = ""; //StringUtils.join(terms, " " + opStr + " ");
-      if (terms.size() > 1) {
-        expr = String.format("(%s)", expr);
-      }
-      
-      List<String> w = new ArrayList<> ();
-      w.add(expr);
-      return w;
-    } else {
-      List<String> terms = new ArrayList<> ();
-      terms.add(f.apply(tree.body));
-      return terms;
-    }
-  }
+//  public static List<String> gprTreeToString(MultiNodeTree<Object> tree, Function<Object, String> f) {
+//    if (tree == null) {
+//      return null;
+//    }
+//    if (tree.body instanceof Operator) {
+//      List<String> terms = new ArrayList<> ();
+//      String opStr = ((Operator) tree.body).toString().toLowerCase();
+//      for (MultiNodeTree<Object> c : tree.getChilds()) {
+//        terms.addAll(gprTreeToString(c, f));
+////        sb.append(gprTreeToString(c, o) + " " + op);
+//      }
+//      String expr = ""; //StringUtils.join(terms, " " + opStr + " ");
+//      if (terms.size() > 1) {
+//        expr = String.format("(%s)", expr);
+//      }
+//      
+//      List<String> w = new ArrayList<> ();
+//      w.add(expr);
+//      return w;
+//    } else {
+//      List<String> terms = new ArrayList<> ();
+//      terms.add(f.apply(tree.body));
+//      return terms;
+//    }
+//  }
   
   public static Map<String, String> parseNotes(List<String> notes) {
     Map<String, String> data = new HashMap<> ();
