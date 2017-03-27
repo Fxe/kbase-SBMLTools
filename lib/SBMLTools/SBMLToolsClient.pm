@@ -391,6 +391,40 @@ min_length has a value which is an int
 
 
 
+=head2 SbmlImportParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+assembly_input_ref has a value which is a SBMLTools.assembly_ref
+workspace_name has a value which is a string
+min_length has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+assembly_input_ref has a value which is a SBMLTools.assembly_ref
+workspace_name has a value which is a string
+min_length has a value which is an int
+
+
+=end text
+
+=back
+
+
+
 =head2 FilterContigsResults
 
 =over 4

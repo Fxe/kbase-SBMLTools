@@ -33,6 +33,12 @@ module SBMLTools {
         int min_length;
     } FilterContigsParams;
 
+    typedef structure {
+        assembly_ref assembly_input_ref;
+        string workspace_name;
+        int min_length;
+    } SbmlImportParams;
+
 
     /*
         Here is the definition of the output of the function.  The output

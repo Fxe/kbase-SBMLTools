@@ -41,10 +41,11 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
  * </pre>
  */
 public class SBMLToolsServer extends JsonServerServlet {
+  
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
-    private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "142fe8eaa833545d22cd11a48b797a8da86c5ed0";
+    private static final String gitUrl = "";
+    private static final String gitCommitHash = "";
 
     //BEGIN_CLASS_HEADER
     private final URL callbackURL;
