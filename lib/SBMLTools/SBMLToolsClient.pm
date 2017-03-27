@@ -121,9 +121,9 @@ sub new
 =begin html
 
 <pre>
-$params is a SBMLTools.FilterContigsParams
+$params is a SBMLTools.SbmlImportParams
 $output is a SBMLTools.FilterContigsResults
-FilterContigsParams is a reference to a hash where the following keys are defined:
+SbmlImportParams is a reference to a hash where the following keys are defined:
 	assembly_input_ref has a value which is a SBMLTools.assembly_ref
 	workspace_name has a value which is a string
 	min_length has a value which is an int
@@ -142,9 +142,9 @@ FilterContigsResults is a reference to a hash where the following keys are defin
 
 =begin text
 
-$params is a SBMLTools.FilterContigsParams
+$params is a SBMLTools.SbmlImportParams
 $output is a SBMLTools.FilterContigsResults
-FilterContigsParams is a reference to a hash where the following keys are defined:
+SbmlImportParams is a reference to a hash where the following keys are defined:
 	assembly_input_ref has a value which is a SBMLTools.assembly_ref
 	workspace_name has a value which is a string
 	min_length has a value which is an int

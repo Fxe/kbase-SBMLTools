@@ -171,12 +171,12 @@ public class SBMLToolsClient {
      * Apps that run in the Narrative, your function should have the 
      * 'authentication required' modifier.
      * </pre>
-     * @param   params   instance of type {@link sbmltools.FilterContigsParams FilterContigsParams}
+     * @param   params   instance of type {@link sbmltools.SbmlImportParams SbmlImportParams}
      * @return   parameter "output" of type {@link sbmltools.FilterContigsResults FilterContigsResults}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public FilterContigsResults filterContigs(FilterContigsParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public FilterContigsResults filterContigs(SbmlImportParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
         TypeReference<List<FilterContigsResults>> retType = new TypeReference<List<FilterContigsResults>>() {};

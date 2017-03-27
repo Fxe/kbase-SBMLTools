@@ -44,7 +44,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "bc25bca9bb39bf53ad7bf9606f52404295d9aa15";
+    private static final String gitCommitHash = "142fe8eaa833545d22cd11a48b797a8da86c5ed0";
 
     //BEGIN_CLASS_HEADER
     private final URL callbackURL;
@@ -73,11 +73,11 @@ public class SBMLToolsServer extends JsonServerServlet {
      * Apps that run in the Narrative, your function should have the 
      * 'authentication required' modifier.
      * </pre>
-     * @param   params   instance of type {@link sbmltools.SbmlImportParams SbmlImportParams}
+     * @param   params   instance of type {@link sbmltools.FilterContigsParams FilterContigsParams}
      * @return   parameter "output" of type {@link sbmltools.FilterContigsResults FilterContigsResults}
      */
     @JsonServerMethod(rpc = "SBMLTools.filter_contigs", async=true)
-    public FilterContigsResults filterContigs(SbmlImportParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    public FilterContigsResults filterContigs(FilterContigsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         FilterContigsResults returnVal = null;
         //BEGIN filter_contigs
         

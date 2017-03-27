@@ -62,6 +62,6 @@ module SBMLTools {
         Apps that run in the Narrative, your function should have the 
         'authentication required' modifier.
     */
-    funcdef filter_contigs(FilterContigsParams params)
+    funcdef filter_contigs(SbmlImportParams params)
         returns (FilterContigsResults output) authentication required;
 };
