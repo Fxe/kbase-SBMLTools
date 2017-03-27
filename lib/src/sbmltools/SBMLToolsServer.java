@@ -30,6 +30,7 @@ import net.sf.jfasta.FASTAFileReader;
 import net.sf.jfasta.impl.FASTAElementIterator;
 import net.sf.jfasta.impl.FASTAFileReaderImpl;
 import net.sf.jfasta.impl.FASTAFileWriter;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 //END_HEADER
 
 /**
@@ -126,7 +127,8 @@ public class SBMLToolsServer extends JsonServerServlet {
         assyUtil.setIsInsecureHttpConnectionAllowed(true);
         final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
                 .withRef(assyRef));
-
+        
+        XmlStreamSbmlReader reader = new XmlStreamSbmlReader("");
         /* Step 3 - Actually perform the filter operation, saving the good contigs to a new
          * fasta file.
          */
