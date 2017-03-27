@@ -109,60 +109,21 @@ public class SBMLToolsServerTest {
     
     @Test
     public void testFilterContigsOk() throws Exception {
-        // First load a test FASTA file as an KBase Assembly
-        final String fastaContent = ">seq1 something something asdf\n" +
-                                    "agcttttcat\n" +
-                                    ">seq2\n" +
-                                    "agctt\n" +
-                                    ">seq3\n" +
-                                    "agcttttcatgg";
-        
-        final String ref = loadFASTA(scratch.resolve("test1.fasta"), "TestAssembly", fastaContent);
-        
-        // second, call the implementation
-        final FilterContigsResults ret = impl.filterContigs(new FilterContigsParams()
-                .withWorkspaceName(getWsName())
-                .withAssemblyInputRef(ref)
-                .withMinLength(10L),
-                token, getContext());
-        
-        // validate the returned data
-        Assert.assertEquals(3L, (long)ret.getNInitialContigs());
-        Assert.assertEquals(1L, (long)ret.getNContigsRemoved());
-        Assert.assertEquals(2L, (long)ret.getNContigsRemaining());
+
     }
     
     @Test
     public void test_filter_contigs_err1() throws Exception {
-        try {
-            impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
-                .withAssemblyInputRef("fake/fake/1"), token, getContext());
-            Assert.fail("Error is expected above");
-        } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("Parameter min_length is not set in input arguments",
-                    ex.getMessage());
-        }
+
     }
     
     @Test
     public void test_filter_contigs_err2() throws Exception {
-        try {
-            impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
-                .withAssemblyInputRef("fake/fake/1").withMinLength(-10L), token, getContext());
-            Assert.fail("Error is expected above");
-        } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("min_length parameter cannot be negative (-10)", ex.getMessage());
-        }
+
     }
     
     @Test
     public void test_filter_contigs_err3() throws Exception {
-        try {
-            impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
-                .withAssemblyInputRef("fake").withMinLength(10L), token, getContext());
-            Assert.fail("Error is expected above");
-        } catch (ServerException ex) {
-            Assert.assertEquals("Invalid workspace reference string! Found fake", ex.getMessage());
-        }
+
     }
 }
