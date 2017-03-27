@@ -102,12 +102,12 @@ public class XmlStreamSbmlReader {
 
   public XmlStreamSbmlReader(String path) throws IOException {
 //    data = IOUtils.readFromFile(new File(path));
-    logger.debug("Loaded {} bytes", data.getBytes().length);
+    logger.debug("Loaded {} bytes", 0);
   }
 
   public XmlStreamSbmlReader(InputStream inputStream) throws IOException {
 //    data = IOUtils.readFromInputStream(inputStream);
-    logger.debug("Loaded {} bytes", data.getBytes().length);
+    logger.debug("Loaded {} bytes", 0);
   }
 
   public XmlSbmlModel parse() throws IOException {
