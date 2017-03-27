@@ -1,17 +1,20 @@
 package sbmltools;
 
 import java.io.File;
-import java.net.MalformedURLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import us.kbase.auth.AuthToken;
+import us.kbase.common.service.JsonServerMethod;
+import us.kbase.common.service.JsonServerServlet;
+import us.kbase.common.service.JsonServerSyslog;
+import us.kbase.common.service.RpcContext;
+
 //BEGIN_HEADER
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.net.MalformedURLException;
 
 import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
@@ -22,12 +25,12 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
+import net.sf.jfasta.FASTAElement;
+import net.sf.jfasta.FASTAFileReader;
+import net.sf.jfasta.impl.FASTAElementIterator;
+import net.sf.jfasta.impl.FASTAFileReaderImpl;
+import net.sf.jfasta.impl.FASTAFileWriter;
 //END_HEADER
-import us.kbase.auth.AuthToken;
-import us.kbase.common.service.JsonServerMethod;
-import us.kbase.common.service.JsonServerServlet;
-import us.kbase.common.service.JsonServerSyslog;
-import us.kbase.common.service.RpcContext;
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
@@ -48,8 +51,6 @@ public class SBMLToolsServer extends JsonServerServlet {
     private final Path scratch;
     //END_CLASS_HEADER
 
-//    private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
-    
     public SBMLToolsServer() throws Exception {
         super("SBMLTools");
         //BEGIN_CONSTRUCTOR
@@ -130,7 +131,6 @@ public class SBMLToolsServer extends JsonServerServlet {
          * fasta file.
          */
         final Path out = scratch.resolve("filtered.fasta");
-//        logger.info("test {}", out.getFileName().toAbsolutePath());
         long total = 0;
         long remaining = 0;
 //        try (final FASTAFileReader fastaRead = new FASTAFileReaderImpl(
