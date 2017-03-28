@@ -142,9 +142,12 @@ public class SBMLToolsServer extends JsonServerServlet {
 //            new DownloadWebFileParams().withFileUrl(params.getUrl()));
 //        final Path webFilePath = scratch.resolve(webFileOutput.getCopyFilePath());
         URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
-        IOUtils.readLines(url.openStream());
-//        InputStream is = url.openStream();
-        XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
+        
+        InputStream is = url.openStream();
+        XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
+//        if (url != null) {
+//          url.c
+//        }
 //        if (is != null) {
 //          is.close();
 //        }
