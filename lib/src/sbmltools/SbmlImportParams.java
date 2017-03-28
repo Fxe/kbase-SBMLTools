@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "assembly_input_ref",
     "workspace_name",
+    "url",
     "min_length"
 })
 public class SbmlImportParams {
@@ -29,6 +30,8 @@ public class SbmlImportParams {
     private String assemblyInputRef;
     @JsonProperty("workspace_name")
     private String workspaceName;
+    @JsonProperty("url")
+    private String url;
     @JsonProperty("min_length")
     private Long minLength;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -63,6 +66,21 @@ public class SbmlImportParams {
         return this;
     }
 
+    @JsonProperty("url")
+    public String getUrl() {
+        return url;
+    }
+
+    @JsonProperty("url")
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public SbmlImportParams withUrl(String url) {
+        this.url = url;
+        return this;
+    }
+
     @JsonProperty("min_length")
     public Long getMinLength() {
         return minLength;
@@ -90,7 +108,7 @@ public class SbmlImportParams {
 
     @Override
     public String toString() {
-        return ((((((((("SbmlImportParams"+" [assemblyInputRef=")+ assemblyInputRef)+", workspaceName=")+ workspaceName)+", minLength=")+ minLength)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((("SbmlImportParams"+" [assemblyInputRef=")+ assemblyInputRef)+", workspaceName=")+ workspaceName)+", url=")+ url)+", minLength=")+ minLength)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

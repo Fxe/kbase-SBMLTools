@@ -126,6 +126,7 @@ $output is a SBMLTools.FilterContigsResults
 SbmlImportParams is a reference to a hash where the following keys are defined:
 	assembly_input_ref has a value which is a SBMLTools.assembly_ref
 	workspace_name has a value which is a string
+	url has a value which is a string
 	min_length has a value which is an int
 assembly_ref is a string
 FilterContigsResults is a reference to a hash where the following keys are defined:
@@ -147,6 +148,7 @@ $output is a SBMLTools.FilterContigsResults
 SbmlImportParams is a reference to a hash where the following keys are defined:
 	assembly_input_ref has a value which is a SBMLTools.assembly_ref
 	workspace_name has a value which is a string
+	url has a value which is a string
 	min_length has a value which is an int
 assembly_ref is a string
 FilterContigsResults is a reference to a hash where the following keys are defined:
@@ -235,6 +237,7 @@ $output is a SBMLTools.FilterContigsResults
 SbmlImportParams is a reference to a hash where the following keys are defined:
 	assembly_input_ref has a value which is a SBMLTools.assembly_ref
 	workspace_name has a value which is a string
+	url has a value which is a string
 	min_length has a value which is an int
 assembly_ref is a string
 FilterContigsResults is a reference to a hash where the following keys are defined:
@@ -256,6 +259,7 @@ $output is a SBMLTools.FilterContigsResults
 SbmlImportParams is a reference to a hash where the following keys are defined:
 	assembly_input_ref has a value which is a SBMLTools.assembly_ref
 	workspace_name has a value which is a string
+	url has a value which is a string
 	min_length has a value which is an int
 assembly_ref is a string
 FilterContigsResults is a reference to a hash where the following keys are defined:
@@ -511,6 +515,7 @@ min_length has a value which is an int
 a reference to a hash where the following keys are defined:
 assembly_input_ref has a value which is a SBMLTools.assembly_ref
 workspace_name has a value which is a string
+url has a value which is a string
 min_length has a value which is an int
 
 </pre>
@@ -522,6 +527,7 @@ min_length has a value which is an int
 a reference to a hash where the following keys are defined:
 assembly_input_ref has a value which is a SBMLTools.assembly_ref
 workspace_name has a value which is a string
+url has a value which is a string
 min_length has a value which is an int
 
 

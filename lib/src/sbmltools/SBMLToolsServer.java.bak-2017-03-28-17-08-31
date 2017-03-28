@@ -44,7 +44,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "1ab91759ef489e6f5108a960dcbc8cb76fdba839";
+    private static final String gitCommitHash = "23fb5360d3d52dd5d95439b602e0706446fd7130";
 
     //BEGIN_CLASS_HEADER
     private final URL callbackURL;
@@ -197,8 +197,40 @@ public class SBMLToolsServer extends JsonServerServlet {
     @JsonServerMethod(rpc = "SBMLTools.import_model_xml", async=true)
     public FilterContigsResults importModelXml(SbmlImportParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         FilterContigsResults returnVal = null;
-        //BEGIN import_model_xml
-        //END import_model_xml
+
+        final String assyRef = params.getAssemblyInputRef();
+
+        System.out.println("Downloading assembly data as FASTA file.");
+        final AssemblyUtilClient assyUtil = new AssemblyUtilClient(callbackURL, authPart);
+
+        assyUtil.setIsInsecureHttpConnectionAllowed(true);
+        final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
+                .withRef(assyRef));
+        
+        final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
+            .withAssemblyName(fileobj.getAssemblyName() + "_new")
+            .withWorkspaceName(params.getWorkspaceName())
+            .withFile(new FastaAssemblyFile().withPath(fileobj.getPath())));
+        
+        final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
+        // see note above about bad practice
+        kbr.setIsInsecureHttpConnectionAllowed(true);
+        final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(params.getWorkspaceName())
+                .withReport(new Report().withTextMessage("some text")
+                        .withObjectsCreated(Arrays.asList(new WorkspaceObject()
+                                .withDescription("Filtered contigs")
+                                .withRef(newAssyRef)))));
+        
+        returnVal = new FilterContigsResults()
+            .withAssemblyOutput(newAssyRef)
+            .withNInitialContigs(0L)
+            .withNContigsRemaining(0L)
+            .withNContigsRemoved(0L)
+            .withReportName(report.getName())
+            .withReportRef(report.getRef());
+
+        System.out.println("returning:\n" + returnVal);
+        
         return returnVal;
     }
     @JsonServerMethod(rpc = "SBMLTools.status")

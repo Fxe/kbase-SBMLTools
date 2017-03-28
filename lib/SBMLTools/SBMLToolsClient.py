@@ -45,7 +45,8 @@ class SBMLTools(object):
            primitive types include 'string', 'int', 'float'.  Here we define
            a type named assembly_ref to indicate a string that should be set
            to a KBase ID reference to an Assembly data object.), parameter
-           "workspace_name" of String, parameter "min_length" of Long
+           "workspace_name" of String, parameter "url" of String, parameter
+           "min_length" of Long
         :returns: instance of type "FilterContigsResults" (Here is the
            definition of the output of the function.  The output can be used
            by other SDK modules which call your code, or the output
@@ -73,7 +74,8 @@ class SBMLTools(object):
            primitive types include 'string', 'int', 'float'.  Here we define
            a type named assembly_ref to indicate a string that should be set
            to a KBase ID reference to an Assembly data object.), parameter
-           "workspace_name" of String, parameter "min_length" of Long
+           "workspace_name" of String, parameter "url" of String, parameter
+           "min_length" of Long
         :returns: instance of type "FilterContigsResults" (Here is the
            definition of the output of the function.  The output can be used
            by other SDK modules which call your code, or the output
