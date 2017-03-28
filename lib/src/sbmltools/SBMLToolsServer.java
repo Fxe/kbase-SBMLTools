@@ -1,6 +1,7 @@
 package sbmltools;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import us.kbase.auth.AuthToken;
@@ -127,7 +128,12 @@ public class SBMLToolsServer extends JsonServerServlet {
         final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
                 .withRef(assyRef));
         
-        XmlStreamSbmlReader reader = new XmlStreamSbmlReader("");
+        URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
+        InputStream is = url.openStream();
+        XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
+        if (is != null) {
+          is.close();
+        }
         /* Step 3 - Actually perform the filter operation, saving the good contigs to a new
          * fasta file.
          */
