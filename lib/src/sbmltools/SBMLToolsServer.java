@@ -153,31 +153,31 @@ public class SBMLToolsServer extends JsonServerServlet {
         String msg = "empty";
         FBAModel fbaModel = new FBAModel();
         try {
-          URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
+          URL url = new URL(params.getUrl());
           XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
           XmlSbmlModel model = reader.parse();
 //          msg = model.getAttributes().toString();
           msg = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
-          for (XmlSbmlCompartment xcmp : model.getCompartments()) {
-            ModelCompartment compartment = new ModelCompartment();
-            compartment.setCompartmentIndex(0L);
-            compartment.setCompartmentRef("0");
-            compartment.setId(xcmp.getAttributes().get("id"));
-            compartment.setLabel(xcmp.getAttributes().get("name"));
-            compartment.setPH(7.0);
-            compartment.setPotential(1.0);
-            fbaModel.getModelcompartments().add(compartment);
-          }
-          for (XmlSbmlSpecie xspi : model.getSpecies()) {
-            ModelCompound compound = new ModelCompound();
-            compound.setCompoundRef("0");
-            compound.setCharge(0.0);
-            compound.setFormula("");
-            compound.setName(xspi.getAttributes().get("name"));
-            compound.setId(xspi.getAttributes().get("id"));
+//          for (XmlSbmlCompartment xcmp : model.getCompartments()) {
+//            ModelCompartment compartment = new ModelCompartment();
+//            compartment.setCompartmentIndex(0L);
+//            compartment.setCompartmentRef("0");
+//            compartment.setId(xcmp.getAttributes().get("id"));
+//            compartment.setLabel(xcmp.getAttributes().get("name"));
+//            compartment.setPH(7.0);
+//            compartment.setPotential(1.0);
+//            fbaModel.getModelcompartments().add(compartment);
+//          }
+//          for (XmlSbmlSpecie xspi : model.getSpecies()) {
+//            ModelCompound compound = new ModelCompound();
 //            compound.setCompoundRef("0");
-            fbaModel.getModelcompounds().add(compound);
-          }
+//            compound.setCharge(0.0);
+//            compound.setFormula("");
+//            compound.setName(xspi.getAttributes().get("name"));
+//            compound.setId(xspi.getAttributes().get("id"));
+////            compound.setCompoundRef("0");
+//            fbaModel.getModelcompounds().add(compound);
+//          }
         } catch (Exception e) {
           e.printStackTrace();
           msg = e.getMessage();
