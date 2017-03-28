@@ -37,5 +37,10 @@ parameters :
             Min Length Threshold
         short-hint : |
             All contigs below this length will be removed
+    url :
+        ui-name : |
+            Some URL
+        short-hint : |
+            SBML URL to pull
 description : |
     <p>This is a simple method designed to illustrate the KBase SDK.</p>

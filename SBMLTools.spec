@@ -36,6 +36,7 @@ module SBMLTools {
     typedef structure {
         assembly_ref assembly_input_ref;
         string workspace_name;
+        string url;
         int min_length;
     } SbmlImportParams;
 

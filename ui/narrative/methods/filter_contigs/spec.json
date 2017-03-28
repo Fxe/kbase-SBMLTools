@@ -32,6 +32,17 @@
                 "validate_as": "int",
                 "min_integer" : 0
             }
+        },
+        {
+            "id": "url",
+            "optional": false,
+            "advanced": false,
+            "allow_multiple": false,
+            "default_values": [ "" ],
+            "field_type": "text",
+            "text_options": {
+                "validate_as": "string"
+            }
         }
     ],
     "behavior": {
@@ -52,6 +63,10 @@
                 {
                     "input_parameter": "min_length",
                     "target_property": "min_length"
+                },
+                {
+                    "input_parameter": "url",
+                    "target_property": "url"
                 }
             ],
             "output_mapping": [
