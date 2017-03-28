@@ -129,11 +129,11 @@ public class SBMLToolsServer extends JsonServerServlet {
                 .withRef(assyRef));
         
         URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
-        InputStream is = url.openStream();
-        XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
-        if (is != null) {
-          is.close();
-        }
+//        InputStream is = url.openStream();
+        XmlStreamSbmlReader reader = new XmlStreamSbmlReader("");
+//        if (is != null) {
+//          is.close();
+//        }
         /* Step 3 - Actually perform the filter operation, saving the good contigs to a new
          * fasta file.
          */
