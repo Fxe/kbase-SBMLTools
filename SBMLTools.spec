@@ -64,4 +64,6 @@ module SBMLTools {
     */
     funcdef filter_contigs(SbmlImportParams params)
         returns (FilterContigsResults output) authentication required;
+    funcdef import_model_xml(SbmlImportParams params)
+        returns (FilterContigsResults output) authentication required;
 };
