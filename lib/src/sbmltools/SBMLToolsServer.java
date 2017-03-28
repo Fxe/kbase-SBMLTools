@@ -142,14 +142,17 @@ public class SBMLToolsServer extends JsonServerServlet {
 //        DownloadWebFileOutput webFileOutput = fileUtilClient.downloadWebFile(
 //            new DownloadWebFileParams().withFileUrl(params.getUrl()));
 //        final Path webFilePath = scratch.resolve(webFileOutput.getCopyFilePath());
-        URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
+        
         
 //        InputStream is = url.openStream();
         String msg = "empty";
-        XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
+        
         try {
+          URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
+          XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
           XmlSbmlModel model = reader.parse();
-          msg = model.getAttributes().toString();
+//          msg = model.getAttributes().toString();
+          msg = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
         } catch (Exception e) {
           e.printStackTrace();
           msg = e.getMessage();
