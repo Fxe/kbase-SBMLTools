@@ -18,6 +18,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,12 +103,17 @@ public class XmlStreamSbmlReader {
 
   public XmlStreamSbmlReader(String path) throws IOException {
 //    data = IOUtils.readFromFile(new File(path));
+    
     logger.debug("Loaded {} bytes", 0);
   }
 
   public XmlStreamSbmlReader(InputStream inputStream) throws IOException {
 //    data = IOUtils.readFromInputStream(inputStream);
-    logger.debug("Loaded {} bytes", 0);
+    data = "";
+    for (String s : IOUtils.readLines(inputStream)) {
+      data += s;
+    }
+    logger.debug("Loaded {} bytes", data.getBytes().length);
   }
 
   public XmlSbmlModel parse() throws IOException {

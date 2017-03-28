@@ -1,8 +1,13 @@
 package sbmltools;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
@@ -20,6 +25,9 @@ import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
 import assemblyutil.GetAssemblyParams;
 import assemblyutil.SaveAssemblyParams;
+import datafileutil.DataFileUtilClient;
+import datafileutil.DownloadWebFileOutput;
+import datafileutil.DownloadWebFileParams;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
@@ -127,9 +135,16 @@ public class SBMLToolsServer extends JsonServerServlet {
         final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
                 .withRef(assyRef));
         
+//        final DataFileUtilClient fileUtilClient = new DataFileUtilClient(callbackURL, authPart);
+//        fileUtilClient.setIsInsecureHttpConnectionAllowed(true);
+//        
+//        DownloadWebFileOutput webFileOutput = fileUtilClient.downloadWebFile(
+//            new DownloadWebFileParams().withFileUrl(params.getUrl()));
+//        final Path webFilePath = scratch.resolve(webFileOutput.getCopyFilePath());
         URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
+        IOUtils.readLines(url.openStream());
 //        InputStream is = url.openStream();
-        XmlStreamSbmlReader reader = new XmlStreamSbmlReader("");
+        XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
 //        if (is != null) {
 //          is.close();
 //        }
