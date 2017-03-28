@@ -199,6 +199,18 @@ public class SBMLToolsServer extends JsonServerServlet {
         FilterContigsResults returnVal = null;
 
         final String assyRef = params.getAssemblyInputRef();
+
+        System.out.println("Downloading assembly data as FASTA file.");
+        final AssemblyUtilClient assyUtil = new AssemblyUtilClient(callbackURL, authPart);
+
+        assyUtil.setIsInsecureHttpConnectionAllowed(true);
+        final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
+                .withRef(assyRef));
+        
+        final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
+            .withAssemblyName(fileobj.getAssemblyName() + "_new")
+            .withWorkspaceName(params.getWorkspaceName())
+            .withFile(new FastaAssemblyFile().withPath(fileobj.getPath())));
         
         final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
         // see note above about bad practice
@@ -207,10 +219,10 @@ public class SBMLToolsServer extends JsonServerServlet {
                 .withReport(new Report().withTextMessage("some text")
                         .withObjectsCreated(Arrays.asList(new WorkspaceObject()
                                 .withDescription("Filtered contigs")
-                                .withRef(assyRef)))));
+                                .withRef(newAssyRef)))));
         
         returnVal = new FilterContigsResults()
-            .withAssemblyOutput(assyRef)
+            .withAssemblyOutput(newAssyRef)
             .withNInitialContigs(0L)
             .withNContigsRemaining(0L)
             .withNContigsRemoved(0L)
