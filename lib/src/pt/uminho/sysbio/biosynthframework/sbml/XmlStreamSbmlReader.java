@@ -112,7 +112,10 @@ public class XmlStreamSbmlReader {
 //    data = IOUtils.readFromInputStream(inputStream);
     data = "";
     BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-    
+    String line = null;
+    while ((line = br.readLine()) != null) {
+      data += line;
+    }
     br.close();
     inputStream.close();
 //    for (String s : IOUtils.readLines(inputStream)) {

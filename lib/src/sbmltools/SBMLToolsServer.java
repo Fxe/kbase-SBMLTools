@@ -38,6 +38,7 @@ import net.sf.jfasta.FASTAFileReader;
 import net.sf.jfasta.impl.FASTAElementIterator;
 import net.sf.jfasta.impl.FASTAFileReaderImpl;
 import net.sf.jfasta.impl.FASTAFileWriter;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 //END_HEADER
 
@@ -144,7 +145,15 @@ public class SBMLToolsServer extends JsonServerServlet {
         URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
         
 //        InputStream is = url.openStream();
+        String msg = "empty";
         XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
+        try {
+          XmlSbmlModel model = reader.parse();
+          msg = model.getAttributes().toString();
+        } catch (Exception e) {
+          e.printStackTrace();
+          msg = e.getMessage();
+        }
 //        if (url != null) {
 //          url.c
 //        }
@@ -170,7 +179,7 @@ public class SBMLToolsServer extends JsonServerServlet {
 //                }
 //            }
 //        }
-        final String resultText = "No changes " + params.getUrl();
+        final String resultText = "No changes " + params.getUrl() + " " + msg;
         System.out.println(resultText);
         
         // Step 4 - Save the new Assembly back to the system
