@@ -217,6 +217,112 @@ Apps that run in the Narrative, your function should have the
     }
 }
  
+
+
+=head2 import_model_xml
+
+  $output = $obj->import_model_xml($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a SBMLTools.SbmlImportParams
+$output is a SBMLTools.FilterContigsResults
+SbmlImportParams is a reference to a hash where the following keys are defined:
+	assembly_input_ref has a value which is a SBMLTools.assembly_ref
+	workspace_name has a value which is a string
+	min_length has a value which is an int
+assembly_ref is a string
+FilterContigsResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	assembly_output has a value which is a SBMLTools.assembly_ref
+	n_initial_contigs has a value which is an int
+	n_contigs_removed has a value which is an int
+	n_contigs_remaining has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a SBMLTools.SbmlImportParams
+$output is a SBMLTools.FilterContigsResults
+SbmlImportParams is a reference to a hash where the following keys are defined:
+	assembly_input_ref has a value which is a SBMLTools.assembly_ref
+	workspace_name has a value which is a string
+	min_length has a value which is an int
+assembly_ref is a string
+FilterContigsResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	assembly_output has a value which is a SBMLTools.assembly_ref
+	n_initial_contigs has a value which is an int
+	n_contigs_removed has a value which is an int
+	n_contigs_remaining has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub import_model_xml
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function import_model_xml (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to import_model_xml:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'import_model_xml');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.import_model_xml",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'import_model_xml',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_model_xml",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'import_model_xml',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -260,16 +366,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'filter_contigs',
+                method_name => 'import_model_xml',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method filter_contigs",
+            error => "Error invoking method import_model_xml",
             status_line => $self->{client}->status_line,
-            method_name => 'filter_contigs',
+            method_name => 'import_model_xml',
         );
     }
 }
