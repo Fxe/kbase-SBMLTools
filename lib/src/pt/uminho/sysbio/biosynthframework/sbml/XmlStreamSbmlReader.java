@@ -1,9 +1,11 @@
 package pt.uminho.sysbio.biosynthframework.sbml;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -109,6 +111,10 @@ public class XmlStreamSbmlReader {
   public XmlStreamSbmlReader(InputStream inputStream) throws IOException {
 //    data = IOUtils.readFromInputStream(inputStream);
     data = "";
+    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+    
+    br.close();
+    inputStream.close();
 //    for (String s : IOUtils.readLines(inputStream)) {
 //      data += s;
 //    }
