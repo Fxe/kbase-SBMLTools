@@ -163,6 +163,7 @@ public class XmlStreamSbmlReader {
             model.columnNumber = startElement.getLocation().getColumnNumber();
             model.lineNumber = startElement.getLocation().getLineNumber();
             model.setAttributes(getAttributes(startElement));
+            model.getAttributes().put("size", Integer.toString(data.length()));
             break;
           case SBML_NOTES:
             if (model != null) {
