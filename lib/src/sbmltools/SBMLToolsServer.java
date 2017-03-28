@@ -197,8 +197,28 @@ public class SBMLToolsServer extends JsonServerServlet {
     @JsonServerMethod(rpc = "SBMLTools.import_model_xml", async=true)
     public FilterContigsResults importModelXml(SbmlImportParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         FilterContigsResults returnVal = null;
-        //BEGIN import_model_xml
-        //END import_model_xml
+
+        final String assyRef = params.getAssemblyInputRef();
+        
+        final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
+        // see note above about bad practice
+        kbr.setIsInsecureHttpConnectionAllowed(true);
+        final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(params.getWorkspaceName())
+                .withReport(new Report().withTextMessage("some text")
+                        .withObjectsCreated(Arrays.asList(new WorkspaceObject()
+                                .withDescription("Filtered contigs")
+                                .withRef(assyRef)))));
+        
+        returnVal = new FilterContigsResults()
+            .withAssemblyOutput(assyRef)
+            .withNInitialContigs(0L)
+            .withNContigsRemaining(0L)
+            .withNContigsRemoved(0L)
+            .withReportName(report.getName())
+            .withReportRef(report.getRef());
+
+        System.out.println("returning:\n" + returnVal);
+        
         return returnVal;
     }
     @JsonServerMethod(rpc = "SBMLTools.status")
