@@ -1,51 +1,36 @@
 package sbmltools;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-
-import us.kbase.auth.AuthToken;
-import us.kbase.common.service.JsonServerMethod;
-import us.kbase.common.service.JsonServerServlet;
-import us.kbase.common.service.JsonServerSyslog;
-import us.kbase.common.service.RpcContext;
-
+import java.net.MalformedURLException;
 //BEGIN_HEADER
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.net.MalformedURLException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
 import assemblyutil.GetAssemblyParams;
 import assemblyutil.SaveAssemblyParams;
-import datafileutil.DataFileUtilClient;
-import datafileutil.DownloadWebFileOutput;
-import datafileutil.DownloadWebFileParams;
 import kbasefba.FBAModel;
-import kbasefba.ModelCompartment;
-import kbasefba.ModelCompound;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
-import net.sf.jfasta.FASTAElement;
-import net.sf.jfasta.FASTAFileReader;
-import net.sf.jfasta.impl.FASTAElementIterator;
-import net.sf.jfasta.impl.FASTAFileReaderImpl;
-import net.sf.jfasta.impl.FASTAFileWriter;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 //END_HEADER
+import us.kbase.auth.AuthToken;
+import us.kbase.common.service.JsonServerMethod;
+import us.kbase.common.service.JsonServerServlet;
+import us.kbase.common.service.JsonServerSyslog;
+import us.kbase.common.service.RpcContext;
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
@@ -150,14 +135,21 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         
 //        InputStream is = url.openStream();
-        String msg = "empty";
+        String reportText = "empty";
         FBAModel fbaModel = new FBAModel();
         try {
           URL url = new URL(params.getUrl());
           XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
           XmlSbmlModel model = reader.parse();
 //          msg = model.getAttributes().toString();
-          msg = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
+          XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model);
+          List<XmlMessage> msgs = validator.validate();
+          reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
+          for (XmlMessage m : msgs) {
+            reportText +="\n" + String.format("%s", m);
+          }
+          
+          
 //          for (XmlSbmlCompartment xcmp : model.getCompartments()) {
 //            ModelCompartment compartment = new ModelCompartment();
 //            compartment.setCompartmentIndex(0L);
@@ -180,7 +172,7 @@ public class SBMLToolsServer extends JsonServerServlet {
 //          }
         } catch (Exception e) {
           e.printStackTrace();
-          msg = e.getMessage();
+          reportText = e.getMessage();
         }
 //        if (url != null) {
 //          url.c
@@ -207,7 +199,7 @@ public class SBMLToolsServer extends JsonServerServlet {
 //                }
 //            }
 //        }
-        final String resultText = "No changes " + params.getUrl() + " " + msg;
+        final String resultText = "No changes " + params.getUrl() + "\n" + reportText;
         System.out.println(resultText);
         
         // Step 4 - Save the new Assembly back to the system
