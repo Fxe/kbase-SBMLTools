@@ -148,7 +148,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         String msg = "empty";
         
         try {
-          URL url = new URL(params.getUrl());
+          URL url = new URL("http://193.137.11.210/models/biomodels/iBROKEN.xml");
           XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
           XmlSbmlModel model = reader.parse();
 //          msg = model.getAttributes().toString();
