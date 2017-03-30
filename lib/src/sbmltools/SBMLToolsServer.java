@@ -123,21 +123,7 @@ public class SBMLToolsServer extends JsonServerServlet {
                     minLength + ")");
         }
         
-        /* Step 2 - Download the input data as a Fasta file
-         * We can use the AssemblyUtils module to download a FASTA file from our Assembly data
-         * object. The return object gives us the path to the file that was created.
-         */
-        System.out.println("Downloading assembly data as FASTA file.");
-        final AssemblyUtilClient assyUtil = new AssemblyUtilClient(callbackURL, authPart);
-        /* Normally this is bad practice, but the callback server (which runs on the same machine
-         * as the docker container running the method) is http only
-         * TODO Should allow the clients to not require a token, even for auth required methods,
-         * since the callback server ignores the incoming token. No need to transmit the token
-         * here.
-         */
-        assyUtil.setIsInsecureHttpConnectionAllowed(true);
-        final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
-                .withRef(assyRef));
+
         
 //        final DataFileUtilClient fileUtilClient = new DataFileUtilClient(callbackURL, authPart);
 //        fileUtilClient.setIsInsecureHttpConnectionAllowed(true);
@@ -149,55 +135,25 @@ public class SBMLToolsServer extends JsonServerServlet {
         
 //        InputStream is = url.openStream();
         String reportText = "empty";
+        SbmlTools tools = new SbmlTools(authPart, callbackURL, jsonRpcContext);
         
-        try {
-          URL url = new URL(params.getUrl());
-          XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
-          XmlSbmlModel model = reader.parse();
-//          msg = model.getAttributes().toString();
-//          XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model);
-//          List<XmlMessage> msgs = 
-          reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
-//          reportText += SbmlTools.aaa(validator.validate());
-//          reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
-        } catch (Exception e) {
-          e.printStackTrace();
-          reportText = e.getMessage();
-        }
+        final String newAssyRef = tools.filterContigs(assyRef, workspaceName, scratch);
+        
+        reportText = tools.importModel(params);
+        
 //        if (url != null) {
 //          url.c
 //        }
 //        if (is != null) {
 //          is.close();
 //        }
-        /* Step 3 - Actually perform the filter operation, saving the good contigs to a new
-         * fasta file.
-         */
-        final Path out = scratch.resolve("filtered.fasta");
-        long total = 0;
-        long remaining = 0;
-//        try (final FASTAFileReader fastaRead = new FASTAFileReaderImpl(
-//                    new File(fileobj.getPath()));
-//                final FASTAFileWriter fastaWrite = new FASTAFileWriter(out.toFile())) {
-//            final FASTAElementIterator iter = fastaRead.getIterator();
-//            while (iter.hasNext()) {
-//                total++;
-//                final FASTAElement fe = iter.next();
-//                if (fe.getSequenceLength() >= minLength) {
-//                    remaining++;
-//                    fastaWrite.write(fe);
-//                }
-//            }
-//        }
-        final String resultText = "No changes " + params.getUrl() + "\n" + reportText;
+
+        final String resultText = "No changes\n" + reportText;
         System.out.println(resultText);
         
-        // Step 4 - Save the new Assembly back to the system
         
-        final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
-                .withAssemblyName(fileobj.getAssemblyName() + "_new")
-                .withWorkspaceName(workspaceName)
-                .withFile(new FastaAssemblyFile().withPath(fileobj.getPath())));
+        
+
         
         // Step 5 - Build a Report and return
         
@@ -213,9 +169,9 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         returnVal = new FilterContigsResults()
                 .withAssemblyOutput(newAssyRef)
-                .withNInitialContigs(total)
-                .withNContigsRemaining(remaining)
-                .withNContigsRemoved(total - remaining)
+                .withNInitialContigs(0L)
+                .withNContigsRemaining(0L)
+                .withNContigsRemoved(-1L)
                 .withReportName(report.getName())
                 .withReportRef(report.getRef());
 
