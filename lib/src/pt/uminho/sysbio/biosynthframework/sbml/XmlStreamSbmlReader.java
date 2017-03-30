@@ -1,12 +1,8 @@
 package pt.uminho.sysbio.biosynthframework.sbml;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,15 +17,12 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.Operator;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
-//import pt.uminho.sysbio.biosynthframework.util.IOUtils;
-import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
 /**
  * Java XML reader for SBML models

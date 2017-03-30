@@ -1,6 +1,5 @@
 package sbmltools;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
