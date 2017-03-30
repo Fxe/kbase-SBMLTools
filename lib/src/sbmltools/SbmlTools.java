@@ -123,6 +123,10 @@ public class SbmlTools {
       
       List<XmlMessage> msgs = validator.validate();
       reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
+//      String txt = "";
+      for (XmlMessage m : msgs) {
+        reportText +="\n" + String.format("%s", m);
+      }
 //      reportText += SbmlTools.aaa(validator.validate());
 //      reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
     } catch (Exception e) {
@@ -133,12 +137,12 @@ public class SbmlTools {
     return reportText;
   }
   
-  public static String aaa(List<XmlMessage> msgs) {
-    String txt = "";
-    for (XmlMessage m : msgs) {
-      txt +="\n" + String.format("%s", m);
-    }
-    
-    return txt;
-  }
+//  public static String aaa(List<XmlMessage> msgs) {
+//    String txt = "";
+//    for (XmlMessage m : msgs) {
+//      txt +="\n" + String.format("%s", m);
+//    }
+//    
+//    return txt;
+//  }
 }
