@@ -155,10 +155,10 @@ public class SBMLToolsServer extends JsonServerServlet {
           XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
           XmlSbmlModel model = reader.parse();
 //          msg = model.getAttributes().toString();
-          XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model);
+//          XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model);
 //          List<XmlMessage> msgs = 
           reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
-          reportText += SbmlTools.aaa(validator.validate());
+//          reportText += SbmlTools.aaa(validator.validate());
 //          reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
         } catch (Exception e) {
           e.printStackTrace();
