@@ -156,11 +156,9 @@ public class SBMLToolsServer extends JsonServerServlet {
           XmlSbmlModel model = reader.parse();
 //          msg = model.getAttributes().toString();
           XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model);
-          List<XmlMessage> msgs = validator.validate();
+//          List<XmlMessage> msgs = 
           reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
-          for (XmlMessage m : msgs) {
-            reportText +="\n" + String.format("%s", m);
-          }
+          reportText += SbmlTools.aaa(validator.validate());
 //          reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
         } catch (Exception e) {
           e.printStackTrace();
