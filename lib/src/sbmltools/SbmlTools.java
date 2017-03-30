@@ -1,6 +1,8 @@
 package sbmltools;
 
+import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -115,7 +117,10 @@ public class SbmlTools {
     String reportText = "";
     try {
       URL url = new URL(params.getUrl());
-      XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
+      URLConnection connection = url.openConnection();
+      
+//      URL url = new URL(params.getUrl());
+      XmlStreamSbmlReader reader = new XmlStreamSbmlReader(connection.getInputStream());
       XmlSbmlModel model = reader.parse();
 //      msg = model.getAttributes().toString();
       XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model, knownSpecieAttributes());
@@ -129,6 +134,9 @@ public class SbmlTools {
       }
 //      reportText += SbmlTools.aaa(validator.validate());
 //      reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
+      
+      connection.getInputStream().close();
+      
     } catch (Exception e) {
       e.printStackTrace();
       reportText = e.getMessage();

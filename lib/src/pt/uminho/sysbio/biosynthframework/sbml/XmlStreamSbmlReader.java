@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,6 +21,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,18 +112,41 @@ public class XmlStreamSbmlReader {
 
   public XmlStreamSbmlReader(InputStream inputStream) throws IOException {
 //    data = IOUtils.readFromInputStream(inputStream);
+    
+    logger.info("reading... ");
+//    IOUtils.readFully(input, buffer);
+    
+    byte[] buffer = new byte[1024 * 1024];
+    int bread = 0;
     data = "";
-    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-    String line = null;
-    while ((line = br.readLine()) != null) {
-      data += line;
+    while ((bread = inputStream.read(buffer)) > 0) {
+      data += new String(buffer, 0, bread);
+      buffer = new byte[1024 * 1024];
+//      System.out.println(s);
     }
-    br.close();
-    inputStream.close();
+//    List<String> lines = IOUtils.readLines(inputStream);
+//    data = "";
+//    for (String l : lines) {
+//      data += l + "\n";
+//    }
+    
+    
+//    IOUtils.closeQuietly(inputStream);
+//    data = "";
+//    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+//    String line = null;
+//    while ((line = br.readLine()) != null) {
+//      data += line;
+//      System.out.println(line);
+//    }
+//    br.close();
+//    inputStream.close();
+    
+    logger.info("... done");
 //    for (String s : IOUtils.readLines(inputStream)) {
 //      data += s;
 //    }
-    logger.debug("Loaded {} bytes", data.getBytes().length);
+    logger.info("Loaded {} bytes", data.getBytes().length);
   }
 
   public XmlSbmlModel parse() throws IOException {
