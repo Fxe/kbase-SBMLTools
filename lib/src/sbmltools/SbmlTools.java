@@ -2,14 +2,19 @@ package sbmltools;
 
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
 import assemblyutil.GetAssemblyParams;
 import assemblyutil.SaveAssemblyParams;
+import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.RpcContext;
@@ -47,8 +52,8 @@ public class SbmlTools {
      * fasta file.
      */
     final Path out = scratch.resolve("filtered.fasta");
-    long total = 0;
-    long remaining = 0;
+//    long total = 0;
+//    long remaining = 0;
 //    try (final FASTAFileReader fastaRead = new FASTAFileReaderImpl(
 //                new File(fileobj.getPath()));
 //            final FASTAFileWriter fastaWrite = new FASTAFileWriter(out.toFile())) {
@@ -72,6 +77,40 @@ public class SbmlTools {
     return newAssyRef;
   }
   
+  public static Map<String, MessageType> knownSpecieAttributes() {
+    String[] attr = new String[] {
+        "speciesType", "NONE",
+        "charge", "NONE",
+        "constant", "NONE",
+        "metaid", "NONE",
+        "hasOnlySubstanceUnits", "NONE",
+        "sboTerm", "NONE",
+        "boundaryCondition", "NONE",
+        "chemicalFormula", "NONE",
+        "initialAmount", "NONE",
+        "name", "NONE",
+        "compartment", "WARN",
+        "id", "CRITICAL",
+        "initialConcentration", "NONE",
+    };
+    Map<String, MessageType> fields = new HashMap<>();
+    for (int i = 0; i < attr.length; i+=2) {
+      fields.put(attr[i], MessageType.valueOf(attr[i + 1]));
+    }
+    return fields;
+  }
+  
+  public static void xrxnAttributes(XmlSbmlModelValidator validator) {
+    String[] xrxnAttr = new String[] {
+        "upperFluxBound", "fast", "metaid", "reversible", "sboTerm", "name", "lowerFluxBound", "id"
+    };
+    String[] xrxnSpecieAttr = new String[] {
+        "stoichiometry", "constant", "species", "metaid", "sboTerm"
+    };
+    validator.xrxnAttr.addAll(Arrays.asList(xrxnAttr));
+    validator.xrxnStoichAttr.addAll(Arrays.asList(xrxnSpecieAttr));
+  }
+  
   public String importModel(SbmlImportParams params) {
     String reportText = "";
     try {
@@ -79,8 +118,10 @@ public class SbmlTools {
       XmlStreamSbmlReader reader = new XmlStreamSbmlReader(url.openStream());
       XmlSbmlModel model = reader.parse();
 //      msg = model.getAttributes().toString();
-//      XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model);
-//      List<XmlMessage> msgs = 
+      XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model, knownSpecieAttributes());
+      xrxnAttributes(validator);
+      
+      List<XmlMessage> msgs = validator.validate();
       reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
 //      reportText += SbmlTools.aaa(validator.validate());
 //      reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
