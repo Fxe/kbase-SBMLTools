@@ -72,19 +72,19 @@ public class SbmlTools {
 //            }
 //        }
 //    }
-    SaveObjectsParams saveObjectsParams = new SaveObjectsParams();
-    List<ObjectSaveData> objects = null;
-    ObjectSaveData odata = new ObjectSaveData();
-    odata.setType("kbase.asds");
-    UObject udata = new UObject("");
-    odata.setData(udata);
-//    odata.setName(name);
-//    saveObjectsParams.set
-    saveObjectsParams.setObjects(objects);
-    
-    DataFileUtilClient dataFileUtilClient = new DataFileUtilClient(callbackURL, authPart);
-    long wsid = dataFileUtilClient.wsNameToId(workspaceName);
-    dataFileUtilClient.saveObjects(saveObjectsParams);
+//    SaveObjectsParams saveObjectsParams = new SaveObjectsParams();
+//    List<ObjectSaveData> objects = null;
+//    ObjectSaveData odata = new ObjectSaveData();
+//    odata.setType("kbase.asds");
+//    UObject udata = new UObject("");
+//    odata.setData(udata);
+////    odata.setName(name);
+////    saveObjectsParams.set
+//    saveObjectsParams.setObjects(objects);
+//    
+//    DataFileUtilClient dataFileUtilClient = new DataFileUtilClient(callbackURL, authPart);
+//    long wsid = dataFileUtilClient.wsNameToId(workspaceName);
+//    dataFileUtilClient.saveObjects(saveObjectsParams);
     // Step 4 - Save the new Assembly back to the system
     final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
         .withAssemblyName(fileobj.getAssemblyName() + "_new")
