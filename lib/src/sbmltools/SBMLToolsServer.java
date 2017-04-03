@@ -190,7 +190,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     @JsonServerMethod(rpc = "SBMLTools.import_model_xml", async=true)
     public FilterContigsResults importModelXml(SbmlImportParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
       FilterContigsResults returnVal = null;
-      //BEGIN filter_contigs
+      //BEGIN import_model_xml
       
       // Print statements to stdout/stderr are captured and available as the App log
       System.out.println("Starting filter contigs. Parameters:");
@@ -202,6 +202,7 @@ public class SBMLToolsServer extends JsonServerServlet {
        * defined in a Narrative App, but advanced users or other SDK developers can call
        * this function directly, so validation is still important.
        */
+//      params.get
       final String workspaceName = params.getWorkspaceName();
       if (workspaceName == null || workspaceName.isEmpty()) {
           throw new IllegalArgumentException(
@@ -238,15 +239,17 @@ public class SBMLToolsServer extends JsonServerServlet {
       // Step 6: contruct the output to send back
       
       returnVal = new FilterContigsResults()
-              .withAssemblyOutput(newAssyRef)
-              .withNInitialContigs(1L)
-              .withNContigsRemaining(1L)
-              .withNContigsRemoved(2L)
-              .withReportName(report.getName())
-              .withReportRef(report.getRef());
+          .withAssemblyOutput(newAssyRef)
+          .withNInitialContigs(1L)
+          .withNContigsRemaining(1L)
+          .withNContigsRemoved(2L)
+          .withReportName(report.getName())
+          .withReportRef(report.getRef());
 
       System.out.println("returning:\n" + returnVal);
-        return returnVal;
+      
+      //END import_model_xml
+      return returnVal;
     }
     @JsonServerMethod(rpc = "SBMLTools.status")
     public Map<String, Object> status() {
