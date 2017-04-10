@@ -171,14 +171,14 @@ public class SBMLToolsServer extends JsonServerServlet {
       
       Object mockModel = SbmlTools.mockModel();
       
-      tools.saveData("mockmodel", "KBaseFBA.FBAModel", mockModel);
+      String ref = tools.saveData("mockmodel", "KBaseFBA.FBAModel", mockModel);
       // Step 5 - Build a Report and return
       
       final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
       // see note above about bad practice
       kbr.setIsInsecureHttpConnectionAllowed(true);
       final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
-              .withReport(new Report().withTextMessage(workspaceName + " " + newAssyRef + " " + tools.saveData("", ""))
+              .withReport(new Report().withTextMessage(workspaceName + " " + newAssyRef + " " + ref)
                       .withObjectsCreated(Arrays.asList(new WorkspaceObject()
                               .withDescription("Filtered contigs")
                               .withRef(newAssyRef)))));
