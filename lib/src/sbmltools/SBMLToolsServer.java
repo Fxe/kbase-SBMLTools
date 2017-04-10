@@ -169,7 +169,9 @@ public class SBMLToolsServer extends JsonServerServlet {
       SbmlTools tools = new SbmlTools(workspaceName, authPart, callbackURL, jsonRpcContext);
       final String newAssyRef = tools.filterContigs(assyRef, scratch);
       
-//      tools.saveData("mockmodel", "KBaseFBA.FBAModel");
+      Object mockModel = SbmlTools.mockModel();
+      
+      tools.saveData("mockmodel", "KBaseFBA.FBAModel", mockModel);
       // Step 5 - Build a Report and return
       
       final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);

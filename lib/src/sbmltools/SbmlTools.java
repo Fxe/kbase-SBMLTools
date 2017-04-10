@@ -74,9 +74,39 @@ public class SbmlTools {
   }
   
   public static Object mockModel() {
-//    FBAModel model = new Fb;
+    String cmp = "default";
+    FBAModel model = new FBAModel();
+    model.setId("mockmodel");
+    model.setName("The Mock Model");
+    model.setATPMaintenance(10.0);
+    List<ModelReaction> modelreactions = new ArrayList<> ();
+    modelreactions.add(new ModelReaction()
+        .withId("rxn00148")
+        .withName("ATP:pyruvate O2-phosphotransferase")
+        .withModelReactionReagents(Arrays.asList(
+            new ModelReactionReagent().withCoefficient(-1d).withModelcompoundRef("cpd00002"),
+            new ModelReactionReagent().withCoefficient(-1d).withModelcompoundRef("cpd00020"),
+            new ModelReactionReagent().withCoefficient(1d).withModelcompoundRef("cpd00008"),
+            new ModelReactionReagent().withCoefficient(1d).withModelcompoundRef("cpd00061"),
+            new ModelReactionReagent().withCoefficient(1d).withModelcompoundRef("cpd00067"))));
     
-    return null;
+    List<ModelCompound> modelcompounds = new ArrayList<> ();
+    modelcompounds.add(new ModelCompound().withId("cpd00002").withModelcompartmentRef(cmp));
+    modelcompounds.add(new ModelCompound().withId("cpd00008").withModelcompartmentRef(cmp));
+    modelcompounds.add(new ModelCompound().withId("cpd00020").withModelcompartmentRef(cmp));
+    modelcompounds.add(new ModelCompound().withId("cpd00061").withModelcompartmentRef(cmp));
+    modelcompounds.add(new ModelCompound().withId("cpd00067").withModelcompartmentRef(cmp));
+    
+    List<ModelCompartment> modelcompartments = new ArrayList<> ();
+    modelcompartments.add(new ModelCompartment().withId(cmp).withLabel("default"));
+    
+    
+    model.setModelreactions(modelreactions);
+    model.setModelcompounds(modelcompounds);
+    model.setModelcompartments(modelcompartments);
+    model.setGenomeRef("4345/13/39");
+    
+    return model;
   }
   
   public static String getRefFromObjectInfo(Tuple11<Long, String, String, String, 
@@ -84,20 +114,20 @@ public class SbmlTools {
     return info.getE7() + "/" + info.getE1() + "/" + info.getE5();
   }
   
-  public String saveData(String nameId, String dataType) throws Exception {
-    Object o = null;
+  public String saveData(String nameId, String dataType, Object o) throws Exception {
+//    Object o = null;
 //    String nameId = "";
 //    String dataType = "";
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
     dfuClient.setIsInsecureHttpConnectionAllowed(true);
     long wsId = dfuClient.wsNameToId(workspace);
     
-//    SaveObjectsParams params = new SaveObjectsParams()
-//        .withId(wsId)
-//        .withObjects(Arrays.asList(
-//            new ObjectSaveData().withName(nameId)
-//                                .withType(dataType)
-//                                .withData(new UObject(o))));
+    SaveObjectsParams params = new SaveObjectsParams()
+        .withId(wsId)
+        .withObjects(Arrays.asList(
+            new ObjectSaveData().withName(nameId)
+                                .withType(dataType)
+                                .withData(new UObject(o))));
 ////    params.setId(wsId);
 ////    List<ObjectSaveData> saveData = new ArrayList<> ();
 ////    ObjectSaveData odata = new ObjectSaveData();
@@ -105,9 +135,9 @@ public class SbmlTools {
 ////    
 ////    params.setObjects(saveData);
 ////    ;
-//    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
+    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
     
-    return Long.toString(wsId);
+    return ref;
   }
   
   public String filterContigs(String assyRef, Path scratch) throws Exception {
