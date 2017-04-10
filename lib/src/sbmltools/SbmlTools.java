@@ -150,13 +150,16 @@ public class SbmlTools {
       }
       
       ModelReaction rxn = new ModelReaction().withId(rxnEntry)
+                                             .withAliases(new ArrayList<String> ())
                                              .withName(rxnName)
                                              .withDirection("=")
                                              .withProtons(1.0)
                                              .withReactionRef("rxn37841")
                                              .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
                                              .withProbability(1.0)
-                                             .withModelcompartmentRef("");
+                                             .withPathway("entire model")
+                                             .withModelcompartmentRef(
+                                                 model.getModelcompartments().iterator().next().getId());
       rxn.setModelReactionReagents(reagents);
       model.getModelreactions().add(rxn);
     }
