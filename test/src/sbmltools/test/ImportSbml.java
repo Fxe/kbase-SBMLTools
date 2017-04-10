@@ -5,7 +5,7 @@ import sbmltools.SbmlTools;
 
 public class ImportSbml {
   public static void main(String[] args) {
-    SbmlTools tools = new SbmlTools(null, null, null);
+    SbmlTools tools = new SbmlTools(null, null, null, null);
     SbmlImportParams params = new SbmlImportParams();
     params.setAssemblyInputRef("does not matter");
     params.setMinLength(0L);
