@@ -126,7 +126,7 @@ public class SbmlTools {
     model.setModelreactions(modelreactions);
     model.setModelcompounds(modelcompounds);
     model.setModelcompartments(modelcompartments);
-    model.setGenomeRef("4345/13/39");
+    model.setGenomeRef("4345/2/1");
     model.setSource("");
     model.setSourceId("");
     model.setType("");
