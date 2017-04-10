@@ -309,6 +309,9 @@ public class SbmlTools {
       
       connection.getInputStream().close();
       
+      FBAModel fbaModel = this.convertModel(model, "realmodel");
+      this.saveData("realmodel", KBaseType.FBAModel.value(), fbaModel);
+      
     } catch (Exception e) {
       e.printStackTrace();
       reportText = e.getMessage();
