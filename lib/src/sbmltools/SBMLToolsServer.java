@@ -111,7 +111,11 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         final String newAssyRef = tools.filterContigs(assyRef, scratch);
         
-        reportText = tools.importModel(params);
+        try {
+          reportText = tools.importModel(params);
+        } catch (Exception e) {
+          reportText = e.getMessage();
+        }
         
 
         final String resultText = "No changes\n" + reportText;
@@ -197,6 +201,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         //END import_model_xml
         return returnVal;
     }
+    
     @JsonServerMethod(rpc = "SBMLTools.status")
     public Map<String, Object> status() {
         Map<String, Object> returnVal = null;

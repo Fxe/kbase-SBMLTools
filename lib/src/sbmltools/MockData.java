@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MockData {
+  
   public static ModelCompound mockCompound(String ref, String cmp) {
     return new ModelCompound().withId(ref)
         .withCompoundRef(ref)
@@ -31,7 +32,6 @@ public class MockData {
         .withProbability(1.0)
         .withModelcompartmentRef(cmp)
         .withModelReactionReagents(Arrays.asList(
-            
             new ModelReactionReagent().withCoefficient(-1d).withModelcompoundRef("cpd00002"),
             new ModelReactionReagent().withCoefficient(-1d).withModelcompoundRef("cpd00020"),
             new ModelReactionReagent().withCoefficient(1d).withModelcompoundRef("cpd00008"),
