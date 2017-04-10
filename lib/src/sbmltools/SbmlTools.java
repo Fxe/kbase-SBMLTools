@@ -73,6 +73,12 @@ public class SbmlTools {
     this.workspace = workspace;
   }
   
+  public static Object mockModel() {
+//    FBAModel model = new Fb;
+    
+    return null;
+  }
+  
   public static String getRefFromObjectInfo(Tuple11<Long, String, String, String, 
       Long, String, Long, String, String, Long, Map<String,String>> info) {
     return info.getE7() + "/" + info.getE1() + "/" + info.getE5();
