@@ -21,8 +21,12 @@ import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.RpcContext;
@@ -73,59 +77,11 @@ public class SbmlTools {
     this.workspace = workspace;
   }
   
-  public static ModelCompound mockCompound(String ref, String cmp) {
-    return new ModelCompound().withId(ref)
-        .withCompoundRef(ref)
-        .withModelcompartmentRef(cmp)
-        .withFormula("R")
-        .withCharge(1.0)
-        .withName(ref + "@" + cmp);
-  }
-  
-  public static Object mockModel() {
-    String cmp = "default";
+  public FBAModel convertModel(XmlSbmlModel xmodel, String modelID) {
+    
     FBAModel model = new FBAModel();
-    model.setId("mockmodel");
-    model.setName("The Mock Model");
-    model.setATPMaintenance(10.0);
-    List<ModelReaction> modelreactions = new ArrayList<> ();
-    modelreactions.add(new ModelReaction()
-        .withId("rxn00148")
-        .withName("ATP:pyruvate O2-phosphotransferase")
-        .withDirection("=")
-        .withProtons(1.0)
-        .withReactionRef("rxn00148")
-        .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
-        .withProbability(1.0)
-        .withModelcompartmentRef(cmp)
-        .withModelReactionReagents(Arrays.asList(
-            
-            new ModelReactionReagent().withCoefficient(-1d).withModelcompoundRef("cpd00002"),
-            new ModelReactionReagent().withCoefficient(-1d).withModelcompoundRef("cpd00020"),
-            new ModelReactionReagent().withCoefficient(1d).withModelcompoundRef("cpd00008"),
-            new ModelReactionReagent().withCoefficient(1d).withModelcompoundRef("cpd00061"),
-            new ModelReactionReagent().withCoefficient(1d).withModelcompoundRef("cpd00067"))));
-    
-    List<ModelCompound> modelcompounds = new ArrayList<> ();
-    modelcompounds.add(mockCompound("cpd00002", cmp));
-    modelcompounds.add(mockCompound("cpd00008", cmp));
-    modelcompounds.add(mockCompound("cpd00020", cmp));
-    modelcompounds.add(mockCompound("cpd00061", cmp));
-    modelcompounds.add(mockCompound("cpd00067", cmp));
-    
-    List<ModelCompartment> modelcompartments = new ArrayList<> ();
-    modelcompartments.add(
-        new ModelCompartment().withId(cmp)
-        .withLabel("default")
-        .withPH(7.3)
-        .withPotential(1.0)
-        .withCompartmentIndex(1L)
-        .withCompartmentRef(cmp));
-    
-    
-    model.setModelreactions(modelreactions);
-    model.setModelcompounds(modelcompounds);
-    model.setModelcompartments(modelcompartments);
+    model.setId(modelID);
+    model.setName(modelID); //get from xml if exists
     model.setGenomeRef("4345/2/1");
     model.setSource("");
     model.setSourceId("");
@@ -134,8 +90,74 @@ public class SbmlTools {
     model.setGapfillings(new ArrayList<ModelGapfill> ());
     model.setGapgens(new ArrayList<ModelGapgen> ());
     model.setBiomasses(new ArrayList<Biomass> ());
+    model.setModelcompounds(new ArrayList<ModelCompound> ());
+    model.setModelcompartments(new ArrayList<ModelCompartment> ());
+    model.setModelreactions(new ArrayList<ModelReaction> ());
+    
+    for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
+      String cmpEntry = xcmp.getAttributes().get("id");
+      String cmpName = xcmp.getAttributes().get("name");
+      ModelCompartment cmp = new ModelCompartment().withId(cmpEntry)
+                                                   .withLabel(cmpName)
+                                                   .withPH(7.3)
+                                                   .withPotential(1.0)
+                                                   .withCompartmentIndex(1L)
+                                                   .withCompartmentRef("");
+      model.getModelcompartments().add(cmp);
+    }
+    for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
+      String spiEntry = xspi.getAttributes().get("id");
+      String cmpEntry = xspi.getAttributes().get("compartment");
+      String spiName = xspi.getAttributes().get("name");
+      
+      ModelCompound cpd = new ModelCompound().withId(spiEntry)
+                                             .withCompoundRef("")
+                                             .withModelcompartmentRef(cmpEntry)
+                                             .withFormula("R")
+                                             .withCharge(1.0)
+                                             .withName(spiName);
+      model.getModelcompounds().add(cpd);
+    }
+    for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
+      String rxnEntry = xrxn.getAttributes().get("id");
+      String rxnName = xrxn.getAttributes().get("name");
+      
+      List<ModelReactionReagent> reagents = new ArrayList<> ();
+      
+      for (XmlObject o : xrxn.getListOfReactants()) {
+        String species = o.getAttributes().get("species");
+        double stoichiometry = Double.parseDouble(o.getAttributes().get("stoichiometry"));
+        ModelReactionReagent r = new ModelReactionReagent()
+            .withCoefficient(-1 * stoichiometry)
+            .withModelcompoundRef(species);
+        reagents.add(r);
+      }
+      for (XmlObject o : xrxn.getListOfProducts()) {
+        String species = o.getAttributes().get("species");
+        double stoichiometry = Double.parseDouble(o.getAttributes().get("stoichiometry"));
+        ModelReactionReagent r = new ModelReactionReagent()
+            .withCoefficient(stoichiometry)
+            .withModelcompoundRef(species);
+        reagents.add(r);
+      }
+      
+      ModelReaction rxn = new ModelReaction().withId(rxnEntry)
+                                             .withName(rxnName)
+                                             .withDirection("=")
+                                             .withProtons(1.0)
+                                             .withReactionRef("")
+                                             .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
+                                             .withProbability(1.0)
+                                             .withModelcompartmentRef("");
+      rxn.setModelReactionReagents(reagents);
+      model.getModelreactions().add(rxn);
+    }
+
+    
     return model;
   }
+  
+
   
   public static String getRefFromObjectInfo(Tuple11<Long, String, String, String, 
       Long, String, Long, String, String, Long, Map<String,String>> info) {
