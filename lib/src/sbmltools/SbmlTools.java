@@ -3,6 +3,7 @@ package sbmltools;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.RpcContext;
+import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
 
 public class SbmlTools {
@@ -71,13 +73,35 @@ public class SbmlTools {
     this.workspace = workspace;
   }
   
-  public String wut() throws Exception {
-    
+  public static String getRefFromObjectInfo(Tuple11<Long, String, String, String, 
+      Long, String, Long, String, String, Long, Map<String,String>> info) {
+    return info.getE7() + "/" + info.getE1() + "/" + info.getE5();
+  }
+  
+  public String saveData(String nameId, String dataType) throws Exception {
+    Object o = null;
+//    String nameId = "";
+//    String dataType = "";
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
     dfuClient.setIsInsecureHttpConnectionAllowed(true);
-//    dfuClient.wsNameToId(name);
+    long wsId = dfuClient.wsNameToId(workspace);
     
-    return "wut";
+//    SaveObjectsParams params = new SaveObjectsParams()
+//        .withId(wsId)
+//        .withObjects(Arrays.asList(
+//            new ObjectSaveData().withName(nameId)
+//                                .withType(dataType)
+//                                .withData(new UObject(o))));
+////    params.setId(wsId);
+////    List<ObjectSaveData> saveData = new ArrayList<> ();
+////    ObjectSaveData odata = new ObjectSaveData();
+////    odata.set
+////    
+////    params.setObjects(saveData);
+////    ;
+//    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
+    
+    return Long.toString(wsId);
   }
   
   public String filterContigs(String assyRef, Path scratch) throws Exception {
