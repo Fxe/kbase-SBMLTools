@@ -116,11 +116,12 @@ public class SbmlTools {
         spiName = "undefined";
       }
       ModelCompound cpd = new ModelCompound().withId(spiEntry)
-                                             .withCompoundRef("")
+                                             .withCompoundRef("cpd00001")
                                              .withModelcompartmentRef(cmpEntry)
                                              .withFormula("R")
                                              .withCharge(1.0)
                                              .withName(spiName);
+      
       model.getModelcompounds().add(cpd);
     }
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
@@ -152,7 +153,7 @@ public class SbmlTools {
                                              .withName(rxnName)
                                              .withDirection("=")
                                              .withProtons(1.0)
-                                             .withReactionRef("")
+                                             .withReactionRef("rxn37841")
                                              .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
                                              .withProbability(1.0)
                                              .withModelcompartmentRef("");
