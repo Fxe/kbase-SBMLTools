@@ -97,32 +97,8 @@ public class SBMLToolsServer extends JsonServerServlet {
         System.out.println("Starting filter contigs. Parameters:");
         System.out.println(params);
         
-        /* Step 1 - Parse/examine the parameters and catch any errors
-         * It is important to check that parameters exist and are defined, and that nice error
-         * messages are returned to users.  Parameter values go through basic validation when
-         * defined in a Narrative App, but advanced users or other SDK developers can call
-         * this function directly, so validation is still important.
-         */
-        final String workspaceName = params.getWorkspaceName();
-        if (workspaceName == null || workspaceName.isEmpty()) {
-            throw new IllegalArgumentException(
-                "Parameter workspace_name is not set in input arguments");
-        }
-        final String assyRef = params.getAssemblyInputRef();
-        if (assyRef == null || assyRef.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Parameter assembly_input_ref is not set in input arguments");
-        }
-        if (params.getMinLength() == null) {
-            throw new IllegalArgumentException(
-                    "Parameter min_length is not set in input arguments");
-        }
-        final long minLength = params.getMinLength();
-        if (minLength < 0) {
-            throw new IllegalArgumentException("min_length parameter cannot be negative (" +
-                    minLength + ")");
-        }
-        
+
+        SbmlTools.validateSbmlImportParams(params);
 
         
 //        final DataFileUtilClient fileUtilClient = new DataFileUtilClient(callbackURL, authPart);
@@ -134,19 +110,15 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         
 //        InputStream is = url.openStream();
+        final String workspaceName = params.getWorkspaceName();
+        final String assyRef = params.getAssemblyInputRef();
         String reportText = "empty";
-        SbmlTools tools = new SbmlTools(authPart, callbackURL, jsonRpcContext);
+        SbmlTools tools = new SbmlTools(workspaceName, authPart, callbackURL, jsonRpcContext);
         
-        final String newAssyRef = tools.filterContigs(assyRef, workspaceName, scratch);
+        final String newAssyRef = tools.filterContigs(assyRef, scratch);
         
         reportText = tools.importModel(params);
         
-//        if (url != null) {
-//          url.c
-//        }
-//        if (is != null) {
-//          is.close();
-//        }
 
         final String resultText = "No changes\n" + reportText;
         System.out.println(resultText);
@@ -196,35 +168,12 @@ public class SBMLToolsServer extends JsonServerServlet {
       System.out.println("Starting filter contigs. Parameters:");
       System.out.println(params);
       
-      /* Step 1 - Parse/examine the parameters and catch any errors
-       * It is important to check that parameters exist and are defined, and that nice error
-       * messages are returned to users.  Parameter values go through basic validation when
-       * defined in a Narrative App, but advanced users or other SDK developers can call
-       * this function directly, so validation is still important.
-       */
-//      params.get
+      SbmlTools.validateSbmlImportParams(params);
       final String workspaceName = params.getWorkspaceName();
-      if (workspaceName == null || workspaceName.isEmpty()) {
-          throw new IllegalArgumentException(
-              "Parameter workspace_name is not set in input arguments");
-      }
       final String assyRef = params.getAssemblyInputRef();
-      if (assyRef == null || assyRef.isEmpty()) {
-          throw new IllegalArgumentException(
-                  "Parameter assembly_input_ref is not set in input arguments");
-      }
-      if (params.getMinLength() == null) {
-          throw new IllegalArgumentException(
-                  "Parameter min_length is not set in input arguments");
-      }
-      final long minLength = params.getMinLength();
-      if (minLength < 0) {
-          throw new IllegalArgumentException("min_length parameter cannot be negative (" +
-                  minLength + ")");
-      }
       
-      SbmlTools tools = new SbmlTools(authPart, callbackURL, jsonRpcContext);
-      final String newAssyRef = tools.filterContigs(assyRef, workspaceName, scratch);
+      SbmlTools tools = new SbmlTools(workspaceName, authPart, callbackURL, jsonRpcContext);
+      final String newAssyRef = tools.filterContigs(assyRef, scratch);
       
       // Step 5 - Build a Report and return
       
@@ -232,7 +181,7 @@ public class SBMLToolsServer extends JsonServerServlet {
       // see note above about bad practice
       kbr.setIsInsecureHttpConnectionAllowed(true);
       final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
-              .withReport(new Report().withTextMessage("wut !")
+              .withReport(new Report().withTextMessage(workspaceName + " " + newAssyRef)
                       .withObjectsCreated(Arrays.asList(new WorkspaceObject()
                               .withDescription("Filtered contigs")
                               .withRef(newAssyRef)))));

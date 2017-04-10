@@ -34,14 +34,53 @@ public class SbmlTools {
   public final AuthToken authPart;
   public final RpcContext jsonRpcContext;
   public final URL callbackURL;
+  public final String workspace;
   
-  public SbmlTools(AuthToken authPart, URL callbackURL, RpcContext jsonRpcContext) {
+  public static void validateSbmlImportParams(SbmlImportParams params) {
+    /* Step 1 - Parse/examine the parameters and catch any errors
+     * It is important to check that parameters exist and are defined, and that nice error
+     * messages are returned to users.  Parameter values go through basic validation when
+     * defined in a Narrative App, but advanced users or other SDK developers can call
+     * this function directly, so validation is still important.
+     */
+    final String workspaceName = params.getWorkspaceName();
+    if (workspaceName == null || workspaceName.isEmpty()) {
+        throw new IllegalArgumentException(
+            "Parameter workspace_name is not set in input arguments");
+    }
+    final String assyRef = params.getAssemblyInputRef();
+    if (assyRef == null || assyRef.isEmpty()) {
+        throw new IllegalArgumentException(
+                "Parameter assembly_input_ref is not set in input arguments");
+    }
+    if (params.getMinLength() == null) {
+        throw new IllegalArgumentException(
+                "Parameter min_length is not set in input arguments");
+    }
+    final long minLength = params.getMinLength();
+    if (minLength < 0) {
+        throw new IllegalArgumentException("min_length parameter cannot be negative (" +
+                minLength + ")");
+    }
+  }
+  
+  public SbmlTools(String workspace, AuthToken authPart, URL callbackURL, RpcContext jsonRpcContext) {
     this.authPart = authPart;
     this.jsonRpcContext = jsonRpcContext;
     this.callbackURL = callbackURL;
+    this.workspace = workspace;
   }
   
-  public String filterContigs(String assyRef, String workspaceName, Path scratch) throws Exception {
+  public String wut() throws Exception {
+    
+    final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
+    dfuClient.setIsInsecureHttpConnectionAllowed(true);
+//    dfuClient.wsNameToId(name);
+    
+    return "wut";
+  }
+  
+  public String filterContigs(String assyRef, Path scratch) throws Exception {
     /* Step 2 - Download the input data as a Fasta file
      * We can use the AssemblyUtils module to download a FASTA file from our Assembly data
      * object. The return object gives us the path to the file that was created.
@@ -93,7 +132,7 @@ public class SbmlTools {
     // Step 4 - Save the new Assembly back to the system
     final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
         .withAssemblyName(fileobj.getAssemblyName() + "_new")
-        .withWorkspaceName(workspaceName)
+        .withWorkspaceName(workspace)
         .withFile(new FastaAssemblyFile().withPath(fileobj.getPath())));
     
     return newAssyRef;
