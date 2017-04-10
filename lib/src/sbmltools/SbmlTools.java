@@ -77,11 +77,11 @@ public class SbmlTools {
     this.workspace = workspace;
   }
   
-  public FBAModel convertModel(XmlSbmlModel xmodel, String modelID) {
+  public FBAModel convertModel(XmlSbmlModel xmodel, String modelId) {
     
     FBAModel model = new FBAModel();
-    model.setId(modelID);
-    model.setName(modelID); //get from xml if exists
+    model.setId(modelId);
+    model.setName(modelId); //get from xml if exists
     model.setGenomeRef("4345/2/1");
     model.setSource("");
     model.setSourceId("");
@@ -97,6 +97,9 @@ public class SbmlTools {
     for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
       String cmpEntry = xcmp.getAttributes().get("id");
       String cmpName = xcmp.getAttributes().get("name");
+      if (cmpName == null || cmpName.trim().isEmpty()) {
+        cmpName = "undefined";
+      }
       ModelCompartment cmp = new ModelCompartment().withId(cmpEntry)
                                                    .withLabel(cmpName)
                                                    .withPH(7.3)
@@ -109,7 +112,9 @@ public class SbmlTools {
       String spiEntry = xspi.getAttributes().get("id");
       String cmpEntry = xspi.getAttributes().get("compartment");
       String spiName = xspi.getAttributes().get("name");
-      
+      if (spiName == null || spiName.trim().isEmpty()) {
+        spiName = "undefined";
+      }
       ModelCompound cpd = new ModelCompound().withId(spiEntry)
                                              .withCompoundRef("")
                                              .withModelcompartmentRef(cmpEntry)
@@ -121,7 +126,9 @@ public class SbmlTools {
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
       String rxnEntry = xrxn.getAttributes().get("id");
       String rxnName = xrxn.getAttributes().get("name");
-      
+      if (rxnName == null || rxnName.trim().isEmpty()) {
+        rxnName = "undefined";
+      }
       List<ModelReactionReagent> reagents = new ArrayList<> ();
       
       for (XmlObject o : xrxn.getListOfReactants()) {
