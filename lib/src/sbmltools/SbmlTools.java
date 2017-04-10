@@ -154,7 +154,7 @@ public class SbmlTools {
                                              .withName(rxnName)
                                              .withDirection("=")
                                              .withProtons(1.0)
-                                             .withReactionRef("rxn37841")
+                                             .withReactionRef("rxn00000")
                                              .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
                                              .withProbability(1.0)
                                              .withPathway("entire model")
