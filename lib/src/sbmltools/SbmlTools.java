@@ -293,6 +293,15 @@ public class SbmlTools {
     validator.xrxnStoichAttr.addAll(Arrays.asList(xrxnSpecieAttr));
   }
   
+  public static String getNameFromUrl(String urlStr) {
+    String[] strs = urlStr.split("/");
+    String last = strs[strs.length - 1];
+    if (last.contains(".")) {
+      last = last.substring(0, last.indexOf('.'));
+    }
+    return last;
+  }
+  
   public String importModel(SbmlImportParams params) {
     
     logger.info("import model ...");
@@ -304,13 +313,13 @@ public class SbmlTools {
       
 //      URL url = new URL(params.getUrl());
       XmlStreamSbmlReader reader = new XmlStreamSbmlReader(connection.getInputStream());
-      XmlSbmlModel model = reader.parse();
+      XmlSbmlModel xmodel = reader.parse();
 //      msg = model.getAttributes().toString();
-      XmlSbmlModelValidator validator = new XmlSbmlModelValidator(model, knownSpecieAttributes());
+      XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
       xrxnAttributes(validator);
       
       List<XmlMessage> msgs = validator.validate();
-      reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
+      reportText = String.format("Species %d, Reactions %s, %s", xmodel.getSpecies().size(), xmodel.getReactions().size(), params.getUrl());
 //      String txt = "";
       for (XmlMessage m : msgs) {
         reportText +="\n" + String.format("%s", m);
@@ -320,8 +329,9 @@ public class SbmlTools {
       
       connection.getInputStream().close();
       
-      FBAModel fbaModel = this.convertModel(model, "realmodel");
-      this.saveData("realmodel", KBaseType.FBAModel.value(), fbaModel);
+      String modelId = getNameFromUrl(params.getUrl());
+      FBAModel kmodel = this.convertModel(xmodel, modelId);
+      this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
       
     } catch (Exception e) {
       e.printStackTrace();
