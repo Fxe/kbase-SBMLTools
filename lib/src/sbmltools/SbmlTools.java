@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
 import assemblyutil.GetAssemblyParams;
@@ -25,6 +28,8 @@ import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.UObject;
 
 public class SbmlTools {
+  
+  private static final Logger logger = LoggerFactory.getLogger(SbmlTools.class);
   
   public final AuthToken authPart;
   public final RpcContext jsonRpcContext;
@@ -129,6 +134,9 @@ public class SbmlTools {
   }
   
   public String importModel(SbmlImportParams params) {
+    
+    logger.info("import model ...");
+    
     String reportText = "";
     try {
       URL url = new URL(params.getUrl());
@@ -156,6 +164,8 @@ public class SbmlTools {
       e.printStackTrace();
       reportText = e.getMessage();
     }
+    
+    logger.info("import model [done]");
     
     return reportText;
   }
