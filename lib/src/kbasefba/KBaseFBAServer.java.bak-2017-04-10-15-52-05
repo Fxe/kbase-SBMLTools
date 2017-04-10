@@ -20,7 +20,7 @@ public class KBaseFBAServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "0ceba67f078d29200c621cbcc259f6c608f7ae7e";
+    private static final String gitCommitHash = "63a0c00b725d63140355a865d4c80916c91ce393";
 
     //BEGIN_CLASS_HEADER
     //END_CLASS_HEADER

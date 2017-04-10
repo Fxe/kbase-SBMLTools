@@ -416,6 +416,1463 @@ sub _validate_version {
 
 
 
+=head2 fbamodel_id
+
+=over 4
+
+
+
+=item Description
+
+FBAModel ID
+@id kb
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 source_id
+
+=over 4
+
+
+
+=item Description
+
+Source ID
+@id external
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 genome_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a model template
+@id ws KBaseGenomes.Genome KBaseGenomeAnnotations.GenomeAnnotation
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 metagenome_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a metagenome object
+@id ws KBaseGenomes.MetagenomeAnnotation
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 metagenome_otu_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to an OTU in a metagenome
+@id subws KBaseGenomes.MetagenomeAnnotation.otus.[*].id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 template_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a model template
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 gapfill_id
+
+=over 4
+
+
+
+=item Description
+
+Gapfill ID
+@id kb
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 gapfill_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a gapfilling object
+@id ws KBaseFBA.Gapfilling
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 fba_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a FBA object
+@id ws KBaseFBA.FBA
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 bool
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+an int
+</pre>
+
+=end html
+
+=begin text
+
+an int
+
+=end text
+
+=back
+
+
+
+=head2 media_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a model template
+@id ws KBaseBiochem.Media
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 ModelGapfill
+
+=over 4
+
+
+
+=item Description
+
+ModelGapfill object
+ 
+@optional integrated_solution
+@optional fba_ref
+@optional gapfill_ref jobnode
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.gapfill_id
+gapfill_id has a value which is a SBMLTools.gapfill_id
+gapfill_ref has a value which is a SBMLTools.gapfill_ref
+fba_ref has a value which is a SBMLTools.fba_ref
+integrated has a value which is a SBMLTools.bool
+integrated_solution has a value which is a string
+media_ref has a value which is a SBMLTools.media_ref
+jobnode has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.gapfill_id
+gapfill_id has a value which is a SBMLTools.gapfill_id
+gapfill_ref has a value which is a SBMLTools.gapfill_ref
+fba_ref has a value which is a SBMLTools.fba_ref
+integrated has a value which is a SBMLTools.bool
+integrated_solution has a value which is a string
+media_ref has a value which is a SBMLTools.media_ref
+jobnode has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 gapgen_id
+
+=over 4
+
+
+
+=item Description
+
+Gapgen ID
+@id kb
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 gapgen_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a gapgen object
+@id ws KBaseFBA.Gapgeneration
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 ModelGapgen
+
+=over 4
+
+
+
+=item Description
+
+ModelGapgen object
+
+@optional integrated_solution
+@optional fba_ref
+@optional gapgen_ref jobnode
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.gapgen_id
+gapgen_id has a value which is a SBMLTools.gapgen_id
+gapgen_ref has a value which is a SBMLTools.gapgen_ref
+fba_ref has a value which is a SBMLTools.fba_ref
+integrated has a value which is a SBMLTools.bool
+integrated_solution has a value which is a string
+media_ref has a value which is a SBMLTools.media_ref
+jobnode has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.gapgen_id
+gapgen_id has a value which is a SBMLTools.gapgen_id
+gapgen_ref has a value which is a SBMLTools.gapgen_ref
+fba_ref has a value which is a SBMLTools.fba_ref
+integrated has a value which is a SBMLTools.bool
+integrated_solution has a value which is a string
+media_ref has a value which is a SBMLTools.media_ref
+jobnode has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 QuantOptSolution
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+integrated has a value which is a SBMLTools.bool
+ReactionMaxBounds has a value which is a reference to a list where each element is a reference to a list containing 3 items:
+	0: a string
+	1: a float
+	2: a SBMLTools.bool
+
+UptakeMaxBounds has a value which is a reference to a list where each element is a reference to a list containing 2 items:
+	0: a string
+	1: a float
+
+BiomassChanges has a value which is a reference to a list where each element is a reference to a list containing 3 items:
+	0: a string
+	1: a string
+	2: a float
+
+ATPSynthase has a value which is a float
+ATPMaintenance has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+integrated has a value which is a SBMLTools.bool
+ReactionMaxBounds has a value which is a reference to a list where each element is a reference to a list containing 3 items:
+	0: a string
+	1: a float
+	2: a SBMLTools.bool
+
+UptakeMaxBounds has a value which is a reference to a list where each element is a reference to a list containing 2 items:
+	0: a string
+	1: a float
+
+BiomassChanges has a value which is a reference to a list where each element is a reference to a list containing 3 items:
+	0: a string
+	1: a string
+	2: a float
+
+ATPSynthase has a value which is a float
+ATPMaintenance has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 ModelQuantOpt
+
+=over 4
+
+
+
+=item Description
+
+ModelQuantOpt object
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+id has a value which is a string
+fba_ref has a value which is a SBMLTools.fba_ref
+media_ref has a value which is a SBMLTools.media_ref
+integrated has a value which is a SBMLTools.bool
+integrated_solution has a value which is an int
+solutions has a value which is a reference to a list where each element is a SBMLTools.QuantOptSolution
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+id has a value which is a string
+fba_ref has a value which is a SBMLTools.fba_ref
+media_ref has a value which is a SBMLTools.media_ref
+integrated has a value which is a SBMLTools.bool
+integrated_solution has a value which is an int
+solutions has a value which is a reference to a list where each element is a SBMLTools.QuantOptSolution
+
+
+=end text
+
+=back
+
+
+
+=head2 biomass_id
+
+=over 4
+
+
+
+=item Description
+
+Biomass reaction ID
+@id external
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 modelcompound_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a compound object in a model
+@id subws KBaseFBA.FBAModel.modelcompounds.[*].id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 BiomassCompound
+
+=over 4
+
+
+
+=item Description
+
+BiomassCompound object
+
+    @searchable ws_subset modelcompound_ref coefficient
+    @optional gapfill_data
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+modelcompound_ref has a value which is a SBMLTools.modelcompound_ref
+coefficient has a value which is a float
+gapfill_data has a value which is a reference to a hash where the key is a SBMLTools.gapfill_id and the value is a SBMLTools.bool
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+modelcompound_ref has a value which is a SBMLTools.modelcompound_ref
+coefficient has a value which is a float
+gapfill_data has a value which is a reference to a hash where the key is a SBMLTools.gapfill_id and the value is a SBMLTools.bool
+
+
+=end text
+
+=back
+
+
+
+=head2 Biomass
+
+=over 4
+
+
+
+=item Description
+
+Biomass object
+
+@optional removedcompounds
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.biomass_id
+name has a value which is a string
+other has a value which is a float
+dna has a value which is a float
+rna has a value which is a float
+protein has a value which is a float
+cellwall has a value which is a float
+lipid has a value which is a float
+cofactor has a value which is a float
+energy has a value which is a float
+biomasscompounds has a value which is a reference to a list where each element is a SBMLTools.BiomassCompound
+removedcompounds has a value which is a reference to a list where each element is a SBMLTools.BiomassCompound
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.biomass_id
+name has a value which is a string
+other has a value which is a float
+dna has a value which is a float
+rna has a value which is a float
+protein has a value which is a float
+cellwall has a value which is a float
+lipid has a value which is a float
+cofactor has a value which is a float
+energy has a value which is a float
+biomasscompounds has a value which is a reference to a list where each element is a SBMLTools.BiomassCompound
+removedcompounds has a value which is a reference to a list where each element is a SBMLTools.BiomassCompound
+
+
+=end text
+
+=back
+
+
+
+=head2 modelcompartment_id
+
+=over 4
+
+
+
+=item Description
+
+Model compartment ID
+@id external
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 compartment_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a compartment object
+@id subws KBaseBiochem.Biochemistry.compartments.[*].id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 ModelCompartment
+
+=over 4
+
+
+
+=item Description
+
+ModelCompartment object
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.modelcompartment_id
+compartment_ref has a value which is a SBMLTools.compartment_ref
+compartmentIndex has a value which is an int
+label has a value which is a string
+pH has a value which is a float
+potential has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.modelcompartment_id
+compartment_ref has a value which is a SBMLTools.compartment_ref
+compartmentIndex has a value which is an int
+label has a value which is a string
+pH has a value which is a float
+potential has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 modelcompound_id
+
+=over 4
+
+
+
+=item Description
+
+Model compound ID
+@id external
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 compound_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a compound object
+@id subws KBaseBiochem.Biochemistry.compounds.[*].id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 modelcompartment_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a compartment object in a model
+@id subws KBaseFBA.FBAModel.modelcompartments.[*].id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 ModelCompound
+
+=over 4
+
+
+
+=item Description
+
+ModelCompound object
+
+@optional aliases maxuptake
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.modelcompound_id
+compound_ref has a value which is a SBMLTools.compound_ref
+aliases has a value which is a reference to a list where each element is a string
+name has a value which is a string
+charge has a value which is a float
+maxuptake has a value which is a float
+formula has a value which is a string
+modelcompartment_ref has a value which is a SBMLTools.modelcompartment_ref
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.modelcompound_id
+compound_ref has a value which is a SBMLTools.compound_ref
+aliases has a value which is a reference to a list where each element is a string
+name has a value which is a string
+charge has a value which is a float
+maxuptake has a value which is a float
+formula has a value which is a string
+modelcompartment_ref has a value which is a SBMLTools.modelcompartment_ref
+
+
+=end text
+
+=back
+
+
+
+=head2 modelreaction_id
+
+=over 4
+
+
+
+=item Description
+
+Model reaction ID
+@id external
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 reaction_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a reaction object in a biochemistry
+@id subws KBaseBiochem.Biochemistry.reactions.[*].id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 ModelReactionReagent
+
+=over 4
+
+
+
+=item Description
+
+ModelReactionReagent object
+
+    @searchable ws_subset modelcompound_ref coefficient
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+modelcompound_ref has a value which is a SBMLTools.modelcompound_ref
+coefficient has a value which is a float
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+modelcompound_ref has a value which is a SBMLTools.modelcompound_ref
+coefficient has a value which is a float
+
+
+=end text
+
+=back
+
+
+
+=head2 complex_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a complex object
+@id subws KBaseOntology.Mapping.complexes.[*].id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 feature_ref
+
+=over 4
+
+
+
+=item Description
+
+Reference to a feature of a genome object
+@id subws KBaseGenomes.Genome.features.[*].id
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 ModelReactionProteinSubunit
+
+=over 4
+
+
+
+=item Description
+
+ModelReactionProteinSubunit object
+
+    @searchable ws_subset role triggering optionalSubunit feature_refs
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+role has a value which is a string
+triggering has a value which is a SBMLTools.bool
+optionalSubunit has a value which is a SBMLTools.bool
+note has a value which is a string
+feature_refs has a value which is a reference to a list where each element is a SBMLTools.feature_ref
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+role has a value which is a string
+triggering has a value which is a SBMLTools.bool
+optionalSubunit has a value which is a SBMLTools.bool
+note has a value which is a string
+feature_refs has a value which is a reference to a list where each element is a SBMLTools.feature_ref
+
+
+=end text
+
+=back
+
+
+
+=head2 ModelReactionProtein
+
+=over 4
+
+
+
+=item Description
+
+ModelReactionProtein object
+
+@optional source complex_ref
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+complex_ref has a value which is a SBMLTools.complex_ref
+note has a value which is a string
+modelReactionProteinSubunits has a value which is a reference to a list where each element is a SBMLTools.ModelReactionProteinSubunit
+source has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+complex_ref has a value which is a SBMLTools.complex_ref
+note has a value which is a string
+modelReactionProteinSubunits has a value which is a reference to a list where each element is a SBMLTools.ModelReactionProteinSubunit
+source has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 ModelReaction
+
+=over 4
+
+
+
+=item Description
+
+ModelReaction object
+
+@optional gapfill_data name pathway reference aliases maxforflux maxrevflux
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.modelreaction_id
+reaction_ref has a value which is a SBMLTools.reaction_ref
+name has a value which is a string
+aliases has a value which is a reference to a list where each element is a string
+pathway has a value which is a string
+reference has a value which is a string
+direction has a value which is a string
+protons has a value which is a float
+maxforflux has a value which is a float
+maxrevflux has a value which is a float
+modelcompartment_ref has a value which is a SBMLTools.modelcompartment_ref
+probability has a value which is a float
+modelReactionReagents has a value which is a reference to a list where each element is a SBMLTools.ModelReactionReagent
+modelReactionProteins has a value which is a reference to a list where each element is a SBMLTools.ModelReactionProtein
+gapfill_data has a value which is a reference to a hash where the key is a string and the value is a reference to a hash where the key is an int and the value is a reference to a list containing 3 items:
+	0: a string
+	1: a SBMLTools.bool
+	2: a reference to a list where each element is a SBMLTools.ModelReactionProtein
+
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.modelreaction_id
+reaction_ref has a value which is a SBMLTools.reaction_ref
+name has a value which is a string
+aliases has a value which is a reference to a list where each element is a string
+pathway has a value which is a string
+reference has a value which is a string
+direction has a value which is a string
+protons has a value which is a float
+maxforflux has a value which is a float
+maxrevflux has a value which is a float
+modelcompartment_ref has a value which is a SBMLTools.modelcompartment_ref
+probability has a value which is a float
+modelReactionReagents has a value which is a reference to a list where each element is a SBMLTools.ModelReactionReagent
+modelReactionProteins has a value which is a reference to a list where each element is a SBMLTools.ModelReactionProtein
+gapfill_data has a value which is a reference to a hash where the key is a string and the value is a reference to a hash where the key is an int and the value is a reference to a list containing 3 items:
+	0: a string
+	1: a SBMLTools.bool
+	2: a reference to a list where each element is a SBMLTools.ModelReactionProtein
+
+
+
+=end text
+
+=back
+
+
+
+=head2 FBAModel
+
+=over 4
+
+
+
+=item Description
+
+FBAModel object
+
+@optional gapfilledcandidates metagenome_otu_ref metagenome_ref genome_ref template_refs ATPSynthaseStoichiometry ATPMaintenance quantopts
+    @metadata ws source_id as Source ID
+    @metadata ws source as Source
+    @metadata ws name as Name
+    @metadata ws type as Type
+    @metadata ws genome_ref as Genome
+    @metadata ws length(biomasses) as Number biomasses
+    @metadata ws length(modelcompartments) as Number compartments
+    @metadata ws length(modelcompounds) as Number compounds
+    @metadata ws length(modelreactions) as Number reactions
+    @metadata ws length(gapgens) as Number gapgens
+    @metadata ws length(gapfillings) as Number gapfills
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.fbamodel_id
+source has a value which is a string
+source_id has a value which is a SBMLTools.source_id
+name has a value which is a string
+type has a value which is a string
+genome_ref has a value which is a SBMLTools.genome_ref
+metagenome_ref has a value which is a SBMLTools.metagenome_ref
+metagenome_otu_ref has a value which is a SBMLTools.metagenome_otu_ref
+template_ref has a value which is a SBMLTools.template_ref
+ATPSynthaseStoichiometry has a value which is a float
+ATPMaintenance has a value which is a float
+template_refs has a value which is a reference to a list where each element is a SBMLTools.template_ref
+gapfillings has a value which is a reference to a list where each element is a SBMLTools.ModelGapfill
+gapgens has a value which is a reference to a list where each element is a SBMLTools.ModelGapgen
+quantopts has a value which is a reference to a list where each element is a SBMLTools.ModelQuantOpt
+biomasses has a value which is a reference to a list where each element is a SBMLTools.Biomass
+modelcompartments has a value which is a reference to a list where each element is a SBMLTools.ModelCompartment
+modelcompounds has a value which is a reference to a list where each element is a SBMLTools.ModelCompound
+modelreactions has a value which is a reference to a list where each element is a SBMLTools.ModelReaction
+gapfilledcandidates has a value which is a reference to a list where each element is a SBMLTools.ModelReaction
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+id has a value which is a SBMLTools.fbamodel_id
+source has a value which is a string
+source_id has a value which is a SBMLTools.source_id
+name has a value which is a string
+type has a value which is a string
+genome_ref has a value which is a SBMLTools.genome_ref
+metagenome_ref has a value which is a SBMLTools.metagenome_ref
+metagenome_otu_ref has a value which is a SBMLTools.metagenome_otu_ref
+template_ref has a value which is a SBMLTools.template_ref
+ATPSynthaseStoichiometry has a value which is a float
+ATPMaintenance has a value which is a float
+template_refs has a value which is a reference to a list where each element is a SBMLTools.template_ref
+gapfillings has a value which is a reference to a list where each element is a SBMLTools.ModelGapfill
+gapgens has a value which is a reference to a list where each element is a SBMLTools.ModelGapgen
+quantopts has a value which is a reference to a list where each element is a SBMLTools.ModelQuantOpt
+biomasses has a value which is a reference to a list where each element is a SBMLTools.Biomass
+modelcompartments has a value which is a reference to a list where each element is a SBMLTools.ModelCompartment
+modelcompounds has a value which is a reference to a list where each element is a SBMLTools.ModelCompound
+modelreactions has a value which is a reference to a list where each element is a SBMLTools.ModelReaction
+gapfilledcandidates has a value which is a reference to a list where each element is a SBMLTools.ModelReaction
+
+
+=end text
+
+=back
+
+
+
 =head2 assembly_ref
 
 =over 4
