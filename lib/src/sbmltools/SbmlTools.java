@@ -336,7 +336,7 @@ public class SbmlTools {
       String modelId = getNameFromUrl(params.getUrl());
       FBAModel kmodel = this.convertModel(xmodel, modelId);
       Object kmedia = MockData.mockMedia();
-      this.saveData("mock_media", KBaseType.KBaseBiochemMedia.value(), kmedia);
+      this.saveData("mock_media2", KBaseType.KBaseBiochemMedia.value(), kmedia);
       this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
       
 //      FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, authPart);

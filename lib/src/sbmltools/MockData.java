@@ -20,10 +20,10 @@ public class MockData {
   
   public static Object mockMedia() {
     Media media = new Media();
-    media.id = "mockmedia";
-    media.name = "The Mock Media";
-    media.sourceId = "mockmedia";
-    media.source = "mockmedia";
+    media.id = "mock_media2";
+    media.name = "The Mock Media 2";
+    media.sourceId = "mock_media2";
+    media.source = "mock_media2";
     media.atmosphere = "earth";
     media.atmosphere_addition = "no";
     media.temperature = 70.0;
@@ -56,7 +56,7 @@ public class MockData {
     
     media.addMediaCompound("cpd11416", 0.1, -10, 10);
     
-    media.addMediaCompound("mockcompound", 0.1, -10, 10);
+//    media.addMediaCompound("mockcompound", 0.1, -10, 10);
     
 //    MediaReagent rcpd1 = new MediaReagent();
 //    rcpd1.associated_compounds.put(key, value)
