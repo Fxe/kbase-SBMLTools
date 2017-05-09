@@ -321,9 +321,11 @@ public class SbmlTools {
       List<XmlMessage> msgs = validator.validate();
       reportText = String.format("Species %d, Reactions %s, %s", xmodel.getSpecies().size(), xmodel.getReactions().size(), params.getUrl());
 //      String txt = "";
-      for (XmlMessage m : msgs) {
-        reportText +="\n" + String.format("%s", m);
-      }
+//      for (XmlMessage m : msgs) {
+//        reportText +="\n" + String.format("%s", m);
+//      }
+      
+//      xmlsbmlmodelf
 //      reportText += SbmlTools.aaa(validator.validate());
 //      reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
       
@@ -331,6 +333,8 @@ public class SbmlTools {
       
       String modelId = getNameFromUrl(params.getUrl());
       FBAModel kmodel = this.convertModel(xmodel, modelId);
+      Object kmedia = MockData.mockMedia();
+      this.saveData("mock_media", KBaseType.KBaseBiochemMedia.value(), kmedia);
       this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
       
     } catch (Exception e) {

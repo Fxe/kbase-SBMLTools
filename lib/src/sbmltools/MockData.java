@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import sbmltools.Media.MediaCompound;
+
 public class MockData {
   
   public static ModelCompound mockCompound(String ref, String cmp) {
@@ -13,6 +15,31 @@ public class MockData {
         .withFormula("R")
         .withCharge(1.0)
         .withName(ref + "@" + cmp);
+  }
+  
+  public static Object mockMedia() {
+    Media media = new Media();
+    media.id = "mockmodel";
+    media.name = "The Mock Model";
+    media.atmosphere = "earth";
+    media.atmosphere_addition = "just that";
+    media.isAerobic = true;
+    media.isDefined = true;
+    media.isMinimal = true;
+    media.mediacompounds = new ArrayList<> ();
+    MediaCompound cpd1 = new MediaCompound();
+    cpd1.compound_ref = "cpd00001";
+    cpd1.concentration = 100.0;
+    cpd1.maxFlux =  10.0;
+    cpd1.minFlux = -10.0;
+    MediaCompound cpd2 = new MediaCompound();
+    cpd2.compound_ref = "cpd00002";
+    cpd2.concentration = 100.0;
+    cpd2.maxFlux =  10.0;
+    cpd2.minFlux = -10.0;
+    media.mediacompounds.add(cpd1);
+    media.mediacompounds.add(cpd2);
+    return media;
   }
   
   public static Object mockModel() {
