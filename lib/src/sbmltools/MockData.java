@@ -30,6 +30,8 @@ public class MockData {
     media.isAerobic = 1;
     media.isDefined = 1;
     media.isMinimal = 1;
+    media.protocol_link = "prot";
+    media.type = "some media";
     media.mediacompounds = new ArrayList<> ();
     media.reagents = new ArrayList<> ();
     MediaCompound cpd1 = new MediaCompound();
