@@ -1,5 +1,6 @@
 package sbmltools;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,5 +69,15 @@ public class Media {
   @JsonProperty("reagents")
   public List<MediaReagent> reagents;
   @JsonProperty("mediacompounds")
-  public List<MediaCompound> mediacompounds;
+  public List<MediaCompound> mediacompounds = new ArrayList<> ();
+  
+  public void addMediaCompound(String cpd, double conc, double lb, double ub) {
+    MediaCompound mediaCompound = new MediaCompound();
+    mediaCompound.compound_ref = "cpd00001";
+    //  cpd1.compound_ref = "kbase/default/compounds/id/cpd00001";
+    mediaCompound.concentration = conc;
+    mediaCompound.maxFlux = ub;
+    mediaCompound.minFlux = lb;
+    this.mediacompounds.add(mediaCompound);
+  }
 }

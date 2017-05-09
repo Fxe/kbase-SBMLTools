@@ -35,27 +35,29 @@ public class MockData {
     media.type = "some media";
     media.mediacompounds = new ArrayList<> ();
     media.reagents = new ArrayList<> ();
-    MediaCompound cpd1 = new MediaCompound();
-    cpd1.compound_ref = "cpd00001";
-//    cpd1.compound_ref = "kbase/default/compounds/id/cpd00001";
-    cpd1.concentration = 0.1;
-    cpd1.maxFlux =  10.0;
-    cpd1.minFlux = -10.0;
-    MediaCompound cpd2 = new MediaCompound();
-    cpd2.compound_ref = "cpd00002";
-//    cpd2.compound_ref = "kbase/default/compounds/id/cpd00002";
-    cpd2.concentration = 0.1;
-    cpd2.maxFlux =  10.0;
-    cpd2.minFlux = -10.0;
+
+    media.addMediaCompound("cpd00001", 0.1, -10, 10);
+    media.addMediaCompound("cpd00002", 0.1, -10, 10);
+    media.addMediaCompound("cpd00139", 0.1, -10, 10);
+    media.addMediaCompound("cpd00159", 0.1, -10, 10);
+    media.addMediaCompound("cpd00029", 0.1, -10, 10);
+    media.addMediaCompound("cpd00011", 0.1, -10, 10);
+    media.addMediaCompound("cpd00239", 0.1, -10, 10);
     
-    MediaCompound cpd2_ = new MediaCompound();
-    cpd2_.compound_ref = "mockcompound";
-    cpd2_.concentration = 0.1;
-    cpd2_.maxFlux =  10.0;
-    cpd2_.minFlux = -10.0;
+    media.addMediaCompound("cpd00048", 0.1, -10, 10);
+    media.addMediaCompound("cpd00363", 0.1, -10, 10);
+    media.addMediaCompound("cpd00013", 0.1, -10, 10);
+    media.addMediaCompound("cpd00067", 0.1, -10, 10);
     
-    media.mediacompounds.add(cpd1);
-    media.mediacompounds.add(cpd2);
+    media.addMediaCompound("cpd00009", 0.1, -10, 10);
+    media.addMediaCompound("cpd11640", 0.1, -10, 10);
+    media.addMediaCompound("cpd00047", 0.1, -10, 10);
+    media.addMediaCompound("cpd00100", 0.1, -10, 10);
+    
+    media.addMediaCompound("cpd11416", 0.1, -10, 10);
+    
+    media.addMediaCompound("mockcompound", 0.1, -10, 10);
+    
 //    MediaReagent rcpd1 = new MediaReagent();
 //    rcpd1.associated_compounds.put(key, value)
 //    media.reagents.add(rcpd1);
