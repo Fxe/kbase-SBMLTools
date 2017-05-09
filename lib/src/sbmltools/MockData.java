@@ -22,10 +22,10 @@ public class MockData {
     Media media = new Media();
     media.id = "mockmedia";
     media.name = "The Mock Media";
-    media.sourceId = "external";
-    media.source = "the source";
+    media.sourceId = "mockmedia";
+    media.source = "mockmedia";
     media.atmosphere = "earth";
-    media.atmosphere_addition = "just that";
+    media.atmosphere_addition = "no";
     media.pH_data = "7.3";
     media.isAerobic = 1;
     media.isDefined = 1;
@@ -36,18 +36,20 @@ public class MockData {
     media.reagents = new ArrayList<> ();
     MediaCompound cpd1 = new MediaCompound();
     cpd1.compound_ref = "cpd00001";
-    cpd1.concentration = 100.0;
+//    cpd1.compound_ref = "kbase/default/compounds/id/cpd00001";
+    cpd1.concentration = 0.1;
     cpd1.maxFlux =  10.0;
     cpd1.minFlux = -10.0;
     MediaCompound cpd2 = new MediaCompound();
     cpd2.compound_ref = "cpd00002";
-    cpd2.concentration = 100.0;
+//    cpd2.compound_ref = "kbase/default/compounds/id/cpd00002";
+    cpd2.concentration = 0.1;
     cpd2.maxFlux =  10.0;
     cpd2.minFlux = -10.0;
     
     MediaCompound cpd2_ = new MediaCompound();
     cpd2_.compound_ref = "mockcompound";
-    cpd2_.concentration = 100.0;
+    cpd2_.concentration = 0.1;
     cpd2_.maxFlux =  10.0;
     cpd2_.minFlux = -10.0;
     
