@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import sbmltools.Media.MediaCompound;
+import sbmltools.Media.MediaReagent;
 
 public class MockData {
   
@@ -23,10 +24,11 @@ public class MockData {
     media.name = "The Mock Model";
     media.atmosphere = "earth";
     media.atmosphere_addition = "just that";
-    media.isAerobic = true;
-    media.isDefined = true;
-    media.isMinimal = true;
+    media.isAerobic = 1;
+    media.isDefined = 1;
+    media.isMinimal = 1;
     media.mediacompounds = new ArrayList<> ();
+    media.reagents = new ArrayList<> ();
     MediaCompound cpd1 = new MediaCompound();
     cpd1.compound_ref = "cpd00001";
     cpd1.concentration = 100.0;
@@ -39,6 +41,9 @@ public class MockData {
     cpd2.minFlux = -10.0;
     media.mediacompounds.add(cpd1);
     media.mediacompounds.add(cpd2);
+//    MediaReagent rcpd1 = new MediaReagent();
+//    rcpd1.associated_compounds.put(key, value)
+//    media.reagents.add(rcpd1);
     return media;
   }
   

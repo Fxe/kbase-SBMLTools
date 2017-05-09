@@ -51,11 +51,11 @@ public class Media {
   public java.lang.String protocol_link;
   
   @JsonProperty("isDefined")
-  public java.lang.Boolean isDefined;
+  public java.lang.Integer isDefined;
   @JsonProperty("isMinimal")
-  public java.lang.Boolean isMinimal;
+  public java.lang.Integer isMinimal;
   @JsonProperty("isAerobic")
-  public java.lang.Boolean isAerobic;
+  public java.lang.Integer isAerobic;
   
   @JsonProperty("atmosphere")
   public java.lang.String atmosphere;
