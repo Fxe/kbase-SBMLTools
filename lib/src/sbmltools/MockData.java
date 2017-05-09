@@ -26,6 +26,7 @@ public class MockData {
     media.source = "mockmedia";
     media.atmosphere = "earth";
     media.atmosphere_addition = "no";
+    media.temperature = 70.0;
     media.pH_data = "7.3";
     media.isAerobic = 1;
     media.isDefined = 1;
