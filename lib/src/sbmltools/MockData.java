@@ -20,8 +20,10 @@ public class MockData {
   
   public static Object mockMedia() {
     Media media = new Media();
-    media.id = "mockmodel";
-    media.name = "The Mock Model";
+    media.id = "mockmedia";
+    media.name = "The Mock Media";
+    media.sourceId = "external";
+    media.source = "the source";
     media.atmosphere = "earth";
     media.atmosphere_addition = "just that";
     media.isAerobic = 1;
