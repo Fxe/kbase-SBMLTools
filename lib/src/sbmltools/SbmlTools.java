@@ -19,6 +19,8 @@ import assemblyutil.SaveAssemblyParams;
 import datafileutil.DataFileUtilClient;
 import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
+import fbatools.FbaToolsClient;
+import fbatools.RunFluxBalanceAnalysisParams;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
@@ -336,6 +338,13 @@ public class SbmlTools {
       Object kmedia = MockData.mockMedia();
       this.saveData("mock_media", KBaseType.KBaseBiochemMedia.value(), kmedia);
       this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
+      
+//      FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, authPart);
+//      RunFluxBalanceAnalysisParams fbaParams = new RunFluxBalanceAnalysisParams()
+//          .withFbamodelId(modelId)
+//          .withFbamodelWorkspace("")
+//          .withMediaId("mock_media");
+//      fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
       
     } catch (Exception e) {
       e.printStackTrace();
