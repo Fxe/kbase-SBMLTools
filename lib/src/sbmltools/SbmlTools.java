@@ -138,7 +138,11 @@ public class SbmlTools {
       
       for (XmlObject o : xrxn.getListOfReactants()) {
         String species = o.getAttributes().get("species");
-        double stoichiometry = Double.parseDouble(o.getAttributes().get("stoichiometry"));
+        String stoich = o.getAttributes().get("stoichiometry");
+        if (stoich == null) {
+          stoich = "1";
+        }
+        double stoichiometry = Double.parseDouble(stoich);
         ModelReactionReagent r = new ModelReactionReagent()
             .withCoefficient(-1 * stoichiometry)
             .withModelcompoundRef(species);
@@ -146,7 +150,11 @@ public class SbmlTools {
       }
       for (XmlObject o : xrxn.getListOfProducts()) {
         String species = o.getAttributes().get("species");
-        double stoichiometry = Double.parseDouble(o.getAttributes().get("stoichiometry"));
+        String stoich = o.getAttributes().get("stoichiometry");
+        if (stoich == null) {
+          stoich = "1";
+        }
+        double stoichiometry = Double.parseDouble(stoich);
         ModelReactionReagent r = new ModelReactionReagent()
             .withCoefficient(stoichiometry)
             .withModelcompoundRef(species);
