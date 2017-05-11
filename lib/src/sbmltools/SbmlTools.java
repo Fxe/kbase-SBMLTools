@@ -1,5 +1,7 @@
 package sbmltools;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
@@ -337,6 +339,7 @@ public class SbmlTools {
       FBAModel kmodel = this.convertModel(xmodel, modelId);
       Object kmedia = MockData.mockMedia();
       this.saveData("mock_media2", KBaseType.KBaseBiochemMedia.value(), kmedia);
+      logger.info("save model [{}]", modelId);
       this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
       
 //      FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, authPart);
@@ -347,8 +350,10 @@ public class SbmlTools {
 //      fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
       
     } catch (Exception e) {
-      e.printStackTrace();
-      reportText = e.getMessage();
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
+      e.printStackTrace(pw);
+      reportText = e.getMessage() + " " + sw.toString();
     }
     
     logger.info("import model [done]");

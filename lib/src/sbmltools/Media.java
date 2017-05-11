@@ -74,10 +74,15 @@ public class Media {
   public void addMediaCompound(String cpd, double conc, double lb, double ub) {
     MediaCompound mediaCompound = new MediaCompound();
     mediaCompound.compound_ref = cpd;
-    //  cpd1.compound_ref = "kbase/default/compounds/id/cpd00001";
     mediaCompound.concentration = conc;
     mediaCompound.maxFlux = ub;
     mediaCompound.minFlux = lb;
     this.mediacompounds.add(mediaCompound);
+  }
+  
+  public void addMediaReagent() {
+    MediaReagent mediaReagent = new MediaReagent();
+    mediaReagent.associated_compounds.put("", null);
+//    mediaReagent.
   }
 }
