@@ -87,10 +87,10 @@ public class SbmlTools {
     model.setId(modelId);
     model.setName(modelId); //get from xml if exists
     model.setGenomeRef("4345/2/1");
-    model.setSource("");
-    model.setSourceId("");
-    model.setType("");
-    model.setTemplateRef("");
+    model.setSource("External");
+    model.setSourceId(modelId);
+    model.setType("SBML Model");
+    model.setTemplateRef("50/1/1");
     model.setGapfillings(new ArrayList<ModelGapfill> ());
     model.setGapgens(new ArrayList<ModelGapgen> ());
     model.setBiomasses(new ArrayList<Biomass> ());
@@ -120,7 +120,7 @@ public class SbmlTools {
         spiName = "undefined";
       }
       ModelCompound cpd = new ModelCompound().withId(spiEntry)
-                                             .withCompoundRef("cpd00001")
+                                             .withCompoundRef("~/template/compounds/id/cpd00000")
                                              .withModelcompartmentRef(cmpEntry)
                                              .withFormula("R")
                                              .withCharge(1.0)
@@ -145,7 +145,7 @@ public class SbmlTools {
         double stoichiometry = Double.parseDouble(stoich);
         ModelReactionReagent r = new ModelReactionReagent()
             .withCoefficient(-1 * stoichiometry)
-            .withModelcompoundRef(species);
+            .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
         reagents.add(r);
       }
       for (XmlObject o : xrxn.getListOfProducts()) {
@@ -166,15 +166,49 @@ public class SbmlTools {
                                              .withName(rxnName)
                                              .withDirection("=")
                                              .withProtons(1.0)
-                                             .withReactionRef("rxn00000")
+                                             .withReactionRef("50/1/1/reactions/id/rxn00000_c")
                                              .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
                                              .withProbability(1.0)
                                              .withPathway("entire model")
                                              .withModelcompartmentRef(
                                                  model.getModelcompartments().iterator().next().getId());
       rxn.setModelReactionReagents(reagents);
+      
+//      ModelReactionProtein protein = new ModelReactionProtein();
+//      protein.setModelReactionProteinSubunits(null);
+//      protein.setComplexRef("");
+//      protein.setSource("");
+//      protein.setNote("");
+//      ModelReactionProteinSubunit proteinSubunit = new ModelReactionProteinSubunit();
+////      proteinSubunit.setFeatureRefs(featureRefs);
+////      proteinSubunit.setOptionalSubunit(optionalSubunit);
+//      proteinSubunit.setRole("");
+//      proteinSubunit.setNote("");
+//      proteinSubunit.setTriggering(0L);
+//      
+//      List<ModelReactionProtein> proteins = new ArrayList<> ();
+//      proteins.add(protein);
+//      rxn.setModelReactionProteins(proteins);
+//      
+//      //??
+//      rxn.setDirection("=");
+//      //LB, UB
+//      rxn.setMaxrevflux(100.0);
+//      rxn.setMaxforflux(100.0);
+      
+      
       model.getModelreactions().add(rxn);
+      
     }
+    
+//    //setup biomasses if any detected
+//    Biomass biomass = new Biomass();
+//    biomass.setId("biomass1");
+//    BiomassCompound bspi1 = new BiomassCompound();
+//    bspi1.setCoefficient(1.0);
+//    bspi1.setModelcompoundRef("spiRef");
+//    biomass.getBiomasscompounds().add(bspi1);
+//    model.getBiomasses().add(biomass);
 
     
     return model;

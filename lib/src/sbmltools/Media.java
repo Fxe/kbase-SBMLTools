@@ -72,17 +72,21 @@ public class Media {
   public List<MediaCompound> mediacompounds = new ArrayList<> ();
   
   public void addMediaCompound(String cpd, double conc, double lb, double ub) {
+    if (cpd == null || cpd.trim().isEmpty()) {
+      throw new IllegalArgumentException("invalid compound ID " + cpd);
+    }
+    
     MediaCompound mediaCompound = new MediaCompound();
-    mediaCompound.compound_ref = cpd;
+    mediaCompound.compound_ref = String.format("kbase/default/compounds/id/%s", cpd);
     mediaCompound.concentration = conc;
     mediaCompound.maxFlux = ub;
     mediaCompound.minFlux = lb;
     this.mediacompounds.add(mediaCompound);
   }
   
-  public void addMediaReagent() {
-    MediaReagent mediaReagent = new MediaReagent();
-    mediaReagent.associated_compounds.put("", null);
-//    mediaReagent.
-  }
+//  public void addMediaReagent() {
+//    MediaReagent mediaReagent = new MediaReagent();
+//    mediaReagent.associated_compounds.put("", null);
+////    mediaReagent.
+//  }
 }
