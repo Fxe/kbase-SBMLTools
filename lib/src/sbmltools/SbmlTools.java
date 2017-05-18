@@ -109,7 +109,7 @@ public class SbmlTools {
                                                    .withPH(7.3)
                                                    .withPotential(1.0)
                                                    .withCompartmentIndex(1L)
-                                                   .withCompartmentRef("");
+                                                   .withCompartmentRef("~/template/compartments/id/" + cmpEntry);
       model.getModelcompartments().add(cmp);
     }
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
