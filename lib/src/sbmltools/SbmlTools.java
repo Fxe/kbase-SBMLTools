@@ -109,6 +109,7 @@ public class SbmlTools {
     cmpArray.add("g");
     Iterator<String> cmpIt = cmpArray.iterator();
     
+    Map<String, String> cmpMap = new HashMap<> ();
     for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
       String cmpEntry = xcmp.getAttributes().get("id");
       String cmpName = xcmp.getAttributes().get("name");
@@ -122,6 +123,7 @@ public class SbmlTools {
                                                    .withCompartmentIndex(1L)
                                                    .withCompartmentRef("~/template/compartments/id/" + cmpIt.next());
       model.getModelcompartments().add(cmp);
+      cmpMap.put(cmpEntry, cmp.getId());
     }
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
       String spiEntry = xspi.getAttributes().get("id");
@@ -132,7 +134,8 @@ public class SbmlTools {
       }
       ModelCompound cpd = new ModelCompound().withId(spiEntry)
                                              .withCompoundRef("~/template/compounds/id/cpd00000")
-                                             .withModelcompartmentRef(cmpEntry)
+                                             .withModelcompartmentRef(
+                                                 String.format("~/modelcompartments/id/%s", cmpMap.get(cmpEntry)))
                                              .withFormula("R")
                                              .withCharge(1.0)
                                              .withName(spiName);
