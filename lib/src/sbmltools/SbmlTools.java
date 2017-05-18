@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -98,18 +99,28 @@ public class SbmlTools {
     model.setModelcompartments(new ArrayList<ModelCompartment> ());
     model.setModelreactions(new ArrayList<ModelReaction> ());
     
+    List<String> cmpArray = new ArrayList<> ();
+    cmpArray.add("a");
+    cmpArray.add("b");
+    cmpArray.add("c");
+    cmpArray.add("d");
+    cmpArray.add("e");
+    cmpArray.add("f");
+    cmpArray.add("g");
+    Iterator<String> cmpIt = cmpArray.iterator();
+    
     for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
       String cmpEntry = xcmp.getAttributes().get("id");
       String cmpName = xcmp.getAttributes().get("name");
       if (cmpName == null || cmpName.trim().isEmpty()) {
         cmpName = "undefined";
       }
-      ModelCompartment cmp = new ModelCompartment().withId(cmpEntry)
+      ModelCompartment cmp = new ModelCompartment().withId(cmpIt.next())
                                                    .withLabel(cmpName)
                                                    .withPH(7.3)
                                                    .withPotential(1.0)
                                                    .withCompartmentIndex(1L)
-                                                   .withCompartmentRef("~/template/compartments/id/" + cmpEntry);
+                                                   .withCompartmentRef("~/template/compartments/id/" + cmpIt.next());
       model.getModelcompartments().add(cmp);
     }
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
