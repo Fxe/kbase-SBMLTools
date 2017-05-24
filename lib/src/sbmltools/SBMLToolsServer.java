@@ -37,8 +37,9 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
-//END_HEADER
 import sbmltools.SbmlTools.ImportModelResult;
+//END_HEADER
+
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
