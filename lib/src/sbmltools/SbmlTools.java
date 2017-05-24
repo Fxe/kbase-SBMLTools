@@ -117,14 +117,16 @@ public class SbmlTools {
         cmpName = "undefined";
       }
       String cmpId = cmpIt.next();
-      ModelCompartment cmp = new ModelCompartment().withId(cmpId)
+      long cmpIndex = 0;
+      String cmpIdAndIndex = cmpId + cmpIndex;
+      ModelCompartment cmp = new ModelCompartment().withId(cmpIdAndIndex)
                                                    .withLabel(cmpName)
                                                    .withPH(7.3)
                                                    .withPotential(1.0)
-                                                   .withCompartmentIndex(1L)
+                                                   .withCompartmentIndex(cmpIndex)
                                                    .withCompartmentRef("~/template/compartments/id/" + cmpId);
       model.getModelcompartments().add(cmp);
-      cmpMap.put(cmpEntry, cmp.getId());
+      cmpMap.put(cmpEntry, cmpIdAndIndex);
     }
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
       String spiEntry = xspi.getAttributes().get("id");
