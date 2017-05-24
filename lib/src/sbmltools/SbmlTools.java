@@ -188,7 +188,7 @@ public class SbmlTools {
                                              .withProbability(1.0)
                                              .withPathway("entire model")
                                              .withModelcompartmentRef(
-                                                 model.getModelcompartments().iterator().next().getCompartmentRef());
+                                                 String.format("~/modelcompartments/id/%s", cmpMap.get(model.getModelcompartments().iterator().next().getId())));
       rxn.setModelReactionReagents(reagents);
       
 //      ModelReactionProtein protein = new ModelReactionProtein();
