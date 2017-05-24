@@ -188,7 +188,7 @@ public class SbmlTools {
                                              .withProbability(1.0)
                                              .withPathway("entire model")
                                              .withModelcompartmentRef(
-                                                 model.getModelcompartments().iterator().next().getId());
+                                                 model.getModelcompartments().iterator().next().getCompartmentRef());
       rxn.setModelReactionReagents(reagents);
       
 //      ModelReactionProtein protein = new ModelReactionProtein();
@@ -270,21 +270,21 @@ public class SbmlTools {
      * object. The return object gives us the path to the file that was created.
      */
     System.out.println("Downloading assembly data as FASTA file.");
-    final AssemblyUtilClient assyUtil = new AssemblyUtilClient(callbackURL, authPart);
+//    final AssemblyUtilClient assyUtil = new AssemblyUtilClient(callbackURL, authPart);
     /* Normally this is bad practice, but the callback server (which runs on the same machine
      * as the docker container running the method) is http only
      * TODO Should allow the clients to not require a token, even for auth required methods,
      * since the callback server ignores the incoming token. No need to transmit the token
      * here.
      */
-    assyUtil.setIsInsecureHttpConnectionAllowed(true);
-    final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
-            .withRef(assyRef));
+//    assyUtil.setIsInsecureHttpConnectionAllowed(true);
+//    final FastaAssemblyFile fileobj = assyUtil.getAssemblyAsFasta(new GetAssemblyParams()
+//            .withRef(assyRef));
     
     /* Step 3 - Actually perform the filter operation, saving the good contigs to a new
      * fasta file.
      */
-    final Path out = scratch.resolve("filtered.fasta");
+//    final Path out = scratch.resolve("filtered.fasta");
 //    long total = 0;
 //    long remaining = 0;
 //    try (final FASTAFileReader fastaRead = new FASTAFileReaderImpl(
@@ -314,10 +314,11 @@ public class SbmlTools {
 //    long wsid = dataFileUtilClient.wsNameToId(workspaceName);
 //    dataFileUtilClient.saveObjects(saveObjectsParams);
     // Step 4 - Save the new Assembly back to the system
-    final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
-        .withAssemblyName(fileobj.getAssemblyName() + "_new")
-        .withWorkspaceName(workspace)
-        .withFile(new FastaAssemblyFile().withPath(fileobj.getPath())));
+    final String newAssyRef = assyRef;
+//    final String newAssyRef = assyUtil.saveAssemblyFromFasta(new SaveAssemblyParams()
+//        .withAssemblyName(fileobj.getAssemblyName() + "_new")
+//        .withWorkspaceName(workspace)
+//        .withFile(new FastaAssemblyFile().withPath(fileobj.getPath())));
     
     return newAssyRef;
   }
