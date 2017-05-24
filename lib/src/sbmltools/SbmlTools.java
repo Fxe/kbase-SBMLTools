@@ -100,13 +100,13 @@ public class SbmlTools {
     model.setModelreactions(new ArrayList<ModelReaction> ());
     
     List<String> cmpArray = new ArrayList<> ();
-    cmpArray.add("a");
-    cmpArray.add("b");
+//    cmpArray.add("a");
+//    cmpArray.add("b");
     cmpArray.add("c");
-    cmpArray.add("d");
+//    cmpArray.add("d");
     cmpArray.add("e");
-    cmpArray.add("f");
-    cmpArray.add("g");
+//    cmpArray.add("f");
+//    cmpArray.add("g");
     Iterator<String> cmpIt = cmpArray.iterator();
     
     Map<String, String> cmpMap = new HashMap<> ();
