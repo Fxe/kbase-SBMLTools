@@ -177,7 +177,8 @@ public class SbmlTools {
             .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
         reagents.add(r);
       }
-      
+      String rxnCmpRef = String.format("~/modelcompartments/id/%s", cmpMap.values().iterator().next());
+//      System.out.println(rxnCmpRef);
       ModelReaction rxn = new ModelReaction().withId(rxnEntry)
                                              .withAliases(new ArrayList<String> ())
                                              .withName(rxnName)
@@ -187,8 +188,7 @@ public class SbmlTools {
                                              .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
                                              .withProbability(1.0)
                                              .withPathway("entire model")
-                                             .withModelcompartmentRef(
-                                                 String.format("~/modelcompartments/id/%s", cmpMap.get(model.getModelcompartments().iterator().next().getId())));
+                                             .withModelcompartmentRef(rxnCmpRef);
       rxn.setModelReactionReagents(reagents);
       
 //      ModelReactionProtein protein = new ModelReactionProtein();
@@ -366,10 +366,15 @@ public class SbmlTools {
     return last;
   }
   
-  public String importModel(SbmlImportParams params) {
+  public static class ImportModelResult {
+    public String message = "";
+    public String modelRef = "";
+  }
+  
+  public ImportModelResult importModel(SbmlImportParams params) {
     
     logger.info("import model ...");
-    
+    ImportModelResult result = new ImportModelResult();
     String reportText = "";
     try {
       URL url = new URL(params.getUrl());
@@ -400,7 +405,7 @@ public class SbmlTools {
       Object kmedia = MockData.mockMedia();
       this.saveData("mock_media2", KBaseType.KBaseBiochemMedia.value(), kmedia);
       logger.info("save model [{}]", modelId);
-      this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
+      String modelRef = this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
       
 //      FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, authPart);
 //      RunFluxBalanceAnalysisParams fbaParams = new RunFluxBalanceAnalysisParams()
@@ -408,7 +413,7 @@ public class SbmlTools {
 //          .withFbamodelWorkspace("")
 //          .withMediaId("mock_media");
 //      fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
-      
+      result.modelRef = modelRef;
     } catch (Exception e) {
       StringWriter sw = new StringWriter();
       PrintWriter pw = new PrintWriter(sw);
@@ -418,7 +423,9 @@ public class SbmlTools {
     
     logger.info("import model [done]");
     
-    return reportText;
+    result.message = reportText;
+    
+    return result;
   }
   
 //  public static String aaa(List<XmlMessage> msgs) {

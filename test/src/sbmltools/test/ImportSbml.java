@@ -16,7 +16,7 @@ public class ImportSbml {
     try {
 //      URL url = new URL(urlString);
 //      URLConnection connection = url.openConnection();
-      String res = tools.importModel(params);
+      SbmlTools.ImportModelResult res = tools.importModel(params);
       System.out.println(res);
     } catch (Exception e) {
       e.printStackTrace();

@@ -38,6 +38,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 //END_HEADER
+import sbmltools.SbmlTools.ImportModelResult;
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
@@ -106,22 +107,23 @@ public class SBMLToolsServer extends JsonServerServlet {
 //        InputStream is = url.openStream();
         final String workspaceName = params.getWorkspaceName();
         final String assyRef = params.getAssemblyInputRef();
-        String reportText = "empty";
+        ImportModelResult importModelResult = new ImportModelResult();
         SbmlTools tools = new SbmlTools(workspaceName, authPart, callbackURL, jsonRpcContext);
         
-        final String newAssyRef = tools.filterContigs(assyRef, scratch);
+//        final String newAssyRef = tools.filterContigs(assyRef, scratch);
+        String newAssyRef = assyRef;
         
         try {
-          reportText = tools.importModel(params);
+          importModelResult = tools.importModel(params);
         } catch (Exception e) {
-          reportText = e.getMessage();
+          importModelResult.message = e.getMessage();
         }
         
 
-        final String resultText = "No changes\n" + reportText;
+        final String resultText = "No changes\n" + importModelResult.message;
         System.out.println(resultText);
         
-        
+        newAssyRef = importModelResult.modelRef;
         
 
         
