@@ -116,12 +116,13 @@ public class SbmlTools {
       if (cmpName == null || cmpName.trim().isEmpty()) {
         cmpName = "undefined";
       }
-      ModelCompartment cmp = new ModelCompartment().withId(cmpIt.next())
+      String cmpId = cmpIt.next();
+      ModelCompartment cmp = new ModelCompartment().withId(cmpId)
                                                    .withLabel(cmpName)
                                                    .withPH(7.3)
                                                    .withPotential(1.0)
                                                    .withCompartmentIndex(1L)
-                                                   .withCompartmentRef("~/template/compartments/id/" + cmpIt.next());
+                                                   .withCompartmentRef("~/template/compartments/id/" + cmpId);
       model.getModelcompartments().add(cmp);
       cmpMap.put(cmpEntry, cmp.getId());
     }
