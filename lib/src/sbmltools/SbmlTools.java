@@ -171,7 +171,7 @@ public class SbmlTools {
         double stoichiometry = Double.parseDouble(stoich);
         ModelReactionReagent r = new ModelReactionReagent()
             .withCoefficient(stoichiometry)
-            .withModelcompoundRef(species);
+            .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
         reagents.add(r);
       }
       
