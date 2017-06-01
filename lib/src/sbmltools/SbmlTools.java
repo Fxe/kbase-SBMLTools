@@ -33,6 +33,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.Tuple11;
@@ -82,6 +83,161 @@ public class SbmlTools {
     this.workspace = workspace;
   }
   
+  public static enum Orientation {
+    LeftToRight, RightToLeft, Reversible, Unknown, 
+    Fixed, //fixed constant non zero 
+    Zero, //zero constant
+    Range, //zero not included
+}
+  
+  /**
+   * Determine reaction reversibility
+   */
+  public static String[] validateReactionContraint(String rxnEntry, XmlSbmlModel xmodel, XmlSbmlReaction xrxn, List<XmlObject> rxnParameters) {
+    //    System.out.println(rxnAttributes);
+
+    String lb = null;
+    String ub = null;
+    
+//    System.out.println(xrxn.getAttributes());
+    
+    for (XmlObject xo : rxnParameters) {
+//      System.out.println(xo.getAttributes());
+      String id = xo.getAttributes().get("id");
+      if (id == null) {
+//        this.messages.add(new XmlMessage(xo, MessageType.WARN, "parameter without ID (rxn: %s)", rxnEntry));
+        logger.debug("parameter without ID {}", xo.getAttributes());
+      } else {
+        String value = xo.getAttributes().get("value");
+        //      String units = xo.getAttributes().get("units");
+        //      System.out.println("\t\t:\t" + xo.getAttributes());
+        switch (id.toUpperCase()) {
+        case "OBJECTIVE_COEFFICIENT":
+//          this.defaultObjective.put(rxnEntry, value);
+          break;
+        case "LOWER_BOUND":
+          lb = value;
+          break;
+        case "UPPER_BOUND":
+          ub = value;
+          break;
+        default:
+//          CollectionUtils.increaseCount(ignoredParameter, id, 1);
+          logger.debug("ignored {}", id);
+          break;
+        }
+      }
+    }
+    
+    if (xrxn.getAttributes().containsKey("upperFluxBound")) {
+      String ufbcId = xrxn.getAttributes().get("upperFluxBound");
+      for (XmlObject xo : xmodel.getListOfParameters()) {
+        String id = xo.getAttributes().get("id");
+        if (id != null && id.equals(ufbcId)) {
+          String valueStr = xo.getAttributes().get("value");
+          if (ub != null && !ub.equals(valueStr)) {
+            logger.warn("fbc conflict with reaction parameters [{}] -> [{}]", valueStr, ub);
+          } else {
+            ub = valueStr;
+          }
+        }
+      }
+    }
+    
+    if (xrxn.getAttributes().containsKey("lowerFluxBound")) {
+      String ufbcId = xrxn.getAttributes().get("lowerFluxBound");
+      for (XmlObject xo : xmodel.getListOfParameters()) {
+        String id = xo.getAttributes().get("id");
+        if (id != null && id.equals(ufbcId)) {
+          String valueStr = xo.getAttributes().get("value");
+          if (lb != null && !lb.equals(valueStr)) {
+            logger.warn("fbc conflict with reaction parameters [{}] -> [{}]", valueStr, lb);
+          } else {
+            lb = valueStr;
+          }
+        }
+      }
+    }
+    
+    Orientation parametersOrientation = Orientation.Unknown;
+    Orientation attributesOrientation = Orientation.Unknown;
+//    if (lb == null || ub == null) {
+////      logger.warn("{}, {}", lb, ub);
+//    } else {
+//      if (NumberUtils.isNumber(ub.trim()) && NumberUtils.isNumber(lb.trim())) {
+//        double ub_ = Double.parseDouble(ub.trim());
+//        double lb_ = Double.parseDouble(lb.trim());
+//        if (ub_ > 0.0 && lb_ < 0.0) {
+//          parametersOrientation = Orientation.Reversible;
+//        } else if (lb_ == 0.0 && ub_ > 0.0){
+//          parametersOrientation = Orientation.LeftToRight;
+//        } else if (lb_ < 0.0 && ub_ == 0.0) {
+//          parametersOrientation = Orientation.RightToLeft;
+//        } else if (lb_ == 0.0 && ub_ == 0.0) {
+//          logger.debug("zero [{}, {}]", lb, ub);
+//          parametersOrientation = Orientation.Zero;
+//        } else if (lb_ == ub_) {
+//          logger.debug("fixed bounds [{}, {}]", lb, ub);
+//          parametersOrientation = Orientation.Fixed;
+//        } else {
+//          parametersOrientation = Orientation.Range;
+//          //logger.error("strange bounds [{}, {}]", lb, ub);
+//        }
+//
+//      } else {
+//        logger.error("non numeric bounds [{}, {}]", lb, ub);
+//      }
+//    }
+
+    String rev = xrxn.getAttributes().get("reversible");
+    if (rev != null) {
+      boolean reversible = Boolean.parseBoolean(rev);
+      if (reversible) {
+        attributesOrientation = Orientation.Reversible;
+      } else {
+        attributesOrientation = Orientation.LeftToRight;
+      }
+    }
+
+
+//    logger.debug("{} - type:{}, Attribute: {}, Parameters: {}", rxnEntry, xrxnTypeMap.get(rxnEntry), attributesOrientation, parametersOrientation);
+//
+//    //drains are special case we need to have lower and upper bounds !
+//    if (xrxnTypeMap.get(rxnEntry).equals(EntityType.DRAIN)) {
+//      if (lb == null || ub == null) {
+//        logger.debug("drain reaction with undefined bounds [{}, {}] !", lb, ub);
+//        this.messages.add(new XmlMessage(xrxn, MessageType.WARN, "%s drain reaction with undefined bounds [%s, %s] !", rxnEntry, lb, ub));
+//      }
+//      
+//      //if drain assume parameters or attributes (its up to the user to define uptakes)
+//      if (!parametersOrientation.equals(Orientation.Unknown)) {
+//        this.rxnDirection.get(parametersOrientation).add(rxnEntry);
+//      } else {
+//        this.rxnDirection.get(attributesOrientation).add(rxnEntry);
+//      }
+//    } else if (parametersOrientation.equals(Orientation.Unknown) && attributesOrientation.equals(Orientation.Unknown)) {
+//      this.rxnDirection.get(Orientation.Unknown).add(rxnEntry);
+//      this.messages.add(new XmlMessage(xrxn, MessageType.WARN, "no reversiblity information assume reversible (reversible:%s, #parameters %d)", rev, rxnParameters.size()));
+//      logger.debug("unable to determine orientation reversible:{}, #parameters {}", rev, rxnParameters.size());
+//    } else if (parametersOrientation.equals(attributesOrientation)) {
+//      logger.debug("orientation match ! {}", attributesOrientation);
+//      this.rxnDirection.get(attributesOrientation).add(rxnEntry);
+//    } else if (parametersOrientation.equals(Orientation.Unknown) && 
+//        !attributesOrientation.equals(Orientation.Unknown)) {
+//      logger.debug("using attribute orientation reversible:{} -> {}, #parameters {}", rev, attributesOrientation, rxnParameters.size());
+//      this.rxnDirection.get(attributesOrientation).add(rxnEntry);
+//    } else if (!parametersOrientation.equals(Orientation.Unknown) && 
+//        attributesOrientation.equals(Orientation.Unknown)) {
+//      logger.debug("using parameter orientation [{}, {}] -> {}, reversible:{}", lb, ub, parametersOrientation, rev);
+//      this.rxnDirection.get(parametersOrientation).add(rxnEntry);
+//    } else {
+//      this.messages.add(new XmlMessage(xrxn, MessageType.ERROR, "invalid orientation [%s, %s] -> %s", lb, ub, xrxnTypeMap.get(rxnEntry)));
+//      logger.debug("invalid orientation {}, [{}, {}] -> {}", xrxn.getAttributes(), lb, ub, xrxnTypeMap.get(rxnEntry));
+//      this.rxnDirection.get(Orientation.Unknown).add(rxnEntry);
+//    }
+    return new String[]{lb, ub};
+  }
+  
   public FBAModel convertModel(XmlSbmlModel xmodel, String modelId) {
     
     FBAModel model = new FBAModel();
@@ -100,13 +256,14 @@ public class SbmlTools {
     model.setModelreactions(new ArrayList<ModelReaction> ());
     
     List<String> cmpArray = new ArrayList<> ();
-//    cmpArray.add("a");
-//    cmpArray.add("b");
+
     cmpArray.add("c");
 //    cmpArray.add("d");
     cmpArray.add("e");
-//    cmpArray.add("f");
-//    cmpArray.add("g");
+    cmpArray.add("f");
+    cmpArray.add("g");
+    cmpArray.add("a");
+    cmpArray.add("b");
     Iterator<String> cmpIt = cmpArray.iterator();
     
     Map<String, String> cmpMap = new HashMap<> ();
@@ -210,9 +367,24 @@ public class SbmlTools {
 //      //??
 //      rxn.setDirection("=");
 //      //LB, UB
-//      rxn.setMaxrevflux(100.0);
-//      rxn.setMaxforflux(100.0);
+//      xrxn.get
+      String[] boundStr = validateReactionContraint(rxnEntry, xmodel, xrxn, xrxn.getListOfParameters());
       
+      double lb = -1000;
+      double ub =  1000;
+      try {
+        lb = Double.parseDouble(boundStr[0]);
+      } catch (Exception e) {
+        
+      }
+      try {
+        ub = Double.parseDouble(boundStr[1]);
+      } catch (Exception e) {
+        
+      }
+      rxn.setMaxrevflux(lb);
+      rxn.setMaxforflux(ub);
+      System.out.println(rxnEntry + " " + lb + " " + ub);
       
       model.getModelreactions().add(rxn);
       
