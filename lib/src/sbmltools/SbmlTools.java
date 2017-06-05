@@ -312,30 +312,39 @@ public class SbmlTools {
       
       for (XmlObject o : xrxn.getListOfReactants()) {
         String species = o.getAttributes().get("species");
-        String stoich = o.getAttributes().get("stoichiometry");
-        if (stoich == null) {
-          stoich = "1";
+        //small cheat to test the ecoli model (should be decided by the integration)
+        if (!species.endsWith("_b")) {
+          String stoich = o.getAttributes().get("stoichiometry");
+          if (stoich == null) {
+            stoich = "1";
+          }
+          double stoichiometry = Double.parseDouble(stoich);
+          ModelReactionReagent r = new ModelReactionReagent()
+              .withCoefficient(-1 * stoichiometry)
+              .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
+          reagents.add(r);
         }
-        double stoichiometry = Double.parseDouble(stoich);
-        ModelReactionReagent r = new ModelReactionReagent()
-            .withCoefficient(-1 * stoichiometry)
-            .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
-        reagents.add(r);
       }
+      
       for (XmlObject o : xrxn.getListOfProducts()) {
         String species = o.getAttributes().get("species");
-        String stoich = o.getAttributes().get("stoichiometry");
-        if (stoich == null) {
-          stoich = "1";
+        //small cheat to test the ecoli model (should be decided by the integration)
+        if (!species.endsWith("_b")) {
+          String stoich = o.getAttributes().get("stoichiometry");
+          if (stoich == null) {
+            stoich = "1";
+          }
+          double stoichiometry = Double.parseDouble(stoich);
+          ModelReactionReagent r = new ModelReactionReagent()
+              .withCoefficient(stoichiometry)
+              .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
+          reagents.add(r);
         }
-        double stoichiometry = Double.parseDouble(stoich);
-        ModelReactionReagent r = new ModelReactionReagent()
-            .withCoefficient(stoichiometry)
-            .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
-        reagents.add(r);
       }
+      
       String rxnCmpRef = String.format("~/modelcompartments/id/%s", cmpMap.values().iterator().next());
 //      System.out.println(rxnCmpRef);
+//      System.out.println(reagents);
       ModelReaction rxn = new ModelReaction().withId(rxnEntry)
                                              .withAliases(new ArrayList<String> ())
                                              .withName(rxnName)
