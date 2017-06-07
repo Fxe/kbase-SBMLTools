@@ -6,6 +6,8 @@ python ./scripts/prepare_deploy_cfg.py ./deploy.cfg ./work/config.properties
 
 if [ -f ./work/token ] ; then
   export KB_AUTH_TOKEN=$(<./work/token)
+  echo TOKEN
+  echo $KB_AUTH_TOKEN
 fi
 
 if [ $# -eq 0 ] ; then
