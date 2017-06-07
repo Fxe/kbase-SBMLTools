@@ -14,6 +14,8 @@ import org.ini4j.Ini;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -35,6 +37,9 @@ import us.kbase.workspace.WorkspaceClient;
 import us.kbase.workspace.WorkspaceIdentity;
 
 public class SBMLToolsServerTest {
+  
+  private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServerTest.class);
+  
     private static AuthToken token = null;
     private static Map<String, String> config = null;
     private static WorkspaceClient wsClient = null;
@@ -46,14 +51,23 @@ public class SBMLToolsServerTest {
     @BeforeClass
     public static void init() throws Exception {
         //TODO AUTH make configurable?
-        token = AuthService.validateToken(System.getenv("KB_AUTH_TOKEN"));
-        String configFilePath = System.getenv("KB_DEPLOYMENT_CONFIG");
+      String myToken = "!!!!!!";
+      String configFilePath = System.getenv("KB_DEPLOYMENT_CONFIG");
+      String urlStr = System.getenv("SDK_CALLBACK_URL");
+      
+      logger.info("{}, {}, {}", myToken, configFilePath, urlStr);
+//      myToken = System.getenv("KB_AUTH_TOKEN");
+        token = AuthService.validateToken(myToken);
+        
+        
+        
+        
         File deploy = new File(configFilePath);
         Ini ini = new Ini(deploy);
         config = ini.get("SBMLTools");
         wsClient = new WorkspaceClient(new URL(config.get("workspace-url")), token);
         wsClient.setIsInsecureHttpConnectionAllowed(true); // do we need this?
-        callbackURL = new URL(System.getenv("SDK_CALLBACK_URL"));
+        callbackURL = new URL(urlStr);
         scratch = Paths.get(config.get("scratch"));
         // These lines are necessary because we don't want to start linux syslog bridge service
         JsonServerSyslog.setStaticUseSyslog(false);
