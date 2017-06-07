@@ -12,7 +12,7 @@ MAINTAINER KBase Developer
 RUN cd /kb/deployment/lib/jars \
     && wget https://downloads.sourceforge.net/project/jfasta/releases/jfasta-2.2.0/jfasta-2.2.0-jar-with-dependencies.jar
     
-RUN mvn -v
+# RUN mvn -v
 RUN git clone git@github.com:biosynth-framework.git
 RUN pwd
 RUN ls
