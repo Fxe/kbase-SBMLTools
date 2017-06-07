@@ -14,6 +14,9 @@ RUN cd /kb/deployment/lib/jars \
     
 # RUN mvn -v
 RUN git clone https://github.com/Fxe/biosynth-framework.git
+RUN cd biosynth-framework
+RUN ./gradlew install
+RUN cd ..
 RUN pwd
 RUN ls
 
