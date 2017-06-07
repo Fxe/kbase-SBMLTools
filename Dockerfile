@@ -13,6 +13,9 @@ RUN cd /kb/deployment/lib/jars \
     && wget https://downloads.sourceforge.net/project/jfasta/releases/jfasta-2.2.0/jfasta-2.2.0-jar-with-dependencies.jar
     
 # RUN mvn -v
+RUN java -version
+
+RUN git clone https://github.com/spring-projects/spring-framework.git && cd spring-framework && ./gradlew install
 RUN git clone https://github.com/Fxe/biosynth-framework.git && cd biosynth-framework && ./gradlew install
 RUN pwd
 RUN ls
