@@ -41,9 +41,9 @@ import net.sf.jfasta.impl.FASTAFileWriter;
  */
 public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
-    private static final String version = "0.0.1";
-    private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "b0c4148d12e1ec589b38e212714d30eb68bcab78";
+    private static final String version = "";
+    private static final String gitUrl = "";
+    private static final String gitCommitHash = "";
 
     //BEGIN_CLASS_HEADER
     private final URL callbackURL;
@@ -72,11 +72,11 @@ public class SBMLToolsServer extends JsonServerServlet {
      * Apps that run in the Narrative, your function should have the 
      * 'authentication required' modifier.
      * </pre>
-     * @param   params   instance of type {@link sbmltools.SbmlImportParams SbmlImportParams}
+     * @param   params   instance of type {@link sbmltools.FilterContigsParams FilterContigsParams}
      * @return   parameter "output" of type {@link sbmltools.FilterContigsResults FilterContigsResults}
      */
     @JsonServerMethod(rpc = "SBMLTools.filter_contigs", async=true)
-    public FilterContigsResults filterContigs(SbmlImportParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    public FilterContigsResults filterContigs(FilterContigsParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         FilterContigsResults returnVal = null;
         //BEGIN filter_contigs
         
@@ -178,21 +178,6 @@ public class SBMLToolsServer extends JsonServerServlet {
 
         System.out.println("returning:\n" + returnVal);
         //END filter_contigs
-        return returnVal;
-    }
-
-    /**
-     * <p>Original spec-file function name: import_model_xml</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link sbmltools.SbmlImportParams SbmlImportParams}
-     * @return   parameter "output" of type {@link sbmltools.FilterContigsResults FilterContigsResults}
-     */
-    @JsonServerMethod(rpc = "SBMLTools.import_model_xml", async=true)
-    public FilterContigsResults importModelXml(SbmlImportParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        FilterContigsResults returnVal = null;
-        //BEGIN import_model_xml
-        //END import_model_xml
         return returnVal;
     }
     @JsonServerMethod(rpc = "SBMLTools.status")
