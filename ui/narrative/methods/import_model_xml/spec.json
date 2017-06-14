@@ -32,24 +32,13 @@
                 "validate_as": "int",
                 "min_integer" : 0
             }
-        },
-        {
-            "id": "url",
-            "optional": false,
-            "advanced": false,
-            "allow_multiple": false,
-            "default_values": [ "http://193.137.11.210/models/biomodels/iBROKEN.xml" ],
-            "field_type": "text",
-            "text_options": {
-                "validate_as": "string"
-            }
         }
     ],
     "behavior": {
         "service-mapping": {
             "url": "",
             "name":"SBMLTools",
-            "method": "filter_contigs",
+            "method": "import_model_xml",
             "input_mapping": [
                 {
                     "narrative_system_variable": "workspace",
@@ -63,10 +52,6 @@
                 {
                     "input_parameter": "min_length",
                     "target_property": "min_length"
-                },
-                {
-                    "input_parameter": "url",
-                    "target_property": "url"
                 }
             ],
             "output_mapping": [
