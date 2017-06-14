@@ -30,6 +30,7 @@ import net.sf.jfasta.FASTAFileReader;
 import net.sf.jfasta.impl.FASTAElementIterator;
 import net.sf.jfasta.impl.FASTAFileReaderImpl;
 import net.sf.jfasta.impl.FASTAFileWriter;
+import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import sbmltools.SbmlTools.ImportModelResult;
 //END_HEADER
 
@@ -87,6 +88,10 @@ public class SBMLToolsServer extends JsonServerServlet {
         System.out.println(params);
         
         SbmlTools.validateSbmlImportParams(params);
+        
+        GenericReaction rxn = new GenericReaction();
+        FASTAElement fasta = null;
+        System.err.println(fasta + " " + rxn);
         
         final String workspaceName = params.getWorkspaceName();
         final String assyRef = params.getAssemblyInputRef();

@@ -10,8 +10,9 @@ MAINTAINER KBase Developer
 
 # download a fasta reader/writer
 RUN cd /kb/deployment/lib/jars \
-    && wget http://193.137.11.210/fliu/jfasta-2.2.0-jar-with-dependencies.jar \
-    && wget http://193.137.11.210/fliu/biosynth-core-0.0.1-SNAPSHOT.jar
+    && wget http://193.137.11.210/fliu/biosynth-core-0.0.1-SNAPSHOT.jar \
+    && wget http://193.137.11.210/fliu/jfasta-2.2.0-jar-with-dependencies.jar
+    
 
 #RUN cd /kb/deployment/lib/jars \
 #    && wget http://193.137.11.210/fliu/all-deps.zip && unzip all-deps.zip
