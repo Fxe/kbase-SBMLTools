@@ -30,8 +30,9 @@ import net.sf.jfasta.FASTAFileReader;
 import net.sf.jfasta.impl.FASTAElementIterator;
 import net.sf.jfasta.impl.FASTAFileReaderImpl;
 import net.sf.jfasta.impl.FASTAFileWriter;
-//END_HEADER
 import sbmltools.SbmlTools.ImportModelResult;
+//END_HEADER
+
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
