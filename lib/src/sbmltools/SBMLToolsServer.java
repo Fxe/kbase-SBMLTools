@@ -16,21 +16,11 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.net.MalformedURLException;
 
-import assemblyutil.AssemblyUtilClient;
-import assemblyutil.FastaAssemblyFile;
-import assemblyutil.GetAssemblyParams;
-import assemblyutil.SaveAssemblyParams;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
-import net.sf.jfasta.FASTAElement;
-import net.sf.jfasta.FASTAFileReader;
-import net.sf.jfasta.impl.FASTAElementIterator;
-import net.sf.jfasta.impl.FASTAFileReaderImpl;
-import net.sf.jfasta.impl.FASTAFileWriter;
-import pt.uminho.sysbio.biosynthframework.GenericReaction;
 import sbmltools.SbmlTools.ImportModelResult;
 //END_HEADER
 
@@ -88,10 +78,6 @@ public class SBMLToolsServer extends JsonServerServlet {
         System.out.println(params);
         
         SbmlTools.validateSbmlImportParams(params);
-        
-        GenericReaction rxn = new GenericReaction();
-        FASTAElement fasta = null;
-        System.err.println(fasta + " " + rxn);
         
         final String workspaceName = params.getWorkspaceName();
         final String assyRef = params.getAssemblyInputRef();
