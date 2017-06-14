@@ -10,7 +10,7 @@ MAINTAINER KBase Developer
 
 # download a fasta reader/writer
 RUN cd /kb/deployment/lib/jars \
-    && wget https://downloads.sourceforge.net/project/jfasta/releases/jfasta-2.2.0/jfasta-2.2.0-jar-with-dependencies.jar
+    && wget https://downloads.sourceforge.net/project/jfasta/releases/jfasta-2.2.0/jfasta-2.2.0-jar-with-dependencies.jar \
     && wget http://193.137.11.210/fliu/biojava-core-4.2.5.jar
 
 #RUN cd /kb/deployment/lib/jars \
