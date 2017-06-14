@@ -43,7 +43,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "1b11fd2791b4b5fe944ac97e0d8b1ccdac21f331";
+    private static final String gitCommitHash = "b0c4148d12e1ec589b38e212714d30eb68bcab78";
 
     //BEGIN_CLASS_HEADER
     private final URL callbackURL;

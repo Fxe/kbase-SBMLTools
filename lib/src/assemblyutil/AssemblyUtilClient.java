@@ -19,7 +19,7 @@ import us.kbase.common.service.UnauthorizedException;
  * <pre>
  * </pre>
  */
-public class AssemblyutilClient {
+public class AssemblyUtilClient {
     private JsonClientCaller caller;
     private long asyncJobCheckTimeMs = 100;
     private int asyncJobCheckTimeScalePercent = 150;
@@ -30,7 +30,7 @@ public class AssemblyutilClient {
     /** Constructs a client with a custom URL and no user credentials.
      * @param url the URL of the service.
      */
-    public AssemblyutilClient(URL url) {
+    public AssemblyUtilClient(URL url) {
         caller = new JsonClientCaller(url);
     }
     /** Constructs a client with a custom URL.
@@ -40,7 +40,7 @@ public class AssemblyutilClient {
      * @throws IOException if an IOException occurs when checking the token's
      * validity.
      */
-    public AssemblyutilClient(URL url, AuthToken token) throws UnauthorizedException, IOException {
+    public AssemblyUtilClient(URL url, AuthToken token) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, token);
     }
 
@@ -52,7 +52,7 @@ public class AssemblyutilClient {
      * @throws IOException if an IOException occurs when checking the user's
      * credentials.
      */
-    public AssemblyutilClient(URL url, String user, String password) throws UnauthorizedException, IOException {
+    public AssemblyUtilClient(URL url, String user, String password) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, user, password);
     }
 
@@ -66,7 +66,7 @@ public class AssemblyutilClient {
      * @throws IOException if an IOException occurs when checking the user's
      * credentials.
      */
-    public AssemblyutilClient(URL url, String user, String password, URL auth) throws UnauthorizedException, IOException {
+    public AssemblyUtilClient(URL url, String user, String password, URL auth) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, user, password, auth);
     }
 

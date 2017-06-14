@@ -20,7 +20,7 @@ import us.kbase.common.service.UnauthorizedException;
  * Module for a simple WS data object report type.
  * </pre>
  */
-public class KbasereportClient {
+public class KBaseReportClient {
     private JsonClientCaller caller;
     private long asyncJobCheckTimeMs = 100;
     private int asyncJobCheckTimeScalePercent = 150;
@@ -31,7 +31,7 @@ public class KbasereportClient {
     /** Constructs a client with a custom URL and no user credentials.
      * @param url the URL of the service.
      */
-    public KbasereportClient(URL url) {
+    public KBaseReportClient(URL url) {
         caller = new JsonClientCaller(url);
     }
     /** Constructs a client with a custom URL.
@@ -41,7 +41,7 @@ public class KbasereportClient {
      * @throws IOException if an IOException occurs when checking the token's
      * validity.
      */
-    public KbasereportClient(URL url, AuthToken token) throws UnauthorizedException, IOException {
+    public KBaseReportClient(URL url, AuthToken token) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, token);
     }
 
@@ -53,7 +53,7 @@ public class KbasereportClient {
      * @throws IOException if an IOException occurs when checking the user's
      * credentials.
      */
-    public KbasereportClient(URL url, String user, String password) throws UnauthorizedException, IOException {
+    public KBaseReportClient(URL url, String user, String password) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, user, password);
     }
 
@@ -67,7 +67,7 @@ public class KbasereportClient {
      * @throws IOException if an IOException occurs when checking the user's
      * credentials.
      */
-    public KbasereportClient(URL url, String user, String password, URL auth) throws UnauthorizedException, IOException {
+    public KBaseReportClient(URL url, String user, String password, URL auth) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, user, password, auth);
     }
 
