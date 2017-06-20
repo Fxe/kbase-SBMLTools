@@ -143,9 +143,9 @@ public class SbmlTools {
       List<XmlMessage> msgs = validator.validate();
       reportText = String.format("Species %d, Reactions %s, %s", xmodel.getSpecies().size(), xmodel.getReactions().size(), params.getUrl());
 //      String txt = "";
-//      for (XmlMessage m : msgs) {
-//        reportText +="\n" + String.format("%s", m);
-//      }
+      for (XmlMessage m : msgs) {
+        reportText +="\n" + String.format("%s", m);
+      }
       
 //      xmlsbmlmodelf
 //      reportText += SbmlTools.aaa(validator.validate());
