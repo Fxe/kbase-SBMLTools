@@ -32,11 +32,11 @@ import pt.uminho.sysbio.biosynthframework.util.IntegrationMapUtils;
 public class KBaseModelSeedIntegration {
   
   protected final String biodbDataPath;
-  protected final String curationPath;
+  protected final String curationFilePath;
   
   public KBaseModelSeedIntegration(String biodbDataPath, String curationPath) {
     this.biodbDataPath = biodbDataPath;
-    this.curationPath = curationPath;
+    this.curationFilePath = curationPath;
   }
   
 //  public static Function<List<Set<String>>, List<Set<String>>> buildReduceBigg2(final Function<String, String> entryToUniversalEntry) {
@@ -120,9 +120,9 @@ public class KBaseModelSeedIntegration {
     
     // /data/biobase/export
     // /data/biobase/
-    FileImport.EXPORT_PATH = "/var/biobase/export";
+    FileImport.EXPORT_PATH = biodbDataPath;
     
-    ConnectedComponents<String> ccs = loadConnectedComponents("/var/biobase/integration/cc/cpd_curation.tsv");
+    ConnectedComponents<String> ccs = loadConnectedComponents(curationFilePath);
     IntegrationEngine ie1 = new ConnectedComponentsIntegrationEngine(ccs);
     IntegrationEngine ie2 = new FirstDegreeReferences(biodbService);
     
