@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 import org.apache.commons.io.IOUtils;
 
@@ -40,43 +39,43 @@ public class KBaseModelSeedIntegration {
     this.curationPath = curationPath;
   }
   
-  public static Function<List<Set<String>>, List<Set<String>>> buildReduceBigg2(final Function<String, String> entryToUniversalEntry) {
-    return new Function<List<Set<String>>, List<Set<String>>>() {
-      
-      @Override
-      public List<Set<String>> apply(List<Set<String>> t) {
-//        Map<String, String> entryToAbbr = new HashMap<> ();
-        Map<String, String> reduceToRealEntry = new HashMap<> ();
-        List<Set<String>> reduceSets = new ArrayList<> ();
-        for (Set<String> set : t) {
-          Set<String> reducedSet = new HashSet<> ();
-          for (String e : set) {
-            String abbr = entryToUniversalEntry.apply(e);
-            if (abbr != null) {
-              reducedSet.add(abbr);
-              reduceToRealEntry.put(abbr, e);
-            } else {
-              reducedSet.add(e);
-            }
-          }
-          reduceSets.add(reducedSet);
-        }
-        
-        List<Set<String>> result = new ArrayList<> ();
-        for (Set<String> rset : reduceSets) {
-          Set<String> bigg2set = new HashSet<> ();
-          for (String e : rset) {
-            String bigg2entry = reduceToRealEntry.get(e);
-            bigg2set.add(bigg2entry);
-          }
-          result.add(bigg2set);
-        }
-        
-//        System.out.println(result);
-        return result;
-      }
-    };
-  }
+//  public static Function<List<Set<String>>, List<Set<String>>> buildReduceBigg2(final Function<String, String> entryToUniversalEntry) {
+//    return new Function<List<Set<String>>, List<Set<String>>>() {
+//      
+//      @Override
+//      public List<Set<String>> apply(List<Set<String>> t) {
+////        Map<String, String> entryToAbbr = new HashMap<> ();
+//        Map<String, String> reduceToRealEntry = new HashMap<> ();
+//        List<Set<String>> reduceSets = new ArrayList<> ();
+//        for (Set<String> set : t) {
+//          Set<String> reducedSet = new HashSet<> ();
+//          for (String e : set) {
+//            String abbr = entryToUniversalEntry.apply(e);
+//            if (abbr != null) {
+//              reducedSet.add(abbr);
+//              reduceToRealEntry.put(abbr, e);
+//            } else {
+//              reducedSet.add(e);
+//            }
+//          }
+//          reduceSets.add(reducedSet);
+//        }
+//        
+//        List<Set<String>> result = new ArrayList<> ();
+//        for (Set<String> rset : reduceSets) {
+//          Set<String> bigg2set = new HashSet<> ();
+//          for (String e : rset) {
+//            String bigg2entry = reduceToRealEntry.get(e);
+//            bigg2set.add(bigg2entry);
+//          }
+//          result.add(bigg2set);
+//        }
+//        
+////        System.out.println(result);
+//        return result;
+//      }
+//    };
+//  }
   
   public static ConnectedComponents<String> loadConnectedComponents(String path) {
     ConnectedComponents<String> ccs = new ConnectedComponents<>();
@@ -144,14 +143,14 @@ public class KBaseModelSeedIntegration {
     integration.run();
     
     final Map<String, String> aa = new HashMap<> ();
-    IntegrationMapUtils.reduceBigg = buildReduceBigg2(
-        new Function<String, String>() {
-
-          @Override
-          public String apply(String t) {
-            return aa.get(t);
-          }
-        });
+//    IntegrationMapUtils.reduceBigg = buildReduceBigg2(
+//        new Function<String, String>() {
+//
+//          @Override
+//          public String apply(String t) {
+//            return aa.get(t);
+//          }
+//        });
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
     return imap;
