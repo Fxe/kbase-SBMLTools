@@ -42,6 +42,7 @@
     <include name="commons-io-2.4.jar"/>
     <include name="commons-math-2.2.jar"/>
     <include name="commons-lang3-3.4.jar"/>
+    <include name="guava-18.0.jar"/>
   </fileset>
 
   <path id="compile.classpath">

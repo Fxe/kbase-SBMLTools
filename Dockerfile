@@ -9,8 +9,8 @@ MAINTAINER KBase Developer
 # RUN apt-get update
 
 # download a data fiels
-# RUN mkdir -p /data/integration
-# RUN cd /data/integration && wget http://193.137.11.210/fliu/integration_data.zip && unzip kbase-data.zip
+RUN mkdir -p /data/integration
+RUN cd /data/integration && wget http://193.137.11.210/fliu/integration_data.zip && unzip integration_data.zip
 
 # download a fasta reader/writer
 RUN cd /kb/deployment/lib/jars \
@@ -20,6 +20,7 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/commons-io-2.4.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-math-2.2.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-lang3-3.4.jar \
+    && wget http://193.137.11.210/fliu/kbase/guava-18.0.jar \
     && wget http://193.137.11.210/fliu/kbase/jfasta-2.2.0-jar-with-dependencies.jar
 
 
