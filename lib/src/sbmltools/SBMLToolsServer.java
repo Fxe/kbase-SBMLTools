@@ -102,9 +102,14 @@ public class SBMLToolsServer extends JsonServerServlet {
         kbr.setIsInsecureHttpConnectionAllowed(true);
         final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
                 .withReport(new Report().withTextMessage(resultText)
-                        .withObjectsCreated(Arrays.asList(new WorkspaceObject()
+                        .withObjectsCreated(Arrays.asList(
+                            new WorkspaceObject()
                                 .withDescription("Filtered contigs")
-                                .withRef(newAssyRef)))));
+                                .withRef(newAssyRef),
+                              new WorkspaceObject()
+                                .withDescription("Filtered contigs")
+                                .withRef(newAssyRef)
+                                ))));
         // Step 6: contruct the output to send back
         
         returnVal = new FilterContigsResults()

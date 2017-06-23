@@ -37,8 +37,11 @@
     <include name="kbase/workspace/WorkspaceClient-0.6.0.jar"/>
     <include name="jfasta-2.2.0-jar-with-dependencies.jar"/>
     <include name="biosynth-core-0.0.1-SNAPSHOT.jar"/>
+    <include name="biosynth-integration-0.0.1-SNAPSHOT.jar"/>
+    <include name="neo4j-kernel-2.1.5.jar"/>
     <include name="commons-io-2.4.jar"/>
     <include name="commons-math-2.2.jar"/>
+    <include name="commons-lang3-3.4.jar"/>
   </fileset>
 
   <path id="compile.classpath">

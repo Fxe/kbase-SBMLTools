@@ -84,7 +84,7 @@ public class SBMLToolsServerTest {
         .withAllowInsecureURLs("true".equals(authUrlInsecure)));
     
 //    AuthUser user = authService.login("filipeliu", "+");
-    token = authService.validateToken("eyJ0b2tlbiI6IldUSFFaVlc0SFZWUVNYUUlKUFhZVTUyR1U3MzVMMzRQIiwic291cmNlIjoicHJvZCJ9");
+    token = authService.validateToken("HGPTQEG474SETX5KEGWOT4RDLGSSCLIN");
 //    Map<String, UserDetail> r = authService.fetchUserDetail(Arrays.asList(new String[]{"filipeliu"}));
 //    System.out.println(r);
     
@@ -98,8 +98,9 @@ public class SBMLToolsServerTest {
     
     // These lines are necessary because we don't want to start linux syslog bridge service
     JsonServerSyslog.setStaticUseSyslog(false);
-    JsonServerSyslog.setStaticMlogFile(new File(config.get("scratch"), "test.log")
-        .getAbsolutePath());
+    JsonServerSyslog.setStaticMlogFile("/tmp/test.log");
+//    JsonServerSyslog.setStaticMlogFile(new File(config.get("scratch"), "test.log")
+//        .getAbsolutePath());
     impl = new SBMLToolsServer();
   }
 
@@ -151,6 +152,7 @@ public class SBMLToolsServerTest {
   @Test
   public void testFilterContigsOk() throws Exception {
     // First load a test FASTA file as an KBase Assembly
+    System.out.println("test");
     final String fastaContent = ">seq1 something something asdf\n" +
         "agcttttcat\n" +
         ">seq2\n" +
