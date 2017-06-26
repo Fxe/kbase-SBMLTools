@@ -5,6 +5,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -71,8 +72,12 @@ public class SBMLToolsServerTest {
       AUTH_SERVICE_URL = config.get("auth-service-url");
       AUTH_SERVICE_URL_ALLOW_I = config.get("auth-service-url-allow-insecure");
       scratch = Paths.get(config.get("scratch"));
+    } else {
+
     }
-    
+    config = new HashMap<>();
+    config.put("scratch", "/tmp/trash");
+    scratch = new File("/tmp/trash").toPath();
 
     SDK_CALLBACK_URL = System.getenv("SDK_CALLBACK_URL");
 
@@ -101,6 +106,7 @@ public class SBMLToolsServerTest {
     JsonServerSyslog.setStaticMlogFile("/tmp/test.log");
 //    JsonServerSyslog.setStaticMlogFile(new File(config.get("scratch"), "test.log")
 //        .getAbsolutePath());
+    
     impl = new SBMLToolsServer();
   }
 
@@ -161,7 +167,11 @@ public class SBMLToolsServerTest {
         "agcttttcatgg";
     SbmlImportParams params = new SbmlImportParams()
         .withWorkspaceName(getWsName())
-        .withMinLength(100000L);
+        .withMinLength(100000L)
+        .withAssemblyInputRef("4345/13/69")
+        .withUrl("http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml");
+    
+    impl.filterContigs(params, token, getContext());
     System.out.println(getWsName());
 //    impl.filterContigs(params, token, getContext());
     /*

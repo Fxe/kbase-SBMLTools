@@ -53,7 +53,13 @@ public class SBMLToolsServer extends JsonServerServlet {
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("Invalid SDK callback url: " + sdkURL, e);
         }
-        scratch = Paths.get(super.config.get("scratch"));
+//        System.out.println(super.config.get("scratch"));
+        if (super.config.get("scratch") == null) {
+          scratch = null;
+        } else {
+          scratch = Paths.get(super.config.get("scratch"));
+        }
+        
         //END_CONSTRUCTOR
     }
 

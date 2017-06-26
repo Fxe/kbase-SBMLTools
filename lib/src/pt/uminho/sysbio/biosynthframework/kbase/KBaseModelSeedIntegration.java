@@ -33,6 +33,7 @@ public class KBaseModelSeedIntegration {
   
   protected final String biodbDataPath;
   protected final String curationFilePath;
+  public Map<String, String> spiToModelSeedReference = new HashMap<> ();
   
   public KBaseModelSeedIntegration(String biodbDataPath, String curationPath) {
     this.biodbDataPath = biodbDataPath;
@@ -153,6 +154,14 @@ public class KBaseModelSeedIntegration {
 //        });
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
+    
+    for (String id : imap.keySet()) {
+      String ref = imap.get(id).get(MetaboliteMajorLabel.ModelSeed);
+      if (ref != null) {
+        spiToModelSeedReference.put(id, ref);
+      }
+    }
+    
     return imap;
 
 //    ObjectMapper om = new ObjectMapper();

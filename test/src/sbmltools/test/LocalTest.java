@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.ConnectedComponents;
@@ -31,15 +32,8 @@ public class LocalTest {
       XmlSbmlModel xmodel = reader.parse();
       
       KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(a, b);
-      Map<String, Map<MetaboliteMajorLabel, String>> refs = 
-          integration.generateDatabaseReferences(xmodel, "teh_model");;
-      Map<String, String> spiToModelSeedReference = new HashMap<> ();
-      for (String id : refs.keySet()) {
-        String ref = refs.get(id).get(MetaboliteMajorLabel.ModelSeed);
-        if (ref != null) {
-          spiToModelSeedReference.put(id, ref);
-        }
-      }
+      integration.generateDatabaseReferences(xmodel, "teh_model");;
+      Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
       
       FBAModel fbaModel = new FBAModelFactory()
           .withModelSeedReference(spiToModelSeedReference)
@@ -47,8 +41,9 @@ public class LocalTest {
           .build();
 
       ObjectMapper om = new ObjectMapper();
-//      System.out.println(om.writeValueAsString(fbaModel));
-//      System.out.println("model" + fbaModel);
+      om.enable(SerializationFeature.INDENT_OUTPUT);
+      System.out.println(om.writeValueAsString(fbaModel));
+      System.out.println("model" + fbaModel);
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

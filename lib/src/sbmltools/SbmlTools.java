@@ -116,17 +116,18 @@ public class SbmlTools {
   
   public ImportModelResult importModel(SbmlImportParams params) {
     
-    logger.info("import model ...");
+    logger.info("run");
     ImportModelResult result = new ImportModelResult();
     String reportText = "";
     try {
       URL url = new URL(params.getUrl());
       URLConnection connection = url.openConnection();
-      
+      logger.info("read");
 //      URL url = new URL(params.getUrl());
       XmlStreamSbmlReader reader = new XmlStreamSbmlReader(connection.getInputStream());
       XmlSbmlModel xmodel = reader.parse();
 //      msg = model.getAttributes().toString();
+      logger.info("validate");
       XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
       xrxnAttributes(validator);
       
@@ -151,20 +152,16 @@ public class SbmlTools {
       
       String a = "/data/integration/export";
       String b = "/data/integration/cc/cpd_curation.tsv";
+//      a = "/var/biobase/export";
+//      b = "/var/biobase/integration/cc/cpd_curation.tsv";
       boolean autoIntegration = true;
       if (autoIntegration) {
         //make integrated model
         String imodelEntry = "i" + modelId;
         KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(a, b);
-        Map<String, Map<MetaboliteMajorLabel, String>> refs = 
-            integration.generateDatabaseReferences(xmodel, imodelEntry);
-        Map<String, String> spiToModelSeedReference = new HashMap<> ();
-        for (String id : refs.keySet()) {
-          String ref = refs.get(id).get(MetaboliteMajorLabel.ModelSeed);
-          if (ref != null) {
-            spiToModelSeedReference.put(id, ref);
-          }
-        }
+        integration.generateDatabaseReferences(xmodel, imodelEntry);
+        Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
+        reportText += String.format("i: %d", spiToModelSeedReference.size());
         FBAModel ikmodel = new FBAModelFactory()
             .withModelSeedReference(spiToModelSeedReference)
             .withXmlSbmlModel(xmodel)
@@ -190,7 +187,7 @@ public class SbmlTools {
       StringWriter sw = new StringWriter();
       PrintWriter pw = new PrintWriter(sw);
       e.printStackTrace(pw);
-      reportText = e.getMessage() + " " + sw.toString();
+      reportText += e.getMessage() + " " + sw.toString();
     }
     
     logger.info("import model [done]");
