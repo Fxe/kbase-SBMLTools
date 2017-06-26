@@ -38,6 +38,9 @@ public class KBaseModelSeedIntegration {
   public KBaseModelSeedIntegration(String biodbDataPath, String curationPath) {
     this.biodbDataPath = biodbDataPath;
     this.curationFilePath = curationPath;
+    
+    // /data/biobase/
+    FileImport.EXPORT_PATH = biodbDataPath;
   }
   
 //  public static Function<List<Set<String>>, List<Set<String>>> buildReduceBigg2(final Function<String, String> entryToUniversalEntry) {
@@ -120,8 +123,7 @@ public class KBaseModelSeedIntegration {
         .build();
     
     // /data/biobase/export
-    // /data/biobase/
-    FileImport.EXPORT_PATH = biodbDataPath;
+
     
     ConnectedComponents<String> ccs = loadConnectedComponents(curationFilePath);
     IntegrationEngine ie1 = new ConnectedComponentsIntegrationEngine(ccs);

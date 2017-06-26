@@ -282,7 +282,7 @@ public class FBAModelFactory {
       String id = xo.getAttributes().get("id");
       if (id == null) {
         //        this.messages.add(new XmlMessage(xo, MessageType.WARN, "parameter without ID (rxn: %s)", rxnEntry));
-        logger.debug("parameter without ID {}", xo.getAttributes());
+        logger.trace("parameter without ID {}", xo.getAttributes());
       } else {
         String value = xo.getAttributes().get("value");
         //      String units = xo.getAttributes().get("units");
@@ -299,7 +299,7 @@ public class FBAModelFactory {
           break;
         default:
           //          CollectionUtils.increaseCount(ignoredParameter, id, 1);
-          logger.debug("ignored {}", id);
+          logger.trace("ignored {}", id);
           break;
         }
       }

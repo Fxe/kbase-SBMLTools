@@ -161,7 +161,7 @@ public class SbmlTools {
         KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(a, b);
         integration.generateDatabaseReferences(xmodel, imodelEntry);
         Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
-        reportText += String.format("i: %d", spiToModelSeedReference.size());
+        reportText += String.format("\ni: %d", spiToModelSeedReference.size());
         FBAModel ikmodel = new FBAModelFactory()
             .withModelSeedReference(spiToModelSeedReference)
             .withXmlSbmlModel(xmodel)
