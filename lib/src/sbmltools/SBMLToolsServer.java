@@ -1,8 +1,9 @@
 package sbmltools;
 
+
+//BEGIN_HEADER
 import java.io.File;
 import java.net.MalformedURLException;
-//BEGIN_HEADER
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
