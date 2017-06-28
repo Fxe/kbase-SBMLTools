@@ -44,7 +44,7 @@ module SBMLTools {
     typedef structure {
         string sbml_url;
         string workspace_name;
-        string biomass;
+        list<string> biomass;
         string model_name;
         int automatically_integrate;
     } SbmlImporterParams;
@@ -65,6 +65,11 @@ module SBMLTools {
         int n_contigs_remaining;
     } FilterContigsResults;
     
+    typedef structure {
+        string report_name;
+        string report_ref;
+        string fbamodel_id;
+    } SbmlImporterResults;
     /*
         The actual function is declared using 'funcdef' to specify the name
         and input/return arguments to the function.  For all typical KBase
@@ -76,5 +81,5 @@ module SBMLTools {
     funcdef import_model_xml(SbmlImportParams params)
         returns (FilterContigsResults output) authentication required;
     funcdef sbml_importer(SbmlImporterParams params)
-        returns (FilterContigsResults output) authentication required;
+        returns (SbmlImporterResults output) authentication required;
 };

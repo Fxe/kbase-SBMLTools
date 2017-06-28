@@ -340,21 +340,17 @@ FilterContigsResults is a reference to a hash where the following keys are defin
 
 <pre>
 $params is a SBMLTools.SbmlImporterParams
-$output is a SBMLTools.FilterContigsResults
+$output is a SBMLTools.SbmlImporterResults
 SbmlImporterParams is a reference to a hash where the following keys are defined:
 	sbml_url has a value which is a string
 	workspace_name has a value which is a string
-	biomass has a value which is a string
+	biomass has a value which is a reference to a list where each element is a string
 	model_name has a value which is a string
 	automatically_integrate has a value which is an int
-FilterContigsResults is a reference to a hash where the following keys are defined:
+SbmlImporterResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
-	assembly_output has a value which is a SBMLTools.assembly_ref
-	n_initial_contigs has a value which is an int
-	n_contigs_removed has a value which is an int
-	n_contigs_remaining has a value which is an int
-assembly_ref is a string
+	fbamodel_id has a value which is a string
 
 </pre>
 
@@ -363,21 +359,17 @@ assembly_ref is a string
 =begin text
 
 $params is a SBMLTools.SbmlImporterParams
-$output is a SBMLTools.FilterContigsResults
+$output is a SBMLTools.SbmlImporterResults
 SbmlImporterParams is a reference to a hash where the following keys are defined:
 	sbml_url has a value which is a string
 	workspace_name has a value which is a string
-	biomass has a value which is a string
+	biomass has a value which is a reference to a list where each element is a string
 	model_name has a value which is a string
 	automatically_integrate has a value which is an int
-FilterContigsResults is a reference to a hash where the following keys are defined:
+SbmlImporterResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
-	assembly_output has a value which is a SBMLTools.assembly_ref
-	n_initial_contigs has a value which is an int
-	n_contigs_removed has a value which is an int
-	n_contigs_remaining has a value which is an int
-assembly_ref is a string
+	fbamodel_id has a value which is a string
 
 
 =end text
@@ -660,7 +652,7 @@ min_length has a value which is an int
 a reference to a hash where the following keys are defined:
 sbml_url has a value which is a string
 workspace_name has a value which is a string
-biomass has a value which is a string
+biomass has a value which is a reference to a list where each element is a string
 model_name has a value which is a string
 automatically_integrate has a value which is an int
 
@@ -673,7 +665,7 @@ automatically_integrate has a value which is an int
 a reference to a hash where the following keys are defined:
 sbml_url has a value which is a string
 workspace_name has a value which is a string
-biomass has a value which is a string
+biomass has a value which is a reference to a list where each element is a string
 model_name has a value which is a string
 automatically_integrate has a value which is an int
 
@@ -725,6 +717,40 @@ assembly_output has a value which is a SBMLTools.assembly_ref
 n_initial_contigs has a value which is an int
 n_contigs_removed has a value which is an int
 n_contigs_remaining has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 SbmlImporterResults
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+fbamodel_id has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+fbamodel_id has a value which is a string
 
 
 =end text

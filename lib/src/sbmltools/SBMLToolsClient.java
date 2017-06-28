@@ -206,15 +206,15 @@ public class SBMLToolsClient {
      * <pre>
      * </pre>
      * @param   params   instance of type {@link sbmltools.SbmlImporterParams SbmlImporterParams}
-     * @return   parameter "output" of type {@link sbmltools.FilterContigsResults FilterContigsResults}
+     * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public FilterContigsResults sbmlImporter(SbmlImporterParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public SbmlImporterResults sbmlImporter(SbmlImporterParams params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
-        TypeReference<List<FilterContigsResults>> retType = new TypeReference<List<FilterContigsResults>>() {};
-        List<FilterContigsResults> res = caller.jsonrpcCall("SBMLTools.sbml_importer", args, retType, true, true, jsonRpcContext, this.serviceVersion);
+        TypeReference<List<SbmlImporterResults>> retType = new TypeReference<List<SbmlImporterResults>>() {};
+        List<SbmlImporterResults> res = caller.jsonrpcCall("SBMLTools.sbml_importer", args, retType, true, true, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

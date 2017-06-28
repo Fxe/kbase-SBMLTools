@@ -151,11 +151,11 @@ public class SBMLToolsServer extends JsonServerServlet {
      * <pre>
      * </pre>
      * @param   params   instance of type {@link sbmltools.SbmlImporterParams SbmlImporterParams}
-     * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
+     * @return   parameter "output" of type {@link sbmltools.FilterContigsResults FilterContigsResults}
      */
     @JsonServerMethod(rpc = "SBMLTools.sbml_importer", async=true)
-    public SbmlImporterResults sbmlImporter(SbmlImporterParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        SbmlImporterResults returnVal = null;
+    public FilterContigsResults sbmlImporter(SbmlImporterParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+        FilterContigsResults returnVal = null;
         //BEGIN sbml_importer
         params.getBiomass();
         params.getAutomaticallyIntegrate();
