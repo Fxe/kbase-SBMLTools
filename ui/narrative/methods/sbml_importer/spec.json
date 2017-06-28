@@ -5,7 +5,7 @@
     ],
   "contact" : "help@kbase.us",
   "visble" : true,
-  "categories" : [ "active","metabolic_modeling","importers" ],
+  "categories" : [ "active","metabolic_modeling" ],
   "widgets" : {
     "output" : "kbaseTabTable",
     "input" : null
