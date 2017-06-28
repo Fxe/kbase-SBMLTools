@@ -114,6 +114,18 @@ public class SbmlTools {
     return fields;
   }
   
+  public ImportModelResult importModel(SbmlImporterParams params) {
+    ImportModelResult result = new ImportModelResult();
+    
+    logger.info("SbmlImporterParams:{} ", params);
+    
+    result.message = String.format("%s %s %d %s",
+        params.getSbmlUrl(),
+        params.getBiomass(),
+        params.getAutomaticallyIntegrate(),
+        params.getModelName());
+    return result;
+  }
   
   public ImportModelResult importModel(SbmlImportParams params) {
     

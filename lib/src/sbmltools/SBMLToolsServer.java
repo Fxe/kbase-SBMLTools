@@ -157,9 +157,23 @@ public class SBMLToolsServer extends JsonServerServlet {
     public SbmlImporterResults sbmlImporter(SbmlImporterParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         SbmlImporterResults returnVal = null;
         //BEGIN sbml_importer
-        params.getBiomass();
-        params.getAutomaticallyIntegrate();
-        params.getModelName();
+        final String workspaceName = params.getWorkspaceName();
+        SbmlTools sbmlTools = new SbmlTools(
+            workspaceName, authPart, callbackURL, jsonRpcContext);
+        ImportModelResult result = sbmlTools.importModel(params);
+        final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
+        // see note above about bad practice
+        kbr.setIsInsecureHttpConnectionAllowed(true);
+        Report kbaseReport = new Report().withTextMessage(result.message);
+//        .withObjectsCreated();
+        final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
+                .withReport(kbaseReport));
+        // Step 6: contruct the output to send back
+        
+        returnVal = new SbmlImporterResults()
+                .withReportName(report.getName())
+                .withReportRef(report.getRef());
+        
         //END sbml_importer
         return returnVal;
     }
