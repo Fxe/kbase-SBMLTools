@@ -46,7 +46,7 @@ module SBMLTools {
         string workspace_name;
         string biomass;
         string model_name;
-        int automatically_integrate
+        int automatically_integrate;
     } SbmlImporterParams;
 
     /*

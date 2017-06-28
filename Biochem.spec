@@ -284,7 +284,7 @@ module KBaseBiochem {
     	CompoundSet object
     	
     	@optional description name fbamodel_ref biochemistry_ref
-    */ 
+     
 	typedef structure {
 		list<ImportedCompound> compounds;
 		string id;
@@ -293,7 +293,7 @@ module KBaseBiochem {
 		fbamodel_ref fbamodel_ref;
 		biochemistry_ref biochemistry_ref;
 	} CompoundSet;
-	
+	*/
 	/* 
     	MediaReagent object
     	
@@ -368,6 +368,8 @@ module KBaseBiochem {
 		list<compound_ref> compound_refs;
 	} CompoundSet;
 	
+    
+    
 	/* 
     	ReactionSet object
     	

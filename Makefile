@@ -1,5 +1,7 @@
 SERVICE = sbmltools
 SERVICE_CAPS = SBMLTools
+#SPEC_FILE = #Biochem.spec #FBAModel.spec
+#SPEC_FILE = FBAModel.spec
 SPEC_FILE = SBMLTools.spec
 URL = https://kbase.us/services/sbmltools
 DIR = $(shell pwd)
