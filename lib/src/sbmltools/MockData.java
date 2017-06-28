@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import kbasefba.Biomass;
+import kbasefba.FBAModel;
+import kbasefba.ModelCompartment;
+import kbasefba.ModelCompound;
+import kbasefba.ModelGapfill;
+import kbasefba.ModelGapgen;
+import kbasefba.ModelReaction;
+import kbasefba.ModelReactionProtein;
+import kbasefba.ModelReactionReagent;
+
 public class MockData {
   
   public static ModelCompound mockCompound(String ref, String cmp) {

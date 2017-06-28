@@ -3,7 +3,7 @@
 #
 name: Import Model
 tooltip: |
-    Filters the contigs by removing contigs below a length threshold
+    Dummy Test Module
 screenshots: []
 
 icon: null

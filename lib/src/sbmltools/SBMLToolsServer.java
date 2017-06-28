@@ -157,6 +157,9 @@ public class SBMLToolsServer extends JsonServerServlet {
     public FilterContigsResults sbmlImporter(SbmlImporterParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         FilterContigsResults returnVal = null;
         //BEGIN sbml_importer
+        params.getBiomass();
+        params.getAutomaticallyIntegrate();
+        params.getModelName();
         //END sbml_importer
         return returnVal;
     }

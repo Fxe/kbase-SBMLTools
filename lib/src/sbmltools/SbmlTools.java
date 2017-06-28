@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import datafileutil.DataFileUtilClient;
 import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
+import kbasefba.FBAModel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;

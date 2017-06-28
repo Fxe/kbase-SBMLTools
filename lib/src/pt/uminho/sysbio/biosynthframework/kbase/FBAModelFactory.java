@@ -16,15 +16,15 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
-import sbmltools.Biomass;
-import sbmltools.FBAModel;
-import sbmltools.ModelCompartment;
-import sbmltools.ModelCompound;
-import sbmltools.ModelGapfill;
-import sbmltools.ModelGapgen;
-import sbmltools.ModelReaction;
-import sbmltools.ModelReactionProtein;
-import sbmltools.ModelReactionReagent;
+import kbasefba.Biomass;
+import kbasefba.FBAModel;
+import kbasefba.ModelCompartment;
+import kbasefba.ModelCompound;
+import kbasefba.ModelGapfill;
+import kbasefba.ModelGapgen;
+import kbasefba.ModelReaction;
+import kbasefba.ModelReactionProtein;
+import kbasefba.ModelReactionReagent;
 
 public class FBAModelFactory {
 
@@ -218,6 +218,7 @@ public class FBAModelFactory {
           .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
           .withProbability(1.0)
           .withPathway("entire model")
+          .withDblinks(new HashMap<String, List<String>>())
           .withModelcompartmentRef(rxnCmpRef);
       rxn.setModelReactionReagents(reagents);
 
