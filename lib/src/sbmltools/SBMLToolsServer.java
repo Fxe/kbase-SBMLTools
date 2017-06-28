@@ -1,20 +1,16 @@
 package sbmltools;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import us.kbase.auth.AuthToken;
-import us.kbase.common.service.JsonServerMethod;
-import us.kbase.common.service.JsonServerServlet;
-import us.kbase.common.service.JsonServerSyslog;
-import us.kbase.common.service.RpcContext;
-
+import java.net.MalformedURLException;
 //BEGIN_HEADER
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.net.MalformedURLException;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
@@ -23,6 +19,11 @@ import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import sbmltools.SbmlTools.ImportModelResult;
 //END_HEADER
+import us.kbase.auth.AuthToken;
+import us.kbase.common.service.JsonServerMethod;
+import us.kbase.common.service.JsonServerServlet;
+import us.kbase.common.service.JsonServerSyslog;
+import us.kbase.common.service.RpcContext;
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
@@ -164,7 +165,9 @@ public class SBMLToolsServer extends JsonServerServlet {
         final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
         // see note above about bad practice
         kbr.setIsInsecureHttpConnectionAllowed(true);
-        Report kbaseReport = new Report().withTextMessage(result.message);
+        List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);
+        Report kbaseReport = new Report().withTextMessage(result.message)
+                                         .withObjectsCreated(objs);
 //        .withObjectsCreated();
         final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
                 .withReport(kbaseReport));

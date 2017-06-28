@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import datafileutil.DataFileUtilClient;
 import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
 import kbasefba.FBAModel;
+import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
@@ -78,6 +80,7 @@ public class SbmlTools {
   public static class ImportModelResult {
     public String message = "";
     public String modelRef = "";
+    public List<WorkspaceObject> objects = new ArrayList<> ();
   }
   
   public static void xrxnAttributes(XmlSbmlModelValidator validator) {
@@ -124,6 +127,27 @@ public class SbmlTools {
         params.getBiomass(),
         params.getAutomaticallyIntegrate(),
         params.getModelName());
+   
+    try {
+      Object media1 = MockData.mockMedia();
+      String ref = this.saveData("mock_media2", 
+                                 KBaseType.KBaseBiochemMedia.value(), media1);
+      result.objects.add(new WorkspaceObject().withDescription("test object1")
+                                              .withRef(ref));
+    } catch (Exception e) {
+      logger.error("{}", e.getMessage());
+    }
+    
+    try {
+      Object media2 = MockData.mockMedia();
+      String ref = this.saveData("mock_media2", 
+                                 KBaseType.KBaseBiochemMedia.value(), media2);
+      result.objects.add(new WorkspaceObject().withDescription("test object2")
+                                              .withRef(ref));
+    } catch (Exception e) {
+      logger.error("{}", e.getMessage());
+    }
+    
     return result;
   }
   
