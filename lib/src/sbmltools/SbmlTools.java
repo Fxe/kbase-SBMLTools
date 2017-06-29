@@ -18,7 +18,6 @@ import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
 import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
-import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
@@ -32,21 +31,24 @@ import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
 
 public class SbmlTools {
-  
+
   private static final Logger logger = LoggerFactory.getLogger(SbmlTools.class);
+
+  public final String DATA_EXPORT_PATH = "/data/integration/export";
+  public final String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
   
   public final AuthToken authPart;
   public final RpcContext jsonRpcContext;
   public final URL callbackURL;
   public final String workspace;
-  
+
   public SbmlTools(String workspace, AuthToken authPart, URL callbackURL, RpcContext jsonRpcContext) {
     this.authPart = authPart;
     this.jsonRpcContext = jsonRpcContext;
     this.callbackURL = callbackURL;
     this.workspace = workspace;
   }
-  
+
 
 
   public static void validateSbmlImportParams(SbmlImportParams params) {
@@ -58,31 +60,31 @@ public class SbmlTools {
      */
     final String workspaceName = params.getWorkspaceName();
     if (workspaceName == null || workspaceName.isEmpty()) {
-        throw new IllegalArgumentException(
-            "Parameter workspace_name is not set in input arguments");
+      throw new IllegalArgumentException(
+          "Parameter workspace_name is not set in input arguments");
     }
     final String assyRef = params.getAssemblyInputRef();
     if (assyRef == null || assyRef.isEmpty()) {
-        throw new IllegalArgumentException(
-                "Parameter assembly_input_ref is not set in input arguments");
+      throw new IllegalArgumentException(
+          "Parameter assembly_input_ref is not set in input arguments");
     }
     if (params.getMinLength() == null) {
-        throw new IllegalArgumentException(
-                "Parameter min_length is not set in input arguments");
+      throw new IllegalArgumentException(
+          "Parameter min_length is not set in input arguments");
     }
     final long minLength = params.getMinLength();
     if (minLength < 0) {
-        throw new IllegalArgumentException("min_length parameter cannot be negative (" +
-                minLength + ")");
+      throw new IllegalArgumentException("min_length parameter cannot be negative (" +
+          minLength + ")");
     }
   }
-  
+
   public static class ImportModelResult {
     public String message = "";
     public String modelRef = "";
     public List<WorkspaceObject> objects = new ArrayList<> ();
   }
-  
+
   public static void xrxnAttributes(XmlSbmlModelValidator validator) {
     String[] xrxnAttr = new String[] {
         "upperFluxBound", "fast", "metaid", "reversible", "sboTerm", "name", "lowerFluxBound", "id"
@@ -93,7 +95,7 @@ public class SbmlTools {
     validator.xrxnAttr.addAll(Arrays.asList(xrxnAttr));
     validator.xrxnStoichAttr.addAll(Arrays.asList(xrxnSpecieAttr));
   }
-  
+
   public static Map<String, MessageType> knownSpecieAttributes() {
     String[] attr = new String[] {
         "speciesType", "NONE",
@@ -117,42 +119,107 @@ public class SbmlTools {
     return fields;
   }
   
+
   public ImportModelResult importModel(SbmlImporterParams params) {
     ImportModelResult result = new ImportModelResult();
-    
+
     logger.info("SbmlImporterParams:{} ", params);
-    
+
     result.message = String.format("%s %s %d %s",
         params.getSbmlUrl(),
         params.getBiomass(),
         params.getAutomaticallyIntegrate(),
         params.getModelName());
-   
+    
+
+    
+    
     try {
-      Object media1 = MockData.mockMedia();
-      String ref = this.saveData("mock_media2", 
-                                 KBaseType.KBaseBiochemMedia.value(), media1);
-      result.objects.add(new WorkspaceObject().withDescription("test object1")
-                                              .withRef(ref));
+      final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
+      dfuClient.setIsInsecureHttpConnectionAllowed(true);
+      
+      
+
+      //check url type
+      URL url = new URL(params.getSbmlUrl());
+      URLConnection connection = url.openConnection();
+      //import
+      XmlStreamSbmlReader reader = new XmlStreamSbmlReader(connection.getInputStream());
+      XmlSbmlModel xmodel = reader.parse();
+      
+      logger.info("validate");
+      XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
+      xrxnAttributes(validator);
+      
+      List<XmlMessage> msgs = validator.validate();
+      result.message += String.format("Species %d, Reactions %s, %s", xmodel.getSpecies().size(), xmodel.getReactions().size(), params.getSbmlUrl());
+      //      String txt = "";
+      for (XmlMessage m : msgs) {
+        result.message +="\n" + String.format("%s", m);
+      }
+      
+      String modelId = params.getModelName();
+      if (modelId == null || modelId.trim().isEmpty()) {
+        modelId = getNameFromUrl(params.getSbmlUrl());
+      }
+      
+      modelId = modelId.trim();
+      
+      FBAModel rawModel = new FBAModelFactory()
+          .withXmlSbmlModel(xmodel)
+          .withModelId(modelId)
+          .build();
+      String rawModelRef = this.saveData(modelId, 
+          KBaseType.FBAModel.value(), rawModel, dfuClient);
+      result.objects.add(new WorkspaceObject().withDescription(params.getSbmlUrl())
+          .withRef(rawModelRef));
+      
+      //check if integrate
+      if (params.getAutomaticallyIntegrate() == 1) {
+        String imodelEntry = "i" + modelId;
+        KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
+        integration.generateDatabaseReferences(xmodel, imodelEntry);
+        Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
+        result.message += String.format("\ni: %d", spiToModelSeedReference.size());
+        FBAModel ikmodel = new FBAModelFactory()
+            .withModelSeedReference(spiToModelSeedReference)
+            .withXmlSbmlModel(xmodel)
+            .withModelId(imodelEntry)
+            .build();
+        String imodelRef = this.saveData(imodelEntry, 
+            KBaseType.FBAModel.value(), ikmodel, dfuClient);
+        result.objects.add(new WorkspaceObject().withDescription("i model")
+            .withRef(imodelRef));
+      }
+
+//      try {
+//        Object media1 = MockData.mockMedia();
+//        String ref = this.saveData("mock_media2", 
+//            KBaseType.KBaseBiochemMedia.value(), media1, dfuClient);
+//        result.objects.add(new WorkspaceObject().withDescription("test object1")
+//            .withRef(ref));
+//      } catch (Exception e) {
+//        logger.error("{}", e.getMessage());
+//      }
+//
+//      try {
+//        Object media2 = MockData.mockMedia();
+//        String ref = this.saveData("mock_media2", 
+//            KBaseType.KBaseBiochemMedia.value(), media2, dfuClient);
+//        result.objects.add(new WorkspaceObject().withDescription("test object2")
+//            .withRef(ref));
+//      } catch (Exception e) {
+//        logger.error("{}", e.getMessage());
+//      }
     } catch (Exception e) {
       logger.error("{}", e.getMessage());
     }
-    
-    try {
-      Object media2 = MockData.mockMedia();
-      String ref = this.saveData("mock_media2", 
-                                 KBaseType.KBaseBiochemMedia.value(), media2);
-      result.objects.add(new WorkspaceObject().withDescription("test object2")
-                                              .withRef(ref));
-    } catch (Exception e) {
-      logger.error("{}", e.getMessage());
-    }
-    
+
     return result;
   }
-  
+
   public ImportModelResult importModel(SbmlImportParams params) {
-    
+
     logger.info("run");
     ImportModelResult result = new ImportModelResult();
     String reportText = "";
@@ -160,37 +227,37 @@ public class SbmlTools {
       URL url = new URL(params.getUrl());
       URLConnection connection = url.openConnection();
       logger.info("read");
-//      URL url = new URL(params.getUrl());
+      //      URL url = new URL(params.getUrl());
       XmlStreamSbmlReader reader = new XmlStreamSbmlReader(connection.getInputStream());
       XmlSbmlModel xmodel = reader.parse();
-//      msg = model.getAttributes().toString();
+      //      msg = model.getAttributes().toString();
       logger.info("validate");
       XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
       xrxnAttributes(validator);
-      
+
       List<XmlMessage> msgs = validator.validate();
       reportText = String.format("Species %d, Reactions %s, %s", xmodel.getSpecies().size(), xmodel.getReactions().size(), params.getUrl());
-//      String txt = "";
+      //      String txt = "";
       for (XmlMessage m : msgs) {
         reportText +="\n" + String.format("%s", m);
       }
-      
-//      xmlsbmlmodelf
-//      reportText += SbmlTools.aaa(validator.validate());
-//      reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
-      
+
+      //      xmlsbmlmodelf
+      //      reportText += SbmlTools.aaa(validator.validate());
+      //      reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
+
       connection.getInputStream().close();
-      
+
       String modelId = getNameFromUrl(params.getUrl());
       FBAModel kmodel = new FBAModelFactory()
           .withXmlSbmlModel(xmodel)
           .withModelId(modelId)
           .build();
-      
+
       String a = "/data/integration/export";
       String b = "/data/integration/cc/cpd_curation.tsv";
-//      a = "/var/biobase/export";
-//      b = "/var/biobase/integration/cc/cpd_curation.tsv";
+      //      a = "/var/biobase/export";
+      //      b = "/var/biobase/integration/cc/cpd_curation.tsv";
       boolean autoIntegration = true;
       if (autoIntegration) {
         //make integrated model
@@ -204,21 +271,21 @@ public class SbmlTools {
             .withXmlSbmlModel(xmodel)
             .withModelId(imodelEntry)
             .build();
-        
+
         String imodelRef = this.saveData(imodelEntry, KBaseType.FBAModel.value(), ikmodel);
       }
-      
+
       Object kmedia = MockData.mockMedia();
       this.saveData("mock_media2", KBaseType.KBaseBiochemMedia.value(), kmedia);
       logger.info("save model [{}]", modelId);
       String modelRef = this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
-      
-//      FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, authPart);
-//      RunFluxBalanceAnalysisParams fbaParams = new RunFluxBalanceAnalysisParams()
-//          .withFbamodelId(modelId)
-//          .withFbamodelWorkspace("")
-//          .withMediaId("mock_media");
-//      fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
+
+      //      FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, authPart);
+      //      RunFluxBalanceAnalysisParams fbaParams = new RunFluxBalanceAnalysisParams()
+      //          .withFbamodelId(modelId)
+      //          .withFbamodelWorkspace("")
+      //          .withMediaId("mock_media");
+      //      fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
       result.modelRef = modelRef;
     } catch (Exception e) {
       StringWriter sw = new StringWriter();
@@ -226,26 +293,52 @@ public class SbmlTools {
       e.printStackTrace(pw);
       reportText += e.getMessage() + " " + sw.toString();
     }
-    
+
     logger.info("import model [done]");
-    
+
     result.message = reportText;
-    
+
     return result;
   }
-  
-  
+
+
   public static String getRefFromObjectInfo(Tuple11<Long, String, String, String, 
       Long, String, Long, String, String, Long, Map<String,String>> info) {
     return info.getE7() + "/" + info.getE1() + "/" + info.getE5();
   }
-  
+
+  @Deprecated
   public String saveData(String nameId, String dataType, Object o) throws Exception {
     //  Object o = null;
     //  String nameId = "";
     //  String dataType = "";
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
     dfuClient.setIsInsecureHttpConnectionAllowed(true);
+    long wsId = dfuClient.wsNameToId(workspace);
+
+    SaveObjectsParams params = new SaveObjectsParams()
+        .withId(wsId)
+        .withObjects(Arrays.asList(
+            new ObjectSaveData().withName(nameId)
+            .withType(dataType)
+            .withData(new UObject(o))));
+    ////  params.setId(wsId);
+    ////  List<ObjectSaveData> saveData = new ArrayList<> ();
+    ////  ObjectSaveData odata = new ObjectSaveData();
+    ////  odata.set
+    ////  
+    ////  params.setObjects(saveData);
+    ////  ;
+    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
+
+    return ref;
+  }
+
+  public String saveData(String nameId, String dataType, Object o, final DataFileUtilClient dfuClient) throws Exception {
+    //  Object o = null;
+    //  String nameId = "";
+    //  String dataType = "";
+
     long wsId = dfuClient.wsNameToId(workspace);
 
     SaveObjectsParams params = new SaveObjectsParams()
@@ -274,12 +367,12 @@ public class SbmlTools {
     }
     return last;
   }
-  
-//  public FBAModel convertModel(XmlSbmlModel xmodel, String modelId) {
-//    
-//
-//    return model;
-//  }
-  
+
+  //  public FBAModel convertModel(XmlSbmlModel xmodel, String modelId) {
+  //    
+  //
+  //    return model;
+  //  }
+
 
 }
