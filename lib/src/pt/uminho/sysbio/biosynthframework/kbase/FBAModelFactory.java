@@ -1,22 +1,18 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
-import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import kbasefba.Biomass;
+import kbasefba.BiomassCompound;
 import kbasefba.FBAModel;
 import kbasefba.ModelCompartment;
 import kbasefba.ModelCompound;
@@ -25,6 +21,14 @@ import kbasefba.ModelGapgen;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionReagent;
+import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
+import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
+import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 
 public class FBAModelFactory {
 
@@ -36,7 +40,10 @@ public class FBAModelFactory {
   private XmlSbmlModel xmodel;
   private String modelId;
   private String modelName;
+  private int counter = 0;
+  private Set<String> biomassSet = new HashSet<> ();
   
+  private IntegrationMap<String, String> imap = new IntegrationMap<>();
   private Map<String, String> spiToModelSeedReference = new HashMap<> ();
   private List<ModelCompound> modelCompounds = new ArrayList<> ();
   private List<ModelCompartment> modelCompartments = new ArrayList<> ();
@@ -51,6 +58,11 @@ public class FBAModelFactory {
   
   public FBAModelFactory withModelName(String modelName) {
     this.modelName = modelName;
+    return this;
+  }
+  
+  public FBAModelFactory withBiomassIds(Collection<String> ids) {
+    this.biomassSet.addAll(ids);
     return this;
   }
   
@@ -91,26 +103,33 @@ public class FBAModelFactory {
   public FBAModelFactory withXmlSbmlModel(XmlSbmlModel xmodel) {
     this.xmodel = xmodel;
     
-    List<String> cmpArray = new ArrayList<> ();
-
-    cmpArray.add("c");
+//    List<String> cmpArray = new ArrayList<> ();
+//
+//    //do Zs
+//    cmpArray.add("z");
     //    cmpArray.add("d");
-    cmpArray.add("e");
-    cmpArray.add("f");
-    cmpArray.add("g");
-    cmpArray.add("a");
-    cmpArray.add("b");
-    Iterator<String> cmpIt = cmpArray.iterator();
+//    cmpArray.add("e");
+//    cmpArray.add("f");
+//    cmpArray.add("g");
+//    cmpArray.add("a");
+//    cmpArray.add("b");
+//    cmpArray.add("h");
+//    cmpArray.add("i");
+//    cmpArray.add("j");
+//    cmpArray.add("k");
+//    cmpArray.add("l");
+//    cmpArray.add("m");
+//    Iterator<String> cmpIt = cmpArray.iterator();
 
-    
+    long cmpIndex = 0;
     for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
       String cmpEntry = xcmp.getAttributes().get("id");
       String cmpName = xcmp.getAttributes().get("name");
       if (cmpName == null || cmpName.trim().isEmpty()) {
         cmpName = "undefined";
       }
-      String cmpId = cmpIt.next();
-      long cmpIndex = 0;
+      String cmpId = "z";
+      
       String cmpIdAndIndex = cmpId + cmpIndex;
       ModelCompartment cmp = new ModelCompartment().withId(cmpIdAndIndex)
           .withLabel(cmpName)
@@ -120,6 +139,7 @@ public class FBAModelFactory {
           .withCompartmentRef("~/template/compartments/id/" + cmpId);
       modelCompartments.add(cmp);
       cmpMap.put(cmpEntry, cmpIdAndIndex);
+      cmpIndex++;
     }
     
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
@@ -134,12 +154,22 @@ public class FBAModelFactory {
       if (spiToModelSeedReference.containsKey(spiEntry)) {
         ref = spiToModelSeedReference.get(spiEntry);
       }
+      //maybe fetch formulas !
+      String formula = "*";
+      
+      Map<String, List<String>> dblinks = new HashMap<> ();
+      if (imap.containsKey(spiEntry)) {
+        for (String db : imap.get(spiEntry).keySet()) {
+          dblinks.put(db, new ArrayList<> (imap.get(spiEntry).get(db)));
+        }
+      }
       ModelCompound cpd = new ModelCompound().withId(spiEntry)
           .withCompoundRef(String.format(MODEL_SEED_COMPOUND_REF_PATTERN, ref))
           .withModelcompartmentRef(
               String.format("~/modelcompartments/id/%s", cmpMap.get(cmpEntry)))
-          .withFormula("R")
+          .withFormula(formula)
           .withCharge(1.0)
+          .withDblinks(dblinks)
           .withName(spiName);
 
       modelCompounds.add(cpd);
@@ -165,9 +195,11 @@ public class FBAModelFactory {
     model.setModelcompartments(modelCompartments);
     model.setModelreactions(new ArrayList<ModelReaction> ());
 
-
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
       String rxnEntry = xrxn.getAttributes().get("id");
+      if (rxnEntry == null || rxnEntry.trim().isEmpty()) {
+        rxnEntry = "R_rxn" + counter++;
+      }
       String rxnName = xrxn.getAttributes().get("name");
       if (rxnName == null || rxnName.trim().isEmpty()) {
         rxnName = "undefined";
@@ -259,12 +291,39 @@ public class FBAModelFactory {
       rxn.setMaxrevflux(lb);
       rxn.setMaxforflux(ub);
 //      System.out.println(rxnEntry + " " + lb + " " + ub);
-
-      model.getModelreactions().add(rxn);
-
+      
+      if (biomassSet.contains(rxn.getId())) {
+        model.getBiomasses().add(modelReactionToBiomass(rxn));
+      } else {
+        model.getModelreactions().add(rxn);
+      }
+      
+//      if (rxn.getId().toLowerCase().contains("biomass") || rxn.getId().toLowerCase().contains("growth")) {
+//        logger.info("found biomass {}", rxn.getId());
+//        
+//      } else {
+//        
+//      }
     }
-
+    
     return model;
+  }
+  
+  public static BiomassCompound modelReactionReagentToBiomassCompound(ModelReactionReagent r) {
+    return new BiomassCompound().withCoefficient(r.getCoefficient())
+                                .withModelcompoundRef(r.getModelcompoundRef());
+  }
+  
+  public static Biomass modelReactionToBiomass(ModelReaction rxn) {
+    List<BiomassCompound> compounds = new ArrayList<> ();
+    
+    for (ModelReactionReagent r : rxn.getModelReactionReagents()) {
+      compounds.add(modelReactionReagentToBiomassCompound(r));
+    }
+    
+    return new Biomass().withId(rxn.getId())
+                        .withName(rxn.getName())
+                        .withBiomasscompounds(compounds);
   }
 
   /**

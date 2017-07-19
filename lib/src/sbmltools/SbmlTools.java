@@ -1,23 +1,42 @@
 package sbmltools;
 
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Joiner;
 
 import datafileutil.DataFileUtilClient;
 import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
+import kbasefba.Biomass;
 import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
@@ -25,31 +44,43 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
+import us.kbase.common.service.UnauthorizedException;
 
 public class SbmlTools {
 
   private static final Logger logger = LoggerFactory.getLogger(SbmlTools.class);
 
-  public final String DATA_EXPORT_PATH = "/data/integration/export";
-  public final String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
+  public static String DATA_EXPORT_PATH = "/data/integration/export";
+  public static String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
+  public static String LOCAL_CACHE = "./cache";
   
   public final AuthToken authPart;
   public final RpcContext jsonRpcContext;
   public final URL callbackURL;
   public final String workspace;
-
-  public SbmlTools(String workspace, AuthToken authPart, URL callbackURL, RpcContext jsonRpcContext) {
+  private final DataFileUtilClient dfuClient;
+  public KBaseModelSeedIntegration modelSeedIntegration = null;
+  
+  
+  public SbmlTools(String workspace, AuthToken authPart, URL callbackURL, RpcContext jsonRpcContext) throws UnauthorizedException, IOException {
     this.authPart = authPart;
     this.jsonRpcContext = jsonRpcContext;
     this.callbackURL = callbackURL;
     this.workspace = workspace;
+    this.modelSeedIntegration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
+    if (callbackURL != null) {
+      this.dfuClient = new DataFileUtilClient(callbackURL, authPart);
+      dfuClient.setIsInsecureHttpConnectionAllowed(true);
+    } else {
+      logger.warn("missing callbackURL no saving");
+      this.dfuClient = null;
+    }
   }
-
-
 
   public static void validateSbmlImportParams(SbmlImportParams params) {
     /* Step 1 - Parse/examine the parameters and catch any errors
@@ -119,100 +150,241 @@ public class SbmlTools {
     return fields;
   }
   
+  
+  
+  public static String fetchAndCache(String urlString) {
+    File file2 = null;
+    URLConnection connection = null;
+    OutputStream os = null;
+    try {
+      URL url = new URL(urlString);
+      connection = url.openConnection();
+      
+      String uuid = UUID.randomUUID().toString();
+      File file = new File(String.format("%s/%s", LOCAL_CACHE, uuid));
+      if (file.mkdirs()) {
+        logger.info("created {}", file.getAbsolutePath());
+      }
+      file2 = new File(String.format("%s/%s", file.getAbsolutePath(), uuid));
+      os = new FileOutputStream(file2);
+      IOUtils.copy(connection.getInputStream(), os);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      IOUtils.close(connection);
+      IOUtils.closeQuietly(os);
+    }
+    
+    if (file2 != null) {
+      return file2.getAbsolutePath();
+    }
+    
+    return null;
+  }
+  
+  public static String status2(Map<String, Map<MetaboliteMajorLabel, String>> imap, int total) {
+    Map<Object, Integer> counter = new HashMap<> ();
+    Map<Object, Double> cover = new HashMap<> ();
+    
+    for (String e : imap.keySet()) {
+      Map<MetaboliteMajorLabel, String> a = imap.get(e);
+      boolean any = false;
+      for (MetaboliteMajorLabel db : a.keySet()) {
+        String refs = a.get(db);
+        if (refs != null && !refs.isEmpty()) {
+          any = true;
+          CollectionUtils.increaseCount(counter, db, 1);
+        }
+      }
+      if (any) {
+        CollectionUtils.increaseCount(counter, "has_reference", 1);
+      }
+    }
+    
+    for (Object k : counter.keySet()) {
+      int count = counter.get(k);
+      cover.put(k, (double) count / total);
+    }
+    return Joiner.on(", ").withKeyValueSeparator(": ").join(cover);
+  }
+  
+  public void importModel(InputStream is, 
+      ImportModelResult result, String modelId, String url, boolean runIntegration, Collection<String> biomassIds) throws Exception {
+    //import
+    XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
+    XmlSbmlModel xmodel = reader.parse();
+    
+    if (modelId == null || modelId.trim().isEmpty()) {
+      modelId = getNameFromUrl(url);
+      logger.info("auto model id: {}", modelId);
+    }
+    
+    logger.info("validate");
+    XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
+    xrxnAttributes(validator);
+    
+    List<XmlMessage> msgs = validator.validate();
+    result.message += "\n" + String.format("Species %d, Reactions %s, %s", 
+        xmodel.getSpecies().size(), 
+        xmodel.getReactions().size(), 
+        url);
+    //      String txt = "";
+    Map<MessageType, Integer> typeCounterMap = new HashMap<> ();
+    for (XmlMessage m : msgs) {
+      CollectionUtils.increaseCount(typeCounterMap, m.type, 1);
+    }
+    if (!typeCounterMap.isEmpty()) {
+      result.message +="\n" + modelId + " "+ String.format("%s", Joiner.on(' ').withKeyValueSeparator(": ").join(typeCounterMap));
+    }
+    
+    
+
+    
+    modelId = modelId.trim();
+    
+    FBAModel rawModel = new FBAModelFactory()
+        .withBiomassIds(biomassIds)
+        .withXmlSbmlModel(xmodel)
+        .withModelId(modelId)
+        .build();
+    
+    if (!rawModel.getBiomasses().isEmpty()) {
+      Set<String> biomass = new HashSet<> ();
+      for (Biomass b : rawModel.getBiomasses()) {
+        biomass.add(b.getId());
+      }
+      result.message +="\n" + modelId + " biomass: " + biomass;
+    }
+    String rawModelRef = this.saveDataSafe(modelId, 
+        KBaseType.FBAModel.value(), rawModel, dfuClient);
+    result.objects.add(new WorkspaceObject().withDescription(url)
+        .withRef(rawModelRef));
+
+    //check if integrate
+    if (runIntegration) {
+      String imodelEntry = "i" + modelId;
+//      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
+      Map<String, Map<MetaboliteMajorLabel, String>> imap = 
+          modelSeedIntegration.generateDatabaseReferences(xmodel, imodelEntry);
+      //get stats
+      result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
+      Map<String, String> spiToModelSeedReference = 
+          modelSeedIntegration.spiToModelSeedReference;
+      result.message += String.format("\ni: %d", spiToModelSeedReference.size());
+      FBAModel ikmodel = new FBAModelFactory()
+          .withModelSeedReference(spiToModelSeedReference)
+          .withBiomassIds(biomassIds)
+          .withXmlSbmlModel(xmodel)
+          .withModelId(imodelEntry)
+          .build();
+      
+      String imodelRef = this.saveDataSafe(imodelEntry, 
+          KBaseType.FBAModel.value(), ikmodel, dfuClient);
+      result.objects.add(new WorkspaceObject().withDescription("i model")
+          .withRef(imodelRef));
+    }
+  }
+  
+  public static class ZipContainer implements Closeable {
+    
+    private InputStream is = null; //file input stream
+    private ZipInputStream zis = null; //zip file manipulator
+    private ZipFile zf = null; //zip file pointer
+//    InputStream rfis = null; //file within zip file pointer
+    
+    public ZipContainer(String path) throws IOException {
+      this.is = new FileInputStream(path);
+      this.zis = new ZipInputStream(is);
+      this.zf = new ZipFile(path);
+    }
+    
+    public List<Map<String, Object>> getInputStreams() throws IOException {
+      List<Map<String, Object>> streams = new ArrayList<> ();
+      ZipEntry ze = null;
+      while ((ze = zis.getNextEntry()) != null) {
+        Map<String, Object> record = new HashMap<> ();
+        record.put("name", ze.getName());
+        record.put("size", ze.getSize());
+        record.put("compressed_size", ze.getCompressedSize());
+        record.put("method", ze.getMethod());
+        record.put("is", zf.getInputStream(ze));
+        streams.add(record);
+      }
+      
+      return streams;
+    }
+    
+    @Override
+    public void close() throws IOException {
+      IOUtils.closeQuietly(this.zf);
+      IOUtils.closeQuietly(this.zis);
+      IOUtils.closeQuietly(this.is);
+    }
+    
+  }
+  
+  public void aaa() {
+
+  }
 
   public ImportModelResult importModel(SbmlImporterParams params) {
     ImportModelResult result = new ImportModelResult();
 
-    logger.info("SbmlImporterParams:{} ", params);
+    logger.debug("SbmlImporterParams:{} ", params);
 
     result.message = String.format("%s %s %d %s",
         params.getSbmlUrl(),
         params.getBiomass(),
         params.getAutomaticallyIntegrate(),
         params.getModelName());
-    
-
-    
+    ZipContainer container = null;
     
     try {
-      final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
-      dfuClient.setIsInsecureHttpConnectionAllowed(true);
-      
-      
 
+      String urlPath = params.getSbmlUrl();
       //check url type
-      URL url = new URL(params.getSbmlUrl());
-      URLConnection connection = url.openConnection();
-      //import
-      XmlStreamSbmlReader reader = new XmlStreamSbmlReader(connection.getInputStream());
-      XmlSbmlModel xmodel = reader.parse();
-      
-      logger.info("validate");
-      XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
-      xrxnAttributes(validator);
-      
-      List<XmlMessage> msgs = validator.validate();
-      result.message += String.format("Species %d, Reactions %s, %s", xmodel.getSpecies().size(), xmodel.getReactions().size(), params.getSbmlUrl());
-      //      String txt = "";
-      for (XmlMessage m : msgs) {
-        result.message +="\n" + String.format("%s", m);
+      String localPath = fetchAndCache(params.getSbmlUrl());
+      if (localPath == null) {
+        throw new IOException("unable to create temp file");
       }
-      
+      boolean runIntegration = params.getAutomaticallyIntegrate() == 1;
       String modelId = params.getModelName();
-      if (modelId == null || modelId.trim().isEmpty()) {
-        modelId = getNameFromUrl(params.getSbmlUrl());
+      List<String> biomass = params.getBiomass();
+      if (biomass == null) {
+        biomass = new ArrayList<> ();
+      }
+      Map<String, InputStream> inputStreams = new HashMap<> ();
+      
+      if (urlPath.endsWith(".zip")) {
+        container = new ZipContainer(localPath);
+        List<Map<String, Object>> streams = container.getInputStreams();
+        for (Map<String, Object> d : streams) {
+          InputStream is = (InputStream) d.get("is");
+          String u = params.getSbmlUrl() + "/" + (String) d.get("name");
+          inputStreams.put(u, is);
+        }
+        //ignore modelId when multiple models
+        if (inputStreams.size() > 1) {
+          modelId = null;
+        }
+      } else {
+        inputStreams.put(params.getSbmlUrl(), new FileInputStream(localPath));
       }
       
-      modelId = modelId.trim();
-      
-      FBAModel rawModel = new FBAModelFactory()
-          .withXmlSbmlModel(xmodel)
-          .withModelId(modelId)
-          .build();
-      String rawModelRef = this.saveData(modelId, 
-          KBaseType.FBAModel.value(), rawModel, dfuClient);
-      result.objects.add(new WorkspaceObject().withDescription(params.getSbmlUrl())
-          .withRef(rawModelRef));
-      
-      //check if integrate
-      if (params.getAutomaticallyIntegrate() == 1) {
-        String imodelEntry = "i" + modelId;
-        KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
-        integration.generateDatabaseReferences(xmodel, imodelEntry);
-        Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
-        result.message += String.format("\ni: %d", spiToModelSeedReference.size());
-        FBAModel ikmodel = new FBAModelFactory()
-            .withModelSeedReference(spiToModelSeedReference)
-            .withXmlSbmlModel(xmodel)
-            .withModelId(imodelEntry)
-            .build();
-        String imodelRef = this.saveData(imodelEntry, 
-            KBaseType.FBAModel.value(), ikmodel, dfuClient);
-        result.objects.add(new WorkspaceObject().withDescription("i model")
-            .withRef(imodelRef));
+      for (String u : inputStreams.keySet()) {
+        InputStream is = inputStreams.get(u);
+        try {
+          importModel(is, result, modelId, u, runIntegration, biomass);
+        } catch (Exception e) {
+          result.message += "\nERROR: " + u + " " + e.getMessage();
+        }
       }
 
-//      try {
-//        Object media1 = MockData.mockMedia();
-//        String ref = this.saveData("mock_media2", 
-//            KBaseType.KBaseBiochemMedia.value(), media1, dfuClient);
-//        result.objects.add(new WorkspaceObject().withDescription("test object1")
-//            .withRef(ref));
-//      } catch (Exception e) {
-//        logger.error("{}", e.getMessage());
-//      }
-//
-//      try {
-//        Object media2 = MockData.mockMedia();
-//        String ref = this.saveData("mock_media2", 
-//            KBaseType.KBaseBiochemMedia.value(), media2, dfuClient);
-//        result.objects.add(new WorkspaceObject().withDescription("test object2")
-//            .withRef(ref));
-//      } catch (Exception e) {
-//        logger.error("{}", e.getMessage());
-//      }
     } catch (Exception e) {
+      e.printStackTrace();
       logger.error("{}", e.getMessage());
+    } finally {
+      IOUtils.closeQuietly(container);
     }
 
     return result;
@@ -254,25 +426,25 @@ public class SbmlTools {
           .withModelId(modelId)
           .build();
 
-      String a = "/data/integration/export";
-      String b = "/data/integration/cc/cpd_curation.tsv";
+//      String a = "/data/integration/export";
+//      String b = "/data/integration/cc/cpd_curation.tsv";
       //      a = "/var/biobase/export";
       //      b = "/var/biobase/integration/cc/cpd_curation.tsv";
       boolean autoIntegration = true;
       if (autoIntegration) {
-        //make integrated model
-        String imodelEntry = "i" + modelId;
-        KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(a, b);
-        integration.generateDatabaseReferences(xmodel, imodelEntry);
-        Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
-        reportText += String.format("\ni: %d", spiToModelSeedReference.size());
-        FBAModel ikmodel = new FBAModelFactory()
-            .withModelSeedReference(spiToModelSeedReference)
-            .withXmlSbmlModel(xmodel)
-            .withModelId(imodelEntry)
-            .build();
+//        //make integrated model
+//        String imodelEntry = "i" + modelId;
+//        KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(a, b);
+//        integration.generateDatabaseReferences(xmodel, imodelEntry);
+//        Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
+//        reportText += String.format("\ni: %d", spiToModelSeedReference.size());
+//        FBAModel ikmodel = new FBAModelFactory()
+//            .withModelSeedReference(spiToModelSeedReference)
+//            .withXmlSbmlModel(xmodel)
+//            .withModelId(imodelEntry)
+//            .build();
 
-        String imodelRef = this.saveData(imodelEntry, KBaseType.FBAModel.value(), ikmodel);
+//        String imodelRef = this.saveData(imodelEntry, KBaseType.FBAModel.value(), ikmodel);
       }
 
       Object kmedia = MockData.mockMedia();
@@ -333,12 +505,21 @@ public class SbmlTools {
 
     return ref;
   }
+  
+  public String saveDataSafe(String nameId, String dataType, Object o, final DataFileUtilClient dfuClient) {
+    String ref = null;
+    if (dfuClient != null) {
+      try {
+        ref = saveData(nameId, dataType, o, dfuClient);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    return ref;
+  }
 
   public String saveData(String nameId, String dataType, Object o, final DataFileUtilClient dfuClient) throws Exception {
-    //  Object o = null;
-    //  String nameId = "";
-    //  String dataType = "";
-
     long wsId = dfuClient.wsNameToId(workspace);
 
     SaveObjectsParams params = new SaveObjectsParams()

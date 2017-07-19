@@ -13,6 +13,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
@@ -40,6 +43,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final String gitCommitHash = "7657e029b7ff29f2cff34eb4832381c5a9bb2457";
 
     //BEGIN_CLASS_HEADER
+    private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
     private final URL callbackURL;
     private final Path scratch;
     //END_CLASS_HEADER
@@ -173,6 +177,8 @@ public class SBMLToolsServer extends JsonServerServlet {
         final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
                 .withReport(kbaseReport));
         // Step 6: contruct the output to send back
+        
+        logger.info("{}", callbackURL.getPath());
         
         returnVal = new SbmlImporterResults()
                 .withReportName(report.getName())

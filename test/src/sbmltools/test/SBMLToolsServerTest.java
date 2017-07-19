@@ -22,10 +22,13 @@ import us.kbase.common.service.ServerException;
 import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
 import assemblyutil.SaveAssemblyParams;
+import fbatools.FbaToolsClient;
+import fbatools.RunFluxBalanceAnalysisParams;
 import sbmltools.FilterContigsParams;
 import sbmltools.FilterContigsResults;
 import sbmltools.SBMLToolsServer;
 import sbmltools.SbmlImportParams;
+import sbmltools.SbmlImporterParams;
 import us.kbase.auth.AuthConfig;
 import us.kbase.auth.AuthToken;
 import us.kbase.auth.AuthUser;
@@ -89,7 +92,7 @@ public class SBMLToolsServerTest {
         .withAllowInsecureURLs("true".equals(authUrlInsecure)));
     
 //    AuthUser user = authService.login("filipeliu", "+");
-    token = authService.validateToken("HGPTQEG474SETX5KEGWOT4RDLGSSCLIN");
+    token = authService.validateToken("MR74NVGXFGHQSLBKWA5KBGCIB7N33UYN");
 //    Map<String, UserDetail> r = authService.fetchUserDetail(Arrays.asList(new String[]{"filipeliu"}));
 //    System.out.println(r);
     
@@ -165,13 +168,23 @@ public class SBMLToolsServerTest {
         "agctt\n" +
         ">seq3\n" +
         "agcttttcatgg";
-    SbmlImportParams params = new SbmlImportParams()
+//    RunFluxBalanceAnalysisParams fbaParams = new RunFluxBalanceAnalysisParams()
+//        .withWorkspace("ws.4345.obj.1")
+//        .withFbamodelId("4345/65/20")
+//        .withFbamodelWorkspace("ws.4345.obj.1");
+//    FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, token);
+//    fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
+    SbmlImporterParams params = new SbmlImporterParams()
         .withWorkspaceName(getWsName())
-        .withMinLength(100000L)
-        .withAssemblyInputRef("4345/13/69")
-        .withUrl("http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml");
-    
-    impl.filterContigs(params, token, getContext());
+        .withBiomass(Arrays.asList(new String[]{"bio1"}))
+        .withSbmlUrl("http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml");
+//    SbmlImportParams params = new SbmlImportParams()
+//        .withWorkspaceName(getWsName())
+//        .withMinLength(100000L)
+//        .withAssemblyInputRef("4345/13/69")
+//        .withUrl("http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml");
+    impl.sbmlImporter(params, token, getContext());
+//    impl.filterContigs(params, token, getContext());
     System.out.println(getWsName());
 //    impl.filterContigs(params, token, getContext());
     /*

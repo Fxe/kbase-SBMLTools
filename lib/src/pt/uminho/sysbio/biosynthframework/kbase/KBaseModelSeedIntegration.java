@@ -31,9 +31,13 @@ import pt.uminho.sysbio.biosynthframework.util.IntegrationMapUtils;
 
 public class KBaseModelSeedIntegration {
   
-  protected final String biodbDataPath;
-  protected final String curationFilePath;
+  public String biodbDataPath;
+  public String curationFilePath;
   public Map<String, String> spiToModelSeedReference = new HashMap<> ();
+  
+  public BiodbService biodbService = null;
+  public SearchTable<MetaboliteMajorLabel, String> searchTable = null;
+  public ConnectedComponents<String> ccs = null;
   
   public KBaseModelSeedIntegration(String biodbDataPath, String curationPath) {
     this.biodbDataPath = biodbDataPath;
@@ -41,6 +45,21 @@ public class KBaseModelSeedIntegration {
     
     // /data/biobase/
     FileImport.EXPORT_PATH = biodbDataPath;
+    setup();
+  }
+  
+  public void setup() {
+    biodbService = new BiodbServiceFactory()
+        .withMetaboliteDatabases()
+        .build();
+    
+    searchTable = new SearchTableFactory(biodbService)
+        .withDatabase(MetaboliteMajorLabel.BiGG)
+        .withDatabase(MetaboliteMajorLabel.BiGG2)
+        .withDatabase(MetaboliteMajorLabel.ModelSeed)
+        .withDatabase(MetaboliteMajorLabel.LigandCompound)
+        .build();
+    ccs = KBaseModelSeedIntegration.loadConnectedComponents(curationFilePath);
   }
   
 //  public static Function<List<Set<String>>, List<Set<String>>> buildReduceBigg2(final Function<String, String> entryToUniversalEntry) {
@@ -101,36 +120,29 @@ public class KBaseModelSeedIntegration {
   }
   
   public Map<String, Map<MetaboliteMajorLabel, String>> generateDatabaseReferences(XmlSbmlModel xmodel, String modelEntry) {
-    BiodbService biodbService = new BiodbServiceFactory()
-        .withMetaboliteDatabases()
-        .build();
-    
+
     SpecieIntegrationFacade integration = new SpecieIntegrationFacade();
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
-      integration.patterns.put(xspi.getAttributes().get("id"), null);
-      integration.spiToCompartment.put(
-          xspi.getAttributes().get("id"), 
-          xspi.getAttributes().get("compartment"));
+      String id = xspi.getAttributes().get("id");
+      String cmpId = xspi.getAttributes().get("compartment");
+      integration.addSpecie(id, cmpId);
+//      integration.patterns.put(, null);
+//      integration.spiToCompartment.put(
+//          xspi.getAttributes().get("id"), 
+//          xspi.getAttributes().get("compartment"));
     }
     
     integration.generatePatterns();
     
-    SearchTable<MetaboliteMajorLabel, String> searchTable = new SearchTableFactory(biodbService)
-        .withDatabase(MetaboliteMajorLabel.BiGG)
-        .withDatabase(MetaboliteMajorLabel.BiGG2)
-        .withDatabase(MetaboliteMajorLabel.ModelSeed)
-        .withDatabase(MetaboliteMajorLabel.LigandCompound)
-        .build();
-    
     // /data/biobase/export
 
     
-    ConnectedComponents<String> ccs = loadConnectedComponents(curationFilePath);
+    
     IntegrationEngine ie1 = new ConnectedComponentsIntegrationEngine(ccs);
     IntegrationEngine ie2 = new FirstDegreeReferences(biodbService);
     
     IdBaseIntegrationEngine be1 = new IdBaseIntegrationEngine(searchTable);
-    be1.patterns = integration.patterns;
+    be1.patterns = integration.getPatterns();
     integration.baseEngines.add(be1);
 //    integration.baseEngines.add(be1);
 //    integration.baseEngines.add(be1);
