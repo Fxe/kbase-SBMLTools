@@ -133,6 +133,7 @@ public class LocalTest {
   
   
   public static void main(String[] args) {
+    
     SbmlTools.DATA_EXPORT_PATH = a;
     SbmlTools.CURATION_DATA = b;
     SbmlTools.LOCAL_CACHE = "/tmp/argonne";

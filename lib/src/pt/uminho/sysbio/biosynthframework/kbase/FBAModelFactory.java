@@ -320,8 +320,16 @@ public class FBAModelFactory {
     for (ModelReactionReagent r : rxn.getModelReactionReagents()) {
       compounds.add(modelReactionReagentToBiomassCompound(r));
     }
-    
+//    other, dna, rna, protein, cellwall, lipid, cofactor, energy
     return new Biomass().withId(rxn.getId())
+                        .withOther(0.0)
+                        .withDna(0.0)
+                        .withRna(0.0)
+                        .withProtein(0.0)
+                        .withCellwall(0.0)
+                        .withLipid(0.0)
+                        .withCofactor(0.0)
+                        .withEnergy(0.0)
                         .withName(rxn.getName())
                         .withBiomasscompounds(compounds);
   }

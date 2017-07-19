@@ -59,7 +59,8 @@ public class SBMLToolsServerTest {
   private static String AUTH_SERVICE_URL_ALLOW_I = "false";
   private static String KBASE_ENDPOINT = "https://appdev.kbase.us/services";
   private static String WORKSPACE_URL = KBASE_ENDPOINT + "/ws";
-  private static String SDK_CALLBACK_URL = KBASE_ENDPOINT;
+  //http://172.17.0.11:34767
+  private static String SDK_CALLBACK_URL = "http://172.17.0.11:34767";
   
   @BeforeClass
   public static void init() throws Exception {
