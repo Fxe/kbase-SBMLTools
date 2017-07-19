@@ -24,6 +24,7 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/jfasta-2.2.0-jar-with-dependencies.jar
 
 
+
     
 #RUN cd /kb/deployment/lib/jars \
 #    && wget http://193.137.11.210/fliu/all-deps.zip && unzip all-deps.zip
