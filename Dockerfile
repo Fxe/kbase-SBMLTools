@@ -9,6 +9,9 @@ MAINTAINER KBase Developer
 # RUN apt-get update
 
 # download a data fiels
+RUN mkdir -p /kb/deployment/opt
+RUN cd /kb/deployment/opt && wget http://193.137.11.210/fliu/jdk-8u141-linux-x64.tar.gz && tar -xvf jdk-8u141-linux-x64.tar.gz
+
 RUN mkdir -p /data/integration
 RUN cd /data/integration && wget http://193.137.11.210/fliu/integration_data.zip && unzip integration_data.zip
 
@@ -33,7 +36,9 @@ RUN cd /kb/deployment/lib/jars \
 #RUN rm all-deps.zip
 #RUN cd /kb/deployment/lib/jars \
 #    && wget http://193.137.11.210/fliu/biojava-core-4.2.5.jar
-RUN java -version
+
+
+RUN echo $(java -version)
     
 # -----------------------------------------
 
