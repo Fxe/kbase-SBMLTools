@@ -186,7 +186,6 @@ public class FBAModelFactory {
   }
 
   public FBAModel build() {
-
     FBAModel model = new FBAModel();
     model.setId(modelId);
     model.setName(modelId); //get from xml if exists

@@ -41,6 +41,7 @@ import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils.KBaseObject;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
@@ -210,7 +211,7 @@ public class SbmlTools {
     return Joiner.on(", ").withKeyValueSeparator(": ").join(cover);
   }
   
-  public void importModel(InputStream is, 
+  public FBAModel importModel(InputStream is, 
       ImportModelResult result, String modelId, String url, boolean runIntegration, Collection<String> biomassIds) throws Exception {
     //import
     FBAModel model = null;
@@ -275,13 +276,13 @@ public class SbmlTools {
 //      result.objects.add(new WorkspaceObject().withDescription("i model")
 //          .withRef(imodelRef));
     }
-    
+    //order matters ! fix this ... it is a factory ...
     model = new FBAModelFactory()
         .withIntegration(integration)
         .withBiomassIds(biomassIds)
-        .withXmlSbmlModel(xmodel)
-        .withModelId(modelId)
         .withModelSeedReference(spiToModelSeedReference)
+        .withModelId(modelId)
+        .withXmlSbmlModel(xmodel)
         .build();
     
     if (!model.getBiomasses().isEmpty()) {
@@ -292,7 +293,7 @@ public class SbmlTools {
       result.message +="\n" + modelId + " biomass: " + biomass;
     }
     
-    
+//    KBaseIOUtils.toJson(model);
     if (model != null) {
       String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
           KBaseType.FBAModel.value(), model, workspace, dfuClient);
@@ -301,7 +302,8 @@ public class SbmlTools {
             .withRef(fbaModelRef));
       }
     }
-
+    
+    return model;
   }
   
   public static class ZipContainer implements Closeable {
@@ -393,7 +395,15 @@ public class SbmlTools {
       for (String u : inputStreams.keySet()) {
         InputStream is = inputStreams.get(u);
         try {
-          importModel(is, result, modelId, u, runIntegration, biomass);
+          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass);
+          
+          if (fbaModel != null) {
+            KBaseObject o = new KBaseObject();
+            o.dataType = KBaseType.FBAModel;
+            o.nameId = fbaModel.getId();
+            o.o = fbaModel;
+          }
+//          KBaseIOUtils.saveData(objects, workspace, dfuClient);
         } catch (Exception e) {
           result.message += "\nERROR: " + u + " " + e.getMessage();
         }

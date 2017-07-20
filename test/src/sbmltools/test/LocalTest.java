@@ -138,15 +138,15 @@ public class LocalTest {
     SbmlTools.CURATION_DATA = b;
     SbmlTools.LOCAL_CACHE = "/tmp/argonne";
     String sbmlPath = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
-    sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
-    sbmlPath = "http://193.137.11.210/models/biomodels/joana/iSH335.xml";
+//    sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
+//    sbmlPath = "http://193.137.11.210/models/biomodels/joana/iSH335.xml";
     try {
       SbmlTools sbmlTools = new SbmlTools("", null, null, null);
       List<String> biomass = new ArrayList<> ();
       biomass.add("R_R07230_B");
       biomass.add("R_R374");
       SbmlImporterParams params = new SbmlImporterParams()
-          .withAutomaticallyIntegrate(0L)
+          .withAutomaticallyIntegrate(1L)
           .withModelName(null)
           .withSbmlUrl(sbmlPath)
           .withBiomass(biomass);

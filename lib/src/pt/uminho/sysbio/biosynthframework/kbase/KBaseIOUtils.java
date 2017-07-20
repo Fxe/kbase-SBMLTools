@@ -3,7 +3,10 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import datafileutil.DataFileUtilClient;
 import datafileutil.ObjectSaveData;
@@ -83,5 +86,17 @@ public class KBaseIOUtils {
     }
 
     return references;
+  }
+  
+    public static String toJson(Object o) {
+      ObjectMapper om = new ObjectMapper();
+      om.enable(SerializationFeature.INDENT_OUTPUT);
+      String json = null;
+      try {
+        json = om.writeValueAsString(o);
+      } catch (JsonProcessingException e) {
+        e.printStackTrace();
+      }
+    return json;
   }
 }
