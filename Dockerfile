@@ -10,7 +10,7 @@ MAINTAINER KBase Developer
 
 
 RUN mkdir -p /kb/deployment/opt
-RUN cd /kb/deployment/opt && wget http://193.137.11.210/fliu/jdk-8u141-linux-x64.tar.gz && tar -xf jdk-8u141-linux-x64.tar.gz && ln -s jdk1.8.0_141/bin/java /usr/bin/java
+RUN cd /kb/deployment/opt && wget http://193.137.11.210/fliu/jdk-8u141-linux-x64.tar.gz && tar -xf jdk-8u141-linux-x64.tar.gz && ln -sf jdk1.8.0_141/bin/java /usr/bin/java
 #/usr/bin/java
 
 
