@@ -76,6 +76,13 @@ public class FBAModelFactory {
     return this;
   }
   
+  public FBAModelFactory withIntegration(IntegrationMap<String, String> integration) {
+    if (integration != null) {
+      this.imap = integration;
+    }
+    return this;
+  }
+  
   public FBAModelFactory withSimpleModelSpecie(SimpleModelSpecie mspi) {
     return withSimpleModelSpecie(mspi, "cpd00000");
   }

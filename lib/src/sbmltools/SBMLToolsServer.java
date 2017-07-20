@@ -188,7 +188,8 @@ public class SBMLToolsServer extends JsonServerServlet {
 //                .withObjectsCreated(wsObjs)
 //                .withHtmlLinks(htmlLinks)
 //                .withWorkspaceName(workspaceName));
-        final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
+        final ReportInfo report = kbr.create(
+            new CreateParams().withWorkspaceName(workspaceName)
                 .withReport(kbaseReport));
         // Step 6: contruct the output to send back
         
@@ -197,6 +198,10 @@ public class SBMLToolsServer extends JsonServerServlet {
         returnVal = new SbmlImporterResults()
                 .withReportName(report.getName())
                 .withReportRef(report.getRef());
+        
+        if (objs.size() > 0) {
+          returnVal.withFbamodelId(objs.get(0).getRef());
+        }
         
         //END sbml_importer
         return returnVal;

@@ -37,6 +37,7 @@ import kbasefba.Biomass;
 import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
@@ -245,7 +246,7 @@ public class SbmlTools {
     modelId = modelId.trim();
     
     Map<String, String> spiToModelSeedReference = new HashMap<> ();
-    
+    IntegrationMap<String, String> integration = new IntegrationMap<>();
     //check if integrate
     if (runIntegration) {
       
@@ -253,6 +254,11 @@ public class SbmlTools {
 //      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
       Map<String, Map<MetaboliteMajorLabel, String>> imap = 
           modelSeedIntegration.generateDatabaseReferences(xmodel, modelId);
+      for (String spi : imap.keySet()) {
+        for (MetaboliteMajorLabel db : imap.get(spi).keySet()) {
+          integration.addIntegration(spi, db.toString(), imap.get(spi).get(db));
+        }
+      }
       //get stats
       result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
       spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
@@ -271,6 +277,7 @@ public class SbmlTools {
     }
     
     model = new FBAModelFactory()
+        .withIntegration(integration)
         .withBiomassIds(biomassIds)
         .withXmlSbmlModel(xmodel)
         .withModelId(modelId)
@@ -285,10 +292,16 @@ public class SbmlTools {
       result.message +="\n" + modelId + " biomass: " + biomass;
     }
     
-    String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
-        KBaseType.FBAModel.value(), model, workspace, dfuClient);
-    result.objects.add(new WorkspaceObject().withDescription(url)
-        .withRef(fbaModelRef));
+    
+    if (model != null) {
+      String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
+          KBaseType.FBAModel.value(), model, workspace, dfuClient);
+      if (fbaModelRef != null) {
+        result.objects.add(new WorkspaceObject().withDescription(url)
+            .withRef(fbaModelRef));
+      }
+    }
+
   }
   
   public static class ZipContainer implements Closeable {
