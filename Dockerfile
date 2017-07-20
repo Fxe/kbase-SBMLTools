@@ -15,19 +15,19 @@ RUN cd /kb/deployment/opt && wget http://193.137.11.210/fliu/jdk-8u141-linux-x64
 
 
 # download a data files
-#RUN mkdir -p /data/integration
-#RUN cd /data/integration && wget http://193.137.11.210/fliu/integration_data.zip && unzip integration_data.zip
+RUN mkdir -p /data/integration
+RUN cd /data/integration && wget http://193.137.11.210/fliu/integration_data.zip && unzip integration_data.zip
 
 # download a fasta reader/writer
-#RUN cd /kb/deployment/lib/jars \
-#    && wget http://193.137.11.210/fliu/kbase/jfasta-2.2.0-jar-with-dependencies.jar \
-#    && wget http://193.137.11.210/fliu/kbase/biosynth-core-0.0.1-SNAPSHOT.jar \
-#    && wget http://193.137.11.210/fliu/kbase/biosynth-integration-0.0.1-SNAPSHOT.jar \
-#    && wget http://193.137.11.210/fliu/kbase/neo4j-kernel-2.1.5.jar \
-#    && wget http://193.137.11.210/fliu/kbase/commons-io-2.4.jar \
-#    && wget http://193.137.11.210/fliu/kbase/commons-math-2.2.jar \
-#    && wget http://193.137.11.210/fliu/kbase/commons-lang3-3.4.jar \
-#    && wget http://193.137.11.210/fliu/kbase/guava-18.0.jar
+RUN cd /kb/deployment/lib/jars \
+    && wget http://193.137.11.210/fliu/kbase/jfasta-2.2.0-jar-with-dependencies.jar \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-core-0.0.1-SNAPSHOT.jar \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-integration-0.0.1-SNAPSHOT.jar \
+    && wget http://193.137.11.210/fliu/kbase/neo4j-kernel-2.1.5.jar \
+    && wget http://193.137.11.210/fliu/kbase/commons-io-2.4.jar \
+    && wget http://193.137.11.210/fliu/kbase/commons-math-2.2.jar \
+    && wget http://193.137.11.210/fliu/kbase/commons-lang3-3.4.jar \
+    && wget http://193.137.11.210/fliu/kbase/guava-18.0.jar
 
 
 
