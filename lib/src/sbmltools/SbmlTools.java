@@ -38,6 +38,7 @@ import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
@@ -211,6 +212,7 @@ public class SbmlTools {
   public void importModel(InputStream is, 
       ImportModelResult result, String modelId, String url, boolean runIntegration, Collection<String> biomassIds) throws Exception {
     //import
+    FBAModel model = null;
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
     XmlSbmlModel xmodel = reader.parse();
     
@@ -242,47 +244,51 @@ public class SbmlTools {
     
     modelId = modelId.trim();
     
-    FBAModel rawModel = new FBAModelFactory()
+    Map<String, String> spiToModelSeedReference = new HashMap<> ();
+    
+    //check if integrate
+    if (runIntegration) {
+      
+//      String imodelEntry = "i" + modelId;
+//      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
+      Map<String, Map<MetaboliteMajorLabel, String>> imap = 
+          modelSeedIntegration.generateDatabaseReferences(xmodel, modelId);
+      //get stats
+      result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
+      spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
+      result.message += String.format("\ni: %d", spiToModelSeedReference.size());
+//      FBAModel ikmodel = new FBAModelFactory()
+//          .withModelSeedReference(spiToModelSeedReference)
+//          .withBiomassIds(biomassIds)
+//          .withXmlSbmlModel(xmodel)
+//          .withModelId(imodelEntry)
+//          .build();
+      
+//      String imodelRef = this.saveDataSafe(imodelEntry, 
+//          KBaseType.FBAModel.value(), ikmodel, dfuClient);
+//      result.objects.add(new WorkspaceObject().withDescription("i model")
+//          .withRef(imodelRef));
+    }
+    
+    model = new FBAModelFactory()
         .withBiomassIds(biomassIds)
         .withXmlSbmlModel(xmodel)
         .withModelId(modelId)
+        .withModelSeedReference(spiToModelSeedReference)
         .build();
     
-    if (!rawModel.getBiomasses().isEmpty()) {
+    if (!model.getBiomasses().isEmpty()) {
       Set<String> biomass = new HashSet<> ();
-      for (Biomass b : rawModel.getBiomasses()) {
+      for (Biomass b : model.getBiomasses()) {
         biomass.add(b.getId());
       }
       result.message +="\n" + modelId + " biomass: " + biomass;
     }
-    String rawModelRef = this.saveDataSafe(modelId, 
-        KBaseType.FBAModel.value(), rawModel, dfuClient);
+    
+    String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
+        KBaseType.FBAModel.value(), model, workspace, dfuClient);
     result.objects.add(new WorkspaceObject().withDescription(url)
-        .withRef(rawModelRef));
-
-    //check if integrate
-    if (runIntegration) {
-      String imodelEntry = "i" + modelId;
-//      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
-      Map<String, Map<MetaboliteMajorLabel, String>> imap = 
-          modelSeedIntegration.generateDatabaseReferences(xmodel, imodelEntry);
-      //get stats
-      result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
-      Map<String, String> spiToModelSeedReference = 
-          modelSeedIntegration.spiToModelSeedReference;
-      result.message += String.format("\ni: %d", spiToModelSeedReference.size());
-      FBAModel ikmodel = new FBAModelFactory()
-          .withModelSeedReference(spiToModelSeedReference)
-          .withBiomassIds(biomassIds)
-          .withXmlSbmlModel(xmodel)
-          .withModelId(imodelEntry)
-          .build();
-      
-      String imodelRef = this.saveDataSafe(imodelEntry, 
-          KBaseType.FBAModel.value(), ikmodel, dfuClient);
-      result.objects.add(new WorkspaceObject().withDescription("i model")
-          .withRef(imodelRef));
-    }
+        .withRef(fbaModelRef));
   }
   
   public static class ZipContainer implements Closeable {
@@ -474,10 +480,7 @@ public class SbmlTools {
   }
 
 
-  public static String getRefFromObjectInfo(Tuple11<Long, String, String, String, 
-      Long, String, Long, String, String, Long, Map<String,String>> info) {
-    return info.getE7() + "/" + info.getE1() + "/" + info.getE5();
-  }
+
 
   @Deprecated
   public String saveData(String nameId, String dataType, Object o) throws Exception {
@@ -501,44 +504,12 @@ public class SbmlTools {
     ////  
     ////  params.setObjects(saveData);
     ////  ;
-    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
+    String ref = KBaseIOUtils.getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
 
     return ref;
   }
   
-  public String saveDataSafe(String nameId, String dataType, Object o, final DataFileUtilClient dfuClient) {
-    String ref = null;
-    if (dfuClient != null) {
-      try {
-        ref = saveData(nameId, dataType, o, dfuClient);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
 
-    return ref;
-  }
-
-  public String saveData(String nameId, String dataType, Object o, final DataFileUtilClient dfuClient) throws Exception {
-    long wsId = dfuClient.wsNameToId(workspace);
-
-    SaveObjectsParams params = new SaveObjectsParams()
-        .withId(wsId)
-        .withObjects(Arrays.asList(
-            new ObjectSaveData().withName(nameId)
-            .withType(dataType)
-            .withData(new UObject(o))));
-    ////  params.setId(wsId);
-    ////  List<ObjectSaveData> saveData = new ArrayList<> ();
-    ////  ObjectSaveData odata = new ObjectSaveData();
-    ////  odata.set
-    ////  
-    ////  params.setObjects(saveData);
-    ////  ;
-    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
-
-    return ref;
-  }
 
   public static String getNameFromUrl(String urlStr) {
     String[] strs = urlStr.split("/");

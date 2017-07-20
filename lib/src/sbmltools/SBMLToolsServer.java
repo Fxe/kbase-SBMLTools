@@ -175,19 +175,19 @@ public class SBMLToolsServer extends JsonServerServlet {
         Report kbaseReport = new Report().withTextMessage(result.message)
                                          .withObjectsCreated(objs);
 //        .withObjectsCreated();
-        List<WorkspaceObject> wsObjs = new ArrayList<> ();
-        List<kbasereport.File> htmlLinks = new ArrayList<> ();
-        htmlLinks.add(new kbasereport.File()
-            .withShockId("shock")
-            .withDescription("desc")
-            .withName("rep.html"));
-        final ReportInfo ereport = kbr.createExtendedReport(
-            new CreateExtendedReportParams()
-                .withMessage("report")
-                .withDirectHtmlLinkIndex(0L)
-                .withObjectsCreated(wsObjs)
-                .withHtmlLinks(htmlLinks)
-                .withWorkspaceName(workspaceName));
+//        List<WorkspaceObject> wsObjs = new ArrayList<> ();
+//        List<kbasereport.File> htmlLinks = new ArrayList<> ();
+//        htmlLinks.add(new kbasereport.File()
+//            .withShockId("shock")
+//            .withDescription("desc")
+//            .withName("rep.html"));
+//        final ReportInfo ereport = kbr.createExtendedReport(
+//            new CreateExtendedReportParams()
+//                .withMessage("report")
+//                .withDirectHtmlLinkIndex(0L)
+//                .withObjectsCreated(wsObjs)
+//                .withHtmlLinks(htmlLinks)
+//                .withWorkspaceName(workspaceName));
         final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
                 .withReport(kbaseReport));
         // Step 6: contruct the output to send back
