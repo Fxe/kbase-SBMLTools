@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kbasefba.FBAModel;
+import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
@@ -138,8 +139,10 @@ public class LocalTest {
     SbmlTools.CURATION_DATA = b;
     SbmlTools.LOCAL_CACHE = "/tmp/argonne";
     String sbmlPath = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
-//    sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
+    sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
+    sbmlPath = "http://193.137.11.210/models/biomodels/test_models_with_invalid_sbml.zip";
 //    sbmlPath = "http://193.137.11.210/models/biomodels/joana/iSH335.xml";
+    sbmlPath = "http://193.137.11.210/models/biomodels/sbml/Ec_core_flux1.xml";
     try {
       SbmlTools sbmlTools = new SbmlTools("", null, null, null);
       List<String> biomass = new ArrayList<> ();
@@ -152,6 +155,10 @@ public class LocalTest {
           .withBiomass(biomass);
       ImportModelResult r = sbmlTools.importModel(params);
       System.out.println(r.message);
+      System.out.println(r.objects);
+      for (WorkspaceObject wso : r.objects) {
+        System.out.println(wso);
+      }
     } catch (UnauthorizedException | IOException e) {
       e.printStackTrace();
     }

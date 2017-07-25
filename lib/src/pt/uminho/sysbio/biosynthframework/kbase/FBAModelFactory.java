@@ -45,7 +45,7 @@ public class FBAModelFactory {
   
   private IntegrationMap<String, String> imap = new IntegrationMap<>();
   private Map<String, String> spiToModelSeedReference = new HashMap<> ();
-  private List<ModelCompound> modelCompounds = new ArrayList<> ();
+  private Map<String, ModelCompound> modelCompounds = new HashMap<> ();
   private List<ModelCompartment> modelCompartments = new ArrayList<> ();
   private List<ModelReaction> modelReactions = new ArrayList<> ();
 
@@ -103,7 +103,7 @@ public class FBAModelFactory {
         .withCharge(1.0)
         .withName(spiName);
     
-    this.modelCompounds.add(cpd);
+    this.modelCompounds.put(spiEntry, cpd);
     return this;
   }
 
@@ -153,6 +153,15 @@ public class FBAModelFactory {
       String spiEntry = xspi.getAttributes().get("id");
       String cmpEntry = xspi.getAttributes().get("compartment");
       String spiName = xspi.getAttributes().get("name");
+      boolean boundaryCondition = false;
+      try {
+        String b = xspi.getAttributes().get("boundaryCondition");
+        if (b != null && Boolean.parseBoolean(b)) {
+          boundaryCondition = true;
+        }
+      } catch (Exception e) {
+        
+      }
       if (spiName == null || spiName.trim().isEmpty()) {
         spiName = "undefined";
       }
@@ -178,8 +187,12 @@ public class FBAModelFactory {
           .withCharge(1.0)
           .withDblinks(dblinks)
           .withName(spiName);
-
-      modelCompounds.add(cpd);
+      
+      if (!boundaryCondition) {
+        modelCompounds.put(cpd.getId(), cpd);
+//        modelCompounds.add(cpd);
+      }
+      
     }
     
     return this;
@@ -197,7 +210,7 @@ public class FBAModelFactory {
     model.setGapfillings(new ArrayList<ModelGapfill> ());
     model.setGapgens(new ArrayList<ModelGapgen> ());
     model.setBiomasses(new ArrayList<Biomass> ());
-    model.setModelcompounds(modelCompounds);
+    model.setModelcompounds(new ArrayList<> (modelCompounds.values()));
     model.setModelcompartments(modelCompartments);
     model.setModelreactions(new ArrayList<ModelReaction> ());
 
@@ -215,7 +228,7 @@ public class FBAModelFactory {
       for (XmlObject o : xrxn.getListOfReactants()) {
         String species = o.getAttributes().get("species");
         //small cheat to test the ecoli model (should be decided by the integration)
-        if (!species.endsWith("_b")) {
+        if (modelCompounds.containsKey(species)) {
           String stoich = o.getAttributes().get("stoichiometry");
           if (stoich == null) {
             stoich = "1";
@@ -225,13 +238,15 @@ public class FBAModelFactory {
               .withCoefficient(-1 * stoichiometry)
               .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
           reagents.add(r);
+        } else {
+          logger.info("deleted {}", species);
         }
       }
 
       for (XmlObject o : xrxn.getListOfProducts()) {
         String species = o.getAttributes().get("species");
         //small cheat to test the ecoli model (should be decided by the integration)
-        if (!species.endsWith("_b")) {
+        if (modelCompounds.containsKey(species)) {
           String stoich = o.getAttributes().get("stoichiometry");
           if (stoich == null) {
             stoich = "1";
@@ -241,6 +256,8 @@ public class FBAModelFactory {
               .withCoefficient(stoichiometry)
               .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
           reagents.add(r);
+        } else {
+          logger.info("deleted {}", species);
         }
       }
 
@@ -285,12 +302,12 @@ public class FBAModelFactory {
       double lb = -1000;
       double ub =  1000;
       try {
-        lb = Double.parseDouble(boundStr[0]);
+        lb = Math.abs(Double.parseDouble(boundStr[0]));
       } catch (Exception e) {
 
       }
       try {
-        ub = Double.parseDouble(boundStr[1]);
+        ub = Math.abs(Double.parseDouble(boundStr[1]));
       } catch (Exception e) {
 
       }

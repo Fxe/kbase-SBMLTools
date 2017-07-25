@@ -250,7 +250,7 @@ public class SbmlTools {
     IntegrationMap<String, String> integration = new IntegrationMap<>();
     //check if integrate
     if (runIntegration) {
-      
+      modelSeedIntegration.spiToModelSeedReference.clear();
 //      String imodelEntry = "i" + modelId;
 //      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
       Map<String, Map<MetaboliteMajorLabel, String>> imap = 
