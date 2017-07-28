@@ -143,7 +143,9 @@ public class LocalTest {
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models_with_invalid_sbml.zip";
 //    sbmlPath = "http://193.137.11.210/models/biomodels/joana/iSH335.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/sbml/Ec_core_flux1.xml";
+    sbmlPath = "http://193.137.11.210/models/biomodels/sbml/hsa/MODEL1109130000.xml";
     try {
+      
       SbmlTools sbmlTools = new SbmlTools("", null, null, null);
       List<String> biomass = new ArrayList<> ();
       biomass.add("R_R07230_B");

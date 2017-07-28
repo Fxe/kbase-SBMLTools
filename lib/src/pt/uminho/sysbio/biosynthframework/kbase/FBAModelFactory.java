@@ -132,6 +132,7 @@ public class FBAModelFactory {
     for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
       String cmpEntry = xcmp.getAttributes().get("id");
       String cmpName = xcmp.getAttributes().get("name");
+      
       if (cmpName == null || cmpName.trim().isEmpty()) {
         cmpName = "undefined";
       }
@@ -214,6 +215,8 @@ public class FBAModelFactory {
     model.setModelcompartments(modelCompartments);
     model.setModelreactions(new ArrayList<ModelReaction> ());
 
+    int biomassCounter = 1;
+    
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
       String rxnEntry = xrxn.getAttributes().get("id");
       if (rxnEntry == null || rxnEntry.trim().isEmpty()) {
@@ -316,7 +319,9 @@ public class FBAModelFactory {
 //      System.out.println(rxnEntry + " " + lb + " " + ub);
       
       if (biomassSet.contains(rxn.getId())) {
-        model.getBiomasses().add(modelReactionToBiomass(rxn));
+        Biomass biomass = modelReactionToBiomass(rxn);
+        biomass.setId("bio" + biomassCounter++);
+        model.getBiomasses().add(biomass);
       } else {
         model.getModelreactions().add(rxn);
       }
