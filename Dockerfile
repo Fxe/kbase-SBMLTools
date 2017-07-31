@@ -16,7 +16,7 @@ MAINTAINER KBase Developer
 # download a data files
 RUN mkdir -p /data/integration
 RUN cd /data/integration && wget http://193.137.11.210/fliu/integration_data.zip && unzip integration_data.zip
-RUN cd /data/integration && wget http://193.137.11.210/fliu/export.zip && unzip export.zip
+RUN cd /data/integration && wget http://193.137.11.210/fliu/export.tar.gz && tar -xvf export.tar.gz
 
 # download a fasta reader/writer
 RUN cd /kb/deployment/lib/jars \
