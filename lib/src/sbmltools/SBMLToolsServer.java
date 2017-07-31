@@ -99,15 +99,12 @@ public class SBMLToolsServer extends JsonServerServlet {
         String newAssyRef = assyRef;
         
         try {
-          importModelResult = tools.importModel(params);
+          importModelResult = tools.debugThings(params);
         } catch (Exception e) {
           importModelResult.message = e.getMessage();
         }
         
         final String resultText = "No changes\n" + importModelResult.message;
-        System.out.println(resultText);
-        
-        newAssyRef = importModelResult.modelRef;
         
         final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
         // see note above about bad practice
@@ -116,10 +113,10 @@ public class SBMLToolsServer extends JsonServerServlet {
                 .withReport(new Report().withTextMessage(resultText)
                         .withObjectsCreated(Arrays.asList(
                             new WorkspaceObject()
-                                .withDescription("Filtered contigs")
+                                .withDescription("Ref 1")
                                 .withRef(newAssyRef),
                               new WorkspaceObject()
-                                .withDescription("Filtered contigs")
+                                .withDescription("ref 2")
                                 .withRef(newAssyRef)
                                 ))));
         // Step 6: contruct the output to send back

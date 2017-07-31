@@ -25,9 +25,9 @@ import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 //import pt.uminho.sysbio.biosynthframework.web.service.DefaultBiobaseImportServiceImpl;
 
-public class FileImport {
+public class FileImportKb {
 
-  private static final Logger logger = LoggerFactory.getLogger(FileImport.class);
+  private static final Logger logger = LoggerFactory.getLogger(FileImportKb.class);
 
   public static String EXPORT_PATH = "/var/biobase/export";
   public static String SEP = "\t";

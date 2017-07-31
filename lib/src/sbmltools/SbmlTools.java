@@ -39,6 +39,7 @@ import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils.KBaseObject;
@@ -419,86 +420,33 @@ public class SbmlTools {
     return result;
   }
 
-  public ImportModelResult importModel(SbmlImportParams params) {
+  public ImportModelResult debugThings(SbmlImportParams params) {
 
     logger.info("run");
     ImportModelResult result = new ImportModelResult();
-    String reportText = "";
-    try {
-      URL url = new URL(params.getUrl());
-      URLConnection connection = url.openConnection();
-      logger.info("read");
-      //      URL url = new URL(params.getUrl());
-      XmlStreamSbmlReader reader = new XmlStreamSbmlReader(connection.getInputStream());
-      XmlSbmlModel xmodel = reader.parse();
-      //      msg = model.getAttributes().toString();
-      logger.info("validate");
-      XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
-      xrxnAttributes(validator);
-
-      List<XmlMessage> msgs = validator.validate();
-      reportText = String.format("Species %d, Reactions %s, %s", xmodel.getSpecies().size(), xmodel.getReactions().size(), params.getUrl());
-      //      String txt = "";
-      for (XmlMessage m : msgs) {
-        reportText +="\n" + String.format("%s", m);
-      }
-
-      //      xmlsbmlmodelf
-      //      reportText += SbmlTools.aaa(validator.validate());
-      //      reportText = String.format("Species %d, Reactions %s, %s", model.getSpecies().size(), model.getReactions().size(), params.getUrl());
-
-      connection.getInputStream().close();
-
-      String modelId = getNameFromUrl(params.getUrl());
-      FBAModel kmodel = new FBAModelFactory()
-          .withXmlSbmlModel(xmodel)
-          .withModelId(modelId)
-          .build();
-
-//      String a = "/data/integration/export";
-//      String b = "/data/integration/cc/cpd_curation.tsv";
-      //      a = "/var/biobase/export";
-      //      b = "/var/biobase/integration/cc/cpd_curation.tsv";
-      boolean autoIntegration = true;
-      if (autoIntegration) {
-//        //make integrated model
-//        String imodelEntry = "i" + modelId;
-//        KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(a, b);
-//        integration.generateDatabaseReferences(xmodel, imodelEntry);
-//        Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
-//        reportText += String.format("\ni: %d", spiToModelSeedReference.size());
-//        FBAModel ikmodel = new FBAModelFactory()
-//            .withModelSeedReference(spiToModelSeedReference)
-//            .withXmlSbmlModel(xmodel)
-//            .withModelId(imodelEntry)
-//            .build();
-
-//        String imodelRef = this.saveData(imodelEntry, KBaseType.FBAModel.value(), ikmodel);
-      }
-
-      Object kmedia = MockData.mockMedia();
-      this.saveData("mock_media2", KBaseType.KBaseBiochemMedia.value(), kmedia);
-      logger.info("save model [{}]", modelId);
-      String modelRef = this.saveData(modelId, KBaseType.FBAModel.value(), kmodel);
-
-      //      FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, authPart);
-      //      RunFluxBalanceAnalysisParams fbaParams = new RunFluxBalanceAnalysisParams()
-      //          .withFbamodelId(modelId)
-      //          .withFbamodelWorkspace("")
-      //          .withMediaId("mock_media");
-      //      fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
-      result.modelRef = modelRef;
-    } catch (Exception e) {
-      StringWriter sw = new StringWriter();
-      PrintWriter pw = new PrintWriter(sw);
-      e.printStackTrace(pw);
-      reportText += e.getMessage() + " " + sw.toString();
-    }
-
-    logger.info("import model [done]");
-
+    String reportText = params.toString();
     result.message = reportText;
-
+    
+    try {
+      KBaseBiodbContainer biodbContainer = new KBaseBiodbContainer("/data/integration/export");
+      int nsize = biodbContainer.nameMap.size();
+      result.message += String.format("\nName Dictionary: %d", nsize);
+      Set<String> databases = new HashSet<> ();
+      databases.add("ModelSeed");
+      databases.add("BiGG");
+      databases.add("BiGG2");
+      databases.add("LigandCompound");
+      databases.add("MetaCyc");
+      
+      for (String db : databases) {
+        Set<Long> ids = biodbContainer.biodbService.getIdsByDatabaseAndType(db, "Metabolite");
+        result.message += String.format("\n%s: %d", db, ids.size());
+      }
+      
+    } catch (Exception e) {
+      result.message += "\n ERROR " + e.getMessage();
+    }
+    
     return result;
   }
 

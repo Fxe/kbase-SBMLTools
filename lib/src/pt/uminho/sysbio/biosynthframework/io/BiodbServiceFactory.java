@@ -80,7 +80,7 @@ public class BiodbServiceFactory {
     Map<Long, String> cmpIdToAnnotation_ = new HashMap<> ();
     Map<Long, String> cpdIdToEntry = new HashMap<> ();
     
-    for (long id : FileImport.importModelSpi(modelEntry, idToEntry, 
+    for (long id : FileImportKb.importModelSpi(modelEntry, idToEntry, 
                                              idToName, idToFormula, 
                                              idToReferences, 
                                              idToCmpId, 
@@ -102,7 +102,7 @@ public class BiodbServiceFactory {
       idToType.put(id, GlobalLabel.SubcellularCompartment);
       idToDatabase.put(id, modelEntry);
     }
-    for (long id : FileImport.importModelRxn(modelEntry, idToEntry, 
+    for (long id : FileImportKb.importModelRxn(modelEntry, idToEntry, 
                                              idToName, rxnIdToPathwayAlias,
                                              idToStoich, idToRxnType, 
                                              idToBounds, idToReversible)) {
@@ -117,7 +117,7 @@ public class BiodbServiceFactory {
   
   public BiodbServiceFactory withMetaboliteDatabases() {
     Map<String, Map<String, Map<String, Object>>> cpdData = new HashMap<> ();
-    for (long cpdId : FileImport.importDatabaseCpd(cpdData, idToAlias)) {
+    for (long cpdId : FileImportKb.importDatabaseCpd(cpdData, idToAlias)) {
       idToType.put(cpdId, GlobalLabel.Metabolite);
     }
     for (String k : cpdData.keySet()) {
@@ -147,7 +147,7 @@ public class BiodbServiceFactory {
   }
   
   public BiodbServiceFactory withReactionDatabase(String database) {
-    Set<Long> ids = FileImport.importDatabaseRxn(
+    Set<Long> ids = FileImportKb.importDatabaseRxn(
         database, idToEntry, idToStoich);
     for (long id : ids) {
       idToType.put(id, GlobalLabel.Reaction);
@@ -157,16 +157,16 @@ public class BiodbServiceFactory {
   }
   
   public BiodbServiceFactory usingIntegration(long itgId) {
-    Map<Long, Long> umap =FileImport.importUnificationMap(itgId);
+    Map<Long, Long> umap =FileImportKb.importUnificationMap(itgId);
     uniMap.putAll(umap);
 //    Map<Long, String> metaIdToAlias = new HashMap<> ();
     Map<Long, String> dummy = new HashMap<> ();
-    FileImport.importIntegrationMetadata(itgId, metaIdToAlias, metaIdToAlias, dummy);
+    FileImportKb.importIntegrationMetadata(itgId, metaIdToAlias, metaIdToAlias, dummy);
     return this;
   }
   
   public BiodbServiceFactory usingModelIntegration(long itgId) {
-    Map<Long, Long> umap = FileImport.importModelUnificationMap(itgId);
+    Map<Long, Long> umap = FileImportKb.importModelUnificationMap(itgId);
     uniMap.putAll(umap);
     return this;
   }
@@ -277,7 +277,7 @@ public class BiodbServiceFactory {
   }
   
   public BiodbServiceFactory withNCBITaxonomy() {
-    for (long id : FileImport.importNCBITaxonomy(
+    for (long id : FileImportKb.importNCBITaxonomy(
         modelIdToTxId, idToEntry, idToName, idToParent)) {
       this.idToDatabase.put(id, GlobalLabel.EntrezTaxonomy.toString());
     }
@@ -285,7 +285,7 @@ public class BiodbServiceFactory {
   }
   
   public BiodbServiceFactory withTaxonomyProteins() {
-    for (long id : FileImport.importTaxonomyGenes(idToEntry, protIdToTxId)) {
+    for (long id : FileImportKb.importTaxonomyGenes(idToEntry, protIdToTxId)) {
       this.idToDatabase.put(id, GlobalLabel.Protein.toString());
     }
 //    for (long id : FileImport.importNCBITaxonomy(
