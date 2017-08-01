@@ -20,6 +20,7 @@ import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
+import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
 import sbmltools.SbmlTools;
 import sbmltools.SbmlTools.ImportModelResult;
@@ -133,8 +134,7 @@ public class LocalTest {
   }
   
   
-  public static void main(String[] args) {
-    
+  public static void integrationTest() {
     SbmlTools.DATA_EXPORT_PATH = a;
     SbmlTools.CURATION_DATA = b;
     SbmlTools.LOCAL_CACHE = "/tmp/argonne";
@@ -164,5 +164,27 @@ public class LocalTest {
     } catch (UnauthorizedException | IOException e) {
       e.printStackTrace();
     }
+  }
+  
+  public static void dataTest() {
+    SbmlTools.DATA_EXPORT_PATH = a;
+    SbmlTools.CURATION_DATA = b;
+    SbmlTools.LOCAL_CACHE = "/tmp/argonne";
+    try {
+      SbmlTools sbmlTools = new SbmlTools("", null, null, null);
+      SbmlImportParams params = new SbmlImportParams()
+          .withAssemblyInputRef("111")
+          .withMinLength(10L)
+          .withUrl("url");
+      ImportModelResult result = sbmlTools.debugThings(params);
+      System.out.println(result.message);
+    } catch (UnauthorizedException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+  
+  public static void main(String[] args) {
+//    integrationTest();
+    dataTest();
   }
 }

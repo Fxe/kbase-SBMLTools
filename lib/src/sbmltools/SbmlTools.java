@@ -428,7 +428,7 @@ public class SbmlTools {
     result.message = reportText;
     
     try {
-      KBaseBiodbContainer biodbContainer = new KBaseBiodbContainer("/data/integration/export");
+      KBaseBiodbContainer biodbContainer = new KBaseBiodbContainer(DATA_EXPORT_PATH);
       int nsize = biodbContainer.nameMap.size();
       result.message += String.format("\nName Dictionary: %d", nsize);
       Set<String> databases = new HashSet<> ();

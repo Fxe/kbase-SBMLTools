@@ -17,7 +17,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
-import pt.uminho.sysbio.biosynth.integration.model.NameIntegration;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.integration.model.ConnectedComponents;
@@ -38,6 +37,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.IntegrationMapUtils;
+import pt.uminho.sysbio.ext.NameIntegration;
 
 public class KBaseModelSeedIntegration {
   

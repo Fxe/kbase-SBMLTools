@@ -7,10 +7,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pt.uminho.sysbio.biosynth.BiodbServiceFactory;
-import pt.uminho.sysbio.biosynth.FileBiodbService;
-import pt.uminho.sysbio.biosynth.integration.FileImport;
-import pt.uminho.sysbio.biosynth.integration.model.NameIntegration;
+import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
+import pt.uminho.sysbio.ext.BiodbServiceFactory;
+import pt.uminho.sysbio.ext.FileBiodbService;
+import pt.uminho.sysbio.ext.NameIntegration;
 
 public class KBaseBiodbContainer {
   
@@ -20,7 +20,7 @@ public class KBaseBiodbContainer {
   public Map<Set<String>, String> nameMap = new HashMap<> ();
   
   public KBaseBiodbContainer(String path) {
-    FileImport.EXPORT_PATH = path;
+    FileImportKb.EXPORT_PATH = path;
     logger.info("loading database from [{}] ...", path);
     biodbService = new BiodbServiceFactory().withMetaboliteDatabases().build();
     logger.info("loading names");
