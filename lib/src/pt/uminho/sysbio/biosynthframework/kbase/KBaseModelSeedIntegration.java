@@ -37,6 +37,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.IntegrationMapUtils;
+import pt.uminho.sysbio.ext.MethoBuilder;
 import pt.uminho.sysbio.ext.NameIntegration;
 
 public class KBaseModelSeedIntegration {
@@ -131,7 +132,7 @@ public class KBaseModelSeedIntegration {
   
   public Map<String, Map<MetaboliteMajorLabel, String>> generateDatabaseReferences(XmlSbmlModel xmodel, String modelEntry) {
 
-    
+    MethoBuilder builder = new MethoBuilder(biodbService);
 //    BiodbService service = new File
     
     SpecieIntegrationFacade integration = new SpecieIntegrationFacade();
@@ -169,104 +170,26 @@ public class KBaseModelSeedIntegration {
     integration.generatePatterns();
     
     // /data/biobase/export
-    TrieIdBaseIntegrationEngine be2 = new TrieIdBaseIntegrationEngine();
-    BiodbService biodbService = new BiodbServiceFactory().withMetaboliteDatabases().build();
-    Set<MetaboliteMajorLabel> dbs = new HashSet<> ();
-    dbs.add(MetaboliteMajorLabel.Seed);
-    dbs.add(MetaboliteMajorLabel.ModelSeed);
-    dbs.add(MetaboliteMajorLabel.BiGG);
-    dbs.add(MetaboliteMajorLabel.BiGG2);
-    dbs.add(MetaboliteMajorLabel.LigandCompound);
-    dbs.add(MetaboliteMajorLabel.LigandGlycan);
-    dbs.add(MetaboliteMajorLabel.LigandDrug);
-    
-    for (MetaboliteMajorLabel db : dbs) {
-      Set<String> entries = new HashSet<> ();
-      for (long id : biodbService.getIdsByDatabaseAndType(db.toString(), "Metabolite")) {
-        entries.add(biodbService.getEntryById(id));
-      }
-      be2.setup(db, entries);
-    }
-    be2.ids.addAll(integration.getPatterns().keySet());
+    IdBaseIntegrationEngine be1 = builder.buildIdBaseIntegrationEngine();
+    TrieIdBaseIntegrationEngine be2 = builder.buildTrieIdBaseIntegrationEngine();
+    NameBaseIntegrationEngine be3 = builder.buildNameBaseIntegrationEngine();
     
     IntegrationEngine ie1 = new ConnectedComponentsIntegrationEngine(ccs);
     IntegrationEngine ie2 = new FirstDegreeReferences(biodbService);
     
-    TokenSwapLookupMethod tkLookupMethod = new TokenSwapLookupMethod();
-    tkLookupMethod.acceptedTokens.add("_DASH");
-    tkLookupMethod.acceptedTokens.add("_L");
-    tkLookupMethod.acceptedTokens.add("_D");
-    tkLookupMethod.acceptedTokens.add("_R");
-    tkLookupMethod.acceptedTokens.add("_S");
-    tkLookupMethod.acceptedTokens.add("_bD");
-    tkLookupMethod.addSwap("_DASH_", "_");
-    tkLookupMethod.addSwap("_D", "-D");
-    tkLookupMethod.addSwap("_R", "-R");
-    tkLookupMethod.addSwap("_S", "-S");
-    tkLookupMethod.addSwap("_bD", "-bD");
-    tkLookupMethod.addSwap("_", "-");
-    
-    TokenSwapLookupMethod tkLookupMethod2 = new TokenSwapLookupMethod();
-    tkLookupMethod2.acceptedTokens.add("_DASH");
-    tkLookupMethod2.acceptedTokens.add("_L");
-    tkLookupMethod2.acceptedTokens.add("_D");
-    tkLookupMethod2.acceptedTokens.add("_R");
-    tkLookupMethod2.acceptedTokens.add("_S");
-    tkLookupMethod2.acceptedTokens.add("_bD");
-    tkLookupMethod2.addSwap("_DASH_", "__");
-    tkLookupMethod2.addSwap("_L", "__L");
-    tkLookupMethod2.addSwap("_D", "__D");
-    tkLookupMethod2.addSwap("_R", "__R");
-    tkLookupMethod2.addSwap("_S", "__S");
-    tkLookupMethod2.addSwap("_bD", "__bD");
-    tkLookupMethod2.addSwap("_", "__");
-    
-    IdBaseIntegrationEngine be1 = new IdBaseIntegrationEngine(searchTable);
-    be1.lookupMethods.put(MetaboliteMajorLabel.Seed, 
-        new PrefixNumberSequenceLookupMethod("cpd"));
-    be1.lookupMethods.put(MetaboliteMajorLabel.ModelSeed, 
-        new PrefixNumberSequenceLookupMethod("cpd"));
-
-    be1.lookupMethods.put(MetaboliteMajorLabel.LigandCompound, 
-        new PrefixNumberSequenceLookupMethod("C"));
-    be1.lookupMethods.put(MetaboliteMajorLabel.LigandDrug, 
-        new PrefixNumberSequenceLookupMethod("D"));
-    be1.lookupMethods.put(MetaboliteMajorLabel.LigandGlycan, 
-        new PrefixNumberSequenceLookupMethod("G"));
-    be1.lookupMethods.put(MetaboliteMajorLabel.BiGG, 
-        tkLookupMethod);
-    be1.lookupMethods.put(MetaboliteMajorLabel.BiGG2, 
-        tkLookupMethod2);
-    
-//    be1.lo
-//    be2.setup(MetaboliteMajorLabel.BiGG, words);
-    Map<Set<String>, String> nameData = NameIntegration.buildNameDictionary();
-    Map<String, Set<Set<String>>> nameToCpd = CollectionUtils.reverseMap(nameData);
-    Map<Long, Pair<String, MetaboliteMajorLabel>> data = new HashMap<> ();
-    for (Set<String> ids : nameData.keySet()) {
-      for (String id : ids) {
-        long cpdId = Long.parseLong(id);
-        String cpdEntry = biodbService.getEntryById(cpdId);
-        String databaseStr = biodbService.getDatabaseById(cpdId);
-        Pair<String, MetaboliteMajorLabel> p = 
-            new ImmutablePair<>(cpdEntry, MetaboliteMajorLabel.valueOf(databaseStr));
-        data.put(cpdId, p);
-      }
-    }
-    NameBaseIntegrationEngine be3 = new NameBaseIntegrationEngine(nameToCpd, data);
     be3.spiEntryToName = spiEntryToName;
     be1.patterns = integration.getPatterns();
     integration.baseEngines.add(be1);
     integration.baseEngines.add(be2);
     integration.baseEngines.add(be3);
-//    List<IntegrationEngine> l1 = new ArrayList<> ();
-//    l1.add(ie1);
-//    l1.add(ie2);
+    List<IntegrationEngine> l1 = new ArrayList<> ();
+    l1.add(ie1);
+    l1.add(ie2);
 //    
 //    List<IntegrationEngine> l2 = new ArrayList<> ();
 //    l2.add(ie2);
 //    l2.add(new DummyIntegrationEngine());
-//    integration.engines.add(l1);
+    integration.engines.add(l1);
 //    integration.engines.add(l2);
     integration.run();
     
