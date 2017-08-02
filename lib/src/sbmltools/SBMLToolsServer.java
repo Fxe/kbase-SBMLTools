@@ -16,6 +16,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import datafileutil.DataFileUtilClient;
+import datafileutil.FileToShockParams;
 import kbasereport.CreateExtendedReportParams;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
@@ -116,7 +118,8 @@ public class SBMLToolsServer extends JsonServerServlet {
         reporter.addWsObject("Replicate 1", newAssyRef);
         reporter.addWsObject("Replicate 2", newAssyRef);
         
-        List<File> files = KBaseHtmlReport.makeStaticReport("index.html", 
+        KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
+        List<File> files = htmlReport.makeStaticReport("index.html", 
             "<!DOCTYPE html><html lang=\"en\"><head>" +
   "<meta charset=\"UTF-8\">" +
   "<title>KBase HTML Report</title>" + 
@@ -125,7 +128,9 @@ public class SBMLToolsServer extends JsonServerServlet {
 "<p>Example Html Report</p>" + 
 "</body>" + 
 "</html>");
-        
+//        DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL);
+//        FileToShockParams p = new FileToShockParams().withAttributes(attributes)
+//        dfuClient.fileToShock(params);
         reporter.addHtmlFile("example", "name 1", files.iterator().next().getAbsolutePath());
         reporter.addFile("example file 1", "fname 1", files.iterator().next().getAbsolutePath());
         final ReportInfo report = reporter.extendedReport();

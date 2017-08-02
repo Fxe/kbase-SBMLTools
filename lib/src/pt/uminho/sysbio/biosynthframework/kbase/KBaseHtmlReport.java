@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,12 +17,16 @@ import org.slf4j.LoggerFactory;
 
 public class KBaseHtmlReport {
   
-  public static String LOCAL_CACHE = "./cache";
+  public String LOCAL_CACHE = "./tmp/cache";
   public static String TEMPLATE_FOLDER = "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports";
   
   private static final Logger logger = LoggerFactory.getLogger(KBaseHtmlReport.class);
   
-  public static List<File> makeStaticReport() {
+  public KBaseHtmlReport(Path scratch) {
+    LOCAL_CACHE = scratch.toFile().getAbsolutePath();
+  }
+  
+  public List<File> makeStaticReport() {
     List<File> files = new ArrayList<> ();
     
 //    String uuid = UUID.randomUUID().toString();
@@ -54,7 +59,7 @@ public class KBaseHtmlReport {
     return files;
   }
   
-  public static List<File> makeStaticReport(String fname, String data) {
+  public List<File> makeStaticReport(String fname, String data) {
     List<File> files = new ArrayList<> ();
 
     String uuid = UUID.randomUUID().toString();

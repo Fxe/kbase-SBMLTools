@@ -84,7 +84,7 @@ public class KBaseIOUtils {
       String ref = getRefFromObjectInfo(t);
       references.add(ref);
     }
-
+    
     return references;
   }
   
