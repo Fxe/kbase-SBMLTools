@@ -8,7 +8,6 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,15 +15,13 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import datafileutil.DataFileUtilClient;
-import datafileutil.FileToShockParams;
-import kbasereport.CreateExtendedReportParams;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools.ImportModelResult;
@@ -109,7 +106,7 @@ public class SBMLToolsServer extends JsonServerServlet {
           importModelResult.message = e.getMessage();
         }
         
-        final String resultText = "No changes\n" + importModelResult.message;
+//        final String resultText = "No changes\n" + importModelResult.message;
         
         final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
         // see note above about bad practice
@@ -119,20 +116,33 @@ public class SBMLToolsServer extends JsonServerServlet {
         reporter.addWsObject("Replicate 2", newAssyRef);
         
         KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
-        List<File> files = htmlReport.makeStaticReport("index.html", 
-            "<!DOCTYPE html><html lang=\"en\"><head>" +
-  "<meta charset=\"UTF-8\">" +
-  "<title>KBase HTML Report</title>" + 
-"</head>" + 
-"<body>" + 
-"<p>Example Html Report</p>" + 
-"</body>" + 
-"</html>");
-//        DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL);
-//        FileToShockParams p = new FileToShockParams().withAttributes(attributes)
-//        dfuClient.fileToShock(params);
-        reporter.addHtmlFile("example", "name 1", files.iterator().next().getAbsolutePath());
-        reporter.addFile("example file 1", "fname 1", files.iterator().next().getAbsolutePath());
+        File indexFile = htmlReport.makeStaticReport("index.html", 
+            KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
+        reporter.addHtmlFile("example", "name 1", indexFile.getAbsolutePath());
+        reporter.addFile("example file 1", "fname 1", indexFile.getAbsolutePath());
+        
+        List<String> files = new ArrayList<> ();
+        files.add("index.html");
+        files.add("css/bootstrap.min.css");
+        files.add("js/jquery-2.2.2.min.js");
+        files.add("js/underscore-min.js");
+        files.add("js/plotly-1.28.3.min.js");
+        files.add("ids.json");
+        files.add("names.json");
+        files.add("refs.json");
+        List<String> datas = new ArrayList<> ();
+        
+        for (String f : files) {
+          datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
+        }
+        
+        List<File> filess = htmlReport.makeStaticReport(files, datas);
+        for (int i = 0; i < files.size(); i++) {
+          File f = filess.get(i);
+          reporter.addHtmlFile(f.getName(), f.getName(), f.getAbsolutePath());
+          reporter.addFile(f.getName(), f.getName(), f.getAbsolutePath());
+        }
+        
         final ReportInfo report = reporter.extendedReport();
         
         returnVal = new FilterContigsResults()
