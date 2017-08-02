@@ -1,9 +1,20 @@
 package sbmltools.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.io.IOUtils;
 
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
@@ -22,7 +33,7 @@ public class TestKBaseReport {
 //    
     Path p = new File("/tmp/argonne/report").toPath();
     KBaseHtmlReport htmlReport = new KBaseHtmlReport(p);
-    htmlReport.makeStaticReport("omg/f.html", "<p>hi!</p>");
+//    htmlReport.makeStaticReport("omg/f.html", "<p>hi!</p>");
     
     List<String> files = new ArrayList<> ();
     files.add("index.html");
@@ -39,7 +50,32 @@ public class TestKBaseReport {
       datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
     }
     
-    htmlReport.makeStaticReport(files, datas);
+    List<File> out = htmlReport.makeStaticReport(files, datas);
+
+    try {
+      OutputStream os = new FileOutputStream("/tmp/argonne/report/report.zip");
+      ZipOutputStream zos = new ZipOutputStream(os);
+      
+      System.out.println();
+      
+      for (int i = 0; i < files.size(); i++) {
+        File f = out.get(0);
+        System.out.println(f);
+        ZipEntry ze = new ZipEntry(files.get(i));
+        zos.putNextEntry(ze);
+        InputStream is = new FileInputStream(f);
+        IOUtils.copy(is, zos);
+        IOUtils.closeQuietly(is);
+        zos.closeEntry();
+      }
+      
+      zos.close();
+      os.close();
+      
+      System.out.println("done");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     
   }
 }

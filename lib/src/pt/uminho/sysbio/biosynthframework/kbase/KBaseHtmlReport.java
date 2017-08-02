@@ -131,7 +131,7 @@ public class KBaseHtmlReport {
         is = new ByteArrayInputStream(data.getBytes());
         logger.info("copy {}", ofile.getAbsolutePath());
         IOUtils.copy(is, os);
-        files.add(file);
+        files.add(ofile);
       } catch (IOException e) {
         e.printStackTrace();
       } finally {
