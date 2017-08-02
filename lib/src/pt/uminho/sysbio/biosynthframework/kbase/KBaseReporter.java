@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import kbasereport.CreateExtendedReportParams;
+import kbasereport.File;
 import kbasereport.KBaseReportClient;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
@@ -16,23 +17,59 @@ public class KBaseReporter {
   private final KBaseReportClient client;
   private final String workspaceName;
   
+  private List<File> htmlLinks = new ArrayList<> ();
+  private List<File> fileLinks = new ArrayList<> ();
+  private List<WorkspaceObject> wsObjects = new ArrayList<> ();
+  
   public KBaseReporter(final KBaseReportClient client, String workspace) {
     this.client = client;
     this.workspaceName = workspace;
   }
   
-  public void extendedReport() throws IOException, JsonClientException {
-    List<WorkspaceObject> objectsCreated = new ArrayList<> ();
-    CreateExtendedReportParams params = new CreateExtendedReportParams()
-        .withObjectsCreated(objectsCreated)
-        .withDirectHtml("<p>report!</p>");
-//    params.withFileLinks(null);
-//    params.withHtmlLinks(null);
-    params.withWorkspaceName(workspaceName);
-    params.withReportObjectName("fliu_test_report_" + UUID.randomUUID().toString());
-    ReportInfo reportInfo = client.createExtendedReport(params);
+  public void addHtmlFile() {
+    File kfile = new File()
+        .withDescription("some file")
+        .withName("kfile")
+        .withPath("k path");
+    htmlLinks.add(kfile);
+  }
+  
+  public void addFile() {
+    File kfile = new File()
+        .withDescription("some file")
+        .withName("kfile")
+        .withPath("k path");
+    fileLinks.add(kfile);
+  }
+  
+  public void addWsObject() {
+    File kfile = new File()
+        .withDescription("some file")
+        .withName("kfile")
+        .withPath("k path");
+    fileLinks.add(kfile);
+  }
+  
+  public ReportInfo extendedReport() throws IOException, JsonClientException {
     
-    reportInfo.getName();
-    reportInfo.getRef();
+    CreateExtendedReportParams params = new CreateExtendedReportParams()
+        .withDirectHtml("<p>report!</p>")
+        .withWorkspaceName(workspaceName)
+        .withReportObjectName("fliu_test_report_" + UUID.randomUUID().toString());
+    if (!wsObjects.isEmpty()) {
+      params.withObjectsCreated(wsObjects);
+    }
+    if (!htmlLinks.isEmpty()) {
+      params.withHtmlLinks(htmlLinks);
+    }
+    if (!fileLinks.isEmpty()) {
+      params.withFileLinks(fileLinks);
+    }
+
+    ReportInfo reportInfo = client.createExtendedReport(params);
+//    
+//    reportInfo.getName();
+//    reportInfo.getRef();
+    return reportInfo;
   }
 }

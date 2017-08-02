@@ -22,7 +22,9 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
-import sbmltools.SbmlTools.ImportModelResult;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools.ImportModelResult;
 //END_HEADER
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerMethod;
@@ -89,12 +91,12 @@ public class SBMLToolsServer extends JsonServerServlet {
         System.out.println("Starting filter contigs. Parameters:");
         System.out.println(params);
         
-        SbmlTools.validateSbmlImportParams(params);
+        KBaseSbmlTools.validateSbmlImportParams(params);
         
         final String workspaceName = params.getWorkspaceName();
         final String assyRef = params.getAssemblyInputRef();
         ImportModelResult importModelResult = new ImportModelResult();
-        SbmlTools tools = new SbmlTools(workspaceName, authPart, callbackURL, jsonRpcContext);
+        KBaseSbmlTools tools = new KBaseSbmlTools(workspaceName, authPart, callbackURL, jsonRpcContext);
         
         String newAssyRef = assyRef;
         
@@ -109,16 +111,18 @@ public class SBMLToolsServer extends JsonServerServlet {
         final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
         // see note above about bad practice
         kbr.setIsInsecureHttpConnectionAllowed(true);
-        final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
-                .withReport(new Report().withTextMessage(resultText)
-                        .withObjectsCreated(Arrays.asList(
-                            new WorkspaceObject()
-                                .withDescription("Ref 1")
-                                .withRef(newAssyRef),
-                              new WorkspaceObject()
-                                .withDescription("ref 2")
-                                .withRef(newAssyRef)
-                                ))));
+        KBaseReporter reporter = new KBaseReporter(kbr, workspaceName);
+        final ReportInfo report = reporter.extendedReport();
+//        final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
+//                .withReport(new Report().withTextMessage(resultText)
+//                        .withObjectsCreated(Arrays.asList(
+//                            new WorkspaceObject()
+//                                .withDescription("Ref 1")
+//                                .withRef(newAssyRef),
+//                              new WorkspaceObject()
+//                                .withDescription("ref 2")
+//                                .withRef(newAssyRef)
+//                                ))));
         // Step 6: contruct the output to send back
         
         returnVal = new FilterContigsResults()
@@ -162,7 +166,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         SbmlImporterResults returnVal = null;
         //BEGIN sbml_importer
         final String workspaceName = params.getWorkspaceName();
-        SbmlTools sbmlTools = new SbmlTools(
+        KBaseSbmlTools sbmlTools = new KBaseSbmlTools(
             workspaceName, authPart, callbackURL, jsonRpcContext);
         ImportModelResult result = sbmlTools.importModel(params);
         final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);

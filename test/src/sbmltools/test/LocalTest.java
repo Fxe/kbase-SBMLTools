@@ -18,12 +18,12 @@ import org.slf4j.LoggerFactory;
 import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools.ImportModelResult;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
-import sbmltools.SbmlTools;
-import sbmltools.SbmlTools.ImportModelResult;
 import us.kbase.common.service.UnauthorizedException;
 
 public class LocalTest {
@@ -70,7 +70,7 @@ public class LocalTest {
     ZipInputStream zis = null; //zip file manipulator
     ZipFile zf = null; //zip file pointer
     InputStream rfis = null; //file within zip file pointer
-    String local = SbmlTools.fetchAndCache(sbmlPath);
+    String local = KBaseSbmlTools.fetchAndCache(sbmlPath);
     
     
     if (urlPath.endsWith(".zip") && local != null) {
@@ -135,9 +135,9 @@ public class LocalTest {
   
   
   public static void integrationTest() {
-    SbmlTools.DATA_EXPORT_PATH = a;
-    SbmlTools.CURATION_DATA = b;
-    SbmlTools.LOCAL_CACHE = "/tmp/argonne";
+    KBaseSbmlTools.DATA_EXPORT_PATH = a;
+    KBaseSbmlTools.CURATION_DATA = b;
+    KBaseSbmlTools.LOCAL_CACHE = "/tmp/argonne";
     String sbmlPath = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models_with_invalid_sbml.zip";
@@ -145,7 +145,7 @@ public class LocalTest {
     sbmlPath = "http://193.137.11.210/models/biomodels/sbml/Ec_core_flux1.xml";
     sbmlPath = "http://127.0.0.1/models/biomodels/sbml/hsa/MODEL1109130000.xml";
     try {
-      SbmlTools sbmlTools = new SbmlTools("", null, null, null);
+      KBaseSbmlTools sbmlTools = new KBaseSbmlTools("", null, null, null);
       List<String> biomass = new ArrayList<> ();
       biomass.add("R_R07230_B");
       biomass.add("R_R374");
@@ -166,11 +166,11 @@ public class LocalTest {
   }
   
   public static void dataTest() {
-    SbmlTools.DATA_EXPORT_PATH = a;
-    SbmlTools.CURATION_DATA = b;
-    SbmlTools.LOCAL_CACHE = "/tmp/argonne";
+    KBaseSbmlTools.DATA_EXPORT_PATH = a;
+    KBaseSbmlTools.CURATION_DATA = b;
+    KBaseSbmlTools.LOCAL_CACHE = "/tmp/argonne";
     try {
-      SbmlTools sbmlTools = new SbmlTools("", null, null, null);
+      KBaseSbmlTools sbmlTools = new KBaseSbmlTools("", null, null, null);
       SbmlImportParams params = new SbmlImportParams()
           .withAssemblyInputRef("111")
           .withMinLength(10L)

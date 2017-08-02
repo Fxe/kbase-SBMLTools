@@ -1,4 +1,4 @@
-package sbmltools;
+package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.io.Closeable;
 import java.io.File;
@@ -38,10 +38,6 @@ import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils.KBaseObject;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
@@ -49,15 +45,18 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import sbmltools.KBaseType;
+import sbmltools.SbmlImportParams;
+import sbmltools.SbmlImporterParams;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
 import us.kbase.common.service.UnauthorizedException;
 
-public class SbmlTools {
+public class KBaseSbmlTools {
 
-  private static final Logger logger = LoggerFactory.getLogger(SbmlTools.class);
+  private static final Logger logger = LoggerFactory.getLogger(KBaseSbmlTools.class);
 
   public static String DATA_EXPORT_PATH = "/data/integration/export";
   public static String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
@@ -71,7 +70,7 @@ public class SbmlTools {
   public KBaseModelSeedIntegration modelSeedIntegration = null;
   
   
-  public SbmlTools(String workspace, AuthToken authPart, URL callbackURL, RpcContext jsonRpcContext) throws UnauthorizedException, IOException {
+  public KBaseSbmlTools(String workspace, AuthToken authPart, URL callbackURL, RpcContext jsonRpcContext) throws UnauthorizedException, IOException {
     this.authPart = authPart;
     this.jsonRpcContext = jsonRpcContext;
     this.callbackURL = callbackURL;
