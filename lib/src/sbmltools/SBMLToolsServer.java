@@ -112,18 +112,11 @@ public class SBMLToolsServer extends JsonServerServlet {
         // see note above about bad practice
         kbr.setIsInsecureHttpConnectionAllowed(true);
         KBaseReporter reporter = new KBaseReporter(kbr, workspaceName);
+        reporter.addWsObject("Replicate 1", newAssyRef);
+        reporter.addWsObject("Replicate 2", newAssyRef);
+        reporter.addHtmlFile("example", "name 1", "path");
+        reporter.addFile("example file 1", "fname 1", "path");
         final ReportInfo report = reporter.extendedReport();
-//        final ReportInfo report = kbr.create(new CreateParams().withWorkspaceName(workspaceName)
-//                .withReport(new Report().withTextMessage(resultText)
-//                        .withObjectsCreated(Arrays.asList(
-//                            new WorkspaceObject()
-//                                .withDescription("Ref 1")
-//                                .withRef(newAssyRef),
-//                              new WorkspaceObject()
-//                                .withDescription("ref 2")
-//                                .withRef(newAssyRef)
-//                                ))));
-        // Step 6: contruct the output to send back
         
         returnVal = new FilterContigsResults()
                 .withAssemblyOutput(newAssyRef)

@@ -26,28 +26,26 @@ public class KBaseReporter {
     this.workspaceName = workspace;
   }
   
-  public void addHtmlFile() {
+  public void addHtmlFile(String desc, String name, String path) {
     File kfile = new File()
-        .withDescription("some file")
-        .withName("kfile")
-        .withPath("k path");
+        .withDescription(desc)
+        .withName(name)
+        .withPath(path);
     htmlLinks.add(kfile);
   }
   
-  public void addFile() {
+  public void addFile(String desc, String name, String path) {
     File kfile = new File()
-        .withDescription("some file")
-        .withName("kfile")
-        .withPath("k path");
+        .withDescription(desc)
+        .withName(name)
+        .withPath(path);
     fileLinks.add(kfile);
   }
   
-  public void addWsObject() {
-    File kfile = new File()
-        .withDescription("some file")
-        .withName("kfile")
-        .withPath("k path");
-    fileLinks.add(kfile);
+  public void addWsObject(String desc, String ref) {
+    WorkspaceObject wsObject = new WorkspaceObject().withDescription(desc)
+                                                    .withRef(ref);
+    wsObjects.add(wsObject);
   }
   
   public ReportInfo extendedReport() throws IOException, JsonClientException {

@@ -137,7 +137,7 @@ public class LocalTest {
   public static void integrationTest() {
     KBaseSbmlTools.DATA_EXPORT_PATH = a;
     KBaseSbmlTools.CURATION_DATA = b;
-    KBaseSbmlTools.LOCAL_CACHE = "/tmp/argonne";
+    KBaseSbmlTools.LOCAL_CACHE = "/tmp/argonne/data";
     String sbmlPath = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models_with_invalid_sbml.zip";
