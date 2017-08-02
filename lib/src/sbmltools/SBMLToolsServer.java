@@ -22,6 +22,7 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools.ImportModelResult;
@@ -114,8 +115,19 @@ public class SBMLToolsServer extends JsonServerServlet {
         KBaseReporter reporter = new KBaseReporter(kbr, workspaceName);
         reporter.addWsObject("Replicate 1", newAssyRef);
         reporter.addWsObject("Replicate 2", newAssyRef);
-        reporter.addHtmlFile("example", "name 1", "path");
-        reporter.addFile("example file 1", "fname 1", "path");
+        
+        List<File> files = KBaseHtmlReport.makeStaticReport("index.html", 
+            "<!DOCTYPE html><html lang=\"en\"><head>" +
+  "<meta charset=\"UTF-8\">" +
+  "<title>KBase HTML Report</title>" + 
+"</head>" + 
+"<body>" + 
+"<p>Example Html Report</p>" + 
+"</body>" + 
+"</html>");
+        
+        reporter.addHtmlFile("example", "name 1", files.iterator().next().getAbsolutePath());
+        reporter.addFile("example file 1", "fname 1", files.iterator().next().getAbsolutePath());
         final ReportInfo report = reporter.extendedReport();
         
         returnVal = new FilterContigsResults()
