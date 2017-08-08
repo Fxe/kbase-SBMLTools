@@ -1,13 +1,5 @@
 package sbmltools;
 
-import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import us.kbase.auth.AuthToken;
-import us.kbase.common.service.JsonServerMethod;
-import us.kbase.common.service.JsonServerServlet;
-import us.kbase.common.service.JsonServerSyslog;
-import us.kbase.common.service.RpcContext;
 
 //BEGIN_HEADER
 import java.io.File;
@@ -36,6 +28,12 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools.ImportModelResult;
 //END_HEADER
+import us.kbase.auth.AuthToken;
+import us.kbase.common.service.JsonServerMethod;
+import us.kbase.common.service.JsonServerServlet;
+import us.kbase.common.service.JsonServerSyslog;
+import us.kbase.common.service.RpcContext;
+import us.kbase.workspace.WorkspaceClient;
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
@@ -48,7 +46,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "26b2490696eebf29b0bca4a98aea5d528513f503";
+    private static final String gitCommitHash = "7657e029b7ff29f2cff34eb4832381c5a9bb2457";
 
     //BEGIN_CLASS_HEADER
     private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
@@ -260,21 +258,6 @@ public class SBMLToolsServer extends JsonServerServlet {
         }
         
         //END sbml_importer
-        return returnVal;
-    }
-
-    /**
-     * <p>Original spec-file function name: integrate_model</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link sbmltools.IntegrateModelParams IntegrateModelParams}
-     * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
-     */
-    @JsonServerMethod(rpc = "SBMLTools.integrate_model", async=true)
-    public SbmlImporterResults integrateModel(IntegrateModelParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        SbmlImporterResults returnVal = null;
-        //BEGIN integrate_model
-        //END integrate_model
         return returnVal;
     }
     @JsonServerMethod(rpc = "SBMLTools.status")

@@ -428,6 +428,118 @@ SbmlImporterResults is a reference to a hash where the following keys are define
     }
 }
  
+
+
+=head2 integrate_model
+
+  $output = $obj->integrate_model($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a SBMLTools.IntegrateModelParams
+$output is a SBMLTools.SbmlImporterResults
+IntegrateModelParams is a reference to a hash where the following keys are defined:
+	model_name has a value which is a string
+	workspace_name has a value which is a string
+	output_model_name has a value which is a string
+	template_id has a value which is a string
+	genome_id has a value which is a string
+	compartment_translation has a value which is a reference to a list where each element is a reference to a hash where the key is a string and the value is a string
+	biomass_reactions has a value which is a string
+	compound_mappings has a value which is a string
+	gene_mappings has a value which is a string
+	create_extracellular has a value which is an int
+SbmlImporterResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	fbamodel_id has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a SBMLTools.IntegrateModelParams
+$output is a SBMLTools.SbmlImporterResults
+IntegrateModelParams is a reference to a hash where the following keys are defined:
+	model_name has a value which is a string
+	workspace_name has a value which is a string
+	output_model_name has a value which is a string
+	template_id has a value which is a string
+	genome_id has a value which is a string
+	compartment_translation has a value which is a reference to a list where each element is a reference to a hash where the key is a string and the value is a string
+	biomass_reactions has a value which is a string
+	compound_mappings has a value which is a string
+	gene_mappings has a value which is a string
+	create_extracellular has a value which is an int
+SbmlImporterResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	fbamodel_id has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub integrate_model
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function integrate_model (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to integrate_model:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'integrate_model');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.integrate_model",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'integrate_model',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method integrate_model",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'integrate_model',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -471,16 +583,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'sbml_importer',
+                method_name => 'integrate_model',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method sbml_importer",
+            error => "Error invoking method integrate_model",
             status_line => $self->{client}->status_line,
-            method_name => 'sbml_importer',
+            method_name => 'integrate_model',
         );
     }
 }
@@ -630,6 +742,54 @@ assembly_input_ref has a value which is a SBMLTools.assembly_ref
 workspace_name has a value which is a string
 url has a value which is a string
 min_length has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 IntegrateModelParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+model_name has a value which is a string
+workspace_name has a value which is a string
+output_model_name has a value which is a string
+template_id has a value which is a string
+genome_id has a value which is a string
+compartment_translation has a value which is a reference to a list where each element is a reference to a hash where the key is a string and the value is a string
+biomass_reactions has a value which is a string
+compound_mappings has a value which is a string
+gene_mappings has a value which is a string
+create_extracellular has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+model_name has a value which is a string
+workspace_name has a value which is a string
+output_model_name has a value which is a string
+template_id has a value which is a string
+genome_id has a value which is a string
+compartment_translation has a value which is a reference to a list where each element is a reference to a hash where the key is a string and the value is a string
+biomass_reactions has a value which is a string
+compound_mappings has a value which is a string
+gene_mappings has a value which is a string
+create_extracellular has a value which is an int
 
 
 =end text
