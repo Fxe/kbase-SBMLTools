@@ -1,0 +1,315 @@
+{
+   "ver": "0.0.1",
+    "authors": [
+        "filipeliu"
+    ],
+  "contact" : "help@kbase.us",
+  "visble" : true,
+  "categories" : [ "active","metabolic_modeling" ],
+  "widgets" : {
+    "output" : "kbaseTabTable",
+    "input" : null
+  },
+  "parameter-groups": [
+        {
+            "id": "compartment_translation",
+            "parameters": [
+                "model_compartment_id",
+                "kbase_compartment_id"
+            ],
+            "optional": true,
+            "advanced": false,
+            "allow_multiple": true,
+            "with_border": true
+        }
+  ],
+  "parameters" : [ {
+      "id" : "model_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : [ "KBaseFBA.FBAModel" ]
+      }
+    },
+    {
+      "id" : "output_model_name",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : [ "KBaseFBA.FBAModel" ],
+        "is_output_name" : true
+      }
+    },
+    {
+      "id" : "genome_id",
+      "optional" : true,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : [ "KBaseGenomes.Genome" ]
+      }
+    },
+    {
+         "optional" : true,
+         "allow_multiple" : false,
+         "field_type" : "dropdown",
+         "dropdown_options" : {
+            "options" : [
+               {
+                  "value" : "gramneg",
+                  "ui_name" : "Gram negative",
+                  "display" : "Gram negative",
+                  "id" : "gramneg"
+               },
+               {
+                  "id" : "grampos",
+                  "value" : "grampos",
+                  "ui_name" : "Gram positive",
+                  "display" : "Gram positive"
+               },
+               {
+                  "display" : "Plant",
+                  "ui_name" : "Plant",
+                  "value" : "plant",
+                  "id" : "plant"
+               },
+               {
+                  "display" : "Core metabolism",
+                  "ui_name" : "Core metabolism",
+                  "value" : "core",
+                  "id" : "core"
+               }
+            ]
+         },
+         "id" : "template_id",
+         "advanced" : true,
+         "default_values" : [
+            "gramneg"
+         ],
+         "text_options" : {
+            "valid_ws_types" : []
+         }
+      },
+      {
+         "id" : "biomass_reactions",
+         "field_type" : "textsubdata",
+         "allow_multiple" : false,
+         "optional" : true,
+         "advanced" : false,
+         "default_values" : [],
+         "text_options" : {
+            "valid_ws_types" : []
+         },
+         "textsubdata_options" : {
+            "show_src_obj" : true,
+            "allow_custom" : true,
+            "multiselection" : true,
+            "subdata_selection" : {
+               "additional_options" : [],
+               "subdata_included" : [
+                  "modelreactions/[*]/id",
+                  "modelreactions/[*]/name"
+               ],
+               "selection_description" : [
+                  "name"
+               ],
+               "selection_id" : "id",
+               "path_to_subdata" : [
+                  "modelreactions"
+               ],
+               "parameter_id" : "model_name",
+               "description_template" : "- {{name}}"
+            }
+         }
+    },
+    {
+			"allow_multiple" : false,
+			"optional" : false,
+			"field_type" : "textsubdata",
+			"id" : "model_compartment_id",
+			"advanced" : false,
+			"default_values" : [""],
+			"text_options" : {
+				"valid_ws_types" : []
+			},
+			"textsubdata_options" : {
+				"allow_custom" : false,
+				"show_src_obj" : false,
+				"subdata_selection" : {
+					"parameter_id" : "model_name",
+					"path_to_subdata" : [
+						"modelcompartments"
+					],
+					"selection_id" : "id",
+					"selection_description" : [
+						"label"
+					],
+					"subdata_included" : [
+						"modelcompartments/[*]/id",
+						"modelcompartments/[*]/label"
+					],
+					"description_template" : "- {{label}}"
+				},
+				"multiselection" : false
+			}
+		},
+    {
+         "optional" : false,
+         "allow_multiple" : false,
+         "field_type" : "dropdown",
+         "dropdown_options" : {
+            "options" : [
+               {
+                  "id" : "c",
+                  "display" : "Cytosol",
+                  "ui_name" : "Cytosol",
+                  "value" : "c"
+               },
+               {
+                  "value" : "e",
+                  "ui_name" : "Extracellular",
+                  "display" : "Extracellular",
+                  "id" : "e"
+               },
+               {
+                  "id" : "p",
+                  "value" : "p",
+                  "ui_name" : "Periplasm",
+                  "display" : "Periplasm"
+               }
+            ]
+         },
+         "id" : "kbase_compartment_id",
+         "advanced" : false,
+         "default_values" : [
+            "c"
+         ],
+         "text_options" : {
+            "valid_ws_types" : []
+         }
+      },
+      {
+        "id": "gene_mappings",
+        "optional": true,
+        "advanced": true,
+        "allow_multiple": false,
+        "default_values": [ "" ],
+        "field_type": "textarea",
+        "textarea_options" : {
+            "n_rows" : 10
+    	  }
+      },
+      {
+        "id": "compounds_mappings",
+        "optional": true,
+        "advanced": true,
+        "allow_multiple": false,
+        "default_values": [ "" ],
+        "field_type": "textarea",
+        "textarea_options" : {
+            "n_rows" : 10
+    	  }
+      },
+      {
+         "field_type" : "checkbox",
+         "allow_multiple" : false,
+         "optional" : false,
+         "id" : "create_extracellular",
+         "advanced" : true,
+         "default_values" : [
+            "0"
+         ],
+         "checkbox_options" : {
+            "unchecked_value" : 0,
+            "checked_value" : 1
+         },
+         "text_options" : {
+            "valid_ws_types" : []
+         }
+      }
+  ],
+  "behavior" : {
+    "service-mapping" : {
+      "url" : "",
+      "name" : "SBMLTools",
+      "method" : "integrate_model",
+      "input_mapping" : [
+          {
+              "narrative_system_variable": "workspace",
+              "target_property": "workspace_name"
+          },
+          {
+              "input_parameter": "model_name",
+              "target_property": "model_name"
+          },
+          {
+              "input_parameter": "genome_id",
+              "target_property": "genome_id"
+          },
+          {
+              "input_parameter": "template_id",
+              "target_property": "template_id"
+          },
+          {
+              "input_parameter": "compartment_translation",
+              "target_property": "compartment_translation"
+          },
+          {
+              "input_parameter": "biomass_reactions",
+              "target_property": "biomass_reactions"
+          },
+          {
+              "input_parameter": "gene_mappings",
+              "target_property": "gene_mappings"
+          },
+          {
+              "input_parameter": "compound_mappings",
+              "target_property": "compound_mappings"
+          },
+          {
+              "input_parameter": "create_extracellular",
+              "target_property": "create_extracellular"
+          },
+          {
+              "input_parameter": "output_model_name",
+              "target_property": "output_model_name"
+          }
+      ],
+      "output_mapping" : [
+      		{
+				"service_method_output_path": [0, "report_name"],
+				"target_property": "report_name"
+			},
+			{
+				"service_method_output_path": [0, "report_ref"],
+				"target_property": "report_ref"
+			},
+			{
+				"narrative_system_variable": "workspace",
+				"target_property": "workspace_name"
+			},
+            {
+               "target_property" : "ws",
+               "narrative_system_variable" : "workspace"
+            },
+            {
+               "constant_value" : "KBaseFBA.FBAModel",
+               "target_property" : "type"
+            },
+            {
+               "target_property" : "obj",
+               "input_parameter" : "output_model_name"
+            }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}
