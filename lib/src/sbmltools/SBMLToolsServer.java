@@ -138,7 +138,7 @@ public class SBMLToolsServer extends JsonServerServlet {
           datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
         }
         
-        DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL);
+        DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         
         ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
