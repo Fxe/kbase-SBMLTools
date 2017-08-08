@@ -118,10 +118,10 @@ public class SBMLToolsServer extends JsonServerServlet {
         reporter.addWsObject("Replicate 2", newAssyRef);
         
         KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
-        File indexFile = htmlReport.makeStaticReport("index.html", 
-            KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
-        reporter.addHtmlFile("example", "name 1", indexFile.getAbsolutePath());
-        reporter.addFile("example file 1", "fname 1", indexFile.getAbsolutePath());
+//        File indexFile = htmlReport.makeStaticReport("index.html", 
+//            KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
+//        reporter.addHtmlFile("example", "name 1", indexFile.getAbsolutePath());
+//        reporter.addFile("example file 1", "fname 1", indexFile.getAbsolutePath());
         
         List<String> files = new ArrayList<> ();
         files.add("index.html");
@@ -143,7 +143,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
 //        KBaseIOUtils.folderToShock(reportFiles.baseFolder, dfuClient);
-        reporter.addHtmlFolderShock("html folder", "html folder", reportFiles.baseFolder, dfuClient);
+        reporter.addHtmlFolderShock("report", "index.html", reportFiles.baseFolder, dfuClient);
         for (int i = 0; i < files.size(); i++) {
           File f = reportFiles.files.get(i);
 //          reporter.addHtmlFile(f.getName(), f.getName(), f.getAbsolutePath());

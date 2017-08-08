@@ -62,7 +62,9 @@ public class KBaseReporter {
   public ReportInfo extendedReport() throws IOException, JsonClientException {
     
     CreateExtendedReportParams params = new CreateExtendedReportParams()
-        .withDirectHtml("<p>report!</p>")
+//        .withDirectHtml("<div> <iframe src= "????")
+//        .withDirectHtmlLinkIndex(directHtmlLinkIndex)
+        .withDirectHtmlLinkIndex(0L)
         .withWorkspaceName(workspaceName)
         .withReportObjectName("fliu_test_report_" + UUID.randomUUID().toString());
     if (!wsObjects.isEmpty()) {
