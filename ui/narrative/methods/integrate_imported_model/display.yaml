@@ -62,7 +62,7 @@ parameters :
         short-hint : Provide tab-delimited translation table from gene IDs in the model to gene IDs in the input genome
         long-hint  : Provide tab-delimited translation table from gene IDs in the model to gene IDs in the input genome
         
-    compound_mappings :
+    compounds_mappings :
         ui-name : Compound mappings
         short-hint : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
         long-hint  : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
