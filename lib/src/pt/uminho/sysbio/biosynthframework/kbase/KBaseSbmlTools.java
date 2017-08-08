@@ -129,6 +129,11 @@ public class KBaseSbmlTools {
     public String modelRef = "";
     public String modelName = "";
     public List<WorkspaceObject> objects = new ArrayList<> ();
+    
+    @Override
+    public String toString() {
+      return String.format("%s, %s, %s, %s", message, modelRef, modelName, objects);
+    }
   }
 
   public static void xrxnAttributes(XmlSbmlModelValidator validator) {

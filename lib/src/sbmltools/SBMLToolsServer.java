@@ -235,7 +235,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
         reporter.addWsObjects(objs);
-        reporter.addHtmlFolderShock("importer report", "report.html", reportFiles.baseFolder, dfuClient);
+        reporter.addHtmlFolderShock("importer report", "index.html", reportFiles.baseFolder, dfuClient);
         final ReportInfo report = reporter.extendedReport();
 //        final ReportInfo report = kbr.create(
 //            new CreateParams().withWorkspaceName(workspaceName)
@@ -248,9 +248,11 @@ public class SBMLToolsServer extends JsonServerServlet {
                 .withReportName(report.getName())
                 .withReportRef(report.getRef());
 
+        System.out.println(result);
+        System.out.println(result.modelName);
         if (objs.size() > 0) {
-//          returnVal.withFbamodelId("iBsu1103");
-          returnVal.withFbamodelId(result.modelName);
+          returnVal.withFbamodelId("iBsu1103");
+//          returnVal.withFbamodelId(result.modelName);
           //name instead of ref!
         }
         
