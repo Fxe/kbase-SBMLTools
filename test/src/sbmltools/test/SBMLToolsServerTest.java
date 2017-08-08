@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import junit.framework.Assert;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
 
 import org.ini4j.Ini;
 import org.junit.AfterClass;
@@ -93,9 +94,10 @@ public class SBMLToolsServerTest {
         .withAllowInsecureURLs("true".equals(authUrlInsecure)));
     
 //    AuthUser user = authService.login("filipeliu", "+");
-    token = authService.validateToken("MR74NVGXFGHQSLBKWA5KBGCIB7N33UYN");
-//    Map<String, UserDetail> r = authService.fetchUserDetail(Arrays.asList(new String[]{"filipeliu"}));
-//    System.out.println(r);
+    token = authService.validateToken("Y72TU4D34RICQI3MFVU3SXZ7HZQRVNDC");
+
+    Map<String, UserDetail> r = authService.fetchUserDetail(Arrays.asList(new String[]{"filipeliu"}));
+    System.out.println(r);
     
     
 //    token = user.getToken();//authService.validateToken(System.getenv("KB_AUTH_TOKEN"));
@@ -177,6 +179,7 @@ public class SBMLToolsServerTest {
 //    fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
     SbmlImporterParams params = new SbmlImporterParams()
         .withWorkspaceName(getWsName())
+        .withAutomaticallyIntegrate(0L)
         .withBiomass(Arrays.asList(new String[]{"bio1"}))
         .withSbmlUrl("http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml");
 //    SbmlImportParams params = new SbmlImportParams()
@@ -184,6 +187,9 @@ public class SBMLToolsServerTest {
 //        .withMinLength(100000L)
 //        .withAssemblyInputRef("4345/13/69")
 //        .withUrl("http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml");
+    KBaseSbmlTools.DATA_EXPORT_PATH = "/var/biobase/export";;
+    KBaseSbmlTools.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
+    KBaseSbmlTools.LOCAL_CACHE = "/tmp/argonne/data";
     impl.sbmlImporter(params, token, getContext());
 //    impl.filterContigs(params, token, getContext());
     System.out.println(getWsName());

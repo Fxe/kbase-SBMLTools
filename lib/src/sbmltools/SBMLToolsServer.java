@@ -214,7 +214,8 @@ public class SBMLToolsServer extends JsonServerServlet {
                 .withReportRef(report.getRef());
         
         if (objs.size() > 0) {
-          returnVal.withFbamodelId("6464/188/4");
+//          returnVal.withFbamodelId(objs.get(0).getRef());
+          returnVal.withFbamodelId("iBsu1103");
         }
         
         //END sbml_importer
