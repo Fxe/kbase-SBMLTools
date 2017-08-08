@@ -67,10 +67,10 @@ parameters :
         short-hint : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
         long-hint  : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
 parameter-groups:
-    model_compartment_id :
-        ui-name : model_compartment_id_pg
-        short-hint : model_compartment_id_pg_hint
-        long-hint  : model_compartment_id_pg_lhint
+    compartment_translation :
+        ui-name : compartment_translation
+        short-hint : compartment_translation_hint
+        long-hint  : compartment_translation_lhint
         
     kbase_compartment_id :
         ui-name : kbase_compartment_id_pg
