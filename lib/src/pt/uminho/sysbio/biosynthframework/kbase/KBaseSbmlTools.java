@@ -362,10 +362,6 @@ public class KBaseSbmlTools {
     }
     
   }
-  
-  public void aaa() {
-
-  }
 
   public ImportModelResult importModel(SbmlImporterParams params) {
     ImportModelResult result = new ImportModelResult();
@@ -512,11 +508,7 @@ public class KBaseSbmlTools {
     return last;
   }
 
-  //  public FBAModel convertModel(XmlSbmlModel xmodel, String modelId) {
-  //    
-  //
-  //    return model;
-  //  }
+
 
 
 }
