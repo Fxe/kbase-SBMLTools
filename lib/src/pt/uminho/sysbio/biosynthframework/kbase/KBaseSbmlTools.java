@@ -84,6 +84,17 @@ public class KBaseSbmlTools {
       this.dfuClient = null;
     }
   }
+  
+  public KBaseSbmlTools(String workspace, AuthToken authPart, 
+      final DataFileUtilClient dfuClient, 
+      URL callbackURL, RpcContext jsonRpcContext) throws UnauthorizedException, IOException {
+    this.authPart = authPart;
+    this.jsonRpcContext = jsonRpcContext;
+    this.callbackURL = callbackURL;
+    this.workspace = workspace;
+    this.modelSeedIntegration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
+    this.dfuClient = dfuClient;
+  }
 
   public static void validateSbmlImportParams(SbmlImportParams params) {
     /* Step 1 - Parse/examine the parameters and catch any errors
@@ -116,6 +127,7 @@ public class KBaseSbmlTools {
   public static class ImportModelResult {
     public String message = "";
     public String modelRef = "";
+    public String modelName = "";
     public List<WorkspaceObject> objects = new ArrayList<> ();
   }
 
@@ -237,6 +249,7 @@ public class KBaseSbmlTools {
     for (XmlMessage m : msgs) {
       CollectionUtils.increaseCount(typeCounterMap, m.type, 1);
     }
+    
     if (!typeCounterMap.isEmpty()) {
       result.message +="\n" + modelId + " "+ String.format("%s", Joiner.on(' ').withKeyValueSeparator(": ").join(typeCounterMap));
     }
@@ -282,6 +295,7 @@ public class KBaseSbmlTools {
         .withBiomassIds(biomassIds)
         .withModelSeedReference(spiToModelSeedReference)
         .withModelId(modelId)
+        .withModelName(modelId)
         .withXmlSbmlModel(xmodel)
         .build();
     
@@ -402,6 +416,9 @@ public class KBaseSbmlTools {
             o.dataType = KBaseType.FBAModel;
             o.nameId = fbaModel.getId();
             o.o = fbaModel;
+            if (result.modelName == null && result.modelName.isEmpty()) {
+              result.modelName = fbaModel.getId();
+            }
           }
 //          KBaseIOUtils.saveData(objects, workspace, dfuClient);
         } catch (Exception e) {

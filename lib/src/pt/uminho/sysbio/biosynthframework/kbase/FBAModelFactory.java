@@ -192,7 +192,7 @@ public class FBAModelFactory {
   public FBAModel build() {
     FBAModel model = new FBAModel();
     model.setId(modelId);
-    model.setName(modelId); //get from xml if exists
+    model.setName(modelName); //get from xml if exists
     model.setGenomeRef("4345/2/1");
     model.setSource("External");
     model.setSourceId(modelId);

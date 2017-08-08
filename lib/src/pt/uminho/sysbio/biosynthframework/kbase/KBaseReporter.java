@@ -12,6 +12,7 @@ import kbasereport.KBaseReportClient;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import us.kbase.common.service.JsonClientException;
+import us.kbase.workspace.WorkspaceClient;
 
 public class KBaseReporter {
   
@@ -59,6 +60,10 @@ public class KBaseReporter {
     wsObjects.add(wsObject);
   }
   
+  public void addWsObjects(List<WorkspaceObject> os) {
+    wsObjects.addAll(os);
+  }
+  
   public ReportInfo extendedReport() throws IOException, JsonClientException {
     
     CreateExtendedReportParams params = new CreateExtendedReportParams()
@@ -76,7 +81,9 @@ public class KBaseReporter {
     if (!fileLinks.isEmpty()) {
       params.withFileLinks(fileLinks);
     }
-
+    
+    
+    
     ReportInfo reportInfo = client.createExtendedReport(params);
 //    
 //    reportInfo.getName();

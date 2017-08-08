@@ -33,6 +33,7 @@ import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
+import us.kbase.workspace.WorkspaceClient;
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
@@ -150,6 +151,9 @@ public class SBMLToolsServer extends JsonServerServlet {
           reporter.addFile(f.getName(), f.getName(), f.getAbsolutePath());
         }
         
+//        WorkspaceClient wsClient = new WorkspaceClient(callbackURL, authPart);
+//        wsClient.lis
+        
         final ReportInfo report = reporter.extendedReport();
         
         returnVal = new FilterContigsResults()
@@ -193,19 +197,49 @@ public class SBMLToolsServer extends JsonServerServlet {
         SbmlImporterResults returnVal = null;
         //BEGIN sbml_importer
         final String workspaceName = params.getWorkspaceName();
-        KBaseSbmlTools sbmlTools = new KBaseSbmlTools(
-            workspaceName, authPart, callbackURL, jsonRpcContext);
-        ImportModelResult result = sbmlTools.importModel(params);
-        final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
-        // see note above about bad practice
-        kbr.setIsInsecureHttpConnectionAllowed(true);
-        List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);
-        Report kbaseReport = new Report().withTextMessage(result.message)
-                                         .withObjectsCreated(objs);
 
-        final ReportInfo report = kbr.create(
-            new CreateParams().withWorkspaceName(workspaceName)
-                .withReport(kbaseReport));
+        
+        final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
+        final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
+     // see note above about bad practice
+        dfuClient.setIsInsecureHttpConnectionAllowed(true);
+        kbrClient.setIsInsecureHttpConnectionAllowed(true);
+        
+        KBaseSbmlTools sbmlTools = new KBaseSbmlTools(
+            workspaceName, authPart, dfuClient, callbackURL, jsonRpcContext);
+        
+        ImportModelResult result = sbmlTools.importModel(params);
+        List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);
+//        Report kbaseReport = new Report().withTextMessage(result.message)
+//                                         .withObjectsCreated(objs);
+        
+        
+        KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
+        
+        List<String> files = new ArrayList<> ();
+        files.add("index.html");
+        files.add("css/bootstrap.min.css");
+        files.add("js/jquery-2.2.2.min.js");
+        files.add("js/underscore-min.js");
+        files.add("js/plotly-1.28.3.min.js");
+        files.add("ids.json");
+        files.add("names.json");
+        files.add("refs.json");
+        List<String> datas = new ArrayList<> ();
+        
+        for (String f : files) {
+          datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
+        }
+        
+        ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
+        
+        KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
+        reporter.addWsObjects(objs);
+        reporter.addHtmlFolderShock("importer report", "report.html", reportFiles.baseFolder, dfuClient);
+        final ReportInfo report = reporter.extendedReport();
+//        final ReportInfo report = kbr.create(
+//            new CreateParams().withWorkspaceName(workspaceName)
+//                .withReport(kbaseReport));
         // Step 6: contruct the output to send back
         
         logger.info("{}", callbackURL.getPath());
@@ -213,11 +247,11 @@ public class SBMLToolsServer extends JsonServerServlet {
         returnVal = new SbmlImporterResults()
                 .withReportName(report.getName())
                 .withReportRef(report.getRef());
-        
+
         if (objs.size() > 0) {
-//          returnVal.withFbamodelId(objs.get(0));
+//          returnVal.withFbamodelId("iBsu1103");
+          returnVal.withFbamodelId(result.modelName);
           //name instead of ref!
-          returnVal.withFbamodelId("iBsu1103");
         }
         
         //END sbml_importer
