@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import datafileutil.DataFileUtilClient;
 import kbasereport.CreateExtendedReportParams;
 import kbasereport.File;
 import kbasereport.KBaseReportClient;
@@ -31,6 +32,16 @@ public class KBaseReporter {
         .withDescription(desc)
         .withName(name)
         .withPath(path);
+    htmlLinks.add(kfile);
+  }
+  
+  public void addHtmlFolderShock(String desc, String name, String path, 
+      final DataFileUtilClient dfuClient) throws IOException {
+    String shockId = KBaseIOUtils.folderToShock(path, dfuClient);
+    File kfile = new File()
+        .withDescription(desc)
+        .withName(name)
+        .withShockId(shockId);
     htmlLinks.add(kfile);
   }
   

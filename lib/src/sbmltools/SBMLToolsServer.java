@@ -15,6 +15,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import datafileutil.DataFileUtilClient;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
@@ -24,6 +25,7 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools.ImportModelResult;
 //END_HEADER
 import us.kbase.auth.AuthToken;
@@ -136,9 +138,12 @@ public class SBMLToolsServer extends JsonServerServlet {
           datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
         }
         
-        List<File> filess = htmlReport.makeStaticReport(files, datas);
+        DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL);
+        
+        ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
+        KBaseIOUtils.folderToShock(reportFiles.baseFolder, dfuClient);
         for (int i = 0; i < files.size(); i++) {
-          File f = filess.get(i);
+          File f = reportFiles.files.get(i);
           reporter.addHtmlFile(f.getName(), f.getName(), f.getAbsolutePath());
           reporter.addFile(f.getName(), f.getName(), f.getAbsolutePath());
         }
@@ -195,20 +200,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);
         Report kbaseReport = new Report().withTextMessage(result.message)
                                          .withObjectsCreated(objs);
-//        .withObjectsCreated();
-//        List<WorkspaceObject> wsObjs = new ArrayList<> ();
-//        List<kbasereport.File> htmlLinks = new ArrayList<> ();
-//        htmlLinks.add(new kbasereport.File()
-//            .withShockId("shock")
-//            .withDescription("desc")
-//            .withName("rep.html"));
-//        final ReportInfo ereport = kbr.createExtendedReport(
-//            new CreateExtendedReportParams()
-//                .withMessage("report")
-//                .withDirectHtmlLinkIndex(0L)
-//                .withObjectsCreated(wsObjs)
-//                .withHtmlLinks(htmlLinks)
-//                .withWorkspaceName(workspaceName));
+
         final ReportInfo report = kbr.create(
             new CreateParams().withWorkspaceName(workspaceName)
                 .withReport(kbaseReport));

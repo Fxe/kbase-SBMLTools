@@ -11,19 +11,26 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import datafileutil.DataFileUtilClient;
+import datafileutil.FileToShockOutput;
+import datafileutil.FileToShockParams;
 import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
 import sbmltools.KBaseType;
+import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
 
 public class KBaseIOUtils {
+  
+  private static final Logger logger = LoggerFactory.getLogger(KBaseIOUtils.class);
 
   public static class KBaseObject {
     public String nameId;
@@ -109,6 +116,8 @@ public class KBaseIOUtils {
   }
   
   public static String getDataWeb(String urlStr) {
+    logger.info("load web url [{}] data ...", urlStr);
+    
     URLConnection urlConnection = null;
     InputStream is = null;
     OutputStream os = null;
@@ -130,5 +139,20 @@ public class KBaseIOUtils {
     }
 
     return out;
+  }
+  
+  public static String folderToShock(String path, final DataFileUtilClient dfuClient) throws IOException {
+    FileToShockParams params = new FileToShockParams()
+        .withFilePath(path)
+        .withMakeHandle(0L)
+        .withPack("zip");
+    try {
+      FileToShockOutput output = dfuClient.fileToShock(params);
+      System.out.println(output);
+      
+      return output.getShockId();
+    } catch (IOException | JsonClientException e) {
+      throw new IOException(e);
+    }
   }
 }

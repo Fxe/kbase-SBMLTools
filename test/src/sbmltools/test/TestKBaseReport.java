@@ -16,10 +16,18 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.IOUtils;
 
+import kbasereport.Report;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 
 public class TestKBaseReport {
+  
+//  public static void main(String[] args) {
+//
+////    System.out.println(template);
+//  }
+  
   public static void main(String[] args) {
 //    System.out.println(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
 //    System.out.println(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/css/bootstrap.min.css").length());
@@ -35,31 +43,40 @@ public class TestKBaseReport {
     KBaseHtmlReport htmlReport = new KBaseHtmlReport(p);
 //    htmlReport.makeStaticReport("omg/f.html", "<p>hi!</p>");
     
+    String root = "http://darwin.di.uminho.pt/fliu/model-integration-report2/";
+    String index = KBaseIOUtils.getDataWeb(root + "index.html");
+    String data1 = KBaseIOUtils.getDataWeb(root + "ids.json");
+    String data2 = KBaseIOUtils.getDataWeb(root + "names.json");
+    String data3 = KBaseIOUtils.getDataWeb(root + "refs.json");
+    index = String.format(index, data1, data2, data3);
+    
     List<String> files = new ArrayList<> ();
-    files.add("index.html");
+    
     files.add("css/bootstrap.min.css");
     files.add("js/jquery-2.2.2.min.js");
     files.add("js/underscore-min.js");
     files.add("js/plotly-1.28.3.min.js");
-    files.add("ids.json");
-    files.add("names.json");
-    files.add("refs.json");
+
     List<String> datas = new ArrayList<> ();
     
     for (String f : files) {
-      datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
+      datas.add(KBaseIOUtils.getDataWeb(root + f));
     }
     
-    List<File> out = htmlReport.makeStaticReport(files, datas);
+    files.add("index.html");
+    datas.add(index);
+    
+    ReportFiles out = htmlReport.makeStaticReport(files, datas);
 
     try {
-      OutputStream os = new FileOutputStream("/tmp/argonne/report/report.zip");
+      OutputStream os = new FileOutputStream(out.path + File.separator +
+                                             out.uuid + File.separator + 
+                                             "report.zip");
       ZipOutputStream zos = new ZipOutputStream(os);
       
-      System.out.println();
       
       for (int i = 0; i < files.size(); i++) {
-        File f = out.get(0);
+        File f = out.files.get(i);
         System.out.println(f);
         ZipEntry ze = new ZipEntry(files.get(i));
         zos.putNextEntry(ze);

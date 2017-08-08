@@ -100,26 +100,37 @@ public class KBaseHtmlReport {
     return output;
   }
   
-  public List<File> makeStaticReport(List<String> fnames, List<String> datas) {
-    List<File> files = new ArrayList<> ();
+  public static class ReportFiles {
+    public List<File> files = new ArrayList<>();
+    public List<String> fileNames = new ArrayList<>();
+    public List<String> filePaths = new ArrayList<>();
+    public String path;
+    public String uuid;
+    public String baseFolder;
+  }
+  
+  public ReportFiles makeStaticReport(List<String> paths, List<String> datas) {
+    ReportFiles reportFiles = new ReportFiles();
 
     String uuid = UUID.randomUUID().toString();
-    File file = new File(String.format("%s/%s", localCachePath, uuid));
-    if (file.mkdirs()) {
-      logger.info("created {}", file.getAbsolutePath());
+    File baseFolder = new File(String.format("%s/%s", localCachePath, uuid));
+    if (baseFolder.mkdirs()) {
+      logger.info("created {}", baseFolder.getAbsolutePath());
     }
-
+    
+    reportFiles.baseFolder = baseFolder.getAbsolutePath();
     //    String f = String.format("%s/%s", TEMPLATE_FOLDER, "kbase-example.zip");
     //    List<Map<String, Object>> streams = BIOUtils.readZipFiles(f);
     //    for (Map<String, Object> s : streams) {
     //      System.out.println(s);
-    for (int i = 0; i < fnames.size(); i++) {
-      String fname = fnames.get(i);
+    for (int i = 0; i < paths.size(); i++) {
+      String fname = paths.get(i);
       String data = datas.get(i);
       OutputStream os = null;
       InputStream is = null;
       try {
-        File ofile = new File(String.format("%s/%s", file.getAbsolutePath(), fname));
+        File ofile = new File(
+            String.format("%s/%s", baseFolder.getAbsolutePath(), fname));
         
         System.out.println(ofile.getParent());
         File pfolder = new File(ofile.getParent());
@@ -131,7 +142,10 @@ public class KBaseHtmlReport {
         is = new ByteArrayInputStream(data.getBytes());
         logger.info("copy {}", ofile.getAbsolutePath());
         IOUtils.copy(is, os);
-        files.add(ofile);
+        reportFiles.fileNames.add(ofile.getName());
+        reportFiles.filePaths.add(fname);
+        reportFiles.files.add(ofile);
+//        files.add(ofile);
       } catch (IOException e) {
         e.printStackTrace();
       } finally {
@@ -139,9 +153,11 @@ public class KBaseHtmlReport {
         IOUtils.closeQuietly(os);
       }
     }
-
+    
+    reportFiles.uuid = uuid;
+    reportFiles.path = localCachePath;
     //    }
 
-    return files;
+    return reportFiles;
   }
 }

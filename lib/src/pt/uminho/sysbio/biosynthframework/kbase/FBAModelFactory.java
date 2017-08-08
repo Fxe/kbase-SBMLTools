@@ -20,6 +20,7 @@ import kbasefba.ModelGapfill;
 import kbasefba.ModelGapgen;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
+import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
@@ -114,18 +115,7 @@ public class FBAModelFactory {
 //
 //    //do Zs
 //    cmpArray.add("z");
-    //    cmpArray.add("d");
-//    cmpArray.add("e");
-//    cmpArray.add("f");
-//    cmpArray.add("g");
-//    cmpArray.add("a");
-//    cmpArray.add("b");
-//    cmpArray.add("h");
-//    cmpArray.add("i");
-//    cmpArray.add("j");
-//    cmpArray.add("k");
-//    cmpArray.add("l");
-//    cmpArray.add("m");
+    //    cmpArray.add("d");s
 //    Iterator<String> cmpIt = cmpArray.iterator();
 
     long cmpIndex = 0;
@@ -280,20 +270,20 @@ public class FBAModelFactory {
           .withModelcompartmentRef(rxnCmpRef);
       rxn.setModelReactionReagents(reagents);
 
-      //      ModelReactionProtein protein = new ModelReactionProtein();
-      //      protein.setModelReactionProteinSubunits(null);
-      //      protein.setComplexRef("");
-      //      protein.setSource("");
-      //      protein.setNote("");
-      //      ModelReactionProteinSubunit proteinSubunit = new ModelReactionProteinSubunit();
-      ////      proteinSubunit.setFeatureRefs(featureRefs);
-      ////      proteinSubunit.setOptionalSubunit(optionalSubunit);
-      //      proteinSubunit.setRole("");
-      //      proteinSubunit.setNote("");
-      //      proteinSubunit.setTriggering(0L);
-      //      
-      //      List<ModelReactionProtein> proteins = new ArrayList<> ();
-      //      proteins.add(protein);
+      ModelReactionProtein protein = new ModelReactionProtein();
+      protein.setModelReactionProteinSubunits(null);
+      protein.setComplexRef("");
+      protein.setSource("");
+      protein.setNote("");
+      ModelReactionProteinSubunit proteinSubunit = new ModelReactionProteinSubunit();
+      List<String> featureRefs = new ArrayList<> ();
+      proteinSubunit.setFeatureRefs(featureRefs);
+      proteinSubunit.setOptionalSubunit(0L);
+      proteinSubunit.setRole("");
+      proteinSubunit.setNote("");
+      proteinSubunit.setTriggering(0L);
+      List<ModelReactionProtein> proteins = new ArrayList<> ();
+      proteins.add(protein);
       //      rxn.setModelReactionProteins(proteins);
       //      
       //      //??
