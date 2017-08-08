@@ -42,6 +42,19 @@ module SBMLTools {
     } SbmlImportParams;
 
     typedef structure {
+        string model_name;
+        string workspace_name;
+        string output_model_name;
+        string template_id;
+        string genome_id;
+        list<mapping<string,string>> compartment_translation;
+        string biomass_reactions;
+        string compound_mappings;
+        string gene_mappings;
+        int create_extracellular;
+    } IntegrateModelParams;
+            
+    typedef structure {
         string sbml_url;
         string workspace_name;
         list<string> biomass;
@@ -82,4 +95,6 @@ module SBMLTools {
         returns (FilterContigsResults output) authentication required;
     funcdef sbml_importer(SbmlImporterParams params)
         returns (SbmlImporterResults output) authentication required;
+    funcdef integrate_model(IntegrateModelParams params)
+        returns (SbmlImporterResults output) authentication required;              
 };
