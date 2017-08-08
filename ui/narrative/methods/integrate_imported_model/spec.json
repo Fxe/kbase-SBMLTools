@@ -307,8 +307,8 @@
           "target_property": "gene_mappings"
         },
         {
-          "input_parameter": "compound_mappings",
-          "target_property": "compound_mappings"
+          "input_parameter": "compounds_mappings",
+          "target_property": "compounds_mappings"
         },
         {
           "input_parameter": "create_extracellular",
