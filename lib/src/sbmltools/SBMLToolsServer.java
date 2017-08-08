@@ -142,10 +142,11 @@ public class SBMLToolsServer extends JsonServerServlet {
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         
         ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
-        KBaseIOUtils.folderToShock(reportFiles.baseFolder, dfuClient);
+//        KBaseIOUtils.folderToShock(reportFiles.baseFolder, dfuClient);
+        reporter.addHtmlFolderShock("html folder", "html folder", reportFiles.baseFolder, dfuClient);
         for (int i = 0; i < files.size(); i++) {
           File f = reportFiles.files.get(i);
-          reporter.addHtmlFile(f.getName(), f.getName(), f.getAbsolutePath());
+//          reporter.addHtmlFile(f.getName(), f.getName(), f.getAbsolutePath());
           reporter.addFile(f.getName(), f.getName(), f.getAbsolutePath());
         }
         
@@ -214,7 +215,8 @@ public class SBMLToolsServer extends JsonServerServlet {
                 .withReportRef(report.getRef());
         
         if (objs.size() > 0) {
-//          returnVal.withFbamodelId(objs.get(0).getRef());
+//          returnVal.withFbamodelId(objs.get(0));
+          //name instead of ref!
           returnVal.withFbamodelId("iBsu1103");
         }
         
