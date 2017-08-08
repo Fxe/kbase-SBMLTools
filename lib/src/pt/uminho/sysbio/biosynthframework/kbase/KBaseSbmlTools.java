@@ -421,7 +421,7 @@ public class KBaseSbmlTools {
             o.dataType = KBaseType.FBAModel;
             o.nameId = fbaModel.getId();
             o.o = fbaModel;
-            if (result.modelName == null && result.modelName.isEmpty()) {
+            if (result.modelName == null || result.modelName.isEmpty()) {
               result.modelName = fbaModel.getId();
             }
           }
