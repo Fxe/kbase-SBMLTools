@@ -139,6 +139,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         }
         
         DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL);
+        dfuClient.setIsInsecureHttpConnectionAllowed(true);
         
         ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
         KBaseIOUtils.folderToShock(reportFiles.baseFolder, dfuClient);
