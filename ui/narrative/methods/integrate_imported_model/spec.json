@@ -8,19 +8,6 @@
     "output": "kbaseTabTable",
     "input": null
   },
-  "parameter-groups": [
-    {
-      "id": "compartment_translation",
-      "parameters": [
-        "model_compartment_id",
-        "kbase_compartment_id"
-      ],
-      "optional": true,
-      "advanced": false,
-      "allow_multiple": true,
-      "with_border": true
-    }
-  ],
   "parameters": [
     {
       "id": "model_name",
