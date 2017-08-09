@@ -40,6 +40,44 @@
       }
     },
     {
+      "id": "biomass_reactions",
+      "field_type": "textsubdata",
+      "allow_multiple": false,
+      "optional": true,
+      "advanced": false,
+      "default_values": [
+        
+      ],
+      "text_options": {
+        "valid_ws_types": [
+          
+        ]
+      },
+      "textsubdata_options": {
+        "show_src_obj": true,
+        "allow_custom": true,
+        "multiselection": true,
+        "subdata_selection": {
+          "additional_options": [
+            
+          ],
+          "subdata_included": [
+            "modelreactions\/[*]\/id",
+            "modelreactions\/[*]\/name"
+          ],
+          "selection_description": [
+            "name"
+          ],
+          "selection_id": "id",
+          "path_to_subdata": [
+            "modelreactions"
+          ],
+          "parameter_id": "model_name",
+          "description_template": "- {{name}}"
+        }
+      }
+    },
+    {
       "id": "gene_mappings",
       "optional": true,
       "advanced": true,
@@ -156,6 +194,10 @@
           "target_property": "genome_id"
         },
         {
+          "input_parameter": "biomass_reactions",
+          "target_property": "biomass_reactions"
+        },
+        {
           "input_parameter": "gene_mappings",
           "target_property": "gene_mappings"
         },
@@ -166,6 +208,10 @@
         {
           "input_parameter": "create_extracellular",
           "target_property": "create_extracellular"
+        },
+        {
+          "input_parameter": "template_id",
+          "target_property": "template_id"
         },
         {
           "input_parameter": "output_model_name",

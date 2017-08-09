@@ -20,6 +20,10 @@ parameters :
         ui-name : Genome ID
         short-hint : ID of genome to associate with the model
         long-hint  : ID of genome to associate with the model
+    biomass_reactions :
+        ui-name : New biomass reactions
+        short-hint : Select additional model reactions that actually represent biomass reactions
+        long-hint  : Select additional model reactions that actually represent biomass reactions
     template_id :
         ui-name : Template ID
         short-hint : Select the template model to associate, which impacts candidate reactions for gapfilling
