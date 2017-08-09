@@ -44,7 +44,7 @@ public class IntegrateModelParams {
     @JsonProperty("genome_id")
     private java.lang.String genomeId;
     @JsonProperty("compartment_translation")
-    private java.lang.String compartmentTranslation;
+    private Object compartmentTranslation;
     @JsonProperty("biomass_reactions")
     private java.lang.String biomassReactions;
     @JsonProperty("compound_mappings")
@@ -131,16 +131,16 @@ public class IntegrateModelParams {
     }
 
     @JsonProperty("compartment_translation")
-    public String getCompartmentTranslation() {
+    public Object getCompartmentTranslation() {
         return compartmentTranslation;
     }
 
     @JsonProperty("compartment_translation")
-    public void setCompartmentTranslation(String compartmentTranslation) {
+    public void setCompartmentTranslation(Object compartmentTranslation) {
         this.compartmentTranslation = compartmentTranslation;
     }
 
-    public IntegrateModelParams withCompartmentTranslation(String compartmentTranslation) {
+    public IntegrateModelParams withCompartmentTranslation(Object compartmentTranslation) {
         this.compartmentTranslation = compartmentTranslation;
         return this;
     }
