@@ -8,6 +8,19 @@
     "output": "kbaseTabTable",
     "input": null
   },
+  "parameter-groups": [
+    {
+      "id": "compartment_translation",
+      "parameters": [
+        "model_compartment_id",
+        "kbase_compartment_id"
+      ],
+      "optional": true,
+      "advanced": false,
+      "allow_multiple": true,
+      "with_border": true
+    }
+  ],
   "parameters": [
     {
       "id": "model_name",
@@ -39,7 +52,78 @@
         ]
       }
     },
-    
+    {
+      "allow_multiple": false,
+      "optional": false,
+      "field_type": "textsubdata",
+      "id": "model_compartment_id",
+      "advanced": false,
+      "default_values": [
+        ""
+      ],
+      "text_options": {
+        "valid_ws_types": [
+          
+        ]
+      },
+      "textsubdata_options": {
+        "allow_custom": false,
+        "show_src_obj": false,
+        "subdata_selection": {
+          "parameter_id": "model_name",
+          "path_to_subdata": [
+            "modelcompartments"
+          ],
+          "selection_id": "id",
+          "selection_description": [
+            "label"
+          ],
+          "subdata_included": [
+            "modelcompartments/[*]/id",
+            "modelcompartments/[*]/label"
+          ],
+          "description_template": "- {{label}}"
+        },
+        "multiselection": false
+      }
+    },
+    {
+      "optional": false,
+      "allow_multiple": false,
+      "field_type": "dropdown",
+      "dropdown_options": {
+        "options": [
+          {
+            "id": "c",
+            "display": "Cytosol",
+            "ui_name": "Cytosol",
+            "value": "c"
+          },
+          {
+            "value": "e",
+            "ui_name": "Extracellular",
+            "display": "Extracellular",
+            "id": "e"
+          },
+          {
+            "id": "p",
+            "value": "p",
+            "ui_name": "Periplasm",
+            "display": "Periplasm"
+          }
+        ]
+      },
+      "id": "kbase_compartment_id",
+      "advanced": false,
+      "default_values": [
+        "c"
+      ],
+      "text_options": {
+        "valid_ws_types": [
+          
+        ]
+      }
+    },
     {
       "id": "biomass_reactions",
       "field_type": "textsubdata",
@@ -192,6 +276,10 @@
         {
           "input_parameter": "compound_mappings",
           "target_property": "compound_mappings"
+        },
+        {
+          "input_parameter": "compartment_translation",
+          "target_property": "compartment_translation"
         },
         {
           "input_parameter": "create_extracellular",
