@@ -40,21 +40,28 @@ module SBMLTools {
         string url;
         int min_length;
     } SbmlImportParams;
+    
+    typedef structure {
+        string kbase_compartment_id;
+        list<string> model_compartment_id;
+    } CompartmentMapping;
 
     /*
+      list<mapping<string, string>> compartment_translation;
+    */
     typedef structure {
         string model_name;
         string workspace_name;
         string output_model_name;
         string template_id;
         string genome_id;
-        list<mapping<string, object>> compartment_translation;
+        list<CompartmentMapping> compartment_translation;
         string biomass_reactions;
         string compound_mappings;
         string gene_mappings;
         int create_extracellular;
     } IntegrateModelParams;
-    */
+   
             
     typedef structure {
         string sbml_url;

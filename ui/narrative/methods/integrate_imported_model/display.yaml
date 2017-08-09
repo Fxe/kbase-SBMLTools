@@ -29,9 +29,9 @@ parameters :
         short-hint : model_compartment_id_hint
         long-hint  : model_compartment_id_lhint
     kbase_compartment_id :
-        ui-name : kbase_compartment_id_pg
-        short-hint : kbase_compartment_id_pg_hint
-        long-hint  : kbase_compartment_id_pg_lhint
+        ui-name : kbase_compartment_id
+        short-hint : kbase_compartment_id_hint
+        long-hint  : kbase_compartment_id_lhint
     template_id :
         ui-name : Template ID
         short-hint : Select the template model to associate, which impacts candidate reactions for gapfilling
