@@ -22,51 +22,10 @@ parameters :
         short-hint : ID of genome to associate with the model
         long-hint  : ID of genome to associate with the model
 
-    model_compartment_id :
-        ui-name : model_compartment_id
-        short-hint : model_compartment_id_hint
-        long-hint  : model_compartment_id_lhint
-        
-    kbase_compartment_id :
-        ui-name : kbase_compartment_id_pg
-        short-hint : kbase_compartment_id_pg_hint
-        long-hint  : kbase_compartment_id_pg_lhint
-
-    biomass_reactions :
-        ui-name : New biomass reactions
-        short-hint : Select additional model reactions that actually represent biomass reactions
-        long-hint  : Select additional model reactions that actually represent biomass reactions
-        
-    template_id :
-        ui-name : Template ID
-        short-hint : Select the template model to associate, which impacts candidate reactions for gapfilling
-        long-hint  : Select the template model to associate, which impacts candidate reactions for gapfilling
-        
-    create_extracellular :
-        ui-name : Create extracellular compartment
-        short-hint : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions
-        long-hint  : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions
-
     output_model_name :
         ui-name : Output ID
         short-hint : Name to use for integrated model
         long-hint  : Name to use for integrated model
-        
-    gene_mappings :
-        ui-name : Gene mappings
-        short-hint : Provide tab-delimited translation table from gene IDs in the model to gene IDs in the input genome
-        long-hint  : Provide tab-delimited translation table from gene IDs in the model to gene IDs in the input genome
-        
-    compounds_mappings :
-        ui-name : Compound mappings
-        short-hint : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
-        long-hint  : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
-        
-parameter-groups:
-    compartment_translation :
-        ui-name : Compartment mappings
-        short-hint : Use this control to explicitly specify how model compartments correspond to compartments in KBase
-        long-hint  : Use this control to explicitly specify how model compartments correspond to compartments in KBase
 
 description : |
     <p>Please see <a href="http://kbase.us/data-upload-download-guide/fba-model/" target="_blank">http://kbase.us/data-upload-download-guide/fba-model/</a>
