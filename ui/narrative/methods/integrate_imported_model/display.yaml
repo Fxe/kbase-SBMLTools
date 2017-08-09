@@ -28,6 +28,10 @@ parameters :
         ui-name : Compound mappings
         short-hint : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
         long-hint  : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
+    create_extracellular :
+        ui-name : Create extracellular compartment
+        short-hint : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions
+        long-hint  : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions
     output_model_name :
         ui-name : Output ID
         short-hint : Name to use for integrated model

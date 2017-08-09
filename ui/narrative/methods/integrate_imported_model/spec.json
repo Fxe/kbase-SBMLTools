@@ -66,6 +66,20 @@
       }
     },
     {
+      "field_type": "checkbox",
+      "allow_multiple": false,
+      "optional": false,
+      "id": "create_extracellular",
+      "advanced": true,
+      "default_values": [
+        "0"
+      ],
+      "checkbox_options": {
+        "unchecked_value": 0,
+        "checked_value": 1
+      }
+    },
+    {
       "id": "output_model_name",
       "optional": false,
       "advanced": false,
@@ -107,6 +121,10 @@
         {
           "input_parameter": "compound_mappings",
           "target_property": "compound_mappings"
+        },
+        {
+          "input_parameter": "create_extracellular",
+          "target_property": "create_extracellular"
         },
         {
           "input_parameter": "output_model_name",

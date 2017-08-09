@@ -281,9 +281,12 @@ public class SBMLToolsServer extends JsonServerServlet {
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         
+        List<WorkspaceObject> wsObjects = new ArrayList<> ();
+        
         final ReportInfo reportInfo = kbrClient.create(
             new CreateParams().withWorkspaceName(workspaceName)
                               .withReport(new Report()
+                                  .withObjectsCreated(wsObjects)
                                   .withTextMessage(String.format("%s", params))));
         
         returnVal = new SbmlImporterResults().withFbamodelId("iJO1366")
