@@ -47,7 +47,7 @@ module SBMLTools {
         string output_model_name;
         string template_id;
         string genome_id;
-        list<map<list<string>, string>> compartment_translation;
+        list<mapping<list<string>, string>> compartment_translation;
         string biomass_reactions;
         string compound_mappings;
         string gene_mappings;
