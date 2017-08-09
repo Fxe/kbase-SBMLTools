@@ -22,11 +22,6 @@ parameters :
         short-hint : ID of genome to associate with the model
         long-hint  : ID of genome to associate with the model
 
-    compartment_translation :
-        ui-name : Compartment mappings
-        short-hint : Use this control to explicitly specify how model compartments correspond to compartments in KBase
-        long-hint  : Use this control to explicitly specify how model compartments correspond to compartments in KBase
-
     model_compartment_id :
         ui-name : model_compartment_id
         short-hint : model_compartment_id_hint
@@ -66,17 +61,13 @@ parameters :
         ui-name : Compound mappings
         short-hint : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
         long-hint  : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
+        
 parameter-groups:
     compartment_translation :
-        ui-name : compartment_translation
-        short-hint : compartment_translation_hint
-        long-hint  : compartment_translation_lhint
-        
-    kbase_compartment_id :
-        ui-name : kbase_compartment_id_pg
-        short-hint : kbase_compartment_id_pg_hint
-        long-hint  : kbase_compartment_id_pg_lhint
-        
+        ui-name : Compartment mappings
+        short-hint : Use this control to explicitly specify how model compartments correspond to compartments in KBase
+        long-hint  : Use this control to explicitly specify how model compartments correspond to compartments in KBase
+
 description : |
     <p>Please see <a href="http://kbase.us/data-upload-download-guide/fba-model/" target="_blank">http://kbase.us/data-upload-download-guide/fba-model/</a>
     for more information about how to format your FBA model input file.</p>
