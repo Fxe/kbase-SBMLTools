@@ -40,6 +40,32 @@
       }
     },
     {
+      "id": "gene_mappings",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "textarea",
+      "textarea_options": {
+        "n_rows": 10
+      }
+    },
+    {
+      "id": "compound_mappings",
+      "optional": true,
+      "advanced": true,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "textarea",
+      "textarea_options": {
+        "n_rows": 10
+      }
+    },
+    {
       "id": "output_model_name",
       "optional": false,
       "advanced": false,
@@ -73,6 +99,14 @@
         {
           "input_parameter": "genome_id",
           "target_property": "genome_id"
+        },
+        {
+          "input_parameter": "gene_mappings",
+          "target_property": "gene_mappings"
+        },
+        {
+          "input_parameter": "compound_mappings",
+          "target_property": "compound_mappings"
         },
         {
           "input_parameter": "output_model_name",

@@ -274,7 +274,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     public SbmlImporterResults integrateModel(IntegrateModelParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         SbmlImporterResults returnVal = null;
         //BEGIN integrate_model
-        
+        final String workspaceName = params.getWorkspaceName();
         
         final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
@@ -282,8 +282,9 @@ public class SBMLToolsServer extends JsonServerServlet {
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         
         final ReportInfo reportInfo = kbrClient.create(
-            new CreateParams().withReport(
-                new Report().withTextMessage(String.format("%s", params))));
+            new CreateParams().withWorkspaceName(workspaceName)
+                              .withReport(new Report()
+                                  .withTextMessage(String.format("%s", params))));
         
         returnVal = new SbmlImporterResults().withFbamodelId("iJO1366")
                                              .withReportName(reportInfo.getName())

@@ -16,12 +16,18 @@ parameters :
         ui-name : Model ID
         short-hint : ID of imported model to be integrated
         long-hint  : ID of imported model to be integrated
-
     genome_id :
         ui-name : Genome ID
         short-hint : ID of genome to associate with the model
         long-hint  : ID of genome to associate with the model
-
+    gene_mappings :
+        ui-name : Gene mappings
+        short-hint : Provide tab-delimited translation table from gene IDs in the model to gene IDs in the input genome
+        long-hint  : Provide tab-delimited translation table from gene IDs in the model to gene IDs in the input genome
+    compound_mappings :
+        ui-name : Compound mappings
+        short-hint : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
+        long-hint  : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
     output_model_name :
         ui-name : Output ID
         short-hint : Name to use for integrated model
