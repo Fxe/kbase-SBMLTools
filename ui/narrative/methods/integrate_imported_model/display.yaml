@@ -20,6 +20,14 @@ parameters :
         ui-name : Genome ID
         short-hint : ID of genome to associate with the model
         long-hint  : ID of genome to associate with the model
+    template_id :
+        ui-name : Template ID
+        short-hint : Select the template model to associate, which impacts candidate reactions for gapfilling
+        long-hint  : Select the template model to associate, which impacts candidate reactions for gapfilling
+    create_extracellular :
+        ui-name : Create extracellular compartment
+        short-hint : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions
+        long-hint  : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions
     gene_mappings :
         ui-name : Gene mappings
         short-hint : Provide tab-delimited translation table from gene IDs in the model to gene IDs in the input genome
@@ -28,15 +36,10 @@ parameters :
         ui-name : Compound mappings
         short-hint : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
         long-hint  : Provide tab-delimited translation table from compound IDs in the model to KBase compound IDs (e.g. cpd00001)
-    create_extracellular :
-        ui-name : Create extracellular compartment
-        short-hint : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions
-        long-hint  : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions
     output_model_name :
         ui-name : Output ID
         short-hint : Name to use for integrated model
         long-hint  : Name to use for integrated model
-
 description : |
     <p>Please see <a href="http://kbase.us/data-upload-download-guide/fba-model/" target="_blank">http://kbase.us/data-upload-download-guide/fba-model/</a>
     for more information about how to format your FBA model input file.</p>

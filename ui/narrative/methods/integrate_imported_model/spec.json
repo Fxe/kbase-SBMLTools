@@ -66,6 +66,47 @@
       }
     },
     {
+      "optional": true,
+      "allow_multiple": false,
+      "field_type": "dropdown",
+      "dropdown_options": {
+        "options": [
+          {
+            "value": "gramneg",
+            "ui_name": "Gram negative",
+            "display": "Gram negative",
+            "id": "gramneg"
+          },
+          {
+            "id": "grampos",
+            "value": "grampos",
+            "ui_name": "Gram positive",
+            "display": "Gram positive"
+          },
+          {
+            "display": "Plant",
+            "ui_name": "Plant",
+            "value": "plant",
+            "id": "plant"
+          },
+          {
+            "display": "Core metabolism",
+            "ui_name": "Core metabolism",
+            "value": "core",
+            "id": "core"
+          }
+        ]
+      },
+      "id": "template_id",
+      "advanced": true,
+      "default_values": [
+        "gramneg"
+      ],
+      "text_options": {
+        "valid_ws_types": [ ]
+      }
+    },
+    {
       "field_type": "checkbox",
       "allow_multiple": false,
       "optional": false,
