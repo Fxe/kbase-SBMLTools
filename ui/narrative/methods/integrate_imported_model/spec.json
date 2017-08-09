@@ -39,39 +39,27 @@
         ]
       }
     },
+    
     {
       "id": "biomass_reactions",
       "field_type": "textsubdata",
       "allow_multiple": false,
       "optional": true,
       "advanced": false,
-      "default_values": [
-        
-      ],
-      "text_options": {
-        "valid_ws_types": [
-          
-        ]
-      },
+      "default_values": [""],
+      "text_options": { "valid_ws_types": []},
       "textsubdata_options": {
         "show_src_obj": true,
         "allow_custom": true,
         "multiselection": true,
         "subdata_selection": {
-          "additional_options": [
-            
-          ],
           "subdata_included": [
-            "modelreactions\/[*]\/id",
-            "modelreactions\/[*]\/name"
+            "modelreactions/[*]/id",
+            "modelreactions/[*]/name"
           ],
-          "selection_description": [
-            "name"
-          ],
+          "selection_description": ["name"],
           "selection_id": "id",
-          "path_to_subdata": [
-            "modelreactions"
-          ],
+          "path_to_subdata": ["modelreactions"],
           "parameter_id": "model_name",
           "description_template": "- {{name}}"
         }
