@@ -22,7 +22,7 @@ ANT = $(ANT_HOME)/bin/ant
 
 default: compile
 
-all: build build-startup-script build-executable-script build-test-script
+all: compile build build-startup-script build-executable-script build-test-script
 
 compile:
 	kb-sdk compile $(SPEC_FILE) \

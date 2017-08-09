@@ -41,6 +41,7 @@ module SBMLTools {
         int min_length;
     } SbmlImportParams;
 
+    /*
     typedef structure {
         string model_name;
         string workspace_name;
@@ -53,6 +54,7 @@ module SBMLTools {
         string gene_mappings;
         int create_extracellular;
     } IntegrateModelParams;
+    */
             
     typedef structure {
         string sbml_url;
