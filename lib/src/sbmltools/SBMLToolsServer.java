@@ -197,10 +197,10 @@ public class SBMLToolsServer extends JsonServerServlet {
         //KBaseCollections/FBAModel
         List<String> workspaces = new ArrayList<> ();
         workspaces.add(workspaceName);
-        List<Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>>> o = 
+        List<?> o = 
             wspClient.listObjects(
                 new ListObjectsParams().withType("KBaseFBA.FBAModel").withWorkspaces(workspaces));
-        for (Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>> t : o) {
+        for (Object t : o) {
           System.out.println(t);
         }
         List<WorkspaceObject> objectsCreated = new ArrayList<> ();
