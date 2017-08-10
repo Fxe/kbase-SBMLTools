@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.ini4j.Ini;
@@ -24,6 +25,8 @@ import assemblyutil.SaveAssemblyParams;
 import fbatools.FbaToolsClient;
 import fbatools.RunFluxBalanceAnalysisParams;
 import kbasefba.FBAModel;
+import kbsolrutil.KBSolrUtilClient;
+import kbsolrutil.SearchSolrParams;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
@@ -33,11 +36,13 @@ import sbmltools.SbmlImporterParams;
 import us.kbase.auth.AuthConfig;
 import us.kbase.auth.AuthToken;
 import us.kbase.auth.ConfigurableAuthService;
-import us.kbase.auth.UserDetail;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
+import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
 import us.kbase.workspace.CreateWorkspaceParams;
+import us.kbase.workspace.ListAllTypesParams;
+import us.kbase.workspace.ListObjectsParams;
 import us.kbase.workspace.ProvenanceAction;
 import us.kbase.workspace.WorkspaceClient;
 import us.kbase.workspace.WorkspaceIdentity;
@@ -63,10 +68,11 @@ public class SBMLToolsServerTest {
   private static String KBASE_ENDPOINT = "https://appdev.kbase.us/services";
   private static String WORKSPACE_URL = KBASE_ENDPOINT + "/ws";
   //http://172.17.0.11:34767
+//  private static String SDK_CALLBACK_URL = "http://172.17.0.9:48411";
   private static String SDK_CALLBACK_URL = "http://172.17.0.9:48411";
   
   
-  public static void setupConfig(Map<String, String> config) {
+  public static void setupConfigAppdev(Map<String, String> config) {
     /* 
      * kbase-endpoint=[https://appdev.kbase.us/services], 
      * job-service-url=[https://appdev.kbase.us/services/userandjobstate/], 
@@ -97,8 +103,27 @@ public class SBMLToolsServerTest {
     }
   }
   
+  public static void setupConfigProd(Map<String, String> config) {
+    if (!config.containsKey("kbase-endpoint")) {
+      config.put("kbase-endpoint", "https://kbase.us/services");
+    }
+    if (!config.containsKey("job-service-url")) {
+      config.put("job-service-url", "https://kbase.us/services/userandjobstate/");
+    }
+    if (!config.containsKey("workspace-url")) {
+      config.put("workspace-url", "https://kbase.us/services/ws/");
+    }
+    if (!config.containsKey("shock-url")) {
+      config.put("shock-url", "https://kbase.us/services/shock-api");
+    }
+    if (!config.containsKey("auth-service-url")) {
+      config.put("auth-service-url", "https://kbase.us/services/auth/api/legacy/KBase/Sessions/Login");
+    }
+  }
+  
   @BeforeClass
   public static void init() throws Exception {
+    
     System.out.println("MY TOKEN!: " + System.getenv("KB_AUTH_TOKEN"));
     // Config loading
     String configFilePath = System.getenv("KB_DEPLOYMENT_CONFIG");
@@ -114,17 +139,17 @@ public class SBMLToolsServerTest {
     } else {
       
       config = new HashMap<>();
-      setupConfig(config);
+      setupConfigAppdev(config);
+//      setupConfigProd(config);
     }
-    config = new HashMap<>();
     
     config.put("scratch", "/tmp/trash");
     scratch = new File("/tmp/trash").toPath();
-
-    SDK_CALLBACK_URL = System.getenv("SDK_CALLBACK_URL");
+    System.out.println(config);
+//    SDK_CALLBACK_URL = System.getenv("SDK_CALLBACK_URL");
 
     // Token validation
-    String authUrl = AUTH_SERVICE_URL ; //config.get("auth-service-url");
+    String authUrl = config.get("auth-service-url");
     String authUrlInsecure = AUTH_SERVICE_URL_ALLOW_I; //config.get("auth-service-url-allow-insecure");
     ConfigurableAuthService authService = new ConfigurableAuthService(
         new AuthConfig().withKBaseAuthServerURL(new URL(authUrl))
@@ -140,15 +165,15 @@ public class SBMLToolsServerTest {
 //    token = user.getToken();//authService.validateToken(System.getenv("KB_AUTH_TOKEN"));
     System.out.println(token);
     // Reading URLs from config
-    wsClient = new WorkspaceClient(new URL(WORKSPACE_URL), token);
+    wsClient = new WorkspaceClient(new URL(config.get("workspace-url")), token);
     wsClient.setIsInsecureHttpConnectionAllowed(false); // do we need this?
     callbackURL = new URL(SDK_CALLBACK_URL);
     
     // These lines are necessary because we don't want to start linux syslog bridge service
     JsonServerSyslog.setStaticUseSyslog(false);
     JsonServerSyslog.setStaticMlogFile("/tmp/test.log");
-//    JsonServerSyslog.setStaticMlogFile(new File(config.get("scratch"), "test.log")
-//        .getAbsolutePath());
+
+    System.out.println(SDK_CALLBACK_URL);
     
     impl = new SBMLToolsServer();
   }
@@ -247,6 +272,20 @@ public class SBMLToolsServerTest {
         Assert.assertEquals(2L, (long)ret.getNContigsRemaining());
      */
   }
+  
+  @Test
+  public void test_workspace() throws Exception {
+    System.out.println(wsClient.listAllTypes(new ListAllTypesParams().withWithEmptyModules(0L)));
+    //KBaseCollections/FBAModel
+    List<String> workspaces = new ArrayList<> ();
+    workspaces.add("filipeliu:narrative_1492697501369");
+    List<Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>>> o = 
+        wsClient.listObjects(
+            new ListObjectsParams().withType("KBaseFBA.FBAModel").withWorkspaces(workspaces));
+    for (Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>> t : o) {
+      System.out.println(t);
+    }
+  }
 
   @Test
   public void test_filter_contigs_err1() throws Exception {
@@ -265,6 +304,8 @@ public class SBMLToolsServerTest {
      * geneMappings=null, createExtracellular=0, additionalProperties={}]
      */
 //    KBaseIOUtils.getFBAModel("iJO1366", "filipeliu:narrative_1492697501369", null, wsClient);
+    
+
     FBAModel fbaModel = KBaseIOUtils.getObject("iJO1366", "filipeliu:narrative_1492697501369", null, FBAModel.class, wsClient);
     
     Object o = KBaseIOUtils.getObject("Shewanella_oneidensis_MR-1", "filipeliu:narrative_1492697501369", null, wsClient);
@@ -341,13 +382,26 @@ public class SBMLToolsServerTest {
   @Test
   public void test_filter_contigs_err3() throws Exception {
     /*
-        try {
-            impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
-                .withAssemblyInputRef("fake").withMinLength(10L), token, getContext());
-            Assert.fail("Error is expected above");
-        } catch (ServerException ex) {
-            Assert.assertEquals("Invalid workspace reference string! Found fake", ex.getMessage());
-        }
+     *      "search_core": "GenomeFeatures_prod",
+        "search_query": "{\"q\":\"ECW_m3682\"}",
+        "search_param": "{\"fl\":\"*\",\"start\":0,\"rows\":10}",
+        "result_format": "json",
+        "group_option": ""
      */
+    Map<String, String> searchQuery = new HashMap<> ();
+    searchQuery.put("q", "ECW_m3682");
+    Map<String, String> searchParam = new HashMap<> ();
+    searchParam.put("fl", "*");
+    searchParam.put("start", "0");
+    searchParam.put("rows", "10");
+    KBSolrUtilClient solrClient = new KBSolrUtilClient(callbackURL, token);
+    SearchSolrParams params = new SearchSolrParams()
+        .withSearchCore("GenomeFeatures_prod")
+        .withResultFormat("json")
+        .withSearchQuery(searchQuery)
+        .withSearchParam(searchParam)
+        .withGroupOption("");
+    
+    solrClient.searchKbaseSolr(params);
   }
 }

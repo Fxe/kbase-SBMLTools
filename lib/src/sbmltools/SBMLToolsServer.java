@@ -8,6 +8,7 @@ import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
+import us.kbase.common.service.Tuple11;
 
 //BEGIN_HEADER
 import java.io.File;
@@ -16,6 +17,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import us.kbase.workspace.ListAllTypesParams;
+import us.kbase.workspace.ListObjectsParams;
 import us.kbase.workspace.WorkspaceClient;
 import datafileutil.DataFileUtilClient;
 import kbasereport.CreateParams;
@@ -30,6 +34,8 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
+import kbsolrutil.KBSolrUtilClient;
+import kbsolrutil.SearchSolrParams;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
@@ -185,6 +191,31 @@ public class SBMLToolsServer extends JsonServerServlet {
     public FilterContigsResults importModelXml(SbmlImportParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         FilterContigsResults returnVal = null;
         //BEGIN import_model_xml
+        String workspaceName = params.getUrl();
+        WorkspaceClient wspClient = new WorkspaceClient(callbackURL, authPart);
+        System.out.println(wspClient.listAllTypes(new ListAllTypesParams().withWithEmptyModules(0L)));
+        //KBaseCollections/FBAModel
+        List<String> workspaces = new ArrayList<> ();
+        workspaces.add(workspaceName);
+        List<Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>>> o = 
+            wspClient.listObjects(
+                new ListObjectsParams().withType("KBaseFBA.FBAModel").withWorkspaces(workspaces));
+        for (Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>> t : o) {
+          System.out.println(t);
+        }
+        List<WorkspaceObject> objectsCreated = new ArrayList<> ();
+        final KBaseReportClient kbr = new KBaseReportClient(callbackURL, authPart);
+        // see note above about bad practice
+        kbr.setIsInsecureHttpConnectionAllowed(true);
+        ReportInfo ri = kbr.create(new CreateParams().withWorkspaceName(params.getWorkspaceName())
+            .withReport(new Report()
+                .withTextMessage("")
+                .withObjectsCreated(objectsCreated)));
+        
+        returnVal = new FilterContigsResults()
+            .withReportName(ri.getName())
+            .withReportRef(ri.getRef());
+        
         //END import_model_xml
         return returnVal;
     }
@@ -290,6 +321,22 @@ public class SBMLToolsServer extends JsonServerServlet {
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         wspClient.setIsInsecureHttpConnectionAllowed(true);
         
+        Map<String, String> searchQuery = new HashMap<> ();
+        searchQuery.put("q", "ECW_m3682");
+        Map<String, String> searchParam = new HashMap<> ();
+        searchParam.put("fl", "*");
+        searchParam.put("start", "0");
+        searchParam.put("rows", "10");
+        KBSolrUtilClient solrClient = new KBSolrUtilClient(callbackURL, authPart);
+        SearchSolrParams sparams = new SearchSolrParams()
+            .withSearchCore("GenomeFeatures_prod")
+            .withResultFormat("json")
+            .withSearchQuery(searchQuery)
+            .withSearchParam(searchParam)
+            .withGroupOption("");
+        
+        Map<String, String> a = solrClient.searchKbaseSolr(sparams);
+        System.out.println(a);
         
 //        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
         returnVal = new KBaseModelIntegrationFacade(wspClient, 
