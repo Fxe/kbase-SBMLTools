@@ -281,6 +281,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
         final WorkspaceClient    wspClient = new WorkspaceClient(callbackURL, authPart);
+        wspClient.setServiceVersion("beta");
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         wspClient.setIsInsecureHttpConnectionAllowed(true);
