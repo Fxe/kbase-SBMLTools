@@ -8,8 +8,6 @@ import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
-import us.kbase.workspace.WorkspaceClient;
-import us.kbase.workspace.WorkspaceClientI;
 
 //BEGIN_HEADER
 import java.io.File;
@@ -25,6 +23,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import us.kbase.workspace.WorkspaceClient;
 import datafileutil.DataFileUtilClient;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
@@ -281,14 +280,14 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
-        final WorkspaceClientI   wspClient = new WorkspaceClientI(callbackURL, authPart);
+        final WorkspaceClient    wspClient = new WorkspaceClient(callbackURL, authPart);
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         wspClient.setIsInsecureHttpConnectionAllowed(true);
         
         
-        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
-        returnVal = new KBaseModelIntegrationFacade(null, 
+//        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
+        returnVal = new KBaseModelIntegrationFacade(wspClient, 
                                                     dfuClient, 
                                                     kbrClient).kbaseIntegrate(params, workspaceName);
         
