@@ -13,6 +13,7 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
+import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
 import sbmltools.SbmlImporterResults;
 import us.kbase.workspace.WorkspaceClient;
@@ -43,7 +44,7 @@ public class KBaseModelIntegrationFacade {
                               .withObjectsCreated(wsObjects)
                               .withTextMessage(String.format("%s", params))));
     
-    List<Map<String, Object>> compartmentMapping_ = params.getCompartmentTranslation();
+    List<CompartmentMapping> compartmentMapping_ = params.getCompartmentTranslation();
     
     String fbaModelName = params.getModelName();
     Map<String, String> compartmentMapping = null;
