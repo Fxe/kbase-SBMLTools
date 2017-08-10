@@ -32,6 +32,7 @@ import us.kbase.workspace.GetObjects2Results;
 import us.kbase.workspace.ObjectData;
 import us.kbase.workspace.ObjectSpecification;
 import us.kbase.workspace.WorkspaceClient;
+import us.kbase.workspace.WorkspaceClientI;
 
 public class KBaseIOUtils {
   
@@ -170,6 +171,31 @@ public class KBaseIOUtils {
     }
     return null;
   }
+  
+  public static Object getFBAModel2(String name, String ws, String ref, 
+      WorkspaceClientI wsClient) throws IOException {
+try {
+List<ObjectSpecification> objects = new ArrayList<> ();
+ObjectSpecification ospec = new ObjectSpecification();
+if (name != null) {
+ospec.withName(name);
+}
+if (ws != null) {
+ospec.withWorkspace(ws);
+}
+if (ref != null) {
+ospec.withRef(ref);
+}
+
+GetObjects2Params params = new GetObjects2Params().withObjects(objects);
+GetObjects2Results result = wsClient.getObjects2(params);
+List<ObjectData> odata = result.getData();
+System.out.println(odata);
+} catch (IOException | JsonClientException e) {
+throw new IOException(e);
+}
+return null;
+}
   
   public static String folderToShock(String path, final DataFileUtilClient dfuClient) throws IOException {
     FileToShockParams params = new FileToShockParams()

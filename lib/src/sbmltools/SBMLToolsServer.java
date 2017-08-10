@@ -281,11 +281,14 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
-        final WorkspaceClient    wspClient = new WorkspaceClient(callbackURL, authPart);
+        final WorkspaceClientI   wspClient = new WorkspaceClientI(callbackURL, authPart);
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
+        wspClient.setIsInsecureHttpConnectionAllowed(true);
         
-        returnVal = new KBaseModelIntegrationFacade(wspClient, 
+        
+        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
+        returnVal = new KBaseModelIntegrationFacade(null, 
                                                     dfuClient, 
                                                     kbrClient).kbaseIntegrate(params, workspaceName);
         

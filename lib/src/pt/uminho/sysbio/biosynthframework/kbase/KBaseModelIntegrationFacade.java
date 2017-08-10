@@ -50,8 +50,8 @@ public class KBaseModelIntegrationFacade {
     String fbaModelName = params.getModelName();
     Map<String, String> compartmentMapping = null;
     
-    KBaseIOUtils.getFBAModel(fbaModelName, workspaceName, null, wspClient);
-    KBaseIOUtils.getFBAModel(params.getGenomeId(), workspaceName, null, wspClient);
+//    KBaseIOUtils.getFBAModel(fbaModelName, workspaceName, null, wspClient);
+//    KBaseIOUtils.getFBAModel(params.getGenomeId(), workspaceName, null, wspClient);
     
     SbmlImporterResults returnVal = new SbmlImporterResults().withFbamodelId(fbaModelName)
                                          .withReportName(reportInfo.getName())
