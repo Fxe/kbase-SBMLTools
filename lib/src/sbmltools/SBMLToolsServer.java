@@ -276,12 +276,15 @@ public class SBMLToolsServer extends JsonServerServlet {
     public SbmlImporterResults integrateModel(IntegrateModelParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
         SbmlImporterResults returnVal = null;
         //BEGIN integrate_model
+        
+        System.out.println(config);
+        
         final String workspaceName = params.getWorkspaceName();
         
         final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
-        final WorkspaceClient    wspClient = new WorkspaceClient(callbackURL, authPart);
-        wspClient.setServiceVersion("beta");
+        final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
+//        wspClient.setServiceVersion("beta");
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         wspClient.setIsInsecureHttpConnectionAllowed(true);
