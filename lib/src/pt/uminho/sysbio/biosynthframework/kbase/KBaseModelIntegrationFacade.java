@@ -37,7 +37,7 @@ public class KBaseModelIntegrationFacade {
     this.wspClient = wspClient;
     this.dfuClient = dfuClient;
     this.kbrClient = kbrClient;
-    this.biodbContainer = new KBaseBiodbContainer("");
+    this.biodbContainer = new KBaseBiodbContainer(biodbPath);
   }
   
   public static Map<String, String> getCompartmentMapping(List<CompartmentMapping> compartmentMappings) {

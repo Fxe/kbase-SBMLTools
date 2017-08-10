@@ -63,7 +63,7 @@ public class SBMLToolsServerTest {
   private static String KBASE_ENDPOINT = "https://appdev.kbase.us/services";
   private static String WORKSPACE_URL = KBASE_ENDPOINT + "/ws";
   //http://172.17.0.11:34767
-  private static String SDK_CALLBACK_URL = "http://172.17.0.11:34767";
+  private static String SDK_CALLBACK_URL = "http://172.17.0.9:48411";
   
   
   public static void setupConfig(Map<String, String> config) {
