@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +22,7 @@ import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
+import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
@@ -194,7 +194,7 @@ public class FBAModelFactory {
   
   public String getFbcGpr(XmlSbmlReaction xrxn, final XmlSbmlModel xmodel) {
     MultiNodeTree<Object> a = xrxn.getGpr();
-    Function<Object, String> f = new Function<Object, String>() {
+    BFunction<Object, String> f = new BFunction<Object, String>() {
       
       @Override
       public String apply(Object t) {
