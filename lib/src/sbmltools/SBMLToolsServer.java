@@ -8,6 +8,7 @@ import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
+import us.kbase.workspace.WorkspaceClient;
 
 //BEGIN_HEADER
 import java.io.File;
@@ -31,6 +32,7 @@ import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
@@ -278,20 +280,13 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
+        final WorkspaceClient    wspClient = new WorkspaceClient(callbackURL, authPart);
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         
-        List<WorkspaceObject> wsObjects = new ArrayList<> ();
-        
-        final ReportInfo reportInfo = kbrClient.create(
-            new CreateParams().withWorkspaceName(workspaceName)
-                              .withReport(new Report()
-                                  .withObjectsCreated(wsObjects)
-                                  .withTextMessage(String.format("%s", params))));
-        
-        returnVal = new SbmlImporterResults().withFbamodelId("iJO1366")
-                                             .withReportName(reportInfo.getName())
-                                             .withReportRef(reportInfo.getRef());
+        returnVal = new KBaseModelIntegrationFacade(wspClient, 
+                                                    dfuClient, 
+                                                    kbrClient).kbaseIntegrate(params, workspaceName);
         
         //END integrate_model
         return returnVal;
