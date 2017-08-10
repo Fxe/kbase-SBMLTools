@@ -29,7 +29,7 @@ import us.kbase.common.service.Tuple11;
     "infos",
     "paths"
 })
-public class GetObjectInfo3Results {
+public class GetObjectInfo3ResultsI {
 
     @JsonProperty("infos")
     private List<Tuple11 <Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> infos;
@@ -47,7 +47,7 @@ public class GetObjectInfo3Results {
         this.infos = infos;
     }
 
-    public GetObjectInfo3Results withInfos(List<Tuple11 <Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> infos) {
+    public GetObjectInfo3ResultsI withInfos(List<Tuple11 <Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> infos) {
         this.infos = infos;
         return this;
     }
@@ -62,7 +62,7 @@ public class GetObjectInfo3Results {
         this.paths = paths;
     }
 
-    public GetObjectInfo3Results withPaths(List<List<String>> paths) {
+    public GetObjectInfo3ResultsI withPaths(List<List<String>> paths) {
         this.paths = paths;
         return this;
     }

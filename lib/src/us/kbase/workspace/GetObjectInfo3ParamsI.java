@@ -37,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "includeMetadata",
     "ignoreErrors"
 })
-public class GetObjectInfo3Params {
+public class GetObjectInfo3ParamsI {
 
     @JsonProperty("objects")
     private List<ObjectSpecification> objects;
@@ -57,7 +57,7 @@ public class GetObjectInfo3Params {
         this.objects = objects;
     }
 
-    public GetObjectInfo3Params withObjects(List<ObjectSpecification> objects) {
+    public GetObjectInfo3ParamsI withObjects(List<ObjectSpecification> objects) {
         this.objects = objects;
         return this;
     }
@@ -72,7 +72,7 @@ public class GetObjectInfo3Params {
         this.includeMetadata = includeMetadata;
     }
 
-    public GetObjectInfo3Params withIncludeMetadata(Long includeMetadata) {
+    public GetObjectInfo3ParamsI withIncludeMetadata(Long includeMetadata) {
         this.includeMetadata = includeMetadata;
         return this;
     }
@@ -87,7 +87,7 @@ public class GetObjectInfo3Params {
         this.ignoreErrors = ignoreErrors;
     }
 
-    public GetObjectInfo3Params withIgnoreErrors(Long ignoreErrors) {
+    public GetObjectInfo3ParamsI withIgnoreErrors(Long ignoreErrors) {
         this.ignoreErrors = ignoreErrors;
         return this;
     }

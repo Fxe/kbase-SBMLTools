@@ -36,7 +36,7 @@ import us.kbase.common.service.UnauthorizedException;
  * - Freezing and publishing workspaces
  * </pre>
  */
-public class WorkspaceClient {
+public class WorkspaceClientI {
     private JsonClientCaller caller;
     private String serviceVersion = null;
     private static URL DEFAULT_URL = null;
@@ -49,7 +49,7 @@ public class WorkspaceClient {
     }
 
     /** Constructs a client with the default url and no user credentials.*/
-    public WorkspaceClient() {
+    public WorkspaceClientI() {
        caller = new JsonClientCaller(DEFAULT_URL);
     }
 
@@ -57,7 +57,7 @@ public class WorkspaceClient {
     /** Constructs a client with a custom URL and no user credentials.
      * @param url the URL of the service.
      */
-    public WorkspaceClient(URL url) {
+    public WorkspaceClientI(URL url) {
         caller = new JsonClientCaller(url);
     }
     /** Constructs a client with a custom URL.
@@ -67,7 +67,7 @@ public class WorkspaceClient {
      * @throws IOException if an IOException occurs when checking the token's
      * validity.
      */
-    public WorkspaceClient(URL url, AuthToken token) throws UnauthorizedException, IOException {
+    public WorkspaceClientI(URL url, AuthToken token) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, token);
     }
 
@@ -79,7 +79,7 @@ public class WorkspaceClient {
      * @throws IOException if an IOException occurs when checking the user's
      * credentials.
      */
-    public WorkspaceClient(URL url, String user, String password) throws UnauthorizedException, IOException {
+    public WorkspaceClientI(URL url, String user, String password) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, user, password);
     }
 
@@ -93,7 +93,7 @@ public class WorkspaceClient {
      * @throws IOException if an IOException occurs when checking the user's
      * credentials.
      */
-    public WorkspaceClient(URL url, String user, String password, URL auth) throws UnauthorizedException, IOException {
+    public WorkspaceClientI(URL url, String user, String password, URL auth) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(url, user, password, auth);
     }
 
@@ -103,7 +103,7 @@ public class WorkspaceClient {
      * @throws IOException if an IOException occurs when checking the token's
      * validity.
      */
-    public WorkspaceClient(AuthToken token) throws UnauthorizedException, IOException {
+    public WorkspaceClientI(AuthToken token) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(DEFAULT_URL, token);
     }
 
@@ -114,7 +114,7 @@ public class WorkspaceClient {
      * @throws IOException if an IOException occurs when checking the user's
      * credentials.
      */
-    public WorkspaceClient(String user, String password) throws UnauthorizedException, IOException {
+    public WorkspaceClientI(String user, String password) throws UnauthorizedException, IOException {
         caller = new JsonClientCaller(DEFAULT_URL, user, password);
     }
 
@@ -838,16 +838,16 @@ public class WorkspaceClient {
      * <p>Original spec-file function name: get_object_info3</p>
      * <pre>
      * </pre>
-     * @param   params   instance of type {@link us.kbase.workspace.GetObjectInfo3Params GetObjectInfo3Params}
-     * @return   parameter "results" of type {@link us.kbase.workspace.GetObjectInfo3Results GetObjectInfo3Results}
+     * @param   params   instance of type {@link us.kbase.workspace.GetObjectInfo3ParamsI GetObjectInfo3Params}
+     * @return   parameter "results" of type {@link us.kbase.workspace.GetObjectInfo3ResultsI GetObjectInfo3Results}
      * @throws IOException if an IO exception occurs
      * @throws JsonClientException if a JSON RPC exception occurs
      */
-    public GetObjectInfo3Results getObjectInfo3(GetObjectInfo3Params params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
+    public GetObjectInfo3ResultsI getObjectInfo3(GetObjectInfo3ParamsI params, RpcContext... jsonRpcContext) throws IOException, JsonClientException {
         List<Object> args = new ArrayList<Object>();
         args.add(params);
-        TypeReference<List<GetObjectInfo3Results>> retType = new TypeReference<List<GetObjectInfo3Results>>() {};
-        List<GetObjectInfo3Results> res = caller.jsonrpcCall("Workspace.get_object_info3", args, retType, true, false, jsonRpcContext, this.serviceVersion);
+        TypeReference<List<GetObjectInfo3ResultsI>> retType = new TypeReference<List<GetObjectInfo3ResultsI>>() {};
+        List<GetObjectInfo3ResultsI> res = caller.jsonrpcCall("Workspace.get_object_info3", args, retType, true, false, jsonRpcContext, this.serviceVersion);
         return res.get(0);
     }
 

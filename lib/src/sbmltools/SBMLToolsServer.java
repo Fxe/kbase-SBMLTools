@@ -9,6 +9,7 @@ import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
 import us.kbase.workspace.WorkspaceClient;
+import us.kbase.workspace.WorkspaceClientI;
 
 //BEGIN_HEADER
 import java.io.File;

@@ -17,6 +17,7 @@ import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
 import sbmltools.SbmlImporterResults;
 import us.kbase.workspace.WorkspaceClient;
+import us.kbase.workspace.WorkspaceClientI;
 
 public class KBaseModelIntegrationFacade {
   

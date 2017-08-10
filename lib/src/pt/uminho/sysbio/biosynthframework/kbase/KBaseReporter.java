@@ -12,7 +12,7 @@ import kbasereport.KBaseReportClient;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import us.kbase.common.service.JsonClientException;
-import us.kbase.workspace.WorkspaceClient;
+import us.kbase.workspace.WorkspaceClientI;
 
 public class KBaseReporter {
   
