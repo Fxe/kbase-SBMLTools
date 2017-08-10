@@ -97,6 +97,7 @@ public class LocalTest {
           try {
             rfis = zf.getInputStream(ze);
 //            System.out.println(IOUtils.readLines(rfis).size());
+            System.out.println(record.get("name"));
             test(rfis);
           } catch (Exception e) {
             e.printStackTrace();
@@ -183,7 +184,17 @@ public class LocalTest {
   }
   
   public static void main(String[] args) {
-    integrationTest();
+//    integrationTest();
 //    dataTest();
+    test1();
+    try {
+      //iMO1056.xml
+      //
+      test(new FileInputStream("/var/biomodels/sbml/Ec_core_flux1.xml"));
+      test(new FileInputStream("/var/biomodels/joana/iMO1056.xml"));
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 }

@@ -72,7 +72,7 @@ public class KBaseIntegration {
       if (cpdEntry.equals(from)) {
         to = buildIdentifier(to, getModelCompoundCompartmentEntry(kcpd));
         
-        logger.info("{} -> {}", kcpd.getId(), to);
+        logger.trace("{} -> {}", kcpd.getId(), to);
         
         kcpd.setId(to);
         

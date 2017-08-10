@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +23,17 @@ import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
+import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
+import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
+import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
 public class FBAModelFactory {
 
@@ -43,7 +47,7 @@ public class FBAModelFactory {
   private String modelName;
   private int counter = 0;
   private Set<String> biomassSet = new HashSet<> ();
-  
+  private SbmlNotesParser notesParser = new SbmlNotesParser();
   private IntegrationMap<String, String> imap = new IntegrationMap<>();
   private Map<String, String> spiToModelSeedReference = new HashMap<> ();
   private Map<String, ModelCompound> modelCompounds = new HashMap<> ();
@@ -122,9 +126,8 @@ public class FBAModelFactory {
     for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
       String cmpEntry = xcmp.getAttributes().get("id");
       String cmpName = xcmp.getAttributes().get("name");
-      
       if (cmpName == null || cmpName.trim().isEmpty()) {
-        cmpName = "undefined";
+        cmpName = cmpEntry;
       }
       String cmpId = "z";
       
@@ -188,6 +191,71 @@ public class FBAModelFactory {
     
     return this;
   }
+  
+  public String getFbcGpr(XmlSbmlReaction xrxn, final XmlSbmlModel xmodel) {
+    MultiNodeTree<Object> a = xrxn.getGpr();
+    Function<Object, String> f = new Function<Object, String>() {
+      
+      @Override
+      public String apply(Object t) {
+        if (t instanceof Map) {
+          @SuppressWarnings("rawtypes")
+          Map<?, ?> m = (Map)t;
+          if (m.containsKey("geneProduct")) {
+            String geneProduct = (String) m.get("geneProduct");
+            for (XmlObject o : xmodel.getListOfGeneProducts()) {
+              if (o.getAttributes().get("id").equals(geneProduct)) {
+                if (o.getAttributes().containsKey("label")) {
+                  return o.getAttributes().get("label");
+                }
+                return o.getAttributes().get("name");
+              }
+            }
+            return geneProduct;
+          }
+          return t.toString();
+        }
+        System.out.println(t.getClass().getSimpleName());
+        // TODO Auto-generated method stub
+        return t.toString();
+      }
+    };
+    List<String> s = SbmlUtils.gprTreeToString(a, f);
+    if (s != null && !s.isEmpty()) {
+      return s.iterator().next();
+    }
+    
+    return null;
+  }
+  
+  public String getGpr(XmlSbmlReaction xrxn, final XmlSbmlModel xmodel) {
+    String fgpr = getFbcGpr(xrxn, xmodel);
+    
+    Map<String, Set<String>> ndata = notesParser.parseNotes2(xrxn.getNotes());
+//    System.out.println(ndata);
+    
+    String ngpr = null;
+    if (ndata.containsKey("gene_association") && 
+        ndata.get("gene_association").size() > 0) {
+      ngpr = ndata.get("gene_association").iterator().next();
+    }
+    
+    if (fgpr != null && ngpr == null) {
+      System.out.println("F: " + fgpr);
+      return fgpr;
+    }
+    if (ngpr != null && fgpr == null) {
+      System.out.println("N: " + ngpr);
+      return ngpr;
+    }
+    
+    if (ngpr != null && fgpr != null) {
+      logger.warn("multiple gpr: F:{}, N:{}", fgpr, ngpr);
+    }
+    
+    
+    return ngpr;
+  }
 
   public FBAModel build() {
     FBAModel model = new FBAModel();
@@ -207,7 +275,10 @@ public class FBAModelFactory {
 
     int biomassCounter = 1;
     
+    
+    
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
+
       String rxnEntry = xrxn.getAttributes().get("id");
       if (rxnEntry == null || rxnEntry.trim().isEmpty()) {
         rxnEntry = "R_rxn" + counter++;
@@ -215,6 +286,10 @@ public class FBAModelFactory {
       String rxnName = xrxn.getAttributes().get("name");
       if (rxnName == null || rxnName.trim().isEmpty()) {
         rxnName = "undefined";
+      }
+      String gpr = getGpr(xrxn, xmodel);
+      if (gpr == null) {
+        gpr = "";
       }
       List<ModelReactionReagent> reagents = new ArrayList<> ();
 
@@ -260,6 +335,7 @@ public class FBAModelFactory {
       ModelReaction rxn = new ModelReaction().withId(rxnEntry)
           .withAliases(new ArrayList<String> ())
           .withName(rxnName)
+          .withImportedGpr(gpr)
           .withDirection("=")
           .withProtons(1.0)
           .withReactionRef("50/1/1/reactions/id/rxn00000_c")
@@ -348,7 +424,7 @@ public class FBAModelFactory {
                         .withLipid(0.0)
                         .withCofactor(0.0)
                         .withEnergy(0.0)
-                        .withName(rxn.getName())
+                        .withName(String.format("%s (%s)", rxn.getId(), rxn.getName()))
                         .withBiomasscompounds(compounds);
   }
 

@@ -321,6 +321,8 @@ public class SBMLToolsServer extends JsonServerServlet {
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         wspClient.setIsInsecureHttpConnectionAllowed(true);
         
+        logger.info("SOLR");
+        
         Map<String, String> searchQuery = new HashMap<> ();
         searchQuery.put("q", "ECW_m3682");
         Map<String, String> searchParam = new HashMap<> ();
@@ -337,6 +339,8 @@ public class SBMLToolsServer extends JsonServerServlet {
         
         Map<String, String> a = solrClient.searchKbaseSolr(sparams);
         System.out.println(a);
+        
+        logger.info("SOLDONE !");
         
 //        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
         returnVal = new KBaseModelIntegrationFacade(wspClient, 
