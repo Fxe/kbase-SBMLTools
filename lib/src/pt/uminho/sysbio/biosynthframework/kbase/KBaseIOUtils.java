@@ -23,6 +23,7 @@ import datafileutil.FileToShockOutput;
 import datafileutil.FileToShockParams;
 import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
+import kbasefba.FBAModel;
 import sbmltools.KBaseType;
 import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.Tuple11;
@@ -50,6 +51,19 @@ public class KBaseIOUtils {
 
     return null;
   }
+  
+  /**
+   * 
+   * @param nameId
+   * @param dataType
+   * @param o
+   * @param ws
+   * @param dfuClient
+   * @return object ref
+   */
+  public static String saveDataSafe(String nameId, KBaseType dataType, Object o, String ws, final DataFileUtilClient dfuClient) {
+    return saveDataSafe(nameId, dataType.value(), o, ws, dfuClient);
+  }
 
   public static String saveDataSafe(String nameId, String dataType, Object o, String ws, final DataFileUtilClient dfuClient) {
     String ref = null;
@@ -60,7 +74,6 @@ public class KBaseIOUtils {
         e.printStackTrace();
       }
     }
-
     return ref;
   }
 
@@ -161,14 +174,55 @@ public class KBaseIOUtils {
         ospec.withRef(ref);
       }
       
+      objects.add(ospec);
+      
       GetObjects2Params params = new GetObjects2Params().withObjects(objects);
       GetObjects2Results result = wsClient.getObjects2(params);
       List<ObjectData> odata = result.getData();
-      System.out.println(odata);
+      Object o = odata.iterator().next().getData().asInstance();
+      ObjectMapper om = new ObjectMapper();
+      FBAModel fbaModel = om.convertValue(o, FBAModel.class);
+//      om.readValue(src, FBAModel.class);
+      System.out.println(o.getClass().getSimpleName());
     } catch (IOException | JsonClientException e) {
       throw new IOException(e);
     }
     return null;
+  }
+  
+  public static Object getObject(String name, String ws, String ref, 
+      WorkspaceClient wsClient) throws IOException {
+    try {
+      List<ObjectSpecification> objects = new ArrayList<> ();
+      ObjectSpecification ospec = new ObjectSpecification();
+      if (name != null) {
+        ospec.withName(name);
+      }
+      if (ws != null) {
+        ospec.withWorkspace(ws);
+      }
+      if (ref != null) {
+        ospec.withRef(ref);
+      }
+
+      objects.add(ospec);
+
+      GetObjects2Params params = new GetObjects2Params().withObjects(objects);
+      GetObjects2Results result = wsClient.getObjects2(params);
+      List<ObjectData> odata = result.getData();
+      Object o = odata.iterator().next().getData().asInstance();
+      return o;
+    } catch (IOException | JsonClientException e) {
+      throw new IOException(e);
+    }
+  }
+  
+  public static<T> T getObject(String name, String ws, String ref, Class<T> clazz,
+      WorkspaceClient wsClient) throws IOException {
+    Object o = getObject(name, ws, ref, wsClient);
+    ObjectMapper om = new ObjectMapper();
+    T fbaModel = om.convertValue(o, clazz);
+    return fbaModel;
   }
   
   public static String folderToShock(String path, final DataFileUtilClient dfuClient) throws IOException {

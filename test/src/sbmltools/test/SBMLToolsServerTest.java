@@ -2,37 +2,33 @@ package sbmltools.test;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.Map;
-
-import junit.framework.Assert;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
 
 import org.ini4j.Ini;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import us.kbase.common.service.ServerException;
 import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
 import assemblyutil.SaveAssemblyParams;
-import fbatools.FbaToolsClient;
-import fbatools.RunFluxBalanceAnalysisParams;
-import sbmltools.FilterContigsParams;
-import sbmltools.FilterContigsResults;
+import kbasefba.FBAModel;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
 import sbmltools.SBMLToolsServer;
-import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
 import us.kbase.auth.AuthConfig;
 import us.kbase.auth.AuthToken;
-import us.kbase.auth.AuthUser;
 import us.kbase.auth.ConfigurableAuthService;
 import us.kbase.auth.UserDetail;
 import us.kbase.common.service.JsonServerSyslog;
@@ -44,6 +40,9 @@ import us.kbase.workspace.WorkspaceClient;
 import us.kbase.workspace.WorkspaceIdentity;
 
 public class SBMLToolsServerTest {
+  
+  private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServerTest.class);
+  
   private static AuthToken token = null;
   private static Map<String, String> config = null;
   private static WorkspaceClient wsClient = null;
@@ -63,6 +62,38 @@ public class SBMLToolsServerTest {
   //http://172.17.0.11:34767
   private static String SDK_CALLBACK_URL = "http://172.17.0.11:34767";
   
+  
+  public static void setupConfig(Map<String, String> config) {
+    /* 
+     * kbase-endpoint=[https://appdev.kbase.us/services], 
+     * job-service-url=[https://appdev.kbase.us/services/userandjobstate/], 
+     * workspace-url=[https://appdev.kbase.us/services/ws/], 
+     * shock-url=[https://appdev.kbase.us/services/shock-api], 
+     * handle-service-url=[https://appdev.kbase.us/services/handle_service], 
+     * srv-wiz-url=[https://appdev.kbase.us/services/service_wizard], 
+     * njsw-url=[https://appdev.kbase.us/services/njs_wrapper], 
+     * auth-service-url=[https://appdev.kbase.us/services/auth/api/legacy/KBase/Sessions/Login], 
+     * auth-service-url-allow-insecure=[false], 
+     * scratch=[/kb/module/work/tmp]}
+     */
+    
+    if (!config.containsKey("kbase-endpoint")) {
+      config.put("kbase-endpoint", "https://appdev.kbase.us/services");
+    }
+    if (!config.containsKey("job-service-url")) {
+      config.put("job-service-url", "https://appdev.kbase.us/services/userandjobstate/");
+    }
+    if (!config.containsKey("workspace-url")) {
+      config.put("workspace-url", "https://appdev.kbase.us/services/ws/");
+    }
+    if (!config.containsKey("shock-url")) {
+      config.put("shock-url", "https://appdev.kbase.us/services/shock-api");
+    }
+    if (!config.containsKey("auth-service-url")) {
+      config.put("auth-service-url", "https://appdev.kbase.us/services/auth/api/legacy/KBase/Sessions/Login");
+    }
+  }
+  
   @BeforeClass
   public static void init() throws Exception {
     System.out.println("MY TOKEN!: " + System.getenv("KB_AUTH_TOKEN"));
@@ -78,9 +109,12 @@ public class SBMLToolsServerTest {
       AUTH_SERVICE_URL_ALLOW_I = config.get("auth-service-url-allow-insecure");
       scratch = Paths.get(config.get("scratch"));
     } else {
-
+      
+      config = new HashMap<>();
+      setupConfig(config);
     }
     config = new HashMap<>();
+    
     config.put("scratch", "/tmp/trash");
     scratch = new File("/tmp/trash").toPath();
 
@@ -96,8 +130,8 @@ public class SBMLToolsServerTest {
 //    AuthUser user = authService.login("filipeliu", "+");
     token = authService.validateToken("Y72TU4D34RICQI3MFVU3SXZ7HZQRVNDC");
 
-    Map<String, UserDetail> r = authService.fetchUserDetail(Arrays.asList(new String[]{"filipeliu"}));
-    System.out.println(r);
+//    Map<String, UserDetail> r = authService.fetchUserDetail(Arrays.asList(new String[]{"filipeliu"}));
+//    System.out.println(r);
     
     
 //    token = user.getToken();//authService.validateToken(System.getenv("KB_AUTH_TOKEN"));
@@ -214,15 +248,43 @@ public class SBMLToolsServerTest {
   @Test
   public void test_filter_contigs_err1() throws Exception {
     /*
-        try {
-            impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
-                .withAssemblyInputRef("fake/fake/1"), token, getContext());
-            Assert.fail("Error is expected above");
-        } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("Parameter min_length is not set in input arguments",
-                    ex.getMessage());
-        }
+     * IntegrateModelParams [
+     * modelName=iJO1366, 
+     * workspaceName=filipeliu:narrative_1492697501369, 
+     * outputModelName=iJO1366, 
+     * templateId=gramneg, 
+     * genomeId=Shewanella_oneidensis_MR-1, 
+     * compartmentTranslation=[
+     * CompartmentMapping [kbaseCompartmentId=c, modelCompartmentId=[z0], additionalProperties={}], 
+     * CompartmentMapping [kbaseCompartmentId=e, modelCompartmentId=[z1], additionalProperties={}]], 
+     * biomassReactions=R_12DGR120tipp,R_12DGR140tipp, 
+     * compoundMappings=null, 
+     * geneMappings=null, createExtracellular=0, additionalProperties={}]
      */
+//    KBaseIOUtils.getFBAModel("iJO1366", "filipeliu:narrative_1492697501369", null, wsClient);
+    FBAModel fbaModel = KBaseIOUtils.getObject("iJO1366", "filipeliu:narrative_1492697501369", null, FBAModel.class, wsClient);
+    
+    Object o = KBaseIOUtils.getObject("Shewanella_oneidensis_MR-1", "filipeliu:narrative_1492697501369", null, wsClient);
+    System.out.println(fbaModel.getId());
+    Map<String, ?> om = (HashMap) o;
+    System.out.println(om.get("id"));
+    System.out.println(om.keySet());
+    for (String k : om.keySet()) {
+      Object pp = om.get(k);
+      if (pp instanceof String) {
+        System.out.println(k + "\t" + pp);
+      }
+    }
+    
+    KBaseIntegration integration = new KBaseIntegration();
+    integration.fbaModel = fbaModel;
+    integration.compartmentMapping.put("z0", "c");
+    integration.compartmentMapping.put("z1", "e");
+    integration.compartmentMapping.put("z2", "p");
+    integration.rename = "ModelSeed";
+    integration.integrate();
+    
+//    System.out.println(KBaseIOUtils.toJson(o));
   }
 
   @Test
