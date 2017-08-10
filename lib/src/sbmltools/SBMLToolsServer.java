@@ -278,6 +278,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         //BEGIN integrate_model
         
         System.out.println(config);
+        System.out.println(callbackURL);
         
         final String workspaceName = params.getWorkspaceName();
         
@@ -293,7 +294,8 @@ public class SBMLToolsServer extends JsonServerServlet {
 //        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
         returnVal = new KBaseModelIntegrationFacade(wspClient, 
                                                     dfuClient, 
-                                                    kbrClient).kbaseIntegrate(params, workspaceName);
+                                                    kbrClient,
+                                                    "/data/integration/export").kbaseIntegrate(params, workspaceName);
         
         //END integrate_model
         return returnVal;

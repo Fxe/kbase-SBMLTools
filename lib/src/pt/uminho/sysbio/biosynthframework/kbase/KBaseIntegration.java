@@ -25,7 +25,7 @@ public class KBaseIntegration {
   public String rename = null;
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
-  public BiodbService biodbService;
+  public KBaseBiodbContainer biodbContainer;
   
   public void renameComparmentEntry(String from, String to) {
     for (ModelCompartment kcmp : fbaModel.getModelcompartments()) {
@@ -112,13 +112,23 @@ public class KBaseIntegration {
       }
     }
     
-    if (fillMetadata && biodbService != null) {
+    if (fillMetadata && biodbContainer.biodbService != null) {
+      BiodbService biodbService = biodbContainer.biodbService;
       for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
         List<String> dbRefs = kcpd.getDblinks().get("ModelSeed");
         if (dbRefs != null && !dbRefs.isEmpty()) {
-          kcpd.setFormula("**");
+          String cpdEntry = dbRefs.iterator().next();
+          long cpdId = biodbService.getIdByEntryAndDatabase(cpdEntry, "ModelSeed");
+          String name = biodbService.getNamePropertyById(cpdId);
+          String formula = biodbService.getFormulaPropertyById(cpdId);
+          if (name != null) {
+            kcpd.setName(name);
+          }
+          if (formula != null) {
+            kcpd.setFormula(formula);
+          }
           kcpd.setCharge(-1.234);
-          kcpd.setName("!");
+          
           kcpd.setSmiles(":D");
 //          renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
         }

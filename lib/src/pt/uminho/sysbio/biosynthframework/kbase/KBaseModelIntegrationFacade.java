@@ -28,13 +28,16 @@ public class KBaseModelIntegrationFacade {
   private final WorkspaceClient wspClient;
   private final DataFileUtilClient dfuClient;
   private final KBaseReportClient kbrClient;
+  private final KBaseBiodbContainer biodbContainer;
   
   public KBaseModelIntegrationFacade(WorkspaceClient    wspClient,
                                      DataFileUtilClient dfuClient, 
-                                     KBaseReportClient  kbrClient) {
+                                     KBaseReportClient  kbrClient,
+                                     String biodbPath) {
     this.wspClient = wspClient;
     this.dfuClient = dfuClient;
     this.kbrClient = kbrClient;
+    this.biodbContainer = new KBaseBiodbContainer("");
   }
   
   public static Map<String, String> getCompartmentMapping(List<CompartmentMapping> compartmentMappings) {
@@ -66,11 +69,15 @@ public class KBaseModelIntegrationFacade {
     //get genome ref
     KBaseIOUtils.getObject(params.getGenomeId(), workspaceName, null, wspClient);
     
+    
+    
     //integrate
     KBaseIntegration integration = new KBaseIntegration();
     integration.fbaModel = fbaModel;
     integration.compartmentMapping = compartmentMapping;
     integration.rename = "ModelSeed";
+    integration.fillMetadata = true;
+    integration.biodbContainer = this.biodbContainer;
     
     integration.integrate();
     

@@ -21,7 +21,10 @@ import org.slf4j.LoggerFactory;
 import assemblyutil.AssemblyUtilClient;
 import assemblyutil.FastaAssemblyFile;
 import assemblyutil.SaveAssemblyParams;
+import fbatools.FbaToolsClient;
+import fbatools.RunFluxBalanceAnalysisParams;
 import kbasefba.FBAModel;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
@@ -278,10 +281,12 @@ public class SBMLToolsServerTest {
     
     KBaseIntegration integration = new KBaseIntegration();
     integration.fbaModel = fbaModel;
+    integration.biodbContainer = new KBaseBiodbContainer("/var/biobase/export");
     integration.compartmentMapping.put("z0", "c");
     integration.compartmentMapping.put("z1", "e");
     integration.compartmentMapping.put("z2", "p");
     integration.rename = "ModelSeed";
+    integration.fillMetadata = true;
     integration.integrate();
     
 //    System.out.println(KBaseIOUtils.toJson(o));
@@ -290,14 +295,47 @@ public class SBMLToolsServerTest {
   @Test
   public void test_filter_contigs_err2() throws Exception {
     /*
-        try {
-            impl.filterContigs(new FilterContigsParams().withWorkspaceName(getWsName())
-                .withAssemblyInputRef("fake/fake/1").withMinLength(-10L), token, getContext());
-            Assert.fail("Error is expected above");
-        } catch (IllegalArgumentException ex) {
-            Assert.assertEquals("min_length parameter cannot be negative (-10)", ex.getMessage());
-        }
+     * "fbamodel_id": "kb.iJO1366",
+        "media_id": "Sulfate-L-Arabitol",
+        "target_reaction": ["bio1"],
+        "fba_output_id": "kb.iJO1366.fba",
+        "fva": 1,
+        "minimize_flux": 1,
+        "simulate_ko": 0,
+        "feature_ko_list": [],
+        "reaction_ko_list": [""],
+        "custom_bound_list": [],
+        "media_supplement_list": [],
+        "expseries_id": None,
+        "expression_condition": [""],
+        "exp_threshold_percentile": 0.5,
+        "exp_threshold_margin": 0.1,
+        "activation_coefficient": 0.5,
+        "max_c_uptake": None,
+        "max_n_uptake": None,
+        "max_p_uptake": None,
+        "max_s_uptake": None,
+        "max_o_uptake": None
      */
+    System.out.println(callbackURL);
+    FbaToolsClient fbaClient = new FbaToolsClient(callbackURL, token);
+    RunFluxBalanceAnalysisParams params = new RunFluxBalanceAnalysisParams()
+        .withFbamodelId("iJO1366")
+        .withMediaId("Sulfate-L-Arabitol")
+        .withTargetReaction("bio1")
+        .withFbaOutputId("iJO1366.fba")
+        .withFva(1L)
+        .withMinimizeFlux(1L)
+        .withSimulateKo(0L)
+        .withFeatureKoList(new ArrayList<String> ())
+        .withReactionKoList(new ArrayList<String> ())
+        .withCustomBoundList(new ArrayList<String> ())
+        .withMediaSupplementList(null)
+        .withExpseriesId(null)
+        .withExpThresholdPercentile(0.6)
+        .withExpThresholdMargin(0.1)
+        .withActivationCoefficient(0.5);
+    fbaClient.runFluxBalanceAnalysis(params);
   }
 
   @Test
