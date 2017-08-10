@@ -8,6 +8,7 @@ import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
+import us.kbase.workspace.WorkspaceClient;
 
 //BEGIN_HEADER
 import java.io.File;
@@ -49,7 +50,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "032c47da3969637ffb44e4bec4b1bfce482a1034";
+    private static final String gitCommitHash = "26b2490696eebf29b0bca4a98aea5d528513f503";
 
     //BEGIN_CLASS_HEADER
     private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);

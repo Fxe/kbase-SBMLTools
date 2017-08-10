@@ -14,7 +14,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * <p>Original spec-file type: IntegrateModelParams</p>
- * 
+ * <pre>
+ * list<mapping<string, string>> compartment_translation;
+ * </pre>
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -34,158 +36,158 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class IntegrateModelParams {
 
     @JsonProperty("model_name")
-    private java.lang.String modelName;
+    private String modelName;
     @JsonProperty("workspace_name")
-    private java.lang.String workspaceName;
+    private String workspaceName;
     @JsonProperty("output_model_name")
-    private java.lang.String outputModelName;
+    private String outputModelName;
     @JsonProperty("template_id")
-    private java.lang.String templateId;
+    private String templateId;
     @JsonProperty("genome_id")
-    private java.lang.String genomeId;
+    private String genomeId;
     @JsonProperty("compartment_translation")
-    private List<Map<String, Object>> compartmentTranslation;
+    private List<CompartmentMapping> compartmentTranslation;
     @JsonProperty("biomass_reactions")
-    private java.lang.String biomassReactions;
+    private String biomassReactions;
     @JsonProperty("compound_mappings")
-    private java.lang.String compoundMappings;
+    private String compoundMappings;
     @JsonProperty("gene_mappings")
-    private java.lang.String geneMappings;
+    private String geneMappings;
     @JsonProperty("create_extracellular")
     private Long createExtracellular;
-    private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("model_name")
-    public java.lang.String getModelName() {
+    public String getModelName() {
         return modelName;
     }
 
     @JsonProperty("model_name")
-    public void setModelName(java.lang.String modelName) {
+    public void setModelName(String modelName) {
         this.modelName = modelName;
     }
 
-    public IntegrateModelParams withModelName(java.lang.String modelName) {
+    public IntegrateModelParams withModelName(String modelName) {
         this.modelName = modelName;
         return this;
     }
 
     @JsonProperty("workspace_name")
-    public java.lang.String getWorkspaceName() {
+    public String getWorkspaceName() {
         return workspaceName;
     }
 
     @JsonProperty("workspace_name")
-    public void setWorkspaceName(java.lang.String workspaceName) {
+    public void setWorkspaceName(String workspaceName) {
         this.workspaceName = workspaceName;
     }
 
-    public IntegrateModelParams withWorkspaceName(java.lang.String workspaceName) {
+    public IntegrateModelParams withWorkspaceName(String workspaceName) {
         this.workspaceName = workspaceName;
         return this;
     }
 
     @JsonProperty("output_model_name")
-    public java.lang.String getOutputModelName() {
+    public String getOutputModelName() {
         return outputModelName;
     }
 
     @JsonProperty("output_model_name")
-    public void setOutputModelName(java.lang.String outputModelName) {
+    public void setOutputModelName(String outputModelName) {
         this.outputModelName = outputModelName;
     }
 
-    public IntegrateModelParams withOutputModelName(java.lang.String outputModelName) {
+    public IntegrateModelParams withOutputModelName(String outputModelName) {
         this.outputModelName = outputModelName;
         return this;
     }
 
     @JsonProperty("template_id")
-    public java.lang.String getTemplateId() {
+    public String getTemplateId() {
         return templateId;
     }
 
     @JsonProperty("template_id")
-    public void setTemplateId(java.lang.String templateId) {
+    public void setTemplateId(String templateId) {
         this.templateId = templateId;
     }
 
-    public IntegrateModelParams withTemplateId(java.lang.String templateId) {
+    public IntegrateModelParams withTemplateId(String templateId) {
         this.templateId = templateId;
         return this;
     }
 
     @JsonProperty("genome_id")
-    public java.lang.String getGenomeId() {
+    public String getGenomeId() {
         return genomeId;
     }
 
     @JsonProperty("genome_id")
-    public void setGenomeId(java.lang.String genomeId) {
+    public void setGenomeId(String genomeId) {
         this.genomeId = genomeId;
     }
 
-    public IntegrateModelParams withGenomeId(java.lang.String genomeId) {
+    public IntegrateModelParams withGenomeId(String genomeId) {
         this.genomeId = genomeId;
         return this;
     }
 
     @JsonProperty("compartment_translation")
-    public List<Map<String, Object>> getCompartmentTranslation() {
+    public List<CompartmentMapping> getCompartmentTranslation() {
         return compartmentTranslation;
     }
 
     @JsonProperty("compartment_translation")
-    public void setCompartmentTranslation(List<Map<String, Object>> compartmentTranslation) {
+    public void setCompartmentTranslation(List<CompartmentMapping> compartmentTranslation) {
         this.compartmentTranslation = compartmentTranslation;
     }
 
-    public IntegrateModelParams withCompartmentTranslation(List<Map<String, Object>> compartmentTranslation) {
+    public IntegrateModelParams withCompartmentTranslation(List<CompartmentMapping> compartmentTranslation) {
         this.compartmentTranslation = compartmentTranslation;
         return this;
     }
 
     @JsonProperty("biomass_reactions")
-    public java.lang.String getBiomassReactions() {
+    public String getBiomassReactions() {
         return biomassReactions;
     }
 
     @JsonProperty("biomass_reactions")
-    public void setBiomassReactions(java.lang.String biomassReactions) {
+    public void setBiomassReactions(String biomassReactions) {
         this.biomassReactions = biomassReactions;
     }
 
-    public IntegrateModelParams withBiomassReactions(java.lang.String biomassReactions) {
+    public IntegrateModelParams withBiomassReactions(String biomassReactions) {
         this.biomassReactions = biomassReactions;
         return this;
     }
 
     @JsonProperty("compound_mappings")
-    public java.lang.String getCompoundMappings() {
+    public String getCompoundMappings() {
         return compoundMappings;
     }
 
     @JsonProperty("compound_mappings")
-    public void setCompoundMappings(java.lang.String compoundMappings) {
+    public void setCompoundMappings(String compoundMappings) {
         this.compoundMappings = compoundMappings;
     }
 
-    public IntegrateModelParams withCompoundMappings(java.lang.String compoundMappings) {
+    public IntegrateModelParams withCompoundMappings(String compoundMappings) {
         this.compoundMappings = compoundMappings;
         return this;
     }
 
     @JsonProperty("gene_mappings")
-    public java.lang.String getGeneMappings() {
+    public String getGeneMappings() {
         return geneMappings;
     }
 
     @JsonProperty("gene_mappings")
-    public void setGeneMappings(java.lang.String geneMappings) {
+    public void setGeneMappings(String geneMappings) {
         this.geneMappings = geneMappings;
     }
 
-    public IntegrateModelParams withGeneMappings(java.lang.String geneMappings) {
+    public IntegrateModelParams withGeneMappings(String geneMappings) {
         this.geneMappings = geneMappings;
         return this;
     }
@@ -206,17 +208,17 @@ public class IntegrateModelParams {
     }
 
     @JsonAnyGetter
-    public Map<java.lang.String, Object> getAdditionalProperties() {
+    public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
     }
 
     @JsonAnySetter
-    public void setAdditionalProperties(java.lang.String name, Object value) {
+    public void setAdditionalProperties(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
 
     @Override
-    public java.lang.String toString() {
+    public String toString() {
         return ((((((((((((((((((((((("IntegrateModelParams"+" [modelName=")+ modelName)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", templateId=")+ templateId)+", genomeId=")+ genomeId)+", compartmentTranslation=")+ compartmentTranslation)+", biomassReactions=")+ biomassReactions)+", compoundMappings=")+ compoundMappings)+", geneMappings=")+ geneMappings)+", createExtracellular=")+ createExtracellular)+", additionalProperties=")+ additionalProperties)+"]");
     }
 

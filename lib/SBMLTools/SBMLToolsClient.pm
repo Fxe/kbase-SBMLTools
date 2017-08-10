@@ -449,11 +449,14 @@ IntegrateModelParams is a reference to a hash where the following keys are defin
 	output_model_name has a value which is a string
 	template_id has a value which is a string
 	genome_id has a value which is a string
-	compartment_translation has a value which is a reference to a list where each element is a reference to a hash where the key is a string and the value is a string
+	compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
 	biomass_reactions has a value which is a string
 	compound_mappings has a value which is a string
 	gene_mappings has a value which is a string
 	create_extracellular has a value which is an int
+CompartmentMapping is a reference to a hash where the following keys are defined:
+	kbase_compartment_id has a value which is a string
+	model_compartment_id has a value which is a reference to a list where each element is a string
 SbmlImporterResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -473,11 +476,14 @@ IntegrateModelParams is a reference to a hash where the following keys are defin
 	output_model_name has a value which is a string
 	template_id has a value which is a string
 	genome_id has a value which is a string
-	compartment_translation has a value which is a reference to a list where each element is a reference to a hash where the key is a string and the value is a string
+	compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
 	biomass_reactions has a value which is a string
 	compound_mappings has a value which is a string
 	gene_mappings has a value which is a string
 	create_extracellular has a value which is an int
+CompartmentMapping is a reference to a hash where the following keys are defined:
+	kbase_compartment_id has a value which is a string
+	model_compartment_id has a value which is a reference to a list where each element is a string
 SbmlImporterResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -750,10 +756,47 @@ min_length has a value which is an int
 
 
 
+=head2 CompartmentMapping
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+kbase_compartment_id has a value which is a string
+model_compartment_id has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+kbase_compartment_id has a value which is a string
+model_compartment_id has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
 =head2 IntegrateModelParams
 
 =over 4
 
+
+
+=item Description
+
+list<mapping<string, string>> compartment_translation;
 
 
 =item Definition
@@ -767,7 +810,7 @@ workspace_name has a value which is a string
 output_model_name has a value which is a string
 template_id has a value which is a string
 genome_id has a value which is a string
-compartment_translation has a value which is a reference to a list where each element is a reference to a hash where the key is a string and the value is a string
+compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
 biomass_reactions has a value which is a string
 compound_mappings has a value which is a string
 gene_mappings has a value which is a string
@@ -785,7 +828,7 @@ workspace_name has a value which is a string
 output_model_name has a value which is a string
 template_id has a value which is a string
 genome_id has a value which is a string
-compartment_translation has a value which is a reference to a list where each element is a reference to a hash where the key is a string and the value is a string
+compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
 biomass_reactions has a value which is a string
 compound_mappings has a value which is a string
 gene_mappings has a value which is a string

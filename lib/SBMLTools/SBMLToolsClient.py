@@ -111,14 +111,17 @@ class SBMLTools(object):
 
     def integrate_model(self, params, context=None):
         """
-        :param params: instance of type "IntegrateModelParams" -> structure:
-           parameter "model_name" of String, parameter "workspace_name" of
-           String, parameter "output_model_name" of String, parameter
-           "template_id" of String, parameter "genome_id" of String,
-           parameter "compartment_translation" of list of mapping from String
-           to String, parameter "biomass_reactions" of String, parameter
-           "compound_mappings" of String, parameter "gene_mappings" of
-           String, parameter "create_extracellular" of Long
+        :param params: instance of type "IntegrateModelParams"
+           (list<mapping<string, string>> compartment_translation;) ->
+           structure: parameter "model_name" of String, parameter
+           "workspace_name" of String, parameter "output_model_name" of
+           String, parameter "template_id" of String, parameter "genome_id"
+           of String, parameter "compartment_translation" of list of type
+           "CompartmentMapping" -> structure: parameter
+           "kbase_compartment_id" of String, parameter "model_compartment_id"
+           of list of String, parameter "biomass_reactions" of String,
+           parameter "compound_mappings" of String, parameter "gene_mappings"
+           of String, parameter "create_extracellular" of Long
         :returns: instance of type "SbmlImporterResults" -> structure:
            parameter "report_name" of String, parameter "report_ref" of
            String, parameter "fbamodel_id" of String
