@@ -40,13 +40,13 @@ import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.UObject;
 import us.kbase.workspace.CreateWorkspaceParams;
 import us.kbase.workspace.ProvenanceAction;
-import us.kbase.workspace.WorkspaceClientI;
+import us.kbase.workspace.WorkspaceClient;
 import us.kbase.workspace.WorkspaceIdentity;
 
 public class SBMLToolsServerTest {
   private static AuthToken token = null;
   private static Map<String, String> config = null;
-  private static WorkspaceClientI wsClient = null;
+  private static WorkspaceClient wsClient = null;
   private static String wsName = null;
   private static SBMLToolsServer impl = null;
   private static Path scratch;
@@ -103,7 +103,7 @@ public class SBMLToolsServerTest {
 //    token = user.getToken();//authService.validateToken(System.getenv("KB_AUTH_TOKEN"));
     System.out.println(token);
     // Reading URLs from config
-    wsClient = new WorkspaceClientI(new URL(WORKSPACE_URL), token);
+    wsClient = new WorkspaceClient(new URL(WORKSPACE_URL), token);
     wsClient.setIsInsecureHttpConnectionAllowed(false); // do we need this?
     callbackURL = new URL(SDK_CALLBACK_URL);
     
