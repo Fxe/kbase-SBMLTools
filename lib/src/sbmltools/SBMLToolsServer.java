@@ -330,6 +330,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         searchParam.put("start", "0");
         searchParam.put("rows", "10");
         KBSolrUtilClient solrClient = new KBSolrUtilClient(callbackURL, authPart);
+        solrClient.setIsInsecureHttpConnectionAllowed(true);
         SearchSolrParams sparams = new SearchSolrParams()
             .withSearchCore("GenomeFeatures_prod")
             .withResultFormat("json")
