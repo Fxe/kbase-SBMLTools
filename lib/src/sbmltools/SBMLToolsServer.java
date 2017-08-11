@@ -109,7 +109,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         final String workspaceName = params.getWorkspaceName();
         final String assyRef = params.getAssemblyInputRef();
         ImportModelResult importModelResult = new ImportModelResult();
-        KBaseSbmlTools tools = new KBaseSbmlTools(workspaceName, authPart, callbackURL, jsonRpcContext);
+        KBaseSbmlTools tools = new KBaseSbmlTools(workspaceName, null);
         
         String newAssyRef = assyRef;
         
@@ -240,8 +240,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         
-        KBaseSbmlTools sbmlTools = new KBaseSbmlTools(
-            workspaceName, authPart, dfuClient, callbackURL, jsonRpcContext);
+        KBaseSbmlTools sbmlTools = new KBaseSbmlTools(workspaceName, dfuClient);
         
         ImportModelResult result = sbmlTools.importModel(params);
         List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);
@@ -324,27 +323,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         solrClient.setServiceVersion("beta");
         solrClient.setIsInsecureHttpConnectionAllowed(true);
         
-        logger.info("SOLR");
-        
-        Map<String, String> searchQuery = new HashMap<> ();
-        searchQuery.put("q", "ECW_m3682");
-        Map<String, String> searchParam = new HashMap<> ();
-        searchParam.put("fl", "*");
-        searchParam.put("start", "0");
-        searchParam.put("rows", "10");
-        
 
-        SearchSolrParams sparams = new SearchSolrParams()
-            .withSearchCore("GenomeFeatures_prod")
-            .withResultFormat("json")
-            .withSearchQuery(searchQuery)
-            .withSearchParam(searchParam)
-            .withGroupOption("");
-        
-        Map<String, String> a = solrClient.searchKbaseSolr(sparams);
-        System.out.println(a);
-        
-        logger.info("SOLDONE !");
         
 //        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
         returnVal = new KBaseModelIntegrationFacade(wspClient, 

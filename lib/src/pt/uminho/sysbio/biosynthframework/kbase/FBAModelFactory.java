@@ -215,8 +215,6 @@ public class FBAModelFactory {
           }
           return t.toString();
         }
-        System.out.println(t.getClass().getSimpleName());
-        // TODO Auto-generated method stub
         return t.toString();
       }
     };
@@ -241,11 +239,11 @@ public class FBAModelFactory {
     }
     
     if (fgpr != null && ngpr == null) {
-      System.out.println("F: " + fgpr);
+//      System.out.println("F: " + fgpr);
       return fgpr;
     }
     if (ngpr != null && fgpr == null) {
-      System.out.println("N: " + ngpr);
+//      System.out.println("N: " + ngpr);
       return ngpr;
     }
     
@@ -261,7 +259,7 @@ public class FBAModelFactory {
     FBAModel model = new FBAModel();
     model.setId(modelId);
     model.setName(modelName); //get from xml if exists
-    model.setGenomeRef("4345/2/1");
+    model.setGenomeRef("6464/242/1");
     model.setSource("External");
     model.setSourceId(modelId);
     model.setType("SBML Model");

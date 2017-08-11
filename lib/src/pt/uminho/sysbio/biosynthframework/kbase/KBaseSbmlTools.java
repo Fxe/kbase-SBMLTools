@@ -62,35 +62,16 @@ public class KBaseSbmlTools {
   public static String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
   public static String LOCAL_CACHE = "./cache";
   
-  public final AuthToken authPart;
-  public final RpcContext jsonRpcContext;
-  public final URL callbackURL;
+//  public final AuthToken authPart;
+//  public final RpcContext jsonRpcContext;
+//  public final URL callbackURL;
   public final String workspace;
   private final DataFileUtilClient dfuClient;
   public KBaseModelSeedIntegration modelSeedIntegration = null;
   
   
-  public KBaseSbmlTools(String workspace, AuthToken authPart, URL callbackURL, RpcContext jsonRpcContext) throws UnauthorizedException, IOException {
-    this.authPart = authPart;
-    this.jsonRpcContext = jsonRpcContext;
-    this.callbackURL = callbackURL;
-    this.workspace = workspace;
-    this.modelSeedIntegration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
-    if (callbackURL != null) {
-      this.dfuClient = new DataFileUtilClient(callbackURL, authPart);
-      dfuClient.setIsInsecureHttpConnectionAllowed(true);
-    } else {
-      logger.warn("missing callbackURL no saving");
-      this.dfuClient = null;
-    }
-  }
-  
-  public KBaseSbmlTools(String workspace, AuthToken authPart, 
-      final DataFileUtilClient dfuClient, 
-      URL callbackURL, RpcContext jsonRpcContext) throws UnauthorizedException, IOException {
-    this.authPart = authPart;
-    this.jsonRpcContext = jsonRpcContext;
-    this.callbackURL = callbackURL;
+  public KBaseSbmlTools(
+      String workspace, DataFileUtilClient dfuClient) throws UnauthorizedException, IOException {
     this.workspace = workspace;
     this.modelSeedIntegration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
     this.dfuClient = dfuClient;
@@ -187,6 +168,7 @@ public class KBaseSbmlTools {
       }
       file2 = new File(String.format("%s/%s", file.getAbsolutePath(), uuid));
       os = new FileOutputStream(file2);
+      logger.info("copy {} -> {}", urlString, file2.getAbsolutePath());
       IOUtils.copy(connection.getInputStream(), os);
     } catch (IOException e) {
       e.printStackTrace();
@@ -282,17 +264,6 @@ public class KBaseSbmlTools {
       result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
       spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
       result.message += String.format("\ni: %d", spiToModelSeedReference.size());
-//      FBAModel ikmodel = new FBAModelFactory()
-//          .withModelSeedReference(spiToModelSeedReference)
-//          .withBiomassIds(biomassIds)
-//          .withXmlSbmlModel(xmodel)
-//          .withModelId(imodelEntry)
-//          .build();
-      
-//      String imodelRef = this.saveDataSafe(imodelEntry, 
-//          KBaseType.FBAModel.value(), ikmodel, dfuClient);
-//      result.objects.add(new WorkspaceObject().withDescription("i model")
-//          .withRef(imodelRef));
     }
     //order matters ! fix this ... it is a factory ...
     model = new FBAModelFactory()
@@ -319,6 +290,8 @@ public class KBaseSbmlTools {
       if (fbaModelRef != null) {
         result.objects.add(new WorkspaceObject().withDescription(url)
             .withRef(fbaModelRef));
+      } else {
+        logger.warn("unable to save {}", modelId);
       }
     }
     
@@ -475,8 +448,8 @@ public class KBaseSbmlTools {
     //  Object o = null;
     //  String nameId = "";
     //  String dataType = "";
-    final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
-    dfuClient.setIsInsecureHttpConnectionAllowed(true);
+//    final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
+//    dfuClient.setIsInsecureHttpConnectionAllowed(true);
     long wsId = dfuClient.wsNameToId(workspace);
 
     SaveObjectsParams params = new SaveObjectsParams()

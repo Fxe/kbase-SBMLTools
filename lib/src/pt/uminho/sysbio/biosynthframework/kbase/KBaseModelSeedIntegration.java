@@ -49,6 +49,7 @@ public class KBaseModelSeedIntegration {
   public BiodbService biodbService = null;
   public SearchTable<MetaboliteMajorLabel, String> searchTable = null;
   public ConnectedComponents<String> ccs = null;
+  public MethoBuilder builder;
   
   public KBaseModelSeedIntegration(String biodbDataPath, String curationPath) {
     this.biodbDataPath = biodbDataPath;
@@ -71,45 +72,9 @@ public class KBaseModelSeedIntegration {
         .withDatabase(MetaboliteMajorLabel.LigandCompound)
         .build();
     ccs = KBaseModelSeedIntegration.loadConnectedComponents(curationFilePath);
+    
+    builder = new MethoBuilder(biodbService);
   }
-  
-//  public static Function<List<Set<String>>, List<Set<String>>> buildReduceBigg2(final Function<String, String> entryToUniversalEntry) {
-//    return new Function<List<Set<String>>, List<Set<String>>>() {
-//      
-//      @Override
-//      public List<Set<String>> apply(List<Set<String>> t) {
-////        Map<String, String> entryToAbbr = new HashMap<> ();
-//        Map<String, String> reduceToRealEntry = new HashMap<> ();
-//        List<Set<String>> reduceSets = new ArrayList<> ();
-//        for (Set<String> set : t) {
-//          Set<String> reducedSet = new HashSet<> ();
-//          for (String e : set) {
-//            String abbr = entryToUniversalEntry.apply(e);
-//            if (abbr != null) {
-//              reducedSet.add(abbr);
-//              reduceToRealEntry.put(abbr, e);
-//            } else {
-//              reducedSet.add(e);
-//            }
-//          }
-//          reduceSets.add(reducedSet);
-//        }
-//        
-//        List<Set<String>> result = new ArrayList<> ();
-//        for (Set<String> rset : reduceSets) {
-//          Set<String> bigg2set = new HashSet<> ();
-//          for (String e : rset) {
-//            String bigg2entry = reduceToRealEntry.get(e);
-//            bigg2set.add(bigg2entry);
-//          }
-//          result.add(bigg2set);
-//        }
-//        
-////        System.out.println(result);
-//        return result;
-//      }
-//    };
-//  }
   
   public static ConnectedComponents<String> loadConnectedComponents(String path) {
     ConnectedComponents<String> ccs = new ConnectedComponents<>();
@@ -132,7 +97,7 @@ public class KBaseModelSeedIntegration {
   
   public Map<String, Map<MetaboliteMajorLabel, String>> generateDatabaseReferences(XmlSbmlModel xmodel, String modelEntry) {
 
-    MethoBuilder builder = new MethoBuilder(biodbService);
+    
 //    BiodbService service = new File
     
     SpecieIntegrationFacade integration = new SpecieIntegrationFacade();

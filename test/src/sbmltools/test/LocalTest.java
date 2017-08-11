@@ -64,7 +64,7 @@ public class LocalTest {
 //    sbmlPath = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
 //    sbmlPath = "/var/biomodels/sbml/Ec_core_flux1.xml";
-    
+    sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
     
     String urlPath = sbmlPath;
     InputStream is = null; //file input stream
@@ -146,8 +146,10 @@ public class LocalTest {
 //    sbmlPath = "http://193.137.11.210/models/biomodels/joana/iSH335.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/sbml/Ec_core_flux1.xml";
     sbmlPath = "http://127.0.0.1/models/biomodels/sbml/hsa/MODEL1109130000.xml";
+    sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
+    
     try {
-      KBaseSbmlTools sbmlTools = new KBaseSbmlTools("", null, null, null);
+      KBaseSbmlTools sbmlTools = new KBaseSbmlTools(null, null);
       List<String> biomass = new ArrayList<> ();
       biomass.add("R_R07230_B");
       biomass.add("R_R374");
@@ -172,7 +174,7 @@ public class LocalTest {
     KBaseSbmlTools.CURATION_DATA = b;
     KBaseSbmlTools.LOCAL_CACHE = "/tmp/argonne";
     try {
-      KBaseSbmlTools sbmlTools = new KBaseSbmlTools("", null, null, null);
+      KBaseSbmlTools sbmlTools = new KBaseSbmlTools(null, null);
       SbmlImportParams params = new SbmlImportParams()
           .withAssemblyInputRef("111")
           .withMinLength(10L)
@@ -187,12 +189,12 @@ public class LocalTest {
 
   
   public static void main(String[] args) {
-//    integrationTest();
+    integrationTest();
 //    dataTest();
 //    test1();
     
-    System.out.println(KBaseUtils.getGenes("(a1 and a2 )"));
-    System.out.println(KBaseUtils.getGenes("(a1 a2 )"));
+//    System.out.println(KBaseUtils.getGenes("(a1 and a2 )"));
+//    System.out.println(KBaseUtils.getGenes("(a1 a2 )"));
     
 //    try {
 //      //iMO1056.xml
