@@ -28,6 +28,7 @@ public class KBaseGeneIntegration {
     this.solrClient  = solrClient;
   }
   
+
   public void aaa(FBAModel kmodel) {
     
     Set<String> genes = new HashSet<> ();
@@ -66,12 +67,14 @@ public class KBaseGeneIntegration {
       try {
         a = solrClient.searchKbaseSolr(sparams);
         System.out.println(a.keySet());
-        System.out.println(a.get("search_result"));
+        System.out.println(a.get("solr_search_result"));
         ObjectMapper om = new ObjectMapper();
         @SuppressWarnings("unchecked")
-        Map<String, Object> result = om.readValue(a.get("search_result"), HashMap.class);
+        Map<String, Object> result = om.readValue(a.get("solr_search_result"), HashMap.class);
         System.out.println(result.keySet());
-        System.out.println(result);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> solrResponse = (Map) result.get("response");
+        System.out.println(solrResponse.get("docs"));
       } catch (IOException | JsonClientException e) {
         e.printStackTrace();
       }
