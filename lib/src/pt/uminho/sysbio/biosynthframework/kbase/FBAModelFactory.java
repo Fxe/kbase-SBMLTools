@@ -305,7 +305,7 @@ public class FBAModelFactory {
               .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
           reagents.add(r);
         } else {
-          logger.info("deleted {}", species);
+          logger.trace("deleted {}", species);
         }
       }
 

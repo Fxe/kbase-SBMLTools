@@ -36,6 +36,7 @@ import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import kbsolrutil.KBSolrUtilClient;
 import kbsolrutil.SearchSolrParams;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
@@ -324,11 +325,13 @@ public class SBMLToolsServer extends JsonServerServlet {
         solrClient.setIsInsecureHttpConnectionAllowed(true);
         
 
+        KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(solrClient);
         
 //        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
         returnVal = new KBaseModelIntegrationFacade(wspClient, 
                                                     dfuClient, 
                                                     kbrClient,
+                                                    geneIntegration,
                                                     "/data/integration/export").kbaseIntegrate(params, workspaceName);
         
         //END integrate_model

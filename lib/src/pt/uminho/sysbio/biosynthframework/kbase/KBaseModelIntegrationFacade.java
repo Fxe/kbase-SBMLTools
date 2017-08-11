@@ -29,14 +29,17 @@ public class KBaseModelIntegrationFacade {
   private final DataFileUtilClient dfuClient;
   private final KBaseReportClient kbrClient;
   private final KBaseBiodbContainer biodbContainer;
+  private final KBaseGeneIntegration geneIntegration;
   
   public KBaseModelIntegrationFacade(WorkspaceClient    wspClient,
                                      DataFileUtilClient dfuClient, 
                                      KBaseReportClient  kbrClient,
+                                     KBaseGeneIntegration geneIntegration,
                                      String biodbPath) {
     this.wspClient = wspClient;
     this.dfuClient = dfuClient;
     this.kbrClient = kbrClient;
+    this.geneIntegration = geneIntegration;
     this.biodbContainer = new KBaseBiodbContainer(biodbPath);
   }
   
@@ -82,7 +85,9 @@ public class KBaseModelIntegrationFacade {
     integration.integrate();
     
     
-    
+    if (geneIntegration != null) {
+      geneIntegration.aaa(fbaModel);
+    }
     
     
     String ref = KBaseIOUtils.saveDataSafe(outputName, KBaseType.FBAModel, fbaModel, workspaceName, dfuClient);
