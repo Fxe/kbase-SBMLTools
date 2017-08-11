@@ -103,7 +103,7 @@ public class KBaseGeneIntegration {
     
     String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));
     logger.debug("Query: {}", query);
-    
+    tempResult += query + "\n";
     Map<String, String> searchQuery = new HashMap<> ();
     searchQuery.put("q", query);
     Map<String, String> searchParam = new HashMap<> ();
@@ -129,6 +129,7 @@ public class KBaseGeneIntegration {
         tempResult += process(genes, galiasIndex);
         
       } catch (IOException | JsonClientException e) {
+        tempResult += e.getMessage() + "\n";
         e.printStackTrace();
       }
     }

@@ -85,8 +85,9 @@ public class KBaseModelIntegrationFacade {
     integration.integrate();
     
     
+    String geneData = "";
     if (geneIntegration != null) {
-      geneIntegration.aaa(fbaModel);
+      geneData = geneIntegration.aaa(fbaModel);
     }
     
     
@@ -98,7 +99,7 @@ public class KBaseModelIntegrationFacade {
         new CreateParams().withWorkspaceName(workspaceName)
                           .withReport(new Report()
                               .withObjectsCreated(wsObjects)
-                              .withTextMessage(String.format("%s", params))));
+                              .withTextMessage(String.format("%s\n%s", params, geneData))));
     
     SbmlImporterResults returnVal = new SbmlImporterResults().withFbamodelId(outputName)
                                                              .withReportName(reportInfo.getName())
