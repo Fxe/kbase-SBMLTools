@@ -1,9 +1,11 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
@@ -30,8 +33,8 @@ public class KBaseGeneIntegration {
     this.solrClient  = solrClient;
   }
   
-  public Map<String, Set<KBaseSolrDocument>> processSolrOutput(String ojson) throws IOException {
-    Map<String, Set<KBaseSolrDocument>> galiasIndex = new HashMap<> ();
+  public Map<String, Set<KBaseSolrDocument>> processSolrOutput(String ojson, Map<String, Set<KBaseSolrDocument>> galiasIndex) throws IOException {
+//    Map<String, Set<KBaseSolrDocument>> galiasIndex = new HashMap<> ();
     ObjectMapper om = new ObjectMapper();
     KBaseSolrResponse solrResponse = om.readValue(ojson, KBaseSolrResponse.class);
     
@@ -95,44 +98,60 @@ public class KBaseGeneIntegration {
       String gpr = krxn.getImportedGpr();
       Set<String> grp = KBaseUtils.getGenes(gpr);
       if (gpr != null && !gpr.isEmpty()) {
-        System.out.println(gpr);
         genes.addAll(grp);
       }
     }
     
-    
-    String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));
-    logger.debug("Query: {}", query);
-    tempResult += query + "\n";
-    Map<String, String> searchQuery = new HashMap<> ();
-    searchQuery.put("q", query);
-    Map<String, String> searchParam = new HashMap<> ();
-    searchParam.put("fl", "aliases,scientific_name,functions,workspace_name,genome_id");
-    searchParam.put("start", "0");
-    searchParam.put("rows", String.format("%d", genes.size()));
+    //split querys
+    //
+    Map<String, Set<KBaseSolrDocument>> galiasIndex = new HashMap<> ();
+    if (solrClient != null) {
+      List<List<String>> chunks = Lists.partition(new ArrayList<String> (genes), 200);
+      for (List<String> chunk : chunks) {
+        String query = String.format("aliases:(%s)", StringUtils.join(chunk, " OR "));
+        logger.debug("Query: {}", query);
+        tempResult += query + "\n";
+
+        Map<String, String> searchQuery = new HashMap<> ();
+        searchQuery.put("q", query);
+        Map<String, String> searchParam = new HashMap<> ();
+        searchParam.put("fl", "aliases,scientific_name,functions,workspace_name,genome_id");
+        searchParam.put("start", "0");
+        searchParam.put("rows", "2000");
+
+        SearchSolrParams sparams = new SearchSolrParams()
+            .withSearchCore("GenomeFeatures_prod")
+            .withResultFormat("json")
+            .withSearchQuery(searchQuery)
+            .withSearchParam(searchParam)
+            .withGroupOption("");
+
+
+        Map<String, String> solrClientOutput;
+        try {
+          solrClientOutput = solrClient.searchKbaseSolr(sparams);
+          System.out.println(solrClientOutput.keySet());
+          String ojson = solrClientOutput.get("solr_search_result");
+          this.processSolrOutput(ojson, galiasIndex);
+          
+        } catch (IOException | JsonClientException e) {
+          tempResult += e.getMessage() + "\n";
+          e.printStackTrace();
+        }
+      }
+      
+      tempResult += process(genes, galiasIndex);
+    }
+//    String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));
+   
     
 
-    SearchSolrParams sparams = new SearchSolrParams()
-        .withSearchCore("GenomeFeatures_prod")
-        .withResultFormat("json")
-        .withSearchQuery(searchQuery)
-        .withSearchParam(searchParam)
-        .withGroupOption("");
+
     
-    if (solrClient != null) {
-      Map<String, String> solrClientOutput;
-      try {
-        solrClientOutput = solrClient.searchKbaseSolr(sparams);
-        System.out.println(solrClientOutput.keySet());
-        String ojson = solrClientOutput.get("solr_search_result");
-        Map<String, Set<KBaseSolrDocument>> galiasIndex = this.processSolrOutput(ojson);
-        tempResult += process(genes, galiasIndex);
-        
-      } catch (IOException | JsonClientException e) {
-        tempResult += e.getMessage() + "\n";
-        e.printStackTrace();
-      }
-    }
+
+
+    
+
 
     return tempResult;
   }

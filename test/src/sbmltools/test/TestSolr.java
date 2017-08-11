@@ -31,8 +31,8 @@ public class TestSolr {
         "b2277", "b2276", "b1852", "b1101", "b0474"};
     KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(null);
     try {
-      Map<String, Set<KBaseSolrDocument>> galiasIndex = 
-          geneIntegration.processSolrOutput(SOLR_ECOLI_OUTPUT);
+      Map<String, Set<KBaseSolrDocument>> galiasIndex = new HashMap<> (); 
+      geneIntegration.processSolrOutput(SOLR_ECOLI_OUTPUT, galiasIndex);
       Object r = geneIntegration.process(ECORE_GENES, galiasIndex);
       System.out.println(r);
     } catch (IOException e) {
