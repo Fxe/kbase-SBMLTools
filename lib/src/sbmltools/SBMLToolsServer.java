@@ -316,10 +316,13 @@ public class SBMLToolsServer extends JsonServerServlet {
         final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
         final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
+        final KBSolrUtilClient  solrClient = new KBSolrUtilClient(callbackURL, authPart);
 //        wspClient.setServiceVersion("beta");
         dfuClient.setIsInsecureHttpConnectionAllowed(true);
         kbrClient.setIsInsecureHttpConnectionAllowed(true);
         wspClient.setIsInsecureHttpConnectionAllowed(true);
+        solrClient.setServiceVersion("beta");
+        solrClient.setIsInsecureHttpConnectionAllowed(true);
         
         logger.info("SOLR");
         
@@ -329,9 +332,8 @@ public class SBMLToolsServer extends JsonServerServlet {
         searchParam.put("fl", "*");
         searchParam.put("start", "0");
         searchParam.put("rows", "10");
-        KBSolrUtilClient solrClient = new KBSolrUtilClient(callbackURL, authPart);
-        solrClient.setServiceVersion("beta");
-        solrClient.setIsInsecureHttpConnectionAllowed(true);
+        
+
         SearchSolrParams sparams = new SearchSolrParams()
             .withSearchCore("GenomeFeatures_prod")
             .withResultFormat("json")

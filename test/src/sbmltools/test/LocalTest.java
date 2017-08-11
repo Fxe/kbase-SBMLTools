@@ -20,6 +20,7 @@ import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools.ImportModelResult;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import sbmltools.SbmlImportParams;
@@ -183,18 +184,24 @@ public class LocalTest {
     }
   }
   
+
+  
   public static void main(String[] args) {
 //    integrationTest();
 //    dataTest();
-    test1();
-    try {
-      //iMO1056.xml
-      //
-      test(new FileInputStream("/var/biomodels/sbml/Ec_core_flux1.xml"));
-      test(new FileInputStream("/var/biomodels/joana/iMO1056.xml"));
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+//    test1();
+    
+    System.out.println(KBaseUtils.getGenes("(a1 and a2 )"));
+    System.out.println(KBaseUtils.getGenes("(a1 a2 )"));
+    
+//    try {
+//      //iMO1056.xml
+//      //
+//      test(new FileInputStream("/var/biomodels/sbml/Ec_core_flux1.xml"));
+//      test(new FileInputStream("/var/biomodels/joana/iMO1056.xml"));
+//    } catch (IOException e) {
+//      // TODO Auto-generated catch block
+//      e.printStackTrace();
+//    }
   }
 }
