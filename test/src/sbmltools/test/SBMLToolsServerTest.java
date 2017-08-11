@@ -25,9 +25,11 @@ import assemblyutil.SaveAssemblyParams;
 import fbatools.FbaToolsClient;
 import fbatools.RunFluxBalanceAnalysisParams;
 import kbasefba.FBAModel;
+import kbasefba.ModelReaction;
 import kbsolrutil.KBSolrUtilClient;
 import kbsolrutil.SearchSolrParams;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
@@ -388,20 +390,24 @@ public class SBMLToolsServerTest {
         "result_format": "json",
         "group_option": ""
      */
-    Map<String, String> searchQuery = new HashMap<> ();
-    searchQuery.put("q", "ECW_m3682");
-    Map<String, String> searchParam = new HashMap<> ();
-    searchParam.put("fl", "*");
-    searchParam.put("start", "0");
-    searchParam.put("rows", "10");
-    KBSolrUtilClient solrClient = new KBSolrUtilClient(callbackURL, token);
-    SearchSolrParams params = new SearchSolrParams()
-        .withSearchCore("GenomeFeatures_prod")
-        .withResultFormat("json")
-        .withSearchQuery(searchQuery)
-        .withSearchParam(searchParam)
-        .withGroupOption("");
+//    Map<String, String> searchQuery = new HashMap<> ();
+//    searchQuery.put("q", "ECW_m3682");
+//    Map<String, String> searchParam = new HashMap<> ();
+//    searchParam.put("fl", "*");
+//    searchParam.put("start", "0");
+//    searchParam.put("rows", "10");
+//    KBSolrUtilClient solrClient = new KBSolrUtilClient(callbackURL, token);
+//    SearchSolrParams params = new SearchSolrParams()
+//        .withSearchCore("GenomeFeatures_prod")
+//        .withResultFormat("json")
+//        .withSearchQuery(searchQuery)
+//        .withSearchParam(searchParam)
+//        .withGroupOption("");
+//    
+//    solrClient.searchKbaseSolr(params);
     
-    solrClient.searchKbaseSolr(params);
+    FBAModel fbaModel = KBaseIOUtils.getObject("kb.Ec_core_flux1", "filipeliu:narrative_1492697501369", null, FBAModel.class, wsClient);
+    KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(null);
+    geneIntegration.aaa(fbaModel);
   }
 }

@@ -33,7 +33,8 @@ public class KBaseGeneIntegration {
     for (ModelReaction krxn : kmodel.getModelreactions()) {
       String gpr = krxn.getImportedGpr();
       Set<String> grp = KBaseUtils.getGenes(gpr);
-      if (gpr != null) {
+      if (gpr != null && !gpr.isEmpty()) {
+        System.out.println(gpr);
         genes.addAll(grp);
       }
     }
@@ -58,13 +59,16 @@ public class KBaseGeneIntegration {
         .withSearchParam(searchParam)
         .withGroupOption("");
     
-    Map<String, String> a;
-    try {
-      a = solrClient.searchKbaseSolr(sparams);
-      System.out.println(a);
-    } catch (IOException | JsonClientException e) {
-      e.printStackTrace();
+    if (solrClient != null) {
+      Map<String, String> a;
+      try {
+        a = solrClient.searchKbaseSolr(sparams);
+        System.out.println(a);
+      } catch (IOException | JsonClientException e) {
+        e.printStackTrace();
+      }
     }
+
     
     
     logger.info("SOLDONE !");
