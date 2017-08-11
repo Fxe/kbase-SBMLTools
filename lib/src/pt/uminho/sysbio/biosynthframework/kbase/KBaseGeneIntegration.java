@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbsolrutil.KBSolrUtilClient;
@@ -47,9 +49,9 @@ public class KBaseGeneIntegration {
     Map<String, String> searchQuery = new HashMap<> ();
     searchQuery.put("q", query);
     Map<String, String> searchParam = new HashMap<> ();
-    searchParam.put("fl", "*");
+    searchParam.put("fl", "aliases,scientific_name,functions");
     searchParam.put("start", "0");
-    searchParam.put("rows", "10");
+    searchParam.put("rows", String.format("%d", genes.size()));
     
 
     SearchSolrParams sparams = new SearchSolrParams()
@@ -63,7 +65,13 @@ public class KBaseGeneIntegration {
       Map<String, String> a;
       try {
         a = solrClient.searchKbaseSolr(sparams);
-        System.out.println(a);
+        System.out.println(a.keySet());
+        System.out.println(a.get("search_result"));
+        ObjectMapper om = new ObjectMapper();
+        @SuppressWarnings("unchecked")
+        Map<String, Object> result = om.readValue(a.get("search_result"), HashMap.class);
+        System.out.println(result.keySet());
+        System.out.println(result);
       } catch (IOException | JsonClientException e) {
         e.printStackTrace();
       }
