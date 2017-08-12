@@ -1,6 +1,9 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -75,6 +78,30 @@ public class KBaseIOUtils {
       }
     }
     return ref;
+  }
+  
+  public static void copy(String src, String dst) {
+    File fsrc = new File(src);
+    File fdst = new File(dst);
+    
+    InputStream is = null;
+    OutputStream os = null;
+    try {
+      is = new FileInputStream(fsrc);
+      if (fdst.isDirectory()) {
+        os = new FileOutputStream(fdst.getAbsolutePath() + "/" + fsrc.getName());
+      } else if (!fdst.exists()) {
+        os = new FileOutputStream(fdst);
+      }
+      
+      IOUtils.copy(is, os);
+      
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      IOUtils.closeQuietly(is);
+      IOUtils.closeQuietly(os);
+    }
   }
 
   public static String saveData(String nameId, String dataType, Object o, String ws, final DataFileUtilClient dfuClient) throws Exception {

@@ -271,15 +271,20 @@ public class SBMLToolsServer extends JsonServerServlet {
           datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
         }
         
+
+        
         ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
+        
+        File f = new File("/kb/module/data/readerData.json");
+        if (f.exists()) {
+          logger.info("copy {} -> {}", f.getAbsolutePath(), reportFiles.baseFolder);
+          KBaseIOUtils.copy(f.getAbsolutePath(), reportFiles.baseFolder + "/");
+        }
         
         KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
         reporter.addWsObjects(objs);
         reporter.addHtmlFolderShock("importer report", "index.html", reportFiles.baseFolder, dfuClient);
-        File f = new File("/kb/module/data/readerData.json");
-        if (f.exists()) {
-          reporter.addFile("reader report", "readerData.json", f.getAbsolutePath());
-        }
+
         
         final ReportInfo report = reporter.extendedReport();
 //        final ReportInfo report = kbr.create(
@@ -297,9 +302,7 @@ public class SBMLToolsServer extends JsonServerServlet {
 //        System.out.println(result.modelName);
         if (objs.size() > 0) {
           //name instead of ref!
-//          returnVal.withFbamodelId("iBsu1103");
           returnVal.withFbamodelId(result.modelName);
-          
         }
         
         //END sbml_importer
