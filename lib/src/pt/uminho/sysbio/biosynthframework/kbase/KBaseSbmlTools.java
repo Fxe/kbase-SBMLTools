@@ -215,11 +215,19 @@ public class KBaseSbmlTools {
   }
   
   public FBAModel importModel(InputStream is, 
-      ImportModelResult result, String modelId, String url, boolean runIntegration, Collection<String> biomassIds, IntegrationByDatabase spiIntegrationAll) throws Exception {
+      ImportModelResult result, String modelId, String url, 
+      boolean runIntegration, Collection<String> biomassIds, 
+      IntegrationByDatabase spiIntegrationAll,
+      Map<String, Map<String, Object>> jsonResult) throws Exception {
     //import
     FBAModel model = null;
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
     XmlSbmlModel xmodel = reader.parse();
+    
+    if (modelId == null || modelId.trim().isEmpty()) {
+      modelId = getNameFromUrl(url);
+      logger.info("auto model id: {}", modelId);
+    }
     
     IntegrationReportResult reportData = new IntegrationReportResult();
     IntegrationReportResultAdapter resultAdapter = 
@@ -230,10 +238,7 @@ public class KBaseSbmlTools {
     resultAdapter.fillImportData(xmodel);
     spiIntegrationAll.modelTotal.put(modelId, xmodel.getSpecies().size());
     
-    if (modelId == null || modelId.trim().isEmpty()) {
-      modelId = getNameFromUrl(url);
-      logger.info("auto model id: {}", modelId);
-    }
+
     
     logger.info("validate");
     XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
@@ -297,6 +302,8 @@ public class KBaseSbmlTools {
       }
       result.message +="\n" + modelId + " biomass: " + biomass;
     }
+    
+    jsonResult.get("models").put(modelId, reportData);
     
 //    KBaseIOUtils.toJson(model);
     if (model != null) {
@@ -418,7 +425,7 @@ public class KBaseSbmlTools {
       for (String u : inputStreams.keySet()) {
         InputStream is = inputStreams.get(u);
         try {
-          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, spiIntegrationAll);
+          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, spiIntegrationAll, jsonResult);
           
           if (fbaModel != null) {
             KBaseObject o = new KBaseObject();
@@ -436,6 +443,9 @@ public class KBaseSbmlTools {
       }
       
       jsonResult.get("all").put("species", spiIntegrationAll);
+      System.out.println(jsonResult);
+      
+      System.out.println(spiIntegrationAll);
       
       String jsonData = KBaseIOUtils.toJson(jsonResult);
       logger.info("written {}", jsonData.length());

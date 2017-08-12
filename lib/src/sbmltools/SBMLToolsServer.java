@@ -238,8 +238,13 @@ public class SBMLToolsServer extends JsonServerServlet {
         final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
         final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
      // see note above about bad practice
-        dfuClient.setIsInsecureHttpConnectionAllowed(true);
-        kbrClient.setIsInsecureHttpConnectionAllowed(true);
+        if (dfuClient != null) {
+          dfuClient.setIsInsecureHttpConnectionAllowed(true);
+        }
+        if (kbrClient != null) {
+          kbrClient.setIsInsecureHttpConnectionAllowed(true);
+        }
+        
         
         KBaseSbmlTools sbmlTools = new KBaseSbmlTools(workspaceName, dfuClient);
         

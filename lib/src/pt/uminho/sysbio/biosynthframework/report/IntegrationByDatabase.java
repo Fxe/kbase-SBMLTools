@@ -68,4 +68,11 @@ public class IntegrationByDatabase {
       }
     }
   }
+  
+  @Override
+  public String toString() {
+    return String.format(
+        "modelTotal: %s, databases: %s, dataAbsolute: %s, values: %s, valuesAbsolute: %s", 
+        modelTotal, databases, dataAbsolute, values, valuesAbsolute);
+  }
 }
