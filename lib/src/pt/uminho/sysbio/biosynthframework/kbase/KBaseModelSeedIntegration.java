@@ -175,8 +175,9 @@ public class KBaseModelSeedIntegration {
 //        });
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
-    
+    imap = integration.clean;
     if (resultAdapter != null) {
+//      System.out.println(modelEntry + " -> " + integration.clean.size());
       resultAdapter.fillIntegrationData(integration);
     }
     

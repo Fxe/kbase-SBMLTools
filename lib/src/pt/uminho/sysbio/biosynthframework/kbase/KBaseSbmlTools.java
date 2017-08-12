@@ -275,6 +275,7 @@ public class KBaseSbmlTools {
 //      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
       Map<String, Map<MetaboliteMajorLabel, String>> imap = 
           modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter);
+      spiIntegrationAll.addIntegrationMap(modelId, imap);
       for (String spi : imap.keySet()) {
         for (MetaboliteMajorLabel db : imap.get(spi).keySet()) {
           integration.addIntegration(spi, db.toString(), imap.get(spi).get(db));
@@ -443,9 +444,6 @@ public class KBaseSbmlTools {
       }
       
       jsonResult.get("all").put("species", spiIntegrationAll);
-      System.out.println(jsonResult);
-      
-      System.out.println(spiIntegrationAll);
       
       String jsonData = KBaseIOUtils.toJson(jsonResult);
       logger.info("written {}", jsonData.length());
