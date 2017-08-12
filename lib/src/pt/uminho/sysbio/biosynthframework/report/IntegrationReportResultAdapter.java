@@ -1,6 +1,5 @@
 package pt.uminho.sysbio.biosynthframework.report;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,9 +65,9 @@ public class IntegrationReportResultAdapter {
 //    List<Object> databases = new ArrayList<> ();
 //    this.report.integrationData.put("dbs", databases);
     
-//    if (integrationFacade.clean != null) {
-//      this.report.integrationData.put("species", new HashMap<> (integrationFacade.clean));
-//    }
+    if (integrationFacade.clean != null) {
+      this.report.integrationData.put("species", new HashMap<> (integrationFacade.clean));
+    }
     
     this.report.integrationData.put("reactions", new HashMap<> ());
     

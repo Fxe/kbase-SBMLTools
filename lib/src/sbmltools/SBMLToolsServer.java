@@ -271,6 +271,11 @@ public class SBMLToolsServer extends JsonServerServlet {
         KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
         reporter.addWsObjects(objs);
         reporter.addHtmlFolderShock("importer report", "index.html", reportFiles.baseFolder, dfuClient);
+        File f = new File("/kb/module/data/readerData.json");
+        if (f.exists()) {
+          reporter.addFile("reader report", "readerData.json", f.getAbsolutePath());
+        }
+        
         final ReportInfo report = reporter.extendedReport();
 //        final ReportInfo report = kbr.create(
 //            new CreateParams().withWorkspaceName(workspaceName)
