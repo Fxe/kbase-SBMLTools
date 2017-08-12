@@ -139,7 +139,10 @@ public class KBaseGeneIntegration {
           e.printStackTrace();
         }
       }
-      
+      //frole cover
+      //f roles -> 
+      //non role but in model
+      //missing reactions
       tempResult += process(genes, galiasIndex);
     }
 //    String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));

@@ -31,8 +31,11 @@ import pt.uminho.sysbio.biosynthframework.integration.model.SearchTableFactory;
 import pt.uminho.sysbio.biosynthframework.integration.model.SpecieIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.integration.model.TokenSwapLookupMethod;
 import pt.uminho.sysbio.biosynthframework.integration.model.TrieIdBaseIntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.io.BiodbServiceFactory;
 import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
+import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
+import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -95,7 +98,8 @@ public class KBaseModelSeedIntegration {
     return ccs;
   }
   
-  public Map<String, Map<MetaboliteMajorLabel, String>> generateDatabaseReferences(XmlSbmlModel xmodel, String modelEntry) {
+  public Map<String, Map<MetaboliteMajorLabel, String>> generateDatabaseReferences(
+      XmlSbmlModel xmodel, String modelEntry, IntegrationReportResultAdapter resultAdapter) {
 
     
 //    BiodbService service = new File
@@ -138,15 +142,17 @@ public class KBaseModelSeedIntegration {
     IdBaseIntegrationEngine be1 = builder.buildIdBaseIntegrationEngine();
     TrieIdBaseIntegrationEngine be2 = builder.buildTrieIdBaseIntegrationEngine();
     NameBaseIntegrationEngine be3 = builder.buildNameBaseIntegrationEngine();
+    XmlReferencesBaseIntegrationEngine be0 = builder.buildXmlReferencesBaseIntegrationEngine();
     
     IntegrationEngine ie1 = new ConnectedComponentsIntegrationEngine(ccs);
     IntegrationEngine ie2 = new FirstDegreeReferences(biodbService);
     
     be3.spiEntryToName = spiEntryToName;
     be1.patterns = integration.getPatterns();
-    integration.baseEngines.add(be1);
-    integration.baseEngines.add(be2);
-    integration.baseEngines.add(be3);
+    integration.baseEngines.put("refs", be0);
+    integration.baseEngines.put("pattern", be1);
+    integration.baseEngines.put("trie", be2);
+    integration.baseEngines.put("name", be3);
     List<IntegrationEngine> l1 = new ArrayList<> ();
     l1.add(ie1);
     l1.add(ie2);
@@ -169,6 +175,10 @@ public class KBaseModelSeedIntegration {
 //        });
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
+    
+    if (resultAdapter != null) {
+      resultAdapter.fillIntegrationData(integration);
+    }
     
     for (String id : imap.keySet()) {
       String ref = imap.get(id).get(MetaboliteMajorLabel.ModelSeed);

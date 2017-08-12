@@ -19,6 +19,8 @@ import pt.uminho.sysbio.biosynthframework.integration.model.SearchTable;
 import pt.uminho.sysbio.biosynthframework.integration.model.SearchTableFactory;
 import pt.uminho.sysbio.biosynthframework.integration.model.TokenSwapLookupMethod;
 import pt.uminho.sysbio.biosynthframework.integration.model.TrieIdBaseIntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseIntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 //import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseIntegrationEngine;
 //import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -36,35 +38,35 @@ public class MethoBuilder {
     this.biodbService = biodbService;
   }
   
-//  public static void aaa(SbmlNotesParser parser) {
-//    parser.fields.put("INCHI:", "inchi");
-//    parser.fields.put("EHMN_ABBREVIATION:", "trash");
-//    parser.fields.put("HEPATONET_1.0_ABBREVIATION:", "trash");
-//    parser.fields.put("DRUGBANK_INDUCER:", "trash");
-//    parser.fields.put("DRUGBANK_SUBSTRATE:", "trash");
-//    parser.fields.put("DRUGBANK_UNKNOWN:", "trash");
-//    parser.fields.put("DRUGBANK_COFACTOR:", "trash");
-//    parser.fields.put("DRUGBANK_LIGAND:", "trash");
-//    parser.fields.put("DRUGBANK_BINDER:", "trash");
-//    parser.fields.put("DRUGBANK_INHIBITOR:", "trash");
-//    parser.fields.put("DRUGBANK_ACTIVATOR:", "trash");
-//    parser.fields.put("DRUGBANK_AGONIST:", "trash");
-//    parser.fields.put("DRUGBANK_ANTAGONIST:", "trash");
-//    parser.fields.put("DRUGBANK_OTHER:", "trash");
-//    parser.fields.put("DRUGBANK_PRODUCT_OF:", "trash");
-//    parser.fields.put("DRUGBANK_OTHER_UNKNOWN:", "trash");
-//    parser.fields.put("DRUGBANK_POSITIVE_ALLOSTERIC_MODULATOR:", "trash");
-//    parser.fields.put("DRUGBANK_POTENTIATOR:", "trash");
-//    parser.fields.put("DRUGBANK_CONVERSION_INHIBITOR:", "trash");
-//    
-//    
-//    parser.fields.put("GENE:", "trash");
-//    parser.fields.put("SHORT NAME:", "trash");
-//    
-//    parser.fields.put("KEGG:", "kegg");
-//    parser.fields.put("BIOCYC:", "metacyc");
-//    parser.fields.put("CARBONS:", "trash");
-//  }
+  public static void aaa(SbmlNotesParser parser) {
+    parser.fields.put("INCHI:", "inchi");
+    parser.fields.put("EHMN_ABBREVIATION:", "trash");
+    parser.fields.put("HEPATONET_1.0_ABBREVIATION:", "trash");
+    parser.fields.put("DRUGBANK_INDUCER:", "trash");
+    parser.fields.put("DRUGBANK_SUBSTRATE:", "trash");
+    parser.fields.put("DRUGBANK_UNKNOWN:", "trash");
+    parser.fields.put("DRUGBANK_COFACTOR:", "trash");
+    parser.fields.put("DRUGBANK_LIGAND:", "trash");
+    parser.fields.put("DRUGBANK_BINDER:", "trash");
+    parser.fields.put("DRUGBANK_INHIBITOR:", "trash");
+    parser.fields.put("DRUGBANK_ACTIVATOR:", "trash");
+    parser.fields.put("DRUGBANK_AGONIST:", "trash");
+    parser.fields.put("DRUGBANK_ANTAGONIST:", "trash");
+    parser.fields.put("DRUGBANK_OTHER:", "trash");
+    parser.fields.put("DRUGBANK_PRODUCT_OF:", "trash");
+    parser.fields.put("DRUGBANK_OTHER_UNKNOWN:", "trash");
+    parser.fields.put("DRUGBANK_POSITIVE_ALLOSTERIC_MODULATOR:", "trash");
+    parser.fields.put("DRUGBANK_POTENTIATOR:", "trash");
+    parser.fields.put("DRUGBANK_CONVERSION_INHIBITOR:", "trash");
+    
+    
+    parser.fields.put("GENE:", "trash");
+    parser.fields.put("SHORT NAME:", "trash");
+    
+    parser.fields.put("KEGG:", "kegg");
+    parser.fields.put("BIOCYC:", "metacyc");
+    parser.fields.put("CARBONS:", "trash");
+  }
   
   public void aa() {
     
@@ -188,5 +190,10 @@ public class MethoBuilder {
     return e;
   }
   
-  
+  public XmlReferencesBaseIntegrationEngine buildXmlReferencesBaseIntegrationEngine() {
+    SbmlNotesParser notesParser = new SbmlNotesParser();
+    aaa(notesParser);
+    XmlReferencesBaseIntegrationEngine e = new XmlReferencesBaseIntegrationEngine(notesParser);
+    return e;
+  }
 }

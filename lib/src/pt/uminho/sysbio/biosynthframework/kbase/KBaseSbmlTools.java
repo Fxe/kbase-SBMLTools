@@ -14,6 +14,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -39,6 +40,9 @@ import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils.KBaseObject;
+import pt.uminho.sysbio.biosynthframework.report.IntegrationByDatabase;
+import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResult;
+import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
@@ -211,11 +215,20 @@ public class KBaseSbmlTools {
   }
   
   public FBAModel importModel(InputStream is, 
-      ImportModelResult result, String modelId, String url, boolean runIntegration, Collection<String> biomassIds) throws Exception {
+      ImportModelResult result, String modelId, String url, boolean runIntegration, Collection<String> biomassIds, IntegrationByDatabase spiIntegrationAll) throws Exception {
     //import
     FBAModel model = null;
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
     XmlSbmlModel xmodel = reader.parse();
+    
+    IntegrationReportResult reportData = new IntegrationReportResult();
+    IntegrationReportResultAdapter resultAdapter = 
+        new IntegrationReportResultAdapter(reportData);
+    reportData.name = modelId;
+    reportData.epochTime = System.currentTimeMillis();
+    reportData.date = new GregorianCalendar().getTime().toString();
+    resultAdapter.fillImportData(xmodel);
+    spiIntegrationAll.modelTotal.put(modelId, xmodel.getSpecies().size());
     
     if (modelId == null || modelId.trim().isEmpty()) {
       modelId = getNameFromUrl(url);
@@ -227,6 +240,8 @@ public class KBaseSbmlTools {
     xrxnAttributes(validator);
     
     List<XmlMessage> msgs = validator.validate();
+    resultAdapter.fillValidationData(msgs);
+    
     result.message += "\n" + String.format("Species %d, Reactions %s, %s", 
         xmodel.getSpecies().size(), 
         xmodel.getReactions().size(), 
@@ -254,7 +269,7 @@ public class KBaseSbmlTools {
 //      String imodelEntry = "i" + modelId;
 //      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
       Map<String, Map<MetaboliteMajorLabel, String>> imap = 
-          modelSeedIntegration.generateDatabaseReferences(xmodel, modelId);
+          modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter);
       for (String spi : imap.keySet()) {
         for (MetaboliteMajorLabel db : imap.get(spi).keySet()) {
           integration.addIntegration(spi, db.toString(), imap.get(spi).get(db));
@@ -380,10 +395,30 @@ public class KBaseSbmlTools {
         inputStreams.put(params.getSbmlUrl(), new FileInputStream(localPath));
       }
       
+      Map<String, Map<String, Object>> jsonResult = new HashMap<> ();
+      jsonResult.put("models", new HashMap<String, Object> ());
+      jsonResult.put("all", new HashMap<String, Object> ());
+      IntegrationByDatabase spiIntegrationAll = new IntegrationByDatabase();
+      List<MetaboliteMajorLabel> dbs = new ArrayList<> ();
+      dbs.add(MetaboliteMajorLabel.BiGG);
+      dbs.add(MetaboliteMajorLabel.BiGG2);
+      dbs.add(MetaboliteMajorLabel.LigandCompound);
+      dbs.add(MetaboliteMajorLabel.LigandGlycan);
+      dbs.add(MetaboliteMajorLabel.LigandDrug);
+      dbs.add(MetaboliteMajorLabel.Seed);
+      dbs.add(MetaboliteMajorLabel.ModelSeed);
+      dbs.add(MetaboliteMajorLabel.LipidMAPS);
+      dbs.add(MetaboliteMajorLabel.ChEBI);
+//      dbs.add(MetaboliteMajorLabel.)~
+      
+      for (MetaboliteMajorLabel db : dbs) {
+        spiIntegrationAll.databases.add(db.toString());
+      }
+      
       for (String u : inputStreams.keySet()) {
         InputStream is = inputStreams.get(u);
         try {
-          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass);
+          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, spiIntegrationAll);
           
           if (fbaModel != null) {
             KBaseObject o = new KBaseObject();
@@ -399,7 +434,22 @@ public class KBaseSbmlTools {
           result.message += "\nERROR: " + u + " " + e.getMessage();
         }
       }
-
+      
+      jsonResult.get("all").put("species", spiIntegrationAll);
+      
+      String jsonData = KBaseIOUtils.toJson(jsonResult);
+      logger.info("written {}", jsonData.length());
+      
+      OutputStream os = null;
+      try {
+        os = new FileOutputStream("/kb/module/data/readerData.json");
+        IOUtils.write(jsonData, os);
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        IOUtils.closeQuietly(os);
+      }
+      
     } catch (Exception e) {
       e.printStackTrace();
       logger.error("{}", e.getMessage());
