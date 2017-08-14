@@ -110,31 +110,34 @@ public class KBaseModelSeedIntegration {
     
     BMap<String, String> spiEntryToName = new BHashMap<> ();
     Set<String> spiEntrySet = new HashSet<> ();
+    BoundaryConflictResolver r1 = new BoundaryConflictResolver();
+    ModelSeedMultiMatchResolver r2 = new ModelSeedMultiMatchResolver();
+    BiGG2AliasMultiMatchResolver r3 = new BiGG2AliasMultiMatchResolver(biodbService);
+    integration.matchResolver.put(MetaboliteMajorLabel.ModelSeed, r2);
+    integration.matchResolver.put(MetaboliteMajorLabel.Seed, r2);
+    integration.matchResolver.put(MetaboliteMajorLabel.BiGG2, r3);
+    integration.specieConflictResolve = r1;
+    
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
-      String id = xspi.getAttributes().get("id");
+//      String id = xspi.getAttributes().get("id");
+      String sname = xspi.getAttributes().get("name");
+      String spiEntry = xspi.getAttributes().get("id");
       String cmpId = xspi.getAttributes().get("compartment");
       String bcondition = xspi.getAttributes().get("boundaryCondition");
-      BoundaryConflictResolver r1 = new BoundaryConflictResolver();
+      
       try {
-        if (id != null && bcondition != null && Boolean.parseBoolean(bcondition)) {
-          r1.boundary.add(id);
+        if (spiEntry != null && bcondition != null && Boolean.parseBoolean(bcondition)) {
+          r1.boundary.add(spiEntry);
         }
       } catch (Exception e) {
         logger.warn("{}", e.getMessage());
       }
-      integration.specieConflictResolve = r1;
-      ModelSeedMultiMatchResolver r2 = new ModelSeedMultiMatchResolver();
-      BiGG2AliasMultiMatchResolver r3 = new BiGG2AliasMultiMatchResolver(biodbService);
-      integration.matchResolver.put(MetaboliteMajorLabel.ModelSeed, r2);
-      integration.matchResolver.put(MetaboliteMajorLabel.Seed, r2);
-      integration.matchResolver.put(MetaboliteMajorLabel.BiGG2, r3);
-      integration.addSpecie(id, cmpId);
+      integration.addSpecie(spiEntry, cmpId);
 //      integration.patterns.put(, null);
 //      integration.spiToCompartment.put(
 //          xspi.getAttributes().get("id"), 
 //          xspi.getAttributes().get("compartment"));
-      String sname = xspi.getAttributes().get("name");
-      String spiEntry = xspi.getAttributes().get("id");
+
       if (spiEntry != null && !spiEntry.trim().isEmpty()) {
         spiEntrySet.add(spiEntry);
       }
@@ -195,12 +198,12 @@ public class KBaseModelSeedIntegration {
 //          }
 //        });
 //    IntegrationUtils.m
-    System.out.println(IntegrationMapUtils.merge(integration.isets));
+//    System.out.println(IntegrationMapUtils.merge(integration.isets));
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
-    System.out.println(imap);
+//    System.out.println(imap);
     imap = integration.clean;
-    System.out.println(imap);
+//    System.out.println(imap);
     if (resultAdapter != null) {
 //      System.out.println(modelEntry + " -> " + integration.clean.size());
       resultAdapter.fillIntegrationData(integration);
