@@ -267,7 +267,7 @@ public class SBMLToolsServerTest {
   }
 
   @Test
-  public void test_filter_contigs_err1() throws Exception {
+  public void test_get_model_and_integrate() throws Exception {
     /*
      * IntegrateModelParams [
      * modelName=iJO1366, 
@@ -284,19 +284,19 @@ public class SBMLToolsServerTest {
      */
 //    KBaseIOUtils.getFBAModel("iJO1366", "filipeliu:narrative_1492697501369", null, wsClient);
     
-    FBAModel fbaModel = KBaseIOUtils.getObject("iJO1366", "filipeliu:narrative_1492697501369", null, FBAModel.class, wsClient);
+    FBAModel fbaModel = KBaseIOUtils.getObject("Ec_core_flux1", "filipeliu:narrative_1492697501369", null, FBAModel.class, wsClient);
     
-    Object o = KBaseIOUtils.getObject("Shewanella_oneidensis_MR-1", "filipeliu:narrative_1492697501369", null, wsClient);
-    System.out.println(fbaModel.getId());
-    Map<String, ?> om = (HashMap) o;
-    System.out.println(om.get("id"));
-    System.out.println(om.keySet());
-    for (String k : om.keySet()) {
-      Object pp = om.get(k);
-      if (pp instanceof String) {
-        System.out.println(k + "\t" + pp);
-      }
-    }
+//    Object o = KBaseIOUtils.getObject("Shewanella_oneidensis_MR-1", "filipeliu:narrative_1492697501369", null, wsClient);
+//    System.out.println(fbaModel.getId());
+//    Map<String, ?> om = (HashMap) o;
+//    System.out.println(om.get("id"));
+//    System.out.println(om.keySet());
+//    for (String k : om.keySet()) {
+//      Object pp = om.get(k);
+//      if (pp instanceof String) {
+//        System.out.println(k + "\t" + pp);
+//      }
+//    }
     
     KBaseIntegration integration = new KBaseIntegration();
     integration.fbaModel = fbaModel;
@@ -307,6 +307,9 @@ public class SBMLToolsServerTest {
     integration.rename = "ModelSeed";
     integration.fillMetadata = true;
     integration.integrate();
+    
+    System.out.println(KBaseIOUtils.toJson(integration.fbaModel));
+    
     
 //    System.out.println(KBaseIOUtils.toJson(o));
   }

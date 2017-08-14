@@ -118,12 +118,14 @@ public class KBaseIntegration {
         List<String> dbRefs = kcpd.getDblinks().get("ModelSeed");
         if (dbRefs != null && !dbRefs.isEmpty()) {
           String cpdEntry = dbRefs.iterator().next();
+          System.out.println(cpdEntry);
           Long cpdId = biodbService.getIdByEntryAndDatabase(cpdEntry, "ModelSeed");
           if (cpdId != null) {
             String name = biodbService.getNamePropertyById(cpdId);
             String formula = biodbService.getEntityProperty(cpdId, "formula");
             String smiles = biodbService.getEntityProperty(cpdId, "smiles");
             String inchikey = biodbService.getEntityProperty(cpdId, "inchikey");
+            System.out.println(name + " " + formula + " " + smiles);
             if (name != null) {
               kcpd.setName(name);
             }
