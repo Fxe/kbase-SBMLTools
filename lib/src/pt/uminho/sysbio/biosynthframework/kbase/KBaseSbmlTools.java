@@ -41,6 +41,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils.KBaseObject;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationByDatabase;
+import pt.uminho.sysbio.biosynthframework.report.IntegrationReport;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResult;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
@@ -65,6 +66,7 @@ public class KBaseSbmlTools {
   public static String DATA_EXPORT_PATH = "/data/integration/export";
   public static String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
   public static String LOCAL_CACHE = "./cache";
+  public static String REPORT_OUTPUT_PATH = "/kb/module/data/readerData.json";
   
 //  public final AuthToken authPart;
 //  public final RpcContext jsonRpcContext;
@@ -218,7 +220,7 @@ public class KBaseSbmlTools {
       ImportModelResult result, String modelId, String url, 
       boolean runIntegration, Collection<String> biomassIds, 
       IntegrationByDatabase spiIntegrationAll,
-      Map<String, Map<String, Object>> jsonResult) throws Exception {
+      IntegrationReport jsonResult) throws Exception {
     //import
     FBAModel model = null;
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
@@ -304,7 +306,7 @@ public class KBaseSbmlTools {
       result.message +="\n" + modelId + " biomass: " + biomass;
     }
     
-    jsonResult.get("models").put(modelId, reportData);
+    jsonResult.addIntegrationReport(modelId, reportData);
     
 //    KBaseIOUtils.toJson(model);
     if (model != null) {
@@ -403,9 +405,11 @@ public class KBaseSbmlTools {
         inputStreams.put(params.getSbmlUrl(), new FileInputStream(localPath));
       }
       
-      Map<String, Map<String, Object>> jsonResult = new HashMap<> ();
-      jsonResult.put("models", new HashMap<String, Object> ());
-      jsonResult.put("all", new HashMap<String, Object> ());
+      IntegrationReport jsonResult = new IntegrationReport();
+      
+//      Map<String, Map<String, Object>> jsonResult = new HashMap<> ();
+//      jsonResult.put("models", new HashMap<String, Object> ());
+//      jsonResult.put("all", new HashMap<String, Object> ());
       IntegrationByDatabase spiIntegrationAll = new IntegrationByDatabase();
       List<MetaboliteMajorLabel> dbs = new ArrayList<> ();
       dbs.add(MetaboliteMajorLabel.BiGG);
@@ -417,6 +421,7 @@ public class KBaseSbmlTools {
       dbs.add(MetaboliteMajorLabel.ModelSeed);
       dbs.add(MetaboliteMajorLabel.LipidMAPS);
       dbs.add(MetaboliteMajorLabel.ChEBI);
+      dbs.add(MetaboliteMajorLabel.MetaCyc);
 //      dbs.add(MetaboliteMajorLabel.)~
       
       for (MetaboliteMajorLabel db : dbs) {
@@ -443,14 +448,15 @@ public class KBaseSbmlTools {
         }
       }
       
-      jsonResult.get("all").put("species", spiIntegrationAll);
+      jsonResult.setSpeciesIntegrationSummary(spiIntegrationAll);
+//      jsonResult.get("all").put("species", spiIntegrationAll);
       
-      String jsonData = KBaseIOUtils.toJson(jsonResult);
+      String jsonData = KBaseIOUtils.toJson(jsonResult, true);
       logger.info("written {}", jsonData.length());
       
       OutputStream os = null;
       try {
-        os = new FileOutputStream("/kb/module/data/readerData.json");
+        os = new FileOutputStream(REPORT_OUTPUT_PATH);
         IOUtils.write(jsonData, os);
       } catch (IOException e) {
         e.printStackTrace();

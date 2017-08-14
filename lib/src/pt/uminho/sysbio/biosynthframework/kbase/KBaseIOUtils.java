@@ -12,14 +12,22 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import datafileutil.DataFileUtilClient;
 import datafileutil.FileToShockOutput;
@@ -149,7 +157,23 @@ public class KBaseIOUtils {
   }
 
   public static String toJson(Object o) {
+    return toJson(o, false);
+  }
+  
+  public static String toJson(Object o, boolean allowNullKey) {
     ObjectMapper om = new ObjectMapper();
+    if (allowNullKey) {
+      om.getSerializerProvider().setNullKeySerializer(new JsonSerializer<Object>() {
+
+        @Override
+        public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers)
+            throws IOException, JsonProcessingException {
+          gen.writeFieldName(UUID.randomUUID().toString());
+        }
+        
+      });
+    }
+    
     om.enable(SerializationFeature.INDENT_OUTPUT);
     String json = null;
     try {

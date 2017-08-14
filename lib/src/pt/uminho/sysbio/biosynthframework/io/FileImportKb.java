@@ -52,6 +52,51 @@ public class FileImportKb {
     return edges;
   }
   
+  public static void importMetaboliteFormulas(Map<Long, Set<Long>> idToFormulas, Map<Long, String> idToKey) {
+    importMetaboliteProperties(idToFormulas, idToKey, "cpd_formulas.tsv");
+  }
+  
+  public static void importMetaboliteInchiKeys(Map<Long, Set<Long>> idToInchiKeys, Map<Long, String> idToKey) {
+    importMetaboliteProperties(idToInchiKeys, idToKey, "cpd_inchikey.tsv");
+  }
+  
+  public static void importMetaboliteSmiles(Map<Long, Set<Long>> idToSmiles, Map<Long, String> idToKey) {
+    importMetaboliteProperties(idToSmiles, idToKey, "cpd_smiles.tsv");
+  }
+  
+  public static void importMetaboliteProperties(
+      Map<Long, Set<Long>> idToPropId, Map<Long, String> idToKey, String file) {
+    InputStream is = null;
+    try {
+      is = new FileInputStream(EXPORT_PATH + "/" + file);
+      List<String> lines = IOUtils.readLines(is);
+      for (int i = 1; i < lines.size(); i++) {
+        try {
+          String line = lines.get(i);
+          String[] col = line.concat(SEP).concat("!").split(SEP);
+          long id = Long.parseLong(col[0]);
+          String key = col[1];
+          String[] ids = getOrNull(col, 2, "").split(" ");
+          idToKey.put(id, key);
+          for (String cpdIdStr : ids) {
+            long cpiId = Long.parseLong(cpdIdStr);
+            if (!idToPropId.containsKey(cpiId)) {
+              idToPropId.put(cpiId, new HashSet<Long>());
+            }
+            idToPropId.get(cpiId).add(id);
+          }
+        } catch (Exception e) {
+          logger.warn("Parse error line[{}] - {}", i, lines.get(i));
+          e.printStackTrace();
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      IOUtils.closeQuietly(is);
+    }
+  }
+  
   public static Map<Pair<Pair<String, Integer>, String>, 
                     Set<Pair<String, Map<String, Double>>>> readAlignData(String path) {
     Map<Pair<Pair<String, Integer>, String>, 

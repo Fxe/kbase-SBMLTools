@@ -118,18 +118,25 @@ public class KBaseIntegration {
         List<String> dbRefs = kcpd.getDblinks().get("ModelSeed");
         if (dbRefs != null && !dbRefs.isEmpty()) {
           String cpdEntry = dbRefs.iterator().next();
-          long cpdId = biodbService.getIdByEntryAndDatabase(cpdEntry, "ModelSeed");
-          String name = biodbService.getNamePropertyById(cpdId);
-          String formula = biodbService.getFormulaPropertyById(cpdId);
-          if (name != null) {
-            kcpd.setName(name);
+          Long cpdId = biodbService.getIdByEntryAndDatabase(cpdEntry, "ModelSeed");
+          if (cpdId != null) {
+            String name = biodbService.getNamePropertyById(cpdId);
+            String formula = biodbService.getEntityProperty(cpdId, "formula");
+            String smiles = biodbService.getEntityProperty(cpdId, "smiles");
+            String inchikey = biodbService.getEntityProperty(cpdId, "inchikey");
+            if (name != null) {
+              kcpd.setName(name);
+            }
+            if (formula != null) {
+              kcpd.setFormula(formula);
+            }
+            if (smiles != null) {
+              kcpd.setSmiles(smiles);
+            }
+            if (inchikey != null) {
+              kcpd.setInchikey(inchikey);
+            }
           }
-          if (formula != null) {
-            kcpd.setFormula(formula);
-          }
-          kcpd.setCharge(-1.234);
-          
-          kcpd.setSmiles(":D");
 //          renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
         }
       }

@@ -29,7 +29,7 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/commons-io-2.4.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-lang3-3.4.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-math-2.2.jar \
-    
+    && wget http://193.137.11.210/fliu/kbase/commons-math3-3.1.1.jar \
     && wget http://193.137.11.210/fliu/kbase/ahocorasick-0.4.0.jar
 
 

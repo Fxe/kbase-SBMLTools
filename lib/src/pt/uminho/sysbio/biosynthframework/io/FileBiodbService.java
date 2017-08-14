@@ -600,4 +600,25 @@ public class FileBiodbService implements BiodbService{
   public boolean isProxy(long id) {
     return idToProxy.get(id);
   }
+
+  @Override
+  public String getEntityProperty(long id, String propertyType) {
+    switch (propertyType) {
+      case "alias": return idToAlias.get(id);
+      case "formula": return idToFormula.get(id);
+      case "name": return idToName.get(id);
+//      case "smiles": return idToAlias.get(id);
+      default: logger.warn("unknown property [{}]", propertyType); break;
+    }
+    return null;
+  }
+
+  @Override
+  public Set<Long> getIdByProperty(String property, String propertyType) {
+    switch (propertyType) {
+      case "alias": return new HashSet<> (idToAlias.bget(property));
+      default: logger.warn("unknown property [{}]", propertyType); break;
+    }
+    return new HashSet<> ();
+  }
 }

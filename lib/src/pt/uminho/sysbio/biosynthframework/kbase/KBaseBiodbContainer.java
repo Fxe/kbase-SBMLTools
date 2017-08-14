@@ -22,7 +22,12 @@ public class KBaseBiodbContainer {
   public KBaseBiodbContainer(String path) {
     FileImportKb.EXPORT_PATH = path;
     logger.info("loading database from [{}] ...", path);
-    biodbService = new BiodbServiceFactory().withMetaboliteDatabases().build();
+    biodbService = new BiodbServiceFactory()
+        .withMetaboliteDatabases()
+        .withMetaboliteFormulas()
+        .withMetaboliteInchiKeys()
+        .withMetaboliteSmiles()
+        .build();
     logger.info("loading names");
     nameMap = NameIntegration.buildNameDictionary();
   }

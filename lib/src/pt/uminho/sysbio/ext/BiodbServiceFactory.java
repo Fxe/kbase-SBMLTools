@@ -26,6 +26,8 @@ public class BiodbServiceFactory {
   
   private static final Logger logger = LoggerFactory.getLogger(BiodbServiceFactory.class);
   
+  private Map<Long, Map<String, Set<Long>>> idToPropertyIds = new HashMap<> ();
+  private Map<Long, String> idToKey = new HashMap<> ();
   private Map<Long, String> idToEntry = new HashMap<> ();
   private Map<Long, Boolean> idToProxy = new HashMap<> ();
   private BMap<Long, String> idToAlias = new BHashMap<> ();
@@ -286,6 +288,57 @@ public class BiodbServiceFactory {
     return this;
   }
   
+  public BiodbServiceFactory withMetaboliteFormulas() {
+    Map<Long, Set<Long>> idToFormulas = new HashMap<> ();
+    FileImportKb.importMetaboliteFormulas(idToFormulas, idToKey);
+    for (long id : idToFormulas.keySet()) {
+      if (!idToPropertyIds.containsKey(id)) {
+        idToPropertyIds.put(id, new HashMap<String, Set<Long>> ());
+        
+      }
+      if (!idToPropertyIds.get(id).containsKey("formula")) {
+        idToPropertyIds.get(id).put("formula", new HashSet<Long> ());
+      }
+      idToPropertyIds.get(id).get("formula").addAll(idToFormulas.get(id));
+    }
+    
+    return this;
+  }
+
+  public BiodbServiceFactory withMetaboliteSmiles() {
+    Map<Long, Set<Long>> idToPropIds = new HashMap<> ();
+    FileImportKb.importMetaboliteSmiles(idToPropIds, idToKey);
+    for (long id : idToPropIds.keySet()) {
+      if (!idToPropertyIds.containsKey(id)) {
+        idToPropertyIds.put(id, new HashMap<String, Set<Long>> ());
+        
+      }
+      if (!idToPropertyIds.get(id).containsKey("smiles")) {
+        idToPropertyIds.get(id).put("smiles", new HashSet<Long> ());
+      }
+      idToPropertyIds.get(id).get("smiles").addAll(idToPropIds.get(id));
+    }
+    
+    return this;
+  }
+  
+  public BiodbServiceFactory withMetaboliteInchiKeys() {
+    Map<Long, Set<Long>> idToPropIds = new HashMap<> ();
+    FileImportKb.importMetaboliteInchiKeys(idToPropIds, idToKey);
+    for (long id : idToPropIds.keySet()) {
+      if (!idToPropertyIds.containsKey(id)) {
+        idToPropertyIds.put(id, new HashMap<String, Set<Long>> ());
+        
+      }
+      if (!idToPropertyIds.get(id).containsKey("inchikey")) {
+        idToPropertyIds.get(id).put("inchikey", new HashSet<Long> ());
+      }
+      idToPropertyIds.get(id).get("inchikey").addAll(idToPropIds.get(id));
+    }
+    
+    return this;
+  }
+  
   public BiodbServiceFactory withTaxonomyProteins() {
     for (long id : FileImportKb.importTaxonomyGenes(idToEntry, protIdToTxId)) {
       this.idToDatabase.put(id, GlobalLabel.Protein.toString());
@@ -298,15 +351,17 @@ public class BiodbServiceFactory {
   }
   
   public FileBiodbService build() {
-//    System.out.println(cmpIdToAnnotation);
-    return new FileBiodbService(idToEntry, idToAlias, idToName, idToFormula, 
-                                idToCmpId, cmpIdToAnnotation,
-                                idToReferences, idToStoich, uniMap, idToType, 
-                                idToDatabase, idToRxnType, idToBounds, 
-                                metaIdToAlias, rxnIdToPathwayAlias, mcpdIdToSpiIdSet,
-                                spiIdIsBondary, idToReversible, modelIdToTxId, 
-                                idToParent, protIdToTxId, idToProxy);
-  }
+//  System.out.println(cmpIdToAnnotation);
+  return new FileBiodbService(idToEntry, idToAlias, idToName, idToFormula, 
+                              idToCmpId, cmpIdToAnnotation,
+                              idToReferences, idToStoich, uniMap, idToType, 
+                              idToDatabase, idToRxnType, idToBounds, 
+                              metaIdToAlias, rxnIdToPathwayAlias, mcpdIdToSpiIdSet,
+                              spiIdIsBondary, idToReversible, modelIdToTxId, 
+                              idToParent, protIdToTxId, idToProxy, 
+                              idToKey, idToPropertyIds);
+}
+
 
 
 

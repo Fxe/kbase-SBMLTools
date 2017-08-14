@@ -12,38 +12,40 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
+import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
+import pt.uminho.sysbio.biosynthframework.integration.model.BiGG2AliasMultiMatchResolver;
+import pt.uminho.sysbio.biosynthframework.integration.model.BoundaryConflictResolver;
 import pt.uminho.sysbio.biosynthframework.integration.model.ConnectedComponents;
 import pt.uminho.sysbio.biosynthframework.integration.model.ConnectedComponentsIntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.integration.model.DictionaryBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.FirstDegreeReferences;
 import pt.uminho.sysbio.biosynthframework.integration.model.IdBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.integration.model.ModelSeedMultiMatchResolver;
 import pt.uminho.sysbio.biosynthframework.integration.model.NameBaseIntegrationEngine;
-import pt.uminho.sysbio.biosynthframework.integration.model.PrefixNumberSequenceLookupMethod;
 import pt.uminho.sysbio.biosynthframework.integration.model.SearchTable;
 import pt.uminho.sysbio.biosynthframework.integration.model.SearchTableFactory;
 import pt.uminho.sysbio.biosynthframework.integration.model.SpecieIntegrationFacade;
-import pt.uminho.sysbio.biosynthframework.integration.model.TokenSwapLookupMethod;
 import pt.uminho.sysbio.biosynthframework.integration.model.TrieIdBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.io.BiodbServiceFactory;
 import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
-import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
-import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.IntegrationMapUtils;
 import pt.uminho.sysbio.ext.MethoBuilder;
-import pt.uminho.sysbio.ext.NameIntegration;
 
 public class KBaseModelSeedIntegration {
+  
+  private static final Logger logger = LoggerFactory.getLogger(KBaseModelSeedIntegration.class);
   
   public String biodbDataPath;
   public String curationFilePath;
@@ -111,6 +113,21 @@ public class KBaseModelSeedIntegration {
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
       String id = xspi.getAttributes().get("id");
       String cmpId = xspi.getAttributes().get("compartment");
+      String bcondition = xspi.getAttributes().get("boundaryCondition");
+      BoundaryConflictResolver r1 = new BoundaryConflictResolver();
+      try {
+        if (id != null && bcondition != null && Boolean.parseBoolean(bcondition)) {
+          r1.boundary.add(id);
+        }
+      } catch (Exception e) {
+        logger.warn("{}", e.getMessage());
+      }
+      integration.specieConflictResolve = r1;
+      ModelSeedMultiMatchResolver r2 = new ModelSeedMultiMatchResolver();
+      BiGG2AliasMultiMatchResolver r3 = new BiGG2AliasMultiMatchResolver(biodbService);
+      integration.matchResolver.put(MetaboliteMajorLabel.ModelSeed, r2);
+      integration.matchResolver.put(MetaboliteMajorLabel.Seed, r2);
+      integration.matchResolver.put(MetaboliteMajorLabel.BiGG2, r3);
       integration.addSpecie(id, cmpId);
 //      integration.patterns.put(, null);
 //      integration.spiToCompartment.put(
@@ -141,14 +158,18 @@ public class KBaseModelSeedIntegration {
     // /data/biobase/export
     IdBaseIntegrationEngine be1 = builder.buildIdBaseIntegrationEngine();
     TrieIdBaseIntegrationEngine be2 = builder.buildTrieIdBaseIntegrationEngine();
+    be2.ids = new HashSet<> (spiEntrySet);
     NameBaseIntegrationEngine be3 = builder.buildNameBaseIntegrationEngine();
     XmlReferencesBaseIntegrationEngine be0 = builder.buildXmlReferencesBaseIntegrationEngine();
-    
+    be0.xmlSpecies = new ArrayList<> (xmodel.getSpecies());
+    DictionaryBaseIntegrationEngine beX = builder.buildDictionaryBaseIntegrationEngine();
+    beX.ids = new HashSet<> (spiEntrySet);
     IntegrationEngine ie1 = new ConnectedComponentsIntegrationEngine(ccs);
     IntegrationEngine ie2 = new FirstDegreeReferences(biodbService);
     
     be3.spiEntryToName = spiEntryToName;
     be1.patterns = integration.getPatterns();
+    integration.baseEngines.put("dict", beX);
     integration.baseEngines.put("refs", be0);
     integration.baseEngines.put("pattern", be1);
     integration.baseEngines.put("trie", be2);
@@ -173,9 +194,13 @@ public class KBaseModelSeedIntegration {
 //            return aa.get(t);
 //          }
 //        });
+//    IntegrationUtils.m
+    System.out.println(IntegrationMapUtils.merge(integration.isets));
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
+    System.out.println(imap);
     imap = integration.clean;
+    System.out.println(imap);
     if (resultAdapter != null) {
 //      System.out.println(modelEntry + " -> " + integration.clean.size());
       resultAdapter.fillIntegrationData(integration);

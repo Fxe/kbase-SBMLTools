@@ -229,46 +229,23 @@ public class SBMLToolsServerTest {
   public void testFilterContigsOk() throws Exception {
     // First load a test FASTA file as an KBase Assembly
     System.out.println("test");
-    final String fastaContent = ">seq1 something something asdf\n" +
-        "agcttttcat\n" +
-        ">seq2\n" +
-        "agctt\n" +
-        ">seq3\n" +
-        "agcttttcatgg";
-//    RunFluxBalanceAnalysisParams fbaParams = new RunFluxBalanceAnalysisParams()
-//        .withWorkspace("ws.4345.obj.1")
-//        .withFbamodelId("4345/65/20")
-//        .withFbamodelWorkspace("ws.4345.obj.1");
-//    FbaToolsClient fbaToolsClient = new FbaToolsClient(callbackURL, token);
-//    fbaToolsClient.runFluxBalanceAnalysis(fbaParams);
+    String url = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
+    url = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
     SbmlImporterParams params = new SbmlImporterParams()
         .withWorkspaceName(getWsName())
-        .withAutomaticallyIntegrate(0L)
+        .withAutomaticallyIntegrate(1L)
         .withBiomass(Arrays.asList(new String[]{"bio1"}))
-        .withSbmlUrl("http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml");
-//    SbmlImportParams params = new SbmlImportParams()
-//        .withWorkspaceName(getWsName())
-//        .withMinLength(100000L)
-//        .withAssemblyInputRef("4345/13/69")
-//        .withUrl("http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml");
+        .withSbmlUrl(url);
+    
     KBaseSbmlTools.DATA_EXPORT_PATH = "/var/biobase/export";;
     KBaseSbmlTools.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
     KBaseSbmlTools.LOCAL_CACHE = "/tmp/argonne/data";
+    KBaseSbmlTools.REPORT_OUTPUT_PATH = "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports/model-integration-report/readerData.json";
     impl.sbmlImporter(params, token, getContext());
-//    impl.filterContigs(params, token, getContext());
+    
     System.out.println(getWsName());
-//    impl.filterContigs(params, token, getContext());
+
     /*
-        final String ref = loadFASTA(scratch.resolve("test1.fasta"), "TestAssembly", fastaContent);
-
-        // second, call the implementation
-        final FilterContigsResults ret = impl.filterContigs(new FilterContigsParams()
-                .withWorkspaceName(getWsName())
-                .withAssemblyInputRef(ref)
-                .withMinLength(10L),
-                token, getContext());
-
-        // validate the returned data
         Assert.assertEquals(3L, (long)ret.getNInitialContigs());
         Assert.assertEquals(1L, (long)ret.getNContigsRemoved());
         Assert.assertEquals(2L, (long)ret.getNContigsRemaining());
@@ -307,7 +284,6 @@ public class SBMLToolsServerTest {
      */
 //    KBaseIOUtils.getFBAModel("iJO1366", "filipeliu:narrative_1492697501369", null, wsClient);
     
-
     FBAModel fbaModel = KBaseIOUtils.getObject("iJO1366", "filipeliu:narrative_1492697501369", null, FBAModel.class, wsClient);
     
     Object o = KBaseIOUtils.getObject("Shewanella_oneidensis_MR-1", "filipeliu:narrative_1492697501369", null, wsClient);

@@ -67,33 +67,39 @@ public class FileBiodbService implements BiodbService{
   
   public BMap<Long, Long> protIdToTxId = new BHashMap<> ();
   
+  private Map<Long, Map<String, Set<Long>>> idToPropertyIds = new HashMap<> ();
+  private Map<Long, String> idToKey = new HashMap<> ();
+  
   private long itgId = -1;
   
   public FileBiodbService() { }
   
   public FileBiodbService(Map<Long, String> idToEntry, 
-                          BMap<Long, String> idToAlias,
-                          Map<Long, String> idToName, 
-                          Map<Long, String> idToFormula,
-                          Map<Long, Long> idToCmpId,
-                          Map<Long, String> cmpIdToAnnotation,
-                          Map<Long, Set<Long>> idToReferences,
-                          Map<Long, Map<Long, Double>> idToStoich,
-                          Map<Long, Long> idToCtrId,
-                          Map<Long, Label> idToType,
-                          Map<Long, String> idToDatabase,
-                          Map<Long, String> idToRxnType,
-                          Map<Long, Double[]> idToBounds,
-                          Map<Long, String> metaIdToEntry,
-                          Map<Long, String> rxnIdToPathwayAlias,
-                          Map<Long, Set<Long>> mcpdIdToSpiIdSet,
-                          Map<Long, Boolean> spiIdIsBondary,
-                          Map<Long, Boolean> idToReversible,
-                          Map<Long, Long> modelIdToTxId,
-                          Map<Long, Long> idToParent,
-                          BMap<Long, Long> protIdToTxId,
-                          Map<Long, Boolean> idToProxy) { 
-    
+      BMap<Long, String> idToAlias,
+      Map<Long, String> idToName, 
+      Map<Long, String> idToFormula,
+      Map<Long, Long> idToCmpId,
+      Map<Long, String> cmpIdToAnnotation,
+      Map<Long, Set<Long>> idToReferences,
+      Map<Long, Map<Long, Double>> idToStoich,
+      Map<Long, Long> idToCtrId,
+      Map<Long, Label> idToType,
+      Map<Long, String> idToDatabase,
+      Map<Long, String> idToRxnType,
+      Map<Long, Double[]> idToBounds,
+      Map<Long, String> metaIdToEntry,
+      Map<Long, String> rxnIdToPathwayAlias,
+      Map<Long, Set<Long>> mcpdIdToSpiIdSet,
+      Map<Long, Boolean> spiIdIsBondary,
+      Map<Long, Boolean> idToReversible,
+      Map<Long, Long> modelIdToTxId,
+      Map<Long, Long> idToParent,
+      BMap<Long, Long> protIdToTxId,
+      Map<Long, Boolean> idToProxy,
+      Map<Long, String> idToKey,
+      Map<Long, Map<String, Set<Long>>> idToPropertyIds) { 
+
+
     this.idToEntry = idToEntry;
     this.idToAlias = idToAlias;
     this.idToProxy = idToProxy;
@@ -122,16 +128,8 @@ public class FileBiodbService implements BiodbService{
     this.modelIdToTxId = modelIdToTxId;
     this.idToParent = idToParent;
     this.protIdToTxId = protIdToTxId;
-    
-    //dealing with bounds later
-//    for (double[] b : idToBounds.values()) {
-//      if (Double.isInfinite(b[0])) {
-//        b[0] = -10000;
-//      }
-//      if (Double.isInfinite(b[1])) {
-//        b[1] = 10000;
-//      }
-//    }
+    this.idToKey = idToKey;
+    this.idToPropertyIds = idToPropertyIds;
   }
   
   
@@ -599,5 +597,49 @@ public class FileBiodbService implements BiodbService{
   @Override
   public boolean isProxy(long id) {
     return idToProxy.get(id);
+  }
+
+  @Override
+  public String getEntityProperty(long id, String propertyType) {
+    Map<String, Set<Long>> props = idToPropertyIds.get(id);
+    switch (propertyType) {
+      case "alias": return idToAlias.get(id);
+      case "formula":
+        if (props != null && props.containsKey("formula")) {
+          Set<Long> fids = props.get("formula");
+          if (fids != null && !fids.isEmpty()) {
+            return idToKey.get(fids.iterator().next());
+          }
+        }
+        break;
+      case "name": return idToName.get(id);
+      case "smiles":
+        if (props != null && props.containsKey("smiles")) {
+          Set<Long> fids = props.get("smiles");
+          if (fids != null && !fids.isEmpty()) {
+            return idToKey.get(fids.iterator().next());
+          }
+        }
+        break;
+      case "inchikey":
+        if (props != null && props.containsKey("inchikey")) {
+          Set<Long> fids = props.get("inchikey");
+          if (fids != null && !fids.isEmpty()) {
+            return idToKey.get(fids.iterator().next());
+          }
+        }
+        break;
+      default: logger.warn("unknown property [{}]", propertyType); break;
+    }
+    return null;
+  }
+
+  @Override
+  public Set<Long> getIdByProperty(String property, String propertyType) {
+    switch (propertyType) {
+      case "alias": return new HashSet<> (idToAlias.bget(property));
+      default: logger.warn("unknown property [{}]", propertyType); break;
+    }
+    return new HashSet<> ();
   }
 }
