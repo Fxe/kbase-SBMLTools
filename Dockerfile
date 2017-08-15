@@ -28,8 +28,9 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/neo4j-kernel-2.1.5.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-io-2.4.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-lang3-3.4.jar \
-    && wget http://193.137.11.210/fliu/kbase/commons-math-2.2.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-math3-3.1.1.jar \
+    && wget http://193.137.11.210/fliu/kbase/commons-math-2.2.jar \
+    
     && wget http://193.137.11.210/fliu/kbase/ahocorasick-0.4.0.jar
 
 
@@ -42,7 +43,7 @@ RUN cd /kb/deployment/lib/jars \
 #RUN unzip all-deps.zip
 #RUN rm all-deps.zip
 #RUN cd /kb/deployment/lib/jars \
-#    && wget http://193.137.11.210/fliu/biojava-core-4.2.5.jar
+#    && wget http://193.137.11.210/fliu/biojava-core-4.2.5.jara
 
 
 #RUN echo $(java -version)
