@@ -456,6 +456,71 @@ public class FileImportKb {
   public static<V> V getOrNull(V[] array, int index) {
     return getOrNull(array, index, null);
   }
+  
+  public static Set<Long> importDatabaseRxn(String database, 
+      Map<Long, String> rxnIdToEntry,
+      Map<Long, Map<Long, Double>> rxnStoichMap,
+      Map<Long, String> idToName) {
+    Set<Long> ids = new HashSet<> ();
+    InputStream is = null;
+    try {
+      is = new FileInputStream(EXPORT_PATH + "/" + database + "_rxn.tsv");
+      List<String> lines = IOUtils.readLines(is);
+
+      for (int i = 1; i < lines.size(); i++) {
+        try {
+          String line = lines.get(i);
+          String[] col = line.split(SEP);
+          String[] lstr = getOrNull(col, 2, "").split(" ");
+          String[] rstr = getOrNull(col, 3, "").split(" ");
+          String[] lvstr = getOrNull(col, 4, "").split(" ");
+          String rvstr_ = getOrNull(col, 5, "");
+          String name = getOrNull(col, 6, null);
+          String[] rvstr = rvstr_.split(" ");
+          long rxnId = Long.parseLong(col[0]);
+          String rxnEntry = col[1];
+          Map<Long, Double> stoichiometry = new HashMap<> ();
+          boolean error = false;
+          for (int k = 0; k < lstr.length; k++) {
+            if (!lstr[k].trim().isEmpty()) {
+              long spiId = Long.parseLong(lstr[k]);
+              double value = -1 * Double.parseDouble(lvstr[k]);
+              if (stoichiometry.put(spiId, value) != null) {
+                error = true;
+              }
+            }
+          }
+          for (int k = 0; k < rstr.length; k++) {
+            if (!rstr[k].trim().isEmpty()) {
+              long spiId = Long.parseLong(rstr[k]);
+              double value = Double.parseDouble(rvstr[k]);
+              if (stoichiometry.put(spiId, value) != null) {
+                error = true;
+              }
+            }
+          }
+          if (!error && !stoichiometry.isEmpty()) {
+            ids.add(rxnId);
+            rxnIdToEntry.put(rxnId, rxnEntry);
+            rxnStoichMap.put(rxnId, stoichiometry);
+          } else {
+            logger.debug("Invalid: {}", line);
+          }
+          
+          if (name != null && !name.trim().isEmpty()) {
+            idToName.put(rxnId, name);
+          }
+        } catch (Exception e) {
+          System.err.println(lines.get(i));
+          e.printStackTrace();
+        }
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return ids;
+  }
 
   public static Set<Long> importDatabaseRxn(String database, 
       Map<Long, String> rxnIdToEntry,

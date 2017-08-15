@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.integration.model.BiGG2AliasMultiMatchResolver;
@@ -42,6 +43,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.IntegrationMapUtils;
 import pt.uminho.sysbio.ext.MethoBuilder;
+import pt.uminho.sysbio.ext.ReactionIntegration;
 
 public class KBaseModelSeedIntegration {
   
@@ -51,24 +53,24 @@ public class KBaseModelSeedIntegration {
   public String curationFilePath;
   public Map<String, String> spiToModelSeedReference = new HashMap<> ();
   
-  public BiodbService biodbService = null;
+//  public BiodbService biodbService = null;
   public SearchTable<MetaboliteMajorLabel, String> searchTable = null;
   public ConnectedComponents<String> ccs = null;
   public MethoBuilder builder;
   
-  public KBaseModelSeedIntegration(String biodbDataPath, String curationPath) {
+  private final KBaseBiodbContainer biodbContainer;
+  
+  public KBaseModelSeedIntegration(String biodbDataPath, String curationPath, final KBaseBiodbContainer biodbContainer) {
     this.biodbDataPath = biodbDataPath;
     this.curationFilePath = curationPath;
-    
+    this.biodbContainer = biodbContainer;
     // /data/biobase/
     FileImportKb.EXPORT_PATH = biodbDataPath;
     setup();
   }
   
   public void setup() {
-    biodbService = new BiodbServiceFactory()
-        .withMetaboliteDatabases()
-        .build();
+    BiodbService biodbService = biodbContainer.biodbService;
     
     searchTable = new SearchTableFactory(biodbService)
         .withDatabase(MetaboliteMajorLabel.BiGG)
@@ -101,8 +103,8 @@ public class KBaseModelSeedIntegration {
   }
   
   public Map<String, Map<MetaboliteMajorLabel, String>> generateDatabaseReferences(
-      XmlSbmlModel xmodel, String modelEntry, IntegrationReportResultAdapter resultAdapter) {
-
+      XmlSbmlModel xmodel, String modelEntry, IntegrationReportResultAdapter resultAdapter, ReactionIntegration reactionIntegration) {
+    BiodbService biodbService = biodbContainer.biodbService;
     
 //    BiodbService service = new File
     
@@ -188,17 +190,6 @@ public class KBaseModelSeedIntegration {
 //    integration.engines.add(l2);
     integration.run();
     
-    final Map<String, String> aa = new HashMap<> ();
-//    IntegrationMapUtils.reduceBigg = buildReduceBigg2(
-//        new Function<String, String>() {
-//
-//          @Override
-//          public String apply(String t) {
-//            return aa.get(t);
-//          }
-//        });
-//    IntegrationUtils.m
-//    System.out.println(IntegrationMapUtils.merge(integration.isets));
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
 //    System.out.println(imap);
@@ -206,7 +197,7 @@ public class KBaseModelSeedIntegration {
 //    System.out.println(imap);
     if (resultAdapter != null) {
 //      System.out.println(modelEntry + " -> " + integration.clean.size());
-      resultAdapter.fillIntegrationData(integration);
+      resultAdapter.fillSpeciesIntegrationData(integration);
     }
     
     for (String id : imap.keySet()) {
@@ -215,6 +206,17 @@ public class KBaseModelSeedIntegration {
         spiToModelSeedReference.put(id, ref);
       }
     }
+    
+    reactionIntegration.imap.clear();
+    
+    reactionIntegration.integrate(ReactionMajorLabel.LigandReaction, xmodel, integration.clean);
+    reactionIntegration.integrate(ReactionMajorLabel.Seed, xmodel, integration.clean);
+    reactionIntegration.integrate(ReactionMajorLabel.BiGG, xmodel, integration.clean);
+    reactionIntegration.integrate(ReactionMajorLabel.MetaCyc, xmodel, integration.clean);
+    reactionIntegration.integrate(ReactionMajorLabel.ModelSeedReaction, xmodel, integration.clean);
+    
+    System.out.println(reactionIntegration.imap);
+    resultAdapter.fillReactionIntegrationData(reactionIntegration.imap);
     
     return imap;
 

@@ -38,6 +38,7 @@ import kbasefba.Biomass;
 import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils.KBaseObject;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationByDatabase;
@@ -50,6 +51,9 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import pt.uminho.sysbio.ext.BiGGConflictResolver;
+import pt.uminho.sysbio.ext.ModelSeedReactionConflictResolver;
+import pt.uminho.sysbio.ext.ReactionIntegration;
 import sbmltools.KBaseType;
 import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
@@ -74,13 +78,42 @@ public class KBaseSbmlTools {
   public final String workspace;
   private final DataFileUtilClient dfuClient;
   public KBaseModelSeedIntegration modelSeedIntegration = null;
-  
+  public final ReactionIntegration reactionIntegration;
+  public final KBaseBiodbContainer biodbContainer;
   
   public KBaseSbmlTools(
       String workspace, DataFileUtilClient dfuClient) throws UnauthorizedException, IOException {
     this.workspace = workspace;
-    this.modelSeedIntegration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
     this.dfuClient = dfuClient;
+    this.biodbContainer = new KBaseBiodbContainer(DATA_EXPORT_PATH);
+    this.modelSeedIntegration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA, biodbContainer);
+    
+    reactionIntegration = new ReactionIntegration(biodbContainer.biodbService);
+    reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h2o");
+    reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00001");
+    reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00080");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGG, "h");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGG, "h2o");
+    reactionIntegration.exclude(ReactionMajorLabel.Seed, "cpd00001");
+    reactionIntegration.exclude(ReactionMajorLabel.Seed, "cpd00067");
+    reactionIntegration.exclude(ReactionMajorLabel.ModelSeedReaction, "cpd00001");
+    reactionIntegration.exclude(ReactionMajorLabel.ModelSeedReaction, "cpd00067");
+    
+    Set<ReactionMajorLabel> rxnDbs = new HashSet<> ();
+    rxnDbs.add(ReactionMajorLabel.BiGG);
+    rxnDbs.add(ReactionMajorLabel.LigandReaction);
+    rxnDbs.add(ReactionMajorLabel.MetaCyc);
+    rxnDbs.add(ReactionMajorLabel.ModelSeedReaction);
+    rxnDbs.add(ReactionMajorLabel.Seed);
+    
+    for (ReactionMajorLabel db : rxnDbs) {
+      reactionIntegration.setupStoichDictionary(db);
+    }
+    
+    reactionIntegration.rMap.put(ReactionMajorLabel.BiGG, new BiGGConflictResolver());
+    reactionIntegration.rMap.put(ReactionMajorLabel.ModelSeedReaction, new ModelSeedReactionConflictResolver());
+    reactionIntegration.rMap.put(ReactionMajorLabel.Seed, new ModelSeedReactionConflictResolver());
   }
 
   public static void validateSbmlImportParams(SbmlImportParams params) {
@@ -276,7 +309,8 @@ public class KBaseSbmlTools {
 //      String imodelEntry = "i" + modelId;
 //      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
       Map<String, Map<MetaboliteMajorLabel, String>> imap = 
-          modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter);
+          modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter, reactionIntegration);
+      
       spiIntegrationAll.addIntegrationMap(modelId, imap);
       for (String spi : imap.keySet()) {
         for (MetaboliteMajorLabel db : imap.get(spi).keySet()) {
@@ -287,6 +321,8 @@ public class KBaseSbmlTools {
       result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
       spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
       result.message += String.format("\ni: %d", spiToModelSeedReference.size());
+      
+
     }
     //order matters ! fix this ... it is a factory ...
     model = new FBAModelFactory()

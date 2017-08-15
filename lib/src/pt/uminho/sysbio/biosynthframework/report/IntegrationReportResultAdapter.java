@@ -1,13 +1,18 @@
 package pt.uminho.sysbio.biosynthframework.report;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.SpecieIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 
@@ -25,12 +30,56 @@ public class IntegrationReportResultAdapter {
     int ngne = 0;
     
     int i = 0;
+    Map<String, String> spiToCmp = new HashMap<> ();
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
       Map<String, String> xspiData = new HashMap<> ();
-      xspiData.put("id", xspi.getAttributes().get("id"));
+      String spiEntry = xspi.getAttributes().get("id");
+      String spiCmp = xspi.getAttributes().get("compartment");          
+      xspiData.put("id", spiEntry);
       xspiData.put("name", xspi.getAttributes().get("name"));
-      xspiData.put("cmp", xspi.getAttributes().get("compartment"));
+      xspiData.put("cmp", spiCmp);
+      if (spiEntry != null && spiCmp != null) {
+        spiToCmp.put(spiEntry, spiCmp);
+      }
       this.report.species.put(i++, xspiData);
+    }
+    for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
+      Map<String, String> xrxnData = new HashMap<> ();
+      xrxnData.put("id", xrxn.getAttributes().get("id"));
+      xrxnData.put("name", xrxn.getAttributes().get("name"));
+      
+      xrxnData.put("cmp", "reaction");
+      
+      Set<String> cmps = new HashSet<String> ();
+      for (XmlObject o : xrxn.getListOfReactants()) {
+        String species = o.getAttributes().get("species");
+        if (species == null || !spiToCmp.containsKey(species)) {
+          xrxnData.put("cmp", "error");
+        } else {
+          cmps.add(spiToCmp.get(species));
+        }
+      }
+      for (XmlObject o : xrxn.getListOfProducts()) {
+        String species = o.getAttributes().get("species");
+        if (species == null || !spiToCmp.containsKey(species)) {
+          xrxnData.put("cmp", "error");
+        } else {
+          cmps.add(spiToCmp.get(species));
+        }
+      }
+      
+      if (cmps.size() > 1) {
+        xrxnData.put("cmp", "t");
+      }
+      
+      
+      if (xrxn.getAttributes().get("id") != null &&
+          xrxn.getAttributes().get("id").startsWith("R_EX_")) {
+        xrxnData.put("cmp", "ex");
+      }
+
+      
+      this.report.reactions.put(i++, xrxnData);
     }
     
     this.report.importData.put("species", nspi);
@@ -59,17 +108,22 @@ public class IntegrationReportResultAdapter {
     return this;
   }
   
-  public IntegrationReportResultAdapter fillIntegrationData(
+  public IntegrationReportResultAdapter fillSpeciesIntegrationData(
       SpecieIntegrationFacade integrationFacade) {
-    
-//    List<Object> databases = new ArrayList<> ();
-//    this.report.integrationData.put("dbs", databases);
     
     if (integrationFacade.clean != null) {
       this.report.integrationData.put("species", new HashMap<> (integrationFacade.clean));
     }
     
-    this.report.integrationData.put("reactions", new HashMap<> ());
+    return this;
+  }
+  
+  public IntegrationReportResultAdapter fillReactionIntegrationData(
+      Map<String, Map<ReactionMajorLabel, String>> imap) {
+    
+    if (imap != null) {
+      this.report.integrationData.put("reactions", new HashMap<>(imap));
+    }
     
     return this;
   }

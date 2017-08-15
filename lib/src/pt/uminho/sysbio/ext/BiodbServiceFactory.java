@@ -151,12 +151,12 @@ public class BiodbServiceFactory {
   }
   
   public BiodbServiceFactory withReactionDatabase(String database) {
-//    Set<Long> ids = FileImportKb.importDatabaseRxn(
-//        database, idToEntry, idToStoich, idToName);
-//    for (long id : ids) {
-//      idToType.put(id, GlobalLabel.Reaction);
-//      idToDatabase.put(id, database);
-//    }
+    Set<Long> ids = FileImportKb.importDatabaseRxn(
+        database, idToEntry, idToStoich, idToName);
+    for (long id : ids) {
+      idToType.put(id, GlobalLabel.Reaction);
+      idToDatabase.put(id, database);
+    }
     return this;
   }
   

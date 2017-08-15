@@ -230,7 +230,7 @@ public class SBMLToolsServerTest {
     // First load a test FASTA file as an KBase Assembly
     System.out.println("test");
     String url = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
-    url = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
+//    url = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
     SbmlImporterParams params = new SbmlImporterParams()
         .withWorkspaceName(getWsName())
         .withAutomaticallyIntegrate(1L)
