@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 public class MatrixSFactory<X, Y, D> {
   
@@ -14,8 +13,8 @@ public class MatrixSFactory<X, Y, D> {
   
   private Map<X, Map<Y, D>> data = new HashMap<> ();
   private CellPrinter<X, Y, D> printer = null;
-  private Function<X, String> xlabelPrinter = null;
-  private Function<Y, String> ylabelPrinter = null;
+  private BFunction<X, String> xlabelPrinter = null;
+  private BFunction<Y, String> ylabelPrinter = null;
   private boolean swapCols = false;
   private D defaultValue = null;
   private String label = "";
@@ -35,12 +34,12 @@ public class MatrixSFactory<X, Y, D> {
     return this;
   }
   
-  public MatrixSFactory<X, Y, D> withXLabelPrinter(Function<X, String> printer) {
+  public MatrixSFactory<X, Y, D> withXLabelPrinter(BFunction<X, String> printer) {
     this.xlabelPrinter = printer;
     return this;
   }
   
-  public MatrixSFactory<X, Y, D> withYLabelPrinter(Function<Y, String> printer) {
+  public MatrixSFactory<X, Y, D> withYLabelPrinter(BFunction<Y, String> printer) {
     this.ylabelPrinter = printer;
     return this;
   }

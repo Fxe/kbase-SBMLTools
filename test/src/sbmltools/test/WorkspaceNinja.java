@@ -15,15 +15,15 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
+//import org.springframework.core.io.FileSystemResource;
+//import org.springframework.core.io.Resource;
 
 import kbasefba.FBAModel;
 import kbsolrutil.KBaseAPI;
 import pt.uminho.sysbio.biosynthframework.DataUtils;
 import pt.uminho.sysbio.biosynthframework.Dataset;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
-import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
+//import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
+//import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenomeReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
@@ -155,55 +155,55 @@ public class WorkspaceNinja {
     }
   }
   
-  public static Map<String, Set<String>> getRolesMap() {
-    Map<String, Set<String>> result = new HashMap<> ();
-    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
-    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao(roleJson);
-    Map<String, Set<String>> aa = new HashMap<> ();
-    for (String k : roleDao.data.keySet()) {
-      ModelSeedRole role = roleDao.data.get(k);
-//      System.out.println(k + " " + role.name);
-      if (!aa.containsKey(role.name.trim().toLowerCase())) {
-        aa.put(role.name.trim().toLowerCase(), new HashSet<String> ());
-      }
-      aa.get(role.name.trim().toLowerCase()).add(k);
-    }
-    int good = 0;
-    int bad = 0;
-    for (String k : aa.keySet()) {
-      
-      if (aa.get(k).size() > 1) {
-//        System.out.println(k + " " + aa.get(k));
-        result.put(k.trim().toLowerCase(), aa.get(k));
-        bad++;
-      } else {
-        result.put(k.trim().toLowerCase(), aa.get(k));
-        good++;
-      }
-    }
-    logger.debug("roles good: {}, bad: {}", good, bad);
-    return result;
-  }
+//  public static Map<String, Set<String>> getRolesMap() {
+//    Map<String, Set<String>> result = new HashMap<> ();
+//    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
+//    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao(roleJson);
+//    Map<String, Set<String>> aa = new HashMap<> ();
+//    for (String k : roleDao.data.keySet()) {
+//      ModelSeedRole role = roleDao.data.get(k);
+////      System.out.println(k + " " + role.name);
+//      if (!aa.containsKey(role.name.trim().toLowerCase())) {
+//        aa.put(role.name.trim().toLowerCase(), new HashSet<String> ());
+//      }
+//      aa.get(role.name.trim().toLowerCase()).add(k);
+//    }
+//    int good = 0;
+//    int bad = 0;
+//    for (String k : aa.keySet()) {
+//      
+//      if (aa.get(k).size() > 1) {
+////        System.out.println(k + " " + aa.get(k));
+//        result.put(k.trim().toLowerCase(), aa.get(k));
+//        bad++;
+//      } else {
+//        result.put(k.trim().toLowerCase(), aa.get(k));
+//        good++;
+//      }
+//    }
+//    logger.debug("roles good: {}, bad: {}", good, bad);
+//    return result;
+//  }
   
-  public static Map<String, Set<String>> getReactionRoles() {
-    Map<String, Set<String>> result = new HashMap<> ();
-    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
-    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao(roleJson);
-    for (String k : roleDao.data.keySet()) {
-      ModelSeedRole role = roleDao.data.get(k);
-      for (String rxn : role.reactions) {
-        rxn = rxn.split(";")[0].trim();
-//        System.out.println(rxn + " " + k); 
-        if (!result.containsKey(rxn)) {
-          result.put(rxn, new HashSet<String> ());
-        }
-        result.get(rxn).add(k);
-      }
-//      System.out.println(k + " " + role.reactions.size());
-
-    }
-    return result;
-  }
+//  public static Map<String, Set<String>> getReactionRoles() {
+//    Map<String, Set<String>> result = new HashMap<> ();
+//    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
+//    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao(roleJson);
+//    for (String k : roleDao.data.keySet()) {
+//      ModelSeedRole role = roleDao.data.get(k);
+//      for (String rxn : role.reactions) {
+//        rxn = rxn.split(";")[0].trim();
+////        System.out.println(rxn + " " + k); 
+//        if (!result.containsKey(rxn)) {
+//          result.put(rxn, new HashSet<String> ());
+//        }
+//        result.get(rxn).add(k);
+//      }
+////      System.out.println(k + " " + role.reactions.size());
+//
+//    }
+//    return result;
+//  }
   
   public static String[] gotit = new String[] {
 //      "iGT196",
@@ -245,8 +245,8 @@ public class WorkspaceNinja {
     Map<String, String> swap = getTsv("/var/argonne/model_gpr/iBsu1103_swap.tsv");
     
     String genomeAnnotationWorkspace = "filipeliu:narrative_1502913563238";
-    Map<String, Set<String>> rmap = getRolesMap();
-    Map<String, Set<String>> roles = getReactionRoles();
+    Map<String, Set<String>> rmap = new HashMap<>(); //getRolesMap();
+    Map<String, Set<String>> roles = new HashMap<>(); //getReactionRoles();
     Map<String, Set<String>> roleToRxn = new HashMap<> ();
     for (String rxn : roles.keySet()) {
       for (String r : roles.get(rxn)) {
