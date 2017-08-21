@@ -60,6 +60,9 @@ module SBMLTools {
         string compound_mappings;
         string gene_mappings;
         int create_extracellular;
+        int remove_boundary;
+        int fill_metadata;
+        string translate_database;
     } IntegrateModelParams;
    
             

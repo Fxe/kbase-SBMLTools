@@ -29,7 +29,7 @@ public class TestSolr {
         "b0729", "b2587", "b1702", "b2284", "b2285", "b2779", "b2282", "b2283", 
         "b2280", "b2281", "b1276", "b1241", "b1854", "b2279", "b0008", "b2278", 
         "b2277", "b2276", "b1852", "b1101", "b0474"};
-    KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(null);
+    KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(null, null, null);
     try {
       Map<String, Set<KBaseSolrDocument>> galiasIndex = new HashMap<> (); 
       geneIntegration.processSolrOutput(SOLR_ECOLI_OUTPUT, galiasIndex);

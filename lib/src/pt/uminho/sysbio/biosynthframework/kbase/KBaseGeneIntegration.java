@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,22 +17,35 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
+import datafileutil.DataFileUtilClient;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbsolrutil.KBSolrUtilClient;
 import kbsolrutil.SearchSolrParams;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome.Feature;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import sbmltools.KBaseType;
 import us.kbase.common.service.JsonClientException;
+import us.kbase.common.service.Tuple11;
+import us.kbase.common.service.UObject;
+import us.kbase.workspace.ObjectSaveData;
+import us.kbase.workspace.SaveObjectsParams;
+import us.kbase.workspace.WorkspaceClient;
 
 public class KBaseGeneIntegration {
   
   private static final Logger logger = LoggerFactory.getLogger(KBaseGeneIntegration.class);
   
   private final KBSolrUtilClient solrClient;
+  private final WorkspaceClient wspClient;
+  private final DataFileUtilClient dfuClient;
   
-  public KBaseGeneIntegration(KBSolrUtilClient solrClient) {
+  public KBaseGeneIntegration(WorkspaceClient wspClient, DataFileUtilClient dfuClient, KBSolrUtilClient solrClient) {
     this.solrClient  = solrClient;
+    this.wspClient = wspClient;
+    this.dfuClient = dfuClient;
   }
   
   public Map<String, Set<KBaseSolrDocument>> processSolrOutput(String ojson, Map<String, Set<KBaseSolrDocument>> galiasIndex) throws IOException {
@@ -54,7 +69,18 @@ public class KBaseGeneIntegration {
     return process(new HashSet<> (Arrays.asList(genes)), galiasIndex);
   }
   
+  public Set<String> getReactions(String function) {
+    return null;
+  }
+  
+  public KBaseGenomeReport report;
+  
   public String process(Set<String> genes, Map<String, Set<KBaseSolrDocument>> galiasIndex) {
+    
+    logger.info("process !");
+    KBaseGenomeReport report = new KBaseGenomeReport();
+    this.report = report;
+    Map<String, String> genomeWorkspace = new HashMap<> ();
     Map<String, Set<String>> orgGenomeIds = new HashMap<> ();
     Map<String, Integer> organismGeneHits = new HashMap<> ();
     for (String gene : genes) {
@@ -63,6 +89,8 @@ public class KBaseGeneIntegration {
 //      System.out.println(gene);
       if (docs != null && !docs.isEmpty()) {
         for (KBaseSolrDocument doc : docs) {
+//          System.out.println(doc.workspace_name);
+//          System.out.println(doc.genome_id);
           organism.add(doc.scientific_name);
 //          System.out.println("\t" + doc.scientific_name + "\t" + doc.functions);
           if (!orgGenomeIds.containsKey(doc.scientific_name)) {
@@ -70,6 +98,9 @@ public class KBaseGeneIntegration {
           }
           if (doc.genome_id != null) {
             orgGenomeIds.get(doc.scientific_name).add(doc.genome_id);
+            if (!genomeWorkspace.containsKey(doc.genome_id)) {
+              genomeWorkspace.put(doc.genome_id, doc.workspace_name);
+            }
           }
         }
       }
@@ -79,31 +110,115 @@ public class KBaseGeneIntegration {
     }
     //%organism cover
     //%
-    System.out.println(orgGenomeIds);
+    logger.info("found {}", orgGenomeIds);
+    
     String wut = "";
+    
+    Map<String, Set<String>> best = new HashMap<> ();
+    double bestScore = 0.0;
     for (String org : organismGeneHits.keySet()) {
       double total = genes.size();
-      wut += org + " " + organismGeneHits.get(org) / total + "\n";
+      double coverage = organismGeneHits.get(org) / total;
+      if (coverage > bestScore) {
+        best.clear();
+        bestScore = coverage;
+      }
+      if (coverage == bestScore) {
+        if (!best.containsKey(org)) {
+          best.put(org, new HashSet<String> ());
+        }
+        best.get(org).addAll(orgGenomeIds.get(org));
+        report.bestMatch = org;
+        report.bestScore = coverage;
+        
+      }
+      
+      wut += org + " " + coverage + "\n";
+      for (String genomeId : orgGenomeIds.get(org)) {
+        report.addMatchGenome(genomeId, org, coverage);
+      }
 //      System.out.println(org + " " + organismGeneHits.get(org) / total);
     }
     
-    return wut; 
-  }
-
-  public String aaa(FBAModel kmodel) {
-    String tempResult = "";
-    Set<String> genes = new HashSet<> ();
-    
-    for (ModelReaction krxn : kmodel.getModelreactions()) {
-      String gpr = krxn.getImportedGpr();
-      Set<String> grp = KBaseUtils.getGenes(gpr);
-      if (gpr != null && !gpr.isEmpty()) {
-        genes.addAll(grp);
+    for (String bestOrg : best.keySet()) {
+      Set<String> genomes = best.get(bestOrg);
+      for (String genome : genomes) {
+        
       }
     }
     
-    //split querys
-    //
+    Set<String> nomatch = new HashSet<> (genes);
+    Set<String> mappedFeatures = new HashSet<> ();
+    Map<String, Set<String>> ftoreactions = new HashMap<> ();
+    Set<String> unmappedFeatures = new HashSet<> ();
+    for (String g : genes) {
+      report.mgenes.put(g, null);
+    }
+    for (String org : best.keySet()) {
+      for (String genome : best.get(org)) {
+        String wsName = genomeWorkspace.get(genome);
+        System.out.println(genome + " " + wsName);
+        try {
+          KBaseGenome g = KBaseIOUtils.getGenome(genome, wsName, null, wspClient);
+          for (Feature f : g.features) {
+            //ontology_terms should not be null
+            if (f.ontology_terms == null) {
+              f.ontology_terms = new HashMap<> ();
+            }
+          }
+//          String targetWs = "filipeliu:narrative_1502913563238";
+//          List<ObjectSaveData> odata = new ArrayList<> ();
+//          SaveObjectsParams soparams = new SaveObjectsParams().withWorkspace(targetWs).withObjects(odata);
+//          odata.add(new ObjectSaveData().withData(new UObject(g)).withName(genome).withType(KBaseType.Genome.value()));
+//          try {
+//            for (Tuple11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> t : wspClient.saveObjects(soparams)) {
+//              String gref = KBaseIOUtils.getRefFromObjectInfo(t);
+//              System.out.println("saved: " + gref);
+//              g.kid = new KBaseId(genome, wsName, gref);
+//            }
+//
+//          } catch (JsonClientException e) {
+//            e.printStackTrace();
+//          }
+//          String gref = KBaseIOUtils.saveDataSafe(genome, KBaseType.Genome, g, targetWs, dfuClient);
+
+          report.bestGenomeKID.add(g.kid);
+//          System.out.println("ID: " + g.id);
+//          System.out.println("ID: " + g.);1
+          report.features = g.features.size();
+          for (Feature f : g.features) {
+            report.geneFunction.put(f.id, f.function);
+//            System.out.println(f);
+            Set<String> faliases = new HashSet<> (f.aliases);
+            faliases.add(f.id);
+            Set<String> fgene = Sets.intersection(faliases, genes);
+            nomatch.removeAll(fgene);
+            //should warning if fgenes size > 1
+            if (!fgene.isEmpty()) {
+              report.mapGeneToFeature(fgene, f.id);
+              report.mgenesMapped.addAll(fgene);
+              mappedFeatures.add(f.id);
+//              System.out.println(fgene + " " + f);
+            } else {
+              unmappedFeatures.add(f.id);
+            }
+            //ftoreactions update
+            Set<String> frxn = getReactions(f.function);
+            ftoreactions.put(f.id, frxn);
+          }
+          
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+//    
+    return wut; 
+  }
+
+  public String searchGenome(Set<String> genes) {
+    String tempResult = "";
+    
     Map<String, Set<KBaseSolrDocument>> galiasIndex = new HashMap<> ();
     if (solrClient != null) {
       List<List<String>> chunks = Lists.partition(new ArrayList<String> (genes), 200);
@@ -117,7 +232,7 @@ public class KBaseGeneIntegration {
         Map<String, String> searchParam = new HashMap<> ();
         searchParam.put("fl", "aliases,scientific_name,functions,workspace_name,genome_id");
         searchParam.put("start", "0");
-        searchParam.put("rows", "2000");
+        searchParam.put("rows", "5000");
 
         SearchSolrParams sparams = new SearchSolrParams()
             .withSearchCore("GenomeFeatures_prod")
@@ -126,11 +241,10 @@ public class KBaseGeneIntegration {
             .withSearchParam(searchParam)
             .withGroupOption("");
 
-
         Map<String, String> solrClientOutput;
         try {
           solrClientOutput = solrClient.searchKbaseSolr(sparams);
-          System.out.println(solrClientOutput.keySet());
+//          System.out.println(solrClientOutput.keySet()); //[solr_search_result]
           String ojson = solrClientOutput.get("solr_search_result");
           this.processSolrOutput(ojson, galiasIndex);
           
@@ -145,17 +259,46 @@ public class KBaseGeneIntegration {
       //missing reactions
       tempResult += process(genes, galiasIndex);
     }
-//    String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));
-   
     
-
-
-    
-
-
-    
-
-
     return tempResult;
+  }
+  
+  public String searchGenome(FBAModelAdapter kmodel) {
+    Set<String> genes = new TreeSet<> ();
+    
+    for (ModelReaction krxn : kmodel.fbaModel.getModelreactions()) {
+      Set<String> grp = kmodel.getGenes(krxn.getId());
+      if (grp != null && !grp.isEmpty()) {
+        genes.addAll(grp);
+      }
+    }
+    
+    //split querys
+    //
+
+//    String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));
+
+
+    return searchGenome(genes);
+  }
+  
+  public String searchGenome(FBAModel kmodel) {
+    Set<String> genes = new TreeSet<> ();
+    
+    for (ModelReaction krxn : kmodel.getModelreactions()) {
+      String gpr = krxn.getImportedGpr();
+      Set<String> grp = KBaseUtils.getGenes(gpr);
+      if (grp != null && !grp.isEmpty()) {
+        genes.addAll(grp);
+      }
+    }
+    
+    //split querys
+    //
+
+//    String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));
+
+
+    return searchGenome(genes);
   }
 }

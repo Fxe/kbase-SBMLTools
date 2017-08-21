@@ -32,10 +32,22 @@ parameters :
         ui-name : kbase_compartment_id
         short-hint : kbase_compartment_id_hint
         long-hint  : kbase_compartment_id_lhint
+    translate_database :
+        ui-name : Translate Metabolite and Reaction identifiers
+        short-hint : Rename metabolites and reactions to another database identifiers
+        long-hint  : Rename metabolites and reactions to another database identifiers
     template_id :
         ui-name : Template ID
         short-hint : Select the template model to associate, which impacts candidate reactions for gapfilling
         long-hint  : Select the template model to associate, which impacts candidate reactions for gapfilling
+    remove_boundary :
+        ui-name : Removes Boundary Metabolites
+        short-hint : Automatically excludes boundary metabolites
+        long-hint  : Automatically excludes boundary metabolites
+    fill_metadata :
+        ui-name : Rewrite Metabolite Metadata
+        short-hint : Automatically rewrite Metabolite metadata from integration (Formulas, Chemical Structures, Names)
+        long-hint  : Automatically rewrite Metabolite metadata from integration (Formulas, Chemical Structures, Names)
     create_extracellular :
         ui-name : Create extracellular compartment
         short-hint : Automatically creates an extracellular compartment with transporters added for all metabolites with associated drain reactions

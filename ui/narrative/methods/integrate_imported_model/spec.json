@@ -125,6 +125,71 @@
       }
     },
     {
+      "optional": true,
+      "allow_multiple": false,
+      "field_type": "dropdown",
+      "dropdown_options": {
+        "options": [
+          {
+            "id": "kegg",
+            "display": "KEGG",
+            "ui_name": "KEGG",
+            "value": "kegg"
+          },
+          {
+            "value": "modelseed",
+            "ui_name": "ModelSeed",
+            "display": "ModelSeed",
+            "id": "modelseed"
+          },
+          {
+            "id": "bigg,
+            "value": "bigg",
+            "ui_name": "BiGG",
+            "display": "BiGG"
+          }
+        ]
+      },
+      "id": "translate_database",
+      "advanced": false,
+      "default_values": [
+        "modelseed"
+      ],
+      "text_options": {
+        "valid_ws_types": [
+          
+        ]
+      }
+    },
+    {
+      "field_type": "checkbox",
+      "allow_multiple": false,
+      "optional": false,
+      "id": "remove_boundary",
+      "advanced": true,
+      "default_values": [
+        "1"
+      ],
+      "checkbox_options": {
+        "unchecked_value": 0,
+        "checked_value": 1
+      }
+    },
+    {
+      "field_type": "checkbox",
+      "allow_multiple": false,
+      "optional": false,
+      "id": "fill_metadata",
+      "advanced": true,
+      "default_values": [
+        "1"
+      ],
+      "checkbox_options": {
+        "unchecked_value": 0,
+        "checked_value": 1
+      }
+    },
+    {
       "id": "biomass_reactions",
       "field_type": "textsubdata",
       "allow_multiple": false,

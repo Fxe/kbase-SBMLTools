@@ -241,6 +241,56 @@ public class KBaseIOUtils {
     return null;
   }
   
+  public static KBaseGenome getGenome(String name, String ws, String ref, 
+      WorkspaceClient wsClient) throws IOException {
+    KBaseGenome out = null;
+    try {
+      List<ObjectSpecification> objects = new ArrayList<> ();
+      ObjectSpecification ospec = new ObjectSpecification();
+      if (name != null) {
+        ospec.withName(name);
+      }
+      if (ws != null) {
+        ospec.withWorkspace(ws);
+      }
+      if (ref != null) {
+        ospec.withRef(ref);
+      }
+
+      objects.add(ospec);
+
+      GetObjects2Params params = new GetObjects2Params().withObjects(objects);
+      GetObjects2Results result = wsClient.getObjects2(params);
+      
+      List<ObjectData> odatas = result.getData();
+      ObjectData odata = odatas.iterator().next();
+      String oref = KBaseIOUtils.getRefFromObjectInfo(odata.getInfo());
+      
+      UObject uo = odata.getData();
+      Object jsonData = uo.asInstance();
+      
+      ObjectMapper om = new ObjectMapper();
+      out = om.convertValue(jsonData, KBaseGenome.class);
+      out.kid = new KBaseId(name, ws, oref);
+    } catch (IOException | JsonClientException e) {
+      throw new IOException(e);
+    }
+    return out;
+  }
+  
+  public static void writeStringFile(String string, String path) {
+    OutputStream os = null;
+    try {
+      File f = new File(path);
+      os = new FileOutputStream(f);
+      IOUtils.write(string, os);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      IOUtils.closeQuietly(os);
+    }
+  }
+
   public static Object getObject(String name, String ws, String ref, 
       WorkspaceClient wsClient) throws IOException {
     try {

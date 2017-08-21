@@ -87,7 +87,7 @@ public class KBaseModelIntegrationFacade {
     
     String geneData = "";
     if (geneIntegration != null) {
-      geneData = geneIntegration.aaa(fbaModel);
+      geneData = geneIntegration.searchGenome(fbaModel);
     }
     
     

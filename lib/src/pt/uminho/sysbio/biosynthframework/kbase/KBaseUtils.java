@@ -8,6 +8,7 @@ import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxT
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.DataTypeEnum;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.IValue;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.node.Variable;
+import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
 
 public class KBaseUtils {
   public static Set<String> collect(AbstractSyntaxTreeNode<DataTypeEnum, IValue> root) {
@@ -37,8 +38,8 @@ public class KBaseUtils {
     try {
       grrci = new GeneReactionRuleCI(gprExpression);
       return getGenes(grrci);
-    } catch (Exception e) {
-      return null;
+    } catch (Exception | TokenMgrError e) {
+      return new HashSet<> ();
     }
   }
 }

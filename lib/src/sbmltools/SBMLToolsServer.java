@@ -338,7 +338,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         solrClient.setIsInsecureHttpConnectionAllowed(true);
         
 
-        KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(solrClient);
+        KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(wspClient, dfuClient, solrClient);
         
 //        KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
         returnVal = new KBaseModelIntegrationFacade(wspClient, 

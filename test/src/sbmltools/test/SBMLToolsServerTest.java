@@ -386,7 +386,7 @@ public class SBMLToolsServerTest {
 //    solrClient.searchKbaseSolr(params);
 //    IntegrateModelParams [modelName=iJO1366_bigg2, workspaceName=filipeliu:narrative_1502474753893, outputModelName=test, templateId=gramneg, genomeId=GCF_000022605.2_ASM2260v1_genomic, compartmentTranslation=[], biomassReactions=, compoundMappings=null, geneMappings=null, createExtracellular=0, additionalProperties={}]
     FBAModel fbaModel = KBaseIOUtils.getObject("iJO1366_bigg2", "filipeliu:narrative_1502474753893", null, FBAModel.class, wsClient);
-    KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(null);
-    geneIntegration.aaa(fbaModel);
+    KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(null, null, null);
+    geneIntegration.searchGenome(fbaModel);
   }
 }

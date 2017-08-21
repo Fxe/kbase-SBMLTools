@@ -2,7 +2,9 @@ package sbmltools;
 
 public enum KBaseType {
   
-  FBAModel("KBaseFBA.FBAModel"), KBaseBiochemMedia("KBaseBiochem.Media");
+  FBAModel("KBaseFBA.FBAModel"),
+  Genome("KBaseGenomes.Genome"), 
+  KBaseBiochemMedia("KBaseBiochem.Media");
 
   private final String value;
   
