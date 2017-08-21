@@ -454,6 +454,9 @@ IntegrateModelParams is a reference to a hash where the following keys are defin
 	compound_mappings has a value which is a string
 	gene_mappings has a value which is a string
 	create_extracellular has a value which is an int
+	remove_boundary has a value which is an int
+	fill_metadata has a value which is an int
+	translate_database has a value which is a string
 CompartmentMapping is a reference to a hash where the following keys are defined:
 	kbase_compartment_id has a value which is a string
 	model_compartment_id has a value which is a reference to a list where each element is a string
@@ -481,6 +484,9 @@ IntegrateModelParams is a reference to a hash where the following keys are defin
 	compound_mappings has a value which is a string
 	gene_mappings has a value which is a string
 	create_extracellular has a value which is an int
+	remove_boundary has a value which is an int
+	fill_metadata has a value which is an int
+	translate_database has a value which is a string
 CompartmentMapping is a reference to a hash where the following keys are defined:
 	kbase_compartment_id has a value which is a string
 	model_compartment_id has a value which is a reference to a list where each element is a string
@@ -815,6 +821,9 @@ biomass_reactions has a value which is a string
 compound_mappings has a value which is a string
 gene_mappings has a value which is a string
 create_extracellular has a value which is an int
+remove_boundary has a value which is an int
+fill_metadata has a value which is an int
+translate_database has a value which is a string
 
 </pre>
 
@@ -833,6 +842,9 @@ biomass_reactions has a value which is a string
 compound_mappings has a value which is a string
 gene_mappings has a value which is a string
 create_extracellular has a value which is an int
+remove_boundary has a value which is an int
+fill_metadata has a value which is an int
+translate_database has a value which is a string
 
 
 =end text

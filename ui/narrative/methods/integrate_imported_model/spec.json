@@ -143,7 +143,7 @@
             "id": "modelseed"
           },
           {
-            "id": "bigg,
+            "id": "bigg",
             "value": "bigg",
             "ui_name": "BiGG",
             "display": "BiGG"
@@ -357,6 +357,18 @@
         {
           "input_parameter": "output_model_name",
           "target_property": "output_model_name"
+        },
+        {
+          "input_parameter": "remove_boundary",
+          "target_property": "remove_boundary"
+        },
+        {
+          "input_parameter": "fill_metadata",
+          "target_property": "fill_metadata"
+        },
+        {
+          "input_parameter": "translate_database",
+          "target_property": "translate_database"
         }
       ],
       "output_mapping": [

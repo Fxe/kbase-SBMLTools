@@ -121,7 +121,9 @@ class SBMLTools(object):
            "kbase_compartment_id" of String, parameter "model_compartment_id"
            of list of String, parameter "biomass_reactions" of String,
            parameter "compound_mappings" of String, parameter "gene_mappings"
-           of String, parameter "create_extracellular" of Long
+           of String, parameter "create_extracellular" of Long, parameter
+           "remove_boundary" of Long, parameter "fill_metadata" of Long,
+           parameter "translate_database" of String
         :returns: instance of type "SbmlImporterResults" -> structure:
            parameter "report_name" of String, parameter "report_ref" of
            String, parameter "fbamodel_id" of String

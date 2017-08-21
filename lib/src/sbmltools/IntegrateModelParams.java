@@ -31,7 +31,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "biomass_reactions",
     "compound_mappings",
     "gene_mappings",
-    "create_extracellular"
+    "create_extracellular",
+    "remove_boundary",
+    "fill_metadata",
+    "translate_database"
 })
 public class IntegrateModelParams {
 
@@ -55,6 +58,12 @@ public class IntegrateModelParams {
     private String geneMappings;
     @JsonProperty("create_extracellular")
     private Long createExtracellular;
+    @JsonProperty("remove_boundary")
+    private Long removeBoundary;
+    @JsonProperty("fill_metadata")
+    private Long fillMetadata;
+    @JsonProperty("translate_database")
+    private String translateDatabase;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("model_name")
@@ -207,6 +216,51 @@ public class IntegrateModelParams {
         return this;
     }
 
+    @JsonProperty("remove_boundary")
+    public Long getRemoveBoundary() {
+        return removeBoundary;
+    }
+
+    @JsonProperty("remove_boundary")
+    public void setRemoveBoundary(Long removeBoundary) {
+        this.removeBoundary = removeBoundary;
+    }
+
+    public IntegrateModelParams withRemoveBoundary(Long removeBoundary) {
+        this.removeBoundary = removeBoundary;
+        return this;
+    }
+
+    @JsonProperty("fill_metadata")
+    public Long getFillMetadata() {
+        return fillMetadata;
+    }
+
+    @JsonProperty("fill_metadata")
+    public void setFillMetadata(Long fillMetadata) {
+        this.fillMetadata = fillMetadata;
+    }
+
+    public IntegrateModelParams withFillMetadata(Long fillMetadata) {
+        this.fillMetadata = fillMetadata;
+        return this;
+    }
+
+    @JsonProperty("translate_database")
+    public String getTranslateDatabase() {
+        return translateDatabase;
+    }
+
+    @JsonProperty("translate_database")
+    public void setTranslateDatabase(String translateDatabase) {
+        this.translateDatabase = translateDatabase;
+    }
+
+    public IntegrateModelParams withTranslateDatabase(String translateDatabase) {
+        this.translateDatabase = translateDatabase;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -219,7 +273,7 @@ public class IntegrateModelParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((("IntegrateModelParams"+" [modelName=")+ modelName)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", templateId=")+ templateId)+", genomeId=")+ genomeId)+", compartmentTranslation=")+ compartmentTranslation)+", biomassReactions=")+ biomassReactions)+", compoundMappings=")+ compoundMappings)+", geneMappings=")+ geneMappings)+", createExtracellular=")+ createExtracellular)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((("IntegrateModelParams"+" [modelName=")+ modelName)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", templateId=")+ templateId)+", genomeId=")+ genomeId)+", compartmentTranslation=")+ compartmentTranslation)+", biomassReactions=")+ biomassReactions)+", compoundMappings=")+ compoundMappings)+", geneMappings=")+ geneMappings)+", createExtracellular=")+ createExtracellular)+", removeBoundary=")+ removeBoundary)+", fillMetadata=")+ fillMetadata)+", translateDatabase=")+ translateDatabase)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
