@@ -12,6 +12,7 @@ eval {
     $get_time = sub { Time::HiRes::gettimeofday() };
 };
 
+use Bio::KBase::AuthToken;
 
 # Client version should match Impl version
 # This is a Semantic Version number,
@@ -25,7 +26,8 @@ SBMLTools::SBMLToolsClient
 =head1 DESCRIPTION
 
 
-@author chenry,kkeller
+A KBase module: SBMLTools
+This sample module contains one small method - filter_contigs.
 
 
 =cut
@@ -74,6 +76,27 @@ sub new
 	push(@{$self->{headers}}, 'Kbrpc-Errordest', $self->{kbrpc_error_dest});
     }
 
+    #
+    # This module requires authentication.
+    #
+    # We create an auth token, passing through the arguments that we were (hopefully) given.
+
+    {
+	my %arg_hash2 = @args;
+	if (exists $arg_hash2{"token"}) {
+	    $self->{token} = $arg_hash2{"token"};
+	} elsif (exists $arg_hash2{"user_id"}) {
+	    my $token = Bio::KBase::AuthToken->new(@args);
+	    if (!$token->error_message) {
+	        $self->{token} = $token->token;
+	    }
+	}
+	
+	if (exists $self->{token})
+	{
+	    $self->{client}->{token} = $self->{token};
+	}
+    }
 
     my $ua = $self->{client}->ua;	 
     my $timeout = $ENV{CDMI_TIMEOUT} || (30 * 60);	 
@@ -84,6 +107,451 @@ sub new
 }
 
 
+
+
+=head2 filter_contigs
+
+  $output = $obj->filter_contigs($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a SBMLTools.SbmlImportParams
+$output is a SBMLTools.FilterContigsResults
+SbmlImportParams is a reference to a hash where the following keys are defined:
+	assembly_input_ref has a value which is a SBMLTools.assembly_ref
+	workspace_name has a value which is a string
+	url has a value which is a string
+	min_length has a value which is an int
+assembly_ref is a string
+FilterContigsResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	assembly_output has a value which is a SBMLTools.assembly_ref
+	n_initial_contigs has a value which is an int
+	n_contigs_removed has a value which is an int
+	n_contigs_remaining has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a SBMLTools.SbmlImportParams
+$output is a SBMLTools.FilterContigsResults
+SbmlImportParams is a reference to a hash where the following keys are defined:
+	assembly_input_ref has a value which is a SBMLTools.assembly_ref
+	workspace_name has a value which is a string
+	url has a value which is a string
+	min_length has a value which is an int
+assembly_ref is a string
+FilterContigsResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	assembly_output has a value which is a SBMLTools.assembly_ref
+	n_initial_contigs has a value which is an int
+	n_contigs_removed has a value which is an int
+	n_contigs_remaining has a value which is an int
+
+
+=end text
+
+=item Description
+
+The actual function is declared using 'funcdef' to specify the name
+and input/return arguments to the function.  For all typical KBase
+Apps that run in the Narrative, your function should have the 
+'authentication required' modifier.
+
+=back
+
+=cut
+
+ sub filter_contigs
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function filter_contigs (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to filter_contigs:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'filter_contigs');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.filter_contigs",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'filter_contigs',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method filter_contigs",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'filter_contigs',
+				       );
+    }
+}
+ 
+
+
+=head2 import_model_xml
+
+  $output = $obj->import_model_xml($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a SBMLTools.SbmlImportParams
+$output is a SBMLTools.FilterContigsResults
+SbmlImportParams is a reference to a hash where the following keys are defined:
+	assembly_input_ref has a value which is a SBMLTools.assembly_ref
+	workspace_name has a value which is a string
+	url has a value which is a string
+	min_length has a value which is an int
+assembly_ref is a string
+FilterContigsResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	assembly_output has a value which is a SBMLTools.assembly_ref
+	n_initial_contigs has a value which is an int
+	n_contigs_removed has a value which is an int
+	n_contigs_remaining has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a SBMLTools.SbmlImportParams
+$output is a SBMLTools.FilterContigsResults
+SbmlImportParams is a reference to a hash where the following keys are defined:
+	assembly_input_ref has a value which is a SBMLTools.assembly_ref
+	workspace_name has a value which is a string
+	url has a value which is a string
+	min_length has a value which is an int
+assembly_ref is a string
+FilterContigsResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	assembly_output has a value which is a SBMLTools.assembly_ref
+	n_initial_contigs has a value which is an int
+	n_contigs_removed has a value which is an int
+	n_contigs_remaining has a value which is an int
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub import_model_xml
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function import_model_xml (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to import_model_xml:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'import_model_xml');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.import_model_xml",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'import_model_xml',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method import_model_xml",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'import_model_xml',
+				       );
+    }
+}
+ 
+
+
+=head2 sbml_importer
+
+  $output = $obj->sbml_importer($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a SBMLTools.SbmlImporterParams
+$output is a SBMLTools.SbmlImporterResults
+SbmlImporterParams is a reference to a hash where the following keys are defined:
+	sbml_url has a value which is a string
+	workspace_name has a value which is a string
+	biomass has a value which is a reference to a list where each element is a string
+	model_name has a value which is a string
+	automatically_integrate has a value which is an int
+SbmlImporterResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	fbamodel_id has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a SBMLTools.SbmlImporterParams
+$output is a SBMLTools.SbmlImporterResults
+SbmlImporterParams is a reference to a hash where the following keys are defined:
+	sbml_url has a value which is a string
+	workspace_name has a value which is a string
+	biomass has a value which is a reference to a list where each element is a string
+	model_name has a value which is a string
+	automatically_integrate has a value which is an int
+SbmlImporterResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	fbamodel_id has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub sbml_importer
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function sbml_importer (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to sbml_importer:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'sbml_importer');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.sbml_importer",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'sbml_importer',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method sbml_importer",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'sbml_importer',
+				       );
+    }
+}
+ 
+
+
+=head2 integrate_model
+
+  $output = $obj->integrate_model($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a SBMLTools.IntegrateModelParams
+$output is a SBMLTools.SbmlImporterResults
+IntegrateModelParams is a reference to a hash where the following keys are defined:
+	model_name has a value which is a string
+	workspace_name has a value which is a string
+	output_model_name has a value which is a string
+	template_id has a value which is a string
+	genome_id has a value which is a string
+	compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
+	biomass_reactions has a value which is a string
+	compound_mappings has a value which is a string
+	gene_mappings has a value which is a string
+	create_extracellular has a value which is an int
+	remove_boundary has a value which is an int
+	fill_metadata has a value which is an int
+	translate_database has a value which is a string
+CompartmentMapping is a reference to a hash where the following keys are defined:
+	kbase_compartment_id has a value which is a string
+	model_compartment_id has a value which is a reference to a list where each element is a string
+SbmlImporterResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	fbamodel_id has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a SBMLTools.IntegrateModelParams
+$output is a SBMLTools.SbmlImporterResults
+IntegrateModelParams is a reference to a hash where the following keys are defined:
+	model_name has a value which is a string
+	workspace_name has a value which is a string
+	output_model_name has a value which is a string
+	template_id has a value which is a string
+	genome_id has a value which is a string
+	compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
+	biomass_reactions has a value which is a string
+	compound_mappings has a value which is a string
+	gene_mappings has a value which is a string
+	create_extracellular has a value which is an int
+	remove_boundary has a value which is an int
+	fill_metadata has a value which is an int
+	translate_database has a value which is a string
+CompartmentMapping is a reference to a hash where the following keys are defined:
+	kbase_compartment_id has a value which is a string
+	model_compartment_id has a value which is a reference to a list where each element is a string
+SbmlImporterResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	fbamodel_id has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub integrate_model
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function integrate_model (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to integrate_model:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'integrate_model');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.integrate_model",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'integrate_model',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method integrate_model",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'integrate_model',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -94,7 +562,7 @@ sub status
     }
     my $url = $self->{url};
     my $result = $self->{client}->call($url, $self->{headers}, {
-        method => "KBaseGenomes.status",
+        method => "SBMLTools.status",
         params => \@args,
     });
     if ($result) {
@@ -119,7 +587,7 @@ sub status
 sub version {
     my ($self) = @_;
     my $result = $self->{client}->call($self->{url}, $self->{headers}, {
-        method => "${last_module.module_name}.version",
+        method => "SBMLTools.version",
         params => [],
     });
     if ($result) {
@@ -127,16 +595,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => '${last_method.name}',
+                method_name => 'integrate_model',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method ${last_method.name}",
+            error => "Error invoking method integrate_model",
             status_line => $self->{client}->status_line,
-            method_name => '${last_method.name}',
+            method_name => 'integrate_model',
         );
     }
 }
@@ -170,6 +638,339 @@ sub _validate_version {
 }
 
 =head1 TYPES
+
+
+
+=head2 assembly_ref
+
+=over 4
+
+
+
+=item Description
+
+A 'typedef' allows you to provide a more specific name for
+a type.  Built-in primitive types include 'string', 'int',
+'float'.  Here we define a type named assembly_ref to indicate
+a string that should be set to a KBase ID reference to an
+Assembly data object.
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a string
+</pre>
+
+=end html
+
+=begin text
+
+a string
+
+=end text
+
+=back
+
+
+
+=head2 FilterContigsParams
+
+=over 4
+
+
+
+=item Description
+
+A 'typedef' can also be used to define compound or container
+objects, like lists, maps, and structures.  The standard KBase
+convention is to use structures, as shown here, to define the
+input and output of your function.  Here the input is a
+reference to the Assembly data object, a workspace to save
+output, and a length threshold for filtering.
+
+To define lists and maps, use a syntax similar to C++ templates
+to indicate the type contained in the list or map.  For example:
+
+    list <string> list_of_strings;
+    mapping <string, int> map_of_ints;
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+assembly_input_ref has a value which is a SBMLTools.assembly_ref
+workspace_name has a value which is a string
+min_length has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+assembly_input_ref has a value which is a SBMLTools.assembly_ref
+workspace_name has a value which is a string
+min_length has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 SbmlImportParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+assembly_input_ref has a value which is a SBMLTools.assembly_ref
+workspace_name has a value which is a string
+url has a value which is a string
+min_length has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+assembly_input_ref has a value which is a SBMLTools.assembly_ref
+workspace_name has a value which is a string
+url has a value which is a string
+min_length has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 CompartmentMapping
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+kbase_compartment_id has a value which is a string
+model_compartment_id has a value which is a reference to a list where each element is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+kbase_compartment_id has a value which is a string
+model_compartment_id has a value which is a reference to a list where each element is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 IntegrateModelParams
+
+=over 4
+
+
+
+=item Description
+
+list<mapping<string, string>> compartment_translation;
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+model_name has a value which is a string
+workspace_name has a value which is a string
+output_model_name has a value which is a string
+template_id has a value which is a string
+genome_id has a value which is a string
+compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
+biomass_reactions has a value which is a string
+compound_mappings has a value which is a string
+gene_mappings has a value which is a string
+create_extracellular has a value which is an int
+remove_boundary has a value which is an int
+fill_metadata has a value which is an int
+translate_database has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+model_name has a value which is a string
+workspace_name has a value which is a string
+output_model_name has a value which is a string
+template_id has a value which is a string
+genome_id has a value which is a string
+compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
+biomass_reactions has a value which is a string
+compound_mappings has a value which is a string
+gene_mappings has a value which is a string
+create_extracellular has a value which is an int
+remove_boundary has a value which is an int
+fill_metadata has a value which is an int
+translate_database has a value which is a string
+
+
+=end text
+
+=back
+
+
+
+=head2 SbmlImporterParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+sbml_url has a value which is a string
+workspace_name has a value which is a string
+biomass has a value which is a reference to a list where each element is a string
+model_name has a value which is a string
+automatically_integrate has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+sbml_url has a value which is a string
+workspace_name has a value which is a string
+biomass has a value which is a reference to a list where each element is a string
+model_name has a value which is a string
+automatically_integrate has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 FilterContigsResults
+
+=over 4
+
+
+
+=item Description
+
+Here is the definition of the output of the function.  The output
+can be used by other SDK modules which call your code, or the output
+visualizations in the Narrative.  'report_name' and 'report_ref' are
+special output fields- if defined, the Narrative can automatically
+render your Report.
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+assembly_output has a value which is a SBMLTools.assembly_ref
+n_initial_contigs has a value which is an int
+n_contigs_removed has a value which is an int
+n_contigs_remaining has a value which is an int
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+assembly_output has a value which is a SBMLTools.assembly_ref
+n_initial_contigs has a value which is an int
+n_contigs_removed has a value which is an int
+n_contigs_remaining has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 SbmlImporterResults
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+fbamodel_id has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+report_name has a value which is a string
+report_ref has a value which is a string
+fbamodel_id has a value which is a string
+
+
+=end text
+
+=back
 
 
 

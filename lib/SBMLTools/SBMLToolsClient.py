@@ -17,7 +17,7 @@ except:
     from baseclient import BaseClient as _BaseClient  # @Reimport
 
 
-class KBaseGenomes(object):
+class SBMLTools(object):
 
     def __init__(
             self, url=None, timeout=30 * 60, user_id=None,
@@ -33,6 +33,105 @@ class KBaseGenomes(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
+    def filter_contigs(self, params, context=None):
+        """
+        The actual function is declared using 'funcdef' to specify the name
+        and input/return arguments to the function.  For all typical KBase
+        Apps that run in the Narrative, your function should have the 
+        'authentication required' modifier.
+        :param params: instance of type "SbmlImportParams" -> structure:
+           parameter "assembly_input_ref" of type "assembly_ref" (A 'typedef'
+           allows you to provide a more specific name for a type.  Built-in
+           primitive types include 'string', 'int', 'float'.  Here we define
+           a type named assembly_ref to indicate a string that should be set
+           to a KBase ID reference to an Assembly data object.), parameter
+           "workspace_name" of String, parameter "url" of String, parameter
+           "min_length" of Long
+        :returns: instance of type "FilterContigsResults" (Here is the
+           definition of the output of the function.  The output can be used
+           by other SDK modules which call your code, or the output
+           visualizations in the Narrative.  'report_name' and 'report_ref'
+           are special output fields- if defined, the Narrative can
+           automatically render your Report.) -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String,
+           parameter "assembly_output" of type "assembly_ref" (A 'typedef'
+           allows you to provide a more specific name for a type.  Built-in
+           primitive types include 'string', 'int', 'float'.  Here we define
+           a type named assembly_ref to indicate a string that should be set
+           to a KBase ID reference to an Assembly data object.), parameter
+           "n_initial_contigs" of Long, parameter "n_contigs_removed" of
+           Long, parameter "n_contigs_remaining" of Long
+        """
+        return self._client.call_method(
+            'SBMLTools.filter_contigs',
+            [params], self._service_ver, context)
+
+    def import_model_xml(self, params, context=None):
+        """
+        :param params: instance of type "SbmlImportParams" -> structure:
+           parameter "assembly_input_ref" of type "assembly_ref" (A 'typedef'
+           allows you to provide a more specific name for a type.  Built-in
+           primitive types include 'string', 'int', 'float'.  Here we define
+           a type named assembly_ref to indicate a string that should be set
+           to a KBase ID reference to an Assembly data object.), parameter
+           "workspace_name" of String, parameter "url" of String, parameter
+           "min_length" of Long
+        :returns: instance of type "FilterContigsResults" (Here is the
+           definition of the output of the function.  The output can be used
+           by other SDK modules which call your code, or the output
+           visualizations in the Narrative.  'report_name' and 'report_ref'
+           are special output fields- if defined, the Narrative can
+           automatically render your Report.) -> structure: parameter
+           "report_name" of String, parameter "report_ref" of String,
+           parameter "assembly_output" of type "assembly_ref" (A 'typedef'
+           allows you to provide a more specific name for a type.  Built-in
+           primitive types include 'string', 'int', 'float'.  Here we define
+           a type named assembly_ref to indicate a string that should be set
+           to a KBase ID reference to an Assembly data object.), parameter
+           "n_initial_contigs" of Long, parameter "n_contigs_removed" of
+           Long, parameter "n_contigs_remaining" of Long
+        """
+        return self._client.call_method(
+            'SBMLTools.import_model_xml',
+            [params], self._service_ver, context)
+
+    def sbml_importer(self, params, context=None):
+        """
+        :param params: instance of type "SbmlImporterParams" -> structure:
+           parameter "sbml_url" of String, parameter "workspace_name" of
+           String, parameter "biomass" of list of String, parameter
+           "model_name" of String, parameter "automatically_integrate" of Long
+        :returns: instance of type "SbmlImporterResults" -> structure:
+           parameter "report_name" of String, parameter "report_ref" of
+           String, parameter "fbamodel_id" of String
+        """
+        return self._client.call_method(
+            'SBMLTools.sbml_importer',
+            [params], self._service_ver, context)
+
+    def integrate_model(self, params, context=None):
+        """
+        :param params: instance of type "IntegrateModelParams"
+           (list<mapping<string, string>> compartment_translation;) ->
+           structure: parameter "model_name" of String, parameter
+           "workspace_name" of String, parameter "output_model_name" of
+           String, parameter "template_id" of String, parameter "genome_id"
+           of String, parameter "compartment_translation" of list of type
+           "CompartmentMapping" -> structure: parameter
+           "kbase_compartment_id" of String, parameter "model_compartment_id"
+           of list of String, parameter "biomass_reactions" of String,
+           parameter "compound_mappings" of String, parameter "gene_mappings"
+           of String, parameter "create_extracellular" of Long, parameter
+           "remove_boundary" of Long, parameter "fill_metadata" of Long,
+           parameter "translate_database" of String
+        :returns: instance of type "SbmlImporterResults" -> structure:
+           parameter "report_name" of String, parameter "report_ref" of
+           String, parameter "fbamodel_id" of String
+        """
+        return self._client.call_method(
+            'SBMLTools.integrate_model',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
-        return self._client.call_method('KBaseGenomes.status',
+        return self._client.call_method('SBMLTools.status',
                                         [], self._service_ver, context)
