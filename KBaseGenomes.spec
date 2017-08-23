@@ -65,7 +65,6 @@ module KBaseGenomes {
 		Reference to a source_id
 		@id external
 	*/
-    typedef string source_id;
     /*
 		KBase genome ID
 		@id kb
