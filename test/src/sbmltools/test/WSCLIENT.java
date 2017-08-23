@@ -36,6 +36,7 @@ public class WSCLIENT extends WorkspaceClient {
     super(url, token);
     this.cacheEngine = cengine;
     otypeMap.put("KBaseGenomes.Genome-8.2", KBaseGenome.class);
+    otypeMap.put("KBaseGenomes.Genome-8.3", KBaseGenome.class);
     otypeMap.put("KBaseFBA.FBAModel-9.1", FBAModel.class);
   }
   
@@ -52,6 +53,7 @@ public class WSCLIENT extends WorkspaceClient {
         if (cacheEngine.isCached(id, ws)) {
           logger.info("found in cache {}, {}", id, ws);
           String otype = cacheEngine.getObjectType(id, ws);
+          System.out.println(otype);
           Class<?> cls = otypeMap.get(otype);
           Object genome = cacheEngine.getCacheData(id, ws, cls);
           UObject uo = new UObject(genome);

@@ -1,7 +1,9 @@
-package pt.uminho.sysbio.biosynthframework.sbml;
+package pt.uminho.sysbio.ext;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 
 public class XmlMessage {
   public MessageType type;

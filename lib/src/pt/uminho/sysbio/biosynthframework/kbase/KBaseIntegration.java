@@ -15,6 +15,7 @@ import kbasefba.ModelCompound;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionReagent;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
+import sbmltools.MockData;
 
 public class KBaseIntegration {
   
@@ -25,7 +26,10 @@ public class KBaseIntegration {
   public String rename = null;
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
+  public String mediaName = null;
   public KBaseBiodbContainer biodbContainer;
+  public Object defaultMedia = null;
+  public String genomeRef = null;
   
   public void renameComparmentEntry(String from, String to) {
     for (ModelCompartment kcmp : fbaModel.getModelcompartments()) {
@@ -56,9 +60,14 @@ public class KBaseIntegration {
   }
   
   public static final String COMPOUND_PRE = "M";
+  public static final String REACTION_PRE = "R";
   
   public String buildIdentifier(String id, String cmp) {
     return String.format("%s_%s_%s", COMPOUND_PRE, id, cmp);
+  }
+  
+  public String buildRxnIdentifier(String id) {
+    return String.format("%s_%s", REACTION_PRE, id);
   }
   
   public String getModelCompoundCompartmentEntry(ModelCompound kcpd) {
@@ -95,7 +104,22 @@ public class KBaseIntegration {
     }
   }
   
+  public void renameReactionEntry(String from, String to) {
+    for (ModelReaction krxn : fbaModel.getModelreactions()) {
+      String rxnEntry = krxn.getId();
+      if (rxnEntry.equals(from)) {
+        logger.info("{} -> {}", krxn.getId(), to);
+//        to = buildIdentifier(to, getModelCompoundCompartmentEntry(kcpd));
+//        to = buildRxnIdentifier(rxnEntry);
+      }
+    }
+  }
+  
   public void integrate() {
+    if (this.genomeRef != null) {
+      fbaModel.setGenomeRef(this.genomeRef);
+    }
+    
     for (String cmpOld : compartmentMapping.keySet()) {
       String cmpSwap = compartmentMapping.get(cmpOld);
       renameComparmentEntry(cmpOld, cmpSwap);
@@ -104,10 +128,20 @@ public class KBaseIntegration {
     //integration
     //BiGG, BiGG2, HMDB, LigandCompound, MetaCyc, ModelSeed, Seed
     if (rename != null) {
+      
+      logger.info("rename: {}", this.rename);
+      
       for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
         List<String> dbRefs = kcpd.getDblinks().get(rename);
         if (dbRefs != null && !dbRefs.isEmpty()) {
           renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
+        }
+      }
+      
+      for (ModelReaction krxn : fbaModel.getModelreactions()) {
+        List<String> dbRefs = krxn.getDblinks().get(rename);
+        if (dbRefs != null && !dbRefs.isEmpty()) {
+          renameReactionEntry(krxn.getId(), dbRefs.iterator().next());
         }
       }
     }
@@ -125,7 +159,7 @@ public class KBaseIntegration {
             String formula = biodbService.getEntityProperty(cpdId, "formula");
             String smiles = biodbService.getEntityProperty(cpdId, "smiles");
             String inchikey = biodbService.getEntityProperty(cpdId, "inchikey");
-            System.out.println(name + " " + formula + " " + smiles);
+//            System.out.println(name + " " + formula + " " + smiles);
             if (name != null) {
               kcpd.setName(name);
             }
@@ -143,6 +177,11 @@ public class KBaseIntegration {
         }
       }
 //      biodbService.getNamePropertyById(id)
+    }
+    
+    if (this.mediaName != null) {
+      Object media = MockData.mockMedia();
+      defaultMedia = media;
     }
   }
 }

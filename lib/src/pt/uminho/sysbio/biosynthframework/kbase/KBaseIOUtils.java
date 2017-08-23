@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,7 @@ import us.kbase.workspace.GetObjects2Results;
 import us.kbase.workspace.ObjectData;
 import us.kbase.workspace.ObjectSpecification;
 import us.kbase.workspace.WorkspaceClient;
+import us.kbase.workspace.WorkspaceIdentity;
 
 public class KBaseIOUtils {
   
@@ -111,10 +114,44 @@ public class KBaseIOUtils {
       IOUtils.closeQuietly(os);
     }
   }
+  
+  public static KBaseId saveData(String nameId, String dataType, Object o, String ws, final WorkspaceClient wsClient) throws Exception {
+//    long wsId = dfuClient.wsNameToId(ws);
+
+//    SaveObjectsParams params = new SaveObjectsParams()
+//        .withId(wsId)
+//        .withObjects(Arrays.asList(
+//            new ObjectSaveData().withName(nameId)
+//            .withType(dataType)
+//            .withData(new UObject(o))));
+    ////  params.setId(wsId);
+    ////  List<ObjectSaveData> saveData = new ArrayList<> ();
+    ////  ObjectSaveData odata = new ObjectSaveData();
+    ////  odata.set
+    ////  
+    ////  params.setObjects(saveData);
+    ////  ;
+    List<us.kbase.workspace.ObjectSaveData>objects = new ArrayList<> ();
+    objects.add(new us.kbase.workspace.ObjectSaveData().withData(
+        new UObject(o)).withName(nameId).withType(dataType));
+//    WorkspaceIdentity wsi = new WorkspaceIdentity().withWorkspace(ws);
+//    long wsId = wsClient.getWorkspaceInfo(wsi).getE1();
+    us.kbase.workspace.SaveObjectsParams params = new us.kbase.workspace.SaveObjectsParams()
+//        .withId(wsId)
+        .withWorkspace(ws)
+        .withObjects(objects);
+    List<?> mg = wsClient.saveObjects(params);
+    for (Object savedObject : mg) {
+      System.out.println(savedObject);
+    }
+//    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
+
+    return null;
+  }
 
   public static String saveData(String nameId, String dataType, Object o, String ws, final DataFileUtilClient dfuClient) throws Exception {
     long wsId = dfuClient.wsNameToId(ws);
-
+    System.out.println(wsId);
     SaveObjectsParams params = new SaveObjectsParams()
         .withId(wsId)
         .withObjects(Arrays.asList(
@@ -310,9 +347,42 @@ public class KBaseIOUtils {
 
       GetObjects2Params params = new GetObjects2Params().withObjects(objects);
       GetObjects2Results result = wsClient.getObjects2(params);
-      List<ObjectData> odata = result.getData();
-      Object o = odata.iterator().next().getData().asInstance();
+      List<ObjectData> odatas = result.getData();
+      ObjectData odata = odatas.iterator().next();
+      ref = KBaseIOUtils.getRefFromObjectInfo(odata.getInfo());
+      
+      Object o = odata.getData().asInstance();
       return o;
+    } catch (IOException | JsonClientException e) {
+      throw new IOException(e);
+    }
+  }
+  
+  public static Pair<KBaseId, Object> getObject2(String name, String ws, String ref, 
+      WorkspaceClient wsClient) throws IOException {
+    try {
+      List<ObjectSpecification> objects = new ArrayList<> ();
+      ObjectSpecification ospec = new ObjectSpecification();
+      if (name != null) {
+        ospec.withName(name);
+      }
+      if (ws != null) {
+        ospec.withWorkspace(ws);
+      }
+      if (ref != null) {
+        ospec.withRef(ref);
+      }
+
+      objects.add(ospec);
+
+      GetObjects2Params params = new GetObjects2Params().withObjects(objects);
+      GetObjects2Results result = wsClient.getObjects2(params);
+      List<ObjectData> odatas = result.getData();
+      ObjectData odata = odatas.iterator().next();
+      ref = KBaseIOUtils.getRefFromObjectInfo(odata.getInfo());
+      
+      Object o = odata.getData().asInstance();
+      return new ImmutablePair<KBaseId, Object>(new KBaseId(name, ws, ref), o);
     } catch (IOException | JsonClientException e) {
       throw new IOException(e);
     }

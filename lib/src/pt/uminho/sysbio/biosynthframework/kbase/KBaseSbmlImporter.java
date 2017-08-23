@@ -48,6 +48,8 @@ import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAutofix;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelMetabolicNetworkFactory;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -63,9 +65,9 @@ import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
 import us.kbase.common.service.UnauthorizedException;
 
-public class KBaseSbmlTools {
+public class KBaseSbmlImporter {
 
-  private static final Logger logger = LoggerFactory.getLogger(KBaseSbmlTools.class);
+  private static final Logger logger = LoggerFactory.getLogger(KBaseSbmlImporter.class);
 
   public static String DATA_EXPORT_PATH = "/data/integration/export";
   public static String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
@@ -81,7 +83,7 @@ public class KBaseSbmlTools {
   public final ReactionIntegration reactionIntegration;
   public final KBaseBiodbContainer biodbContainer;
   
-  public KBaseSbmlTools(
+  public KBaseSbmlImporter(
       String workspace, DataFileUtilClient dfuClient) throws UnauthorizedException, IOException {
     this.workspace = workspace;
     this.dfuClient = dfuClient;
@@ -156,39 +158,7 @@ public class KBaseSbmlTools {
     }
   }
 
-  public static void xrxnAttributes(XmlSbmlModelValidator validator) {
-    String[] xrxnAttr = new String[] {
-        "upperFluxBound", "fast", "metaid", "reversible", "sboTerm", "name", "lowerFluxBound", "id"
-    };
-    String[] xrxnSpecieAttr = new String[] {
-        "stoichiometry", "constant", "species", "metaid", "sboTerm"
-    };
-    validator.xrxnAttr.addAll(Arrays.asList(xrxnAttr));
-    validator.xrxnStoichAttr.addAll(Arrays.asList(xrxnSpecieAttr));
-  }
 
-  public static Map<String, MessageType> knownSpecieAttributes() {
-    String[] attr = new String[] {
-        "speciesType", "NONE",
-        "charge", "NONE",
-        "constant", "NONE",
-        "metaid", "NONE",
-        "hasOnlySubstanceUnits", "NONE",
-        "sboTerm", "NONE",
-        "boundaryCondition", "NONE",
-        "chemicalFormula", "NONE",
-        "initialAmount", "NONE",
-        "name", "NONE",
-        "compartment", "WARN",
-        "id", "CRITICAL",
-        "initialConcentration", "NONE",
-    };
-    Map<String, MessageType> fields = new HashMap<>();
-    for (int i = 0; i < attr.length; i+=2) {
-      fields.put(attr[i], MessageType.valueOf(attr[i + 1]));
-    }
-    return fields;
-  }
   
   
   
@@ -276,11 +246,21 @@ public class KBaseSbmlTools {
 
     
     logger.info("validate");
-    XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel, knownSpecieAttributes());
-    xrxnAttributes(validator);
-    
+//    pt.uminho.sysbio.biosynthframework.sbml.
+    XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel);
+    XmlSbmlModelValidator.initializeDefaults(validator);
+
     List<XmlMessage> msgs = validator.validate();
-    resultAdapter.fillValidationData(msgs);
+    XmlSbmlModelAutofix autofix = new XmlSbmlModelAutofix();
+    autofix.fix(xmodel, msgs);
+    
+    List<XmlMessage> fmsgs = autofix.messages;
+    resultAdapter.fillValidationData(fmsgs);
+    
+    XmlSbmlModelValidator validator2 = new XmlSbmlModelValidator(xmodel);
+    XmlSbmlModelValidator.initializeDefaults(validator2);
+    List<XmlMessage> msgs2 = validator2.validate();
+    resultAdapter.fillValidationData(msgs2);
     
     result.message += "\n" + String.format("Species %d, Reactions %s, %s", 
         xmodel.getSpecies().size(), 
@@ -295,9 +275,6 @@ public class KBaseSbmlTools {
     if (!typeCounterMap.isEmpty()) {
       result.message +="\n" + modelId + " "+ String.format("%s", Joiner.on(' ').withKeyValueSeparator(": ").join(typeCounterMap));
     }
-    
-    
-
     
     modelId = modelId.trim();
     

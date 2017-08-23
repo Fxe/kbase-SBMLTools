@@ -40,9 +40,9 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlTools.ImportModelResult;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter.ImportModelResult;
 //END_HEADER
 
 /**
@@ -104,12 +104,12 @@ public class SBMLToolsServer extends JsonServerServlet {
         System.out.println("Starting filter contigs. Parameters:");
         System.out.println(params);
         
-        KBaseSbmlTools.validateSbmlImportParams(params);
+        KBaseSbmlImporter.validateSbmlImportParams(params);
         
         final String workspaceName = params.getWorkspaceName();
         final String assyRef = params.getAssemblyInputRef();
         ImportModelResult importModelResult = new ImportModelResult();
-        KBaseSbmlTools tools = new KBaseSbmlTools(workspaceName, null);
+        KBaseSbmlImporter tools = new KBaseSbmlImporter(workspaceName, null);
         
         String newAssyRef = assyRef;
         
@@ -245,7 +245,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         }
         
         
-        KBaseSbmlTools sbmlTools = new KBaseSbmlTools(workspaceName, dfuClient);
+        KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(workspaceName, dfuClient);
         
         ImportModelResult result = sbmlTools.importModel(params);
         List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);

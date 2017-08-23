@@ -14,8 +14,10 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import datafileutil.DataFileUtilClient;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
+import sbmltools.KBaseType;
 import sbmltools.test.CacheEngine;
 import sbmltools.test.MockKBSolrUtilClient;
 import sbmltools.test.WSCLIENT;
@@ -31,6 +33,7 @@ import us.kbase.workspace.GetObjects2Results;
 import us.kbase.workspace.ListObjectsParams;
 import us.kbase.workspace.ObjectData;
 import us.kbase.workspace.WorkspaceClient;
+import us.kbase.workspace.WorkspaceIdentity;
 
 public class KBaseAPI {
   public static Map<String, String> getConfigProd() {
@@ -69,6 +72,7 @@ public class KBaseAPI {
   
   public final String token;
   public AuthToken authToken;
+  public URL callbackURL;
 //  public final boolean cacheData = false;
   public WorkspaceClient wsClient;
   public KBSolrUtilClient solrClient;
@@ -86,7 +90,7 @@ public class KBaseAPI {
           .withAllowInsecureURLs("true".equals(config.get("auth-service-url-allow-insecure"))));
       authToken = authService.validateToken(token);
       
-      URL callbackURL = new URL(config.get("callback-url"));
+      callbackURL = new URL(config.get("callback-url"));
       if (cache) {
         
         
@@ -118,6 +122,15 @@ public class KBaseAPI {
     return solrClient;
   }
   
+  public Object getWorkspaceInfo(String ws) throws IOException {
+    try {
+      WorkspaceIdentity wsi = new WorkspaceIdentity().withWorkspace(ws);
+      return getWorkspaceClient().getWorkspaceInfo(wsi);
+    } catch (JsonClientException e) {
+      throw new IOException(e);
+    }
+  }
+  
   public Object getWorkspaceObject(String id, String ws) throws IOException {
     Object o = KBaseIOUtils.getObject(id, ws, null, getWorkspaceClient());
     System.out.println(o.getClass().getSimpleName());
@@ -128,6 +141,20 @@ public class KBaseAPI {
     Object o = KBaseIOUtils.getObject(id, ws, null, getWorkspaceClient());
     ObjectMapper om = new ObjectMapper();
     return om.convertValue(o, clazz);
+  }
+  
+  public KBaseGenome getGenome(String id, String ws) throws IOException {
+    KBaseGenome o = KBaseIOUtils.getObject(id, ws, null, KBaseGenome.class, getWorkspaceClient());
+    return o;
+  }
+  
+  public KBaseId saveGenome(String id, String ws, KBaseGenome o) throws IOException {
+    try {
+      KBaseId kid = KBaseIOUtils.saveData(id, KBaseType.Genome.value(), o, ws, getWorkspaceClient());
+      return kid;
+    } catch (Exception e) {
+      throw new IOException(e);
+    }
   }
   
   public List<KBaseId> listNarrative(String ws, String otype) throws IOException {

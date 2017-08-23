@@ -1,4 +1,4 @@
-package pt.uminho.sysbio.biosynthframework.sbml;
+package pt.uminho.sysbio.ext;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 
 public class XmlSbmlModelValidator {
   

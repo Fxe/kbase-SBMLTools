@@ -276,6 +276,9 @@ public class WorkspaceNinja {
       exclude.add("iAI549");
       for (KBaseId kid : fbaModelQuery) {
         FBAModel kmodel = devAPI.getWorkspaceObject(kid.name, modelWorkspace, FBAModel.class);
+        kmodel.setGenomeRef("23373/5/2");
+        
+        
         if (!kmodel.getId().toLowerCase().contains("neuron") && !exclude.contains(kmodel.getId())) {
           geneIntegration.searchGenome(kmodel);
           KBaseGenomeReport report = geneIntegration.report;
@@ -317,7 +320,18 @@ public class WorkspaceNinja {
           }
           
           if (report.bestMatch != null) {
-//            KBaseId genomeKid = report.getGenomeId();
+            KBaseId genomeKid = report.getGenomeId();
+            if (genomeKid!= null && genomeKid.reference != null) {
+              try {
+                
+                kmodel.setGenomeRef(genomeKid.reference);
+                KBaseIOUtils.saveData(kmodel.getId(), KBaseType.FBAModel.value(), kmodel, "filipeliu:narrative_1502913538729", prodAPI.wsClient);
+              } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+              }
+            }
+
 //            System.out.println(genomeKid);
 //            kmodel.setGenomeRef(genomeKid.reference);
 //            String ref = KBaseIOUtils.saveDataSafe(kid.name, KBaseType.FBAModel, kmodel, "filipeliu:narrative_1502913538729", prodAPI.dfuClient);

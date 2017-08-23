@@ -42,7 +42,7 @@ public class KBaseGenome {
     public String id;
     public String function;
     
-    public Map<String, Object> ontology_terms;
+    public Map<String, Object> ontology_terms = new HashMap<> ();;
     
     public Integer dna_sequence_length;
     public Integer protein_translation_length;

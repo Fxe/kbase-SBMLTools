@@ -59,27 +59,77 @@ public class KBaseModelIntegrationFacade {
     return result;
   }
   
+//  public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, Long workspaceId) throws Exception {
+//    //validate params
+//    String fbaModelName = params.getModelName();
+//    String outputName = params.getOutputModelName();
+//    Long workspaceId = dfuClient.wsNameToId(workspaceName);
+//    System.out.println(workspaceId);
+//    Map<String, String> compartmentMapping = getCompartmentMapping(params.getCompartmentTranslation());
+//    
+//    //get model
+//    FBAModel fbaModel = KBaseIOUtils.getObject(fbaModelName, workspaceName, null, FBAModel.class, wspClient);
+//    //get genome ref
+//    KBaseIOUtils.getObject(params.getGenomeId(), workspaceName, null, wspClient);
+//    
+//    
+//    
+//    //integrate
+//    KBaseIntegration integration = new KBaseIntegration();
+//    integration.fbaModel = fbaModel;
+//    integration.compartmentMapping = compartmentMapping;
+//    integration.rename = "ModelSeed";
+//    integration.fillMetadata = true;
+//    integration.biodbContainer = this.biodbContainer;
+//    
+//    integration.integrate();
+//    
+//    
+//    String geneData = "";
+//    if (geneIntegration != null) {
+//      geneData = geneIntegration.searchGenome(fbaModel);
+//    }
+//    
+//    
+//    String ref = KBaseIOUtils.saveDataSafe(outputName, KBaseType.FBAModel, fbaModel, workspaceName, dfuClient);
+//    
+//    List<WorkspaceObject> wsObjects = new ArrayList<> ();
+//    wsObjects.add(new WorkspaceObject().withDescription("model").withRef(ref));
+//    final ReportInfo reportInfo = kbrClient.create(
+//        new CreateParams().withWorkspaceName(workspaceName)
+//                          .withReport(new Report()
+//                              .withObjectsCreated(wsObjects)
+//                              .withTextMessage(String.format("%s\n%s", params, geneData))));
+//    
+//    SbmlImporterResults returnVal = new SbmlImporterResults().withFbamodelId(outputName)
+//                                                             .withReportName(reportInfo.getName())
+//                                                             .withReportRef(reportInfo.getRef());
+//    
+//    return returnVal;
+//  }
+  
   public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName) throws Exception {
     //validate params
     String fbaModelName = params.getModelName();
     String outputName = params.getOutputModelName();
-    Long workspaceId = dfuClient.wsNameToId(workspaceName);
-    System.out.println(workspaceId);
+//    Long workspaceId = dfuClient.wsNameToId(workspaceName);
+//    System.out.println(workspaceId);
     Map<String, String> compartmentMapping = getCompartmentMapping(params.getCompartmentTranslation());
     
     //get model
     FBAModel fbaModel = KBaseIOUtils.getObject(fbaModelName, workspaceName, null, FBAModel.class, wspClient);
     //get genome ref
-    KBaseIOUtils.getObject(params.getGenomeId(), workspaceName, null, wspClient);
-    
-    
+    String genomeRef = 
+        KBaseIOUtils.getObject2(params.getGenomeId(), workspaceName, null, wspClient).getLeft().reference;
     
     //integrate
     KBaseIntegration integration = new KBaseIntegration();
     integration.fbaModel = fbaModel;
+    integration.genomeRef = genomeRef;
     integration.compartmentMapping = compartmentMapping;
-    integration.rename = "ModelSeed";
-    integration.fillMetadata = true;
+    integration.rename = params.getTranslateDatabase();
+    integration.fillMetadata = params.getFillMetadata() == 1L;
+    integration.mediaName = "importer.media";
     integration.biodbContainer = this.biodbContainer;
     
     integration.integrate();
@@ -95,17 +145,22 @@ public class KBaseModelIntegrationFacade {
     
     List<WorkspaceObject> wsObjects = new ArrayList<> ();
     wsObjects.add(new WorkspaceObject().withDescription("model").withRef(ref));
-    final ReportInfo reportInfo = kbrClient.create(
-        new CreateParams().withWorkspaceName(workspaceName)
-                          .withReport(new Report()
-                              .withObjectsCreated(wsObjects)
-                              .withTextMessage(String.format("%s\n%s", params, geneData))));
     
-    SbmlImporterResults returnVal = new SbmlImporterResults().withFbamodelId(outputName)
-                                                             .withReportName(reportInfo.getName())
-                                                             .withReportRef(reportInfo.getRef());
+    if (kbrClient != null) {
+      final ReportInfo reportInfo = kbrClient.create(
+          new CreateParams().withWorkspaceName(workspaceName)
+                            .withReport(new Report()
+                                .withObjectsCreated(wsObjects)
+                                .withTextMessage(String.format("%s\n%s", params, geneData))));
+      
+      SbmlImporterResults returnVal = new SbmlImporterResults().withFbamodelId(outputName)
+                                                               .withReportName(reportInfo.getName())
+                                                               .withReportRef(reportInfo.getRef());
+      
+      return returnVal;
+    }
     
-    return returnVal;
+    return null;
   }
 }
 
