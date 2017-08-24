@@ -23,8 +23,7 @@ import us.kbase.common.service.Tuple7;
  *         Should the Genome object have a list of feature ids? (in
  *         addition to having a list of feature_refs)
  *         Should the Genome object contain a list of contig_ids too?
- * @optional cdss mrnas assembly_ref quality close_genomes analysis_events features source_id source contigs contig_ids publications md5 taxonomy gc_content complete dna_size num_contigs contig_lengths contigset_ref
- * @optional taxon_ref assembly_ref gff_handle_ref genbank_handle_ref external_source_origination_date release original_source_file_name notes environmental_comments reference_annotation quality_score methodology type
+ * @optional assembly_ref quality close_genomes analysis_events features source_id source contigs contig_ids publications md5 taxonomy gc_content complete dna_size num_contigs contig_lengths contigset_ref
  * @metadata ws gc_content as GC content
  * @metadata ws taxonomy as Taxonomy
  * @metadata ws md5 as MD5
@@ -60,22 +59,8 @@ import us.kbase.common.service.Tuple7;
     "complete",
     "publications",
     "features",
-    "cdss",
-    "mrnas",
     "contigset_ref",
     "assembly_ref",
-    "taxon_ref",
-    "genbank_handle_ref",
-    "gff_handle_ref",
-    "external_source_origination_date",
-    "release",
-    "original_source_file_name",
-    "notes",
-    "environmental_comments",
-    "reference_annotation",
-    "quality_score",
-    "methodology",
-    "type",
     "quality",
     "close_genomes",
     "analysis_events"
@@ -116,38 +101,10 @@ public class Genome {
     private List<Tuple7 <Long, String, String, String, String, String, String>> publications;
     @JsonProperty("features")
     private List<Feature> features;
-    @JsonProperty("cdss")
-    private List<CDS> cdss;
-    @JsonProperty("mrnas")
-    private List<MRNA> mrnas;
     @JsonProperty("contigset_ref")
     private java.lang.String contigsetRef;
     @JsonProperty("assembly_ref")
     private java.lang.String assemblyRef;
-    @JsonProperty("taxon_ref")
-    private java.lang.String taxonRef;
-    @JsonProperty("genbank_handle_ref")
-    private java.lang.String genbankHandleRef;
-    @JsonProperty("gff_handle_ref")
-    private java.lang.String gffHandleRef;
-    @JsonProperty("external_source_origination_date")
-    private java.lang.String externalSourceOriginationDate;
-    @JsonProperty("release")
-    private java.lang.String release;
-    @JsonProperty("original_source_file_name")
-    private java.lang.String originalSourceFileName;
-    @JsonProperty("notes")
-    private java.lang.String notes;
-    @JsonProperty("environmental_comments")
-    private java.lang.String environmentalComments;
-    @JsonProperty("reference_annotation")
-    private java.lang.Long referenceAnnotation;
-    @JsonProperty("quality_score")
-    private Double qualityScore;
-    @JsonProperty("methodology")
-    private java.lang.String methodology;
-    @JsonProperty("type")
-    private java.lang.String type;
     /**
      * <p>Original spec-file type: Genome_quality_measure</p>
      * <pre>
@@ -418,36 +375,6 @@ public class Genome {
         return this;
     }
 
-    @JsonProperty("cdss")
-    public List<CDS> getCdss() {
-        return cdss;
-    }
-
-    @JsonProperty("cdss")
-    public void setCdss(List<CDS> cdss) {
-        this.cdss = cdss;
-    }
-
-    public Genome withCdss(List<CDS> cdss) {
-        this.cdss = cdss;
-        return this;
-    }
-
-    @JsonProperty("mrnas")
-    public List<MRNA> getMrnas() {
-        return mrnas;
-    }
-
-    @JsonProperty("mrnas")
-    public void setMrnas(List<MRNA> mrnas) {
-        this.mrnas = mrnas;
-    }
-
-    public Genome withMrnas(List<MRNA> mrnas) {
-        this.mrnas = mrnas;
-        return this;
-    }
-
     @JsonProperty("contigset_ref")
     public java.lang.String getContigsetRef() {
         return contigsetRef;
@@ -475,186 +402,6 @@ public class Genome {
 
     public Genome withAssemblyRef(java.lang.String assemblyRef) {
         this.assemblyRef = assemblyRef;
-        return this;
-    }
-
-    @JsonProperty("taxon_ref")
-    public java.lang.String getTaxonRef() {
-        return taxonRef;
-    }
-
-    @JsonProperty("taxon_ref")
-    public void setTaxonRef(java.lang.String taxonRef) {
-        this.taxonRef = taxonRef;
-    }
-
-    public Genome withTaxonRef(java.lang.String taxonRef) {
-        this.taxonRef = taxonRef;
-        return this;
-    }
-
-    @JsonProperty("genbank_handle_ref")
-    public java.lang.String getGenbankHandleRef() {
-        return genbankHandleRef;
-    }
-
-    @JsonProperty("genbank_handle_ref")
-    public void setGenbankHandleRef(java.lang.String genbankHandleRef) {
-        this.genbankHandleRef = genbankHandleRef;
-    }
-
-    public Genome withGenbankHandleRef(java.lang.String genbankHandleRef) {
-        this.genbankHandleRef = genbankHandleRef;
-        return this;
-    }
-
-    @JsonProperty("gff_handle_ref")
-    public java.lang.String getGffHandleRef() {
-        return gffHandleRef;
-    }
-
-    @JsonProperty("gff_handle_ref")
-    public void setGffHandleRef(java.lang.String gffHandleRef) {
-        this.gffHandleRef = gffHandleRef;
-    }
-
-    public Genome withGffHandleRef(java.lang.String gffHandleRef) {
-        this.gffHandleRef = gffHandleRef;
-        return this;
-    }
-
-    @JsonProperty("external_source_origination_date")
-    public java.lang.String getExternalSourceOriginationDate() {
-        return externalSourceOriginationDate;
-    }
-
-    @JsonProperty("external_source_origination_date")
-    public void setExternalSourceOriginationDate(java.lang.String externalSourceOriginationDate) {
-        this.externalSourceOriginationDate = externalSourceOriginationDate;
-    }
-
-    public Genome withExternalSourceOriginationDate(java.lang.String externalSourceOriginationDate) {
-        this.externalSourceOriginationDate = externalSourceOriginationDate;
-        return this;
-    }
-
-    @JsonProperty("release")
-    public java.lang.String getRelease() {
-        return release;
-    }
-
-    @JsonProperty("release")
-    public void setRelease(java.lang.String release) {
-        this.release = release;
-    }
-
-    public Genome withRelease(java.lang.String release) {
-        this.release = release;
-        return this;
-    }
-
-    @JsonProperty("original_source_file_name")
-    public java.lang.String getOriginalSourceFileName() {
-        return originalSourceFileName;
-    }
-
-    @JsonProperty("original_source_file_name")
-    public void setOriginalSourceFileName(java.lang.String originalSourceFileName) {
-        this.originalSourceFileName = originalSourceFileName;
-    }
-
-    public Genome withOriginalSourceFileName(java.lang.String originalSourceFileName) {
-        this.originalSourceFileName = originalSourceFileName;
-        return this;
-    }
-
-    @JsonProperty("notes")
-    public java.lang.String getNotes() {
-        return notes;
-    }
-
-    @JsonProperty("notes")
-    public void setNotes(java.lang.String notes) {
-        this.notes = notes;
-    }
-
-    public Genome withNotes(java.lang.String notes) {
-        this.notes = notes;
-        return this;
-    }
-
-    @JsonProperty("environmental_comments")
-    public java.lang.String getEnvironmentalComments() {
-        return environmentalComments;
-    }
-
-    @JsonProperty("environmental_comments")
-    public void setEnvironmentalComments(java.lang.String environmentalComments) {
-        this.environmentalComments = environmentalComments;
-    }
-
-    public Genome withEnvironmentalComments(java.lang.String environmentalComments) {
-        this.environmentalComments = environmentalComments;
-        return this;
-    }
-
-    @JsonProperty("reference_annotation")
-    public java.lang.Long getReferenceAnnotation() {
-        return referenceAnnotation;
-    }
-
-    @JsonProperty("reference_annotation")
-    public void setReferenceAnnotation(java.lang.Long referenceAnnotation) {
-        this.referenceAnnotation = referenceAnnotation;
-    }
-
-    public Genome withReferenceAnnotation(java.lang.Long referenceAnnotation) {
-        this.referenceAnnotation = referenceAnnotation;
-        return this;
-    }
-
-    @JsonProperty("quality_score")
-    public Double getQualityScore() {
-        return qualityScore;
-    }
-
-    @JsonProperty("quality_score")
-    public void setQualityScore(Double qualityScore) {
-        this.qualityScore = qualityScore;
-    }
-
-    public Genome withQualityScore(Double qualityScore) {
-        this.qualityScore = qualityScore;
-        return this;
-    }
-
-    @JsonProperty("methodology")
-    public java.lang.String getMethodology() {
-        return methodology;
-    }
-
-    @JsonProperty("methodology")
-    public void setMethodology(java.lang.String methodology) {
-        this.methodology = methodology;
-    }
-
-    public Genome withMethodology(java.lang.String methodology) {
-        this.methodology = methodology;
-        return this;
-    }
-
-    @JsonProperty("type")
-    public java.lang.String getType() {
-        return type;
-    }
-
-    @JsonProperty("type")
-    public void setType(java.lang.String type) {
-        this.type = type;
-    }
-
-    public Genome withType(java.lang.String type) {
-        this.type = type;
         return this;
     }
 
@@ -729,7 +476,7 @@ public class Genome {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("Genome"+" [id=")+ id)+", scientificName=")+ scientificName)+", domain=")+ domain)+", geneticCode=")+ geneticCode)+", dnaSize=")+ dnaSize)+", numContigs=")+ numContigs)+", contigs=")+ contigs)+", contigLengths=")+ contigLengths)+", contigIds=")+ contigIds)+", source=")+ source)+", sourceId=")+ sourceId)+", md5=")+ md5)+", taxonomy=")+ taxonomy)+", gcContent=")+ gcContent)+", complete=")+ complete)+", publications=")+ publications)+", features=")+ features)+", cdss=")+ cdss)+", mrnas=")+ mrnas)+", contigsetRef=")+ contigsetRef)+", assemblyRef=")+ assemblyRef)+", taxonRef=")+ taxonRef)+", genbankHandleRef=")+ genbankHandleRef)+", gffHandleRef=")+ gffHandleRef)+", externalSourceOriginationDate=")+ externalSourceOriginationDate)+", release=")+ release)+", originalSourceFileName=")+ originalSourceFileName)+", notes=")+ notes)+", environmentalComments=")+ environmentalComments)+", referenceAnnotation=")+ referenceAnnotation)+", qualityScore=")+ qualityScore)+", methodology=")+ methodology)+", type=")+ type)+", quality=")+ quality)+", closeGenomes=")+ closeGenomes)+", analysisEvents=")+ analysisEvents)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((((("Genome"+" [id=")+ id)+", scientificName=")+ scientificName)+", domain=")+ domain)+", geneticCode=")+ geneticCode)+", dnaSize=")+ dnaSize)+", numContigs=")+ numContigs)+", contigs=")+ contigs)+", contigLengths=")+ contigLengths)+", contigIds=")+ contigIds)+", source=")+ source)+", sourceId=")+ sourceId)+", md5=")+ md5)+", taxonomy=")+ taxonomy)+", gcContent=")+ gcContent)+", complete=")+ complete)+", publications=")+ publications)+", features=")+ features)+", contigsetRef=")+ contigsetRef)+", assemblyRef=")+ assemblyRef)+", quality=")+ quality)+", closeGenomes=")+ closeGenomes)+", analysisEvents=")+ analysisEvents)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

@@ -33,74 +33,17 @@ class SBMLTools(object):
             trust_all_ssl_certificates=trust_all_ssl_certificates,
             auth_svc=auth_svc)
 
-    def filter_contigs(self, params, context=None):
+    def sbml_importer(self, params, context=None):
         """
         The actual function is declared using 'funcdef' to specify the name
         and input/return arguments to the function.  For all typical KBase
         Apps that run in the Narrative, your function should have the 
         'authentication required' modifier.
-        :param params: instance of type "SbmlImportParams" -> structure:
-           parameter "assembly_input_ref" of type "assembly_ref" (A 'typedef'
-           allows you to provide a more specific name for a type.  Built-in
-           primitive types include 'string', 'int', 'float'.  Here we define
-           a type named assembly_ref to indicate a string that should be set
-           to a KBase ID reference to an Assembly data object.), parameter
-           "workspace_name" of String, parameter "url" of String, parameter
-           "min_length" of Long
-        :returns: instance of type "FilterContigsResults" (Here is the
-           definition of the output of the function.  The output can be used
-           by other SDK modules which call your code, or the output
-           visualizations in the Narrative.  'report_name' and 'report_ref'
-           are special output fields- if defined, the Narrative can
-           automatically render your Report.) -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String,
-           parameter "assembly_output" of type "assembly_ref" (A 'typedef'
-           allows you to provide a more specific name for a type.  Built-in
-           primitive types include 'string', 'int', 'float'.  Here we define
-           a type named assembly_ref to indicate a string that should be set
-           to a KBase ID reference to an Assembly data object.), parameter
-           "n_initial_contigs" of Long, parameter "n_contigs_removed" of
-           Long, parameter "n_contigs_remaining" of Long
-        """
-        return self._client.call_method(
-            'SBMLTools.filter_contigs',
-            [params], self._service_ver, context)
-
-    def import_model_xml(self, params, context=None):
-        """
-        :param params: instance of type "SbmlImportParams" -> structure:
-           parameter "assembly_input_ref" of type "assembly_ref" (A 'typedef'
-           allows you to provide a more specific name for a type.  Built-in
-           primitive types include 'string', 'int', 'float'.  Here we define
-           a type named assembly_ref to indicate a string that should be set
-           to a KBase ID reference to an Assembly data object.), parameter
-           "workspace_name" of String, parameter "url" of String, parameter
-           "min_length" of Long
-        :returns: instance of type "FilterContigsResults" (Here is the
-           definition of the output of the function.  The output can be used
-           by other SDK modules which call your code, or the output
-           visualizations in the Narrative.  'report_name' and 'report_ref'
-           are special output fields- if defined, the Narrative can
-           automatically render your Report.) -> structure: parameter
-           "report_name" of String, parameter "report_ref" of String,
-           parameter "assembly_output" of type "assembly_ref" (A 'typedef'
-           allows you to provide a more specific name for a type.  Built-in
-           primitive types include 'string', 'int', 'float'.  Here we define
-           a type named assembly_ref to indicate a string that should be set
-           to a KBase ID reference to an Assembly data object.), parameter
-           "n_initial_contigs" of Long, parameter "n_contigs_removed" of
-           Long, parameter "n_contigs_remaining" of Long
-        """
-        return self._client.call_method(
-            'SBMLTools.import_model_xml',
-            [params], self._service_ver, context)
-
-    def sbml_importer(self, params, context=None):
-        """
         :param params: instance of type "SbmlImporterParams" -> structure:
            parameter "sbml_url" of String, parameter "workspace_name" of
            String, parameter "biomass" of list of String, parameter
-           "model_name" of String, parameter "automatically_integrate" of Long
+           "model_name" of String, parameter "automatically_integrate" of
+           Long, parameter "remove_boundary" of Long
         :returns: instance of type "SbmlImporterResults" -> structure:
            parameter "report_name" of String, parameter "report_ref" of
            String, parameter "fbamodel_id" of String

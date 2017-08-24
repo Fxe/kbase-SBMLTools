@@ -27,7 +27,7 @@ import us.kbase.common.service.Tuple7;
  *     Should sequence be in separate objects too?
  *     We may want to add additional fields for other CDM functions
  *     (e.g., atomic regulons, coexpressed fids, co_occurring fids,...)
- *     @optional cdss mrnas orthologs quality feature_creation_event md5 location function ontology_terms protein_translation protein_families subsystems publications subsystem_data aliases annotations regulon_data atomic_regulons coexpressed_fids co_occurring_fids dna_sequence protein_translation_length dna_sequence_length
+ *     @optional orthologs quality feature_creation_event md5 location function ontology_terms protein_translation protein_families subsystems publications subsystem_data aliases annotations regulon_data atomic_regulons coexpressed_fids co_occurring_fids dna_sequence protein_translation_length dna_sequence_length
  * </pre>
  * 
  */
@@ -41,8 +41,6 @@ import us.kbase.common.service.Tuple7;
     "ontology_terms",
     "md5",
     "protein_translation",
-    "cdss",
-    "mrnas",
     "dna_sequence",
     "protein_translation_length",
     "dna_sequence_length",
@@ -76,10 +74,6 @@ public class Feature {
     private java.lang.String md5;
     @JsonProperty("protein_translation")
     private java.lang.String proteinTranslation;
-    @JsonProperty("cdss")
-    private List<String> cdss;
-    @JsonProperty("mrnas")
-    private List<String> mrnas;
     @JsonProperty("dna_sequence")
     private java.lang.String dnaSequence;
     @JsonProperty("protein_translation_length")
@@ -230,36 +224,6 @@ public class Feature {
 
     public Feature withProteinTranslation(java.lang.String proteinTranslation) {
         this.proteinTranslation = proteinTranslation;
-        return this;
-    }
-
-    @JsonProperty("cdss")
-    public List<String> getCdss() {
-        return cdss;
-    }
-
-    @JsonProperty("cdss")
-    public void setCdss(List<String> cdss) {
-        this.cdss = cdss;
-    }
-
-    public Feature withCdss(List<String> cdss) {
-        this.cdss = cdss;
-        return this;
-    }
-
-    @JsonProperty("mrnas")
-    public List<String> getMrnas() {
-        return mrnas;
-    }
-
-    @JsonProperty("mrnas")
-    public void setMrnas(List<String> mrnas) {
-        this.mrnas = mrnas;
-    }
-
-    public Feature withMrnas(List<String> mrnas) {
-        this.mrnas = mrnas;
         return this;
     }
 
@@ -543,7 +507,7 @@ public class Feature {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((((((((((((((((((((((((((((((((((((((((((("Feature"+" [id=")+ id)+", location=")+ location)+", type=")+ type)+", function=")+ function)+", ontologyTerms=")+ ontologyTerms)+", md5=")+ md5)+", proteinTranslation=")+ proteinTranslation)+", cdss=")+ cdss)+", mrnas=")+ mrnas)+", dnaSequence=")+ dnaSequence)+", proteinTranslationLength=")+ proteinTranslationLength)+", dnaSequenceLength=")+ dnaSequenceLength)+", publications=")+ publications)+", subsystems=")+ subsystems)+", proteinFamilies=")+ proteinFamilies)+", aliases=")+ aliases)+", orthologs=")+ orthologs)+", annotations=")+ annotations)+", subsystemData=")+ subsystemData)+", regulonData=")+ regulonData)+", atomicRegulons=")+ atomicRegulons)+", coexpressedFids=")+ coexpressedFids)+", coOccurringFids=")+ coOccurringFids)+", quality=")+ quality)+", featureCreationEvent=")+ featureCreationEvent)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((((((((((((((((("Feature"+" [id=")+ id)+", location=")+ location)+", type=")+ type)+", function=")+ function)+", ontologyTerms=")+ ontologyTerms)+", md5=")+ md5)+", proteinTranslation=")+ proteinTranslation)+", dnaSequence=")+ dnaSequence)+", proteinTranslationLength=")+ proteinTranslationLength)+", dnaSequenceLength=")+ dnaSequenceLength)+", publications=")+ publications)+", subsystems=")+ subsystems)+", proteinFamilies=")+ proteinFamilies)+", aliases=")+ aliases)+", orthologs=")+ orthologs)+", annotations=")+ annotations)+", subsystemData=")+ subsystemData)+", regulonData=")+ regulonData)+", atomicRegulons=")+ atomicRegulons)+", coexpressedFids=")+ coexpressedFids)+", coOccurringFids=")+ coOccurringFids)+", quality=")+ quality)+", featureCreationEvent=")+ featureCreationEvent)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

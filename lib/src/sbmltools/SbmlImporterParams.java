@@ -24,7 +24,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "workspace_name",
     "biomass",
     "model_name",
-    "automatically_integrate"
+    "automatically_integrate",
+    "remove_boundary"
 })
 public class SbmlImporterParams {
 
@@ -38,6 +39,8 @@ public class SbmlImporterParams {
     private java.lang.String modelName;
     @JsonProperty("automatically_integrate")
     private Long automaticallyIntegrate;
+    @JsonProperty("remove_boundary")
+    private Long removeBoundary;
     private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
 
     @JsonProperty("sbml_url")
@@ -115,6 +118,21 @@ public class SbmlImporterParams {
         return this;
     }
 
+    @JsonProperty("remove_boundary")
+    public Long getRemoveBoundary() {
+        return removeBoundary;
+    }
+
+    @JsonProperty("remove_boundary")
+    public void setRemoveBoundary(Long removeBoundary) {
+        this.removeBoundary = removeBoundary;
+    }
+
+    public SbmlImporterParams withRemoveBoundary(Long removeBoundary) {
+        this.removeBoundary = removeBoundary;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<java.lang.String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -127,7 +145,7 @@ public class SbmlImporterParams {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((("SbmlImporterParams"+" [sbmlUrl=")+ sbmlUrl)+", workspaceName=")+ workspaceName)+", biomass=")+ biomass)+", modelName=")+ modelName)+", automaticallyIntegrate=")+ automaticallyIntegrate)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((("SbmlImporterParams"+" [sbmlUrl=")+ sbmlUrl)+", workspaceName=")+ workspaceName)+", biomass=")+ biomass)+", modelName=")+ modelName)+", automaticallyIntegrate=")+ automaticallyIntegrate)+", removeBoundary=")+ removeBoundary)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
