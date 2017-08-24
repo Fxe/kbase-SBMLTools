@@ -123,8 +123,7 @@ public class KBaseModelIntegrationFacade {
         KBaseIOUtils.getObject2(params.getGenomeId(), workspaceName, null, wspClient).getLeft().reference;
     
     //integrate
-    KBaseIntegration integration = new KBaseIntegration();
-    integration.fbaModel = fbaModel;
+    KBaseIntegration integration = new KBaseIntegration(fbaModel);
     integration.genomeRef = genomeRef;
     integration.compartmentMapping = compartmentMapping;
     integration.rename = params.getTranslateDatabase();

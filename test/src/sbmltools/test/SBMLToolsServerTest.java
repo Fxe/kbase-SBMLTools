@@ -298,8 +298,7 @@ public class SBMLToolsServerTest {
 //      }
 //    }
     
-    KBaseIntegration integration = new KBaseIntegration();
-    integration.fbaModel = fbaModel;
+    KBaseIntegration integration = new KBaseIntegration(fbaModel);
     integration.biodbContainer = new KBaseBiodbContainer("/var/biobase/export");
     integration.compartmentMapping.put("z0", "c");
     integration.compartmentMapping.put("z1", "e");

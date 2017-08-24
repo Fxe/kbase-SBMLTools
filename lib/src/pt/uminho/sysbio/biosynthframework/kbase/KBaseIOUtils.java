@@ -12,6 +12,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
@@ -20,16 +21,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import datafileutil.DataFileUtilClient;
 import datafileutil.FileToShockOutput;
@@ -46,7 +43,6 @@ import us.kbase.workspace.GetObjects2Results;
 import us.kbase.workspace.ObjectData;
 import us.kbase.workspace.ObjectSpecification;
 import us.kbase.workspace.WorkspaceClient;
-import us.kbase.workspace.WorkspaceIdentity;
 
 public class KBaseIOUtils {
   
@@ -140,9 +136,10 @@ public class KBaseIOUtils {
 //        .withId(wsId)
         .withWorkspace(ws)
         .withObjects(objects);
-    List<?> mg = wsClient.saveObjects(params);
+    List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> mg = 
+        wsClient.saveObjects(params);
     for (Object savedObject : mg) {
-      System.out.println(savedObject);
+//      System.out.println(savedObject);
     }
 //    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
 

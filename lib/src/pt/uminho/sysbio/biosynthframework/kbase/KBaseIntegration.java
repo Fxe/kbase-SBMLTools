@@ -1,8 +1,10 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +23,10 @@ public class KBaseIntegration {
   
   private static final Logger logger = LoggerFactory.getLogger(KBaseIntegration.class);
   
-  public FBAModel fbaModel;
+  public final FBAModel fbaModel;
+  public final FBAModelAdapter adapter;
   public Map<String, String> compartmentMapping = new HashMap<> ();
+  public Set<String> biomassSet = new HashSet<> ();
   public String rename = null;
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
@@ -31,32 +35,9 @@ public class KBaseIntegration {
   public Object defaultMedia = null;
   public String genomeRef = null;
   
-  public void renameComparmentEntry(String from, String to) {
-    for (ModelCompartment kcmp : fbaModel.getModelcompartments()) {
-      String cmpEntry = kcmp.getId();
-      if (cmpEntry.equals(from)) {
-        logger.debug("BEFOR: {}", kcmp);
-        long index = kcmp.getCompartmentIndex();
-        if (from.startsWith("z")) {
-          index = 0;
-          kcmp.setCompartmentIndex(index);
-        }
-        
-        kcmp.setId(to + index);
-        kcmp.setCompartmentRef("~/template/compartments/id/" + to);
-        
-        logger.debug("AFTER: {}", kcmp);
-        
-        for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
-          String cmpRef = kcpd.getModelcompartmentRef();
-          if (cmpRef.endsWith("/" + from)) {
-            logger.trace("BEFOR: {}", kcpd);
-            kcpd.setModelcompartmentRef("~/modelcompartments/id/" + to + index);
-            logger.trace("AFTER: {}", kcpd);
-          }
-        }
-      }
-    }
+  public KBaseIntegration(final FBAModel fbaModel) {
+    this.fbaModel = fbaModel;
+    this.adapter = new FBAModelAdapter(fbaModel);
   }
   
   public static final String COMPOUND_PRE = "M";
@@ -120,9 +101,14 @@ public class KBaseIntegration {
       fbaModel.setGenomeRef(this.genomeRef);
     }
     
+    for (String b : biomassSet) {
+      adapter.convertToBiomass(b);
+    }
+    
     for (String cmpOld : compartmentMapping.keySet()) {
       String cmpSwap = compartmentMapping.get(cmpOld);
-      renameComparmentEntry(cmpOld, cmpSwap);
+      adapter.integrateCompartment(cmpOld, cmpSwap);
+//      renameComparmentEntry(cmpOld, cmpSwap);
     }
     
     //integration

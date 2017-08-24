@@ -15,10 +15,13 @@ import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
+import kbasegenomes.Genome;
 import kbsolrutil.KBaseAPI;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxTree;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
+import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
+import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
@@ -139,30 +142,32 @@ public class IntegrationLocalRun {
       }
       try {
         GeneReactionRuleCI grrci = new GeneReactionRuleCI(gprString);
-        AbstractSyntaxTree<?, ?> rule = grrci.getRule();
-        Set<String> genes = KBaseUtils.getGenes(gprString);
-        if (genes != null) {
-          krxn.getModelReactionProteins().clear();
-          List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
-          List<String> features = new ArrayList<> ();
-          for (String g : genes) {
-            features.add(String.format("%s/features/id/%s", kmodel.getGenomeRef(), g));
-          }
-
-          //1985/8/4/features/id/kb|g.220339.CDS.100
-          ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
-              .withFeatureRefs(features)
-              .withTriggering(0L)
-              .withRole("")
-              .withNote("Imported GPR")
-              .withOptionalSubunit(0L);
-          mrpsLists.add(mrps);
-          ModelReactionProtein mrp = new ModelReactionProtein()
-              .withComplexRef("")
-              .withModelReactionProteinSubunits(mrpsLists)
-              .withNote(krxn.getImportedGpr()).withSource("SBML");
-          krxn.getModelReactionProteins().add(mrp);
-        }
+//        AbstractSyntaxTree<?, ?> rule = grrci.getRule();
+        Set<String> genes = KBaseUtils.getGenes(grrci);
+        List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, kmodel.getGenomeRef());
+        krxn.setModelReactionProteins(mrpList);
+//        if (genes != null) {
+//          krxn.getModelReactionProteins().clear();
+//          List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
+//          List<String> features = new ArrayList<> ();
+//          for (String g : genes) {
+//            features.add(String.format("%s/features/id/%s", kmodel.getGenomeRef(), g));
+//          }
+//
+//          //1985/8/4/features/id/kb|g.220339.CDS.100
+//          ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
+//              .withFeatureRefs(features)
+//              .withTriggering(0L)
+//              .withRole("")
+//              .withNote("Imported GPR")
+//              .withOptionalSubunit(0L);
+//          mrpsLists.add(mrps);
+//          ModelReactionProtein mrp = new ModelReactionProtein()
+//              .withComplexRef("")
+//              .withModelReactionProteinSubunits(mrpsLists)
+//              .withNote(krxn.getImportedGpr()).withSource("SBML");
+//          krxn.getModelReactionProteins().add(mrp);
+//        }
       } catch (Exception | TokenMgrError e) {
         badGpr.put(krxn.getId(), gprString);
       }
@@ -198,22 +203,24 @@ public class IntegrationLocalRun {
     try {
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), false);
 
-      KBaseGenome genome = null; //prodAPI.getGenome("GCF_000008805.1", "ReferenceDataManager");
-      genome = prodAPI.getGenome("GCF_000005845.2", PROD_RAST_GENOME);
+      Object genome = KBaseIOUtils.getObject("GCF_000005845.2", PROD_RAST_GENOME, null, prodAPI.getWorkspaceClient());
       
-      System.out.println(genome.taxon_ref);
-      System.out.println(genome.assembly_ref);
-      System.out.println(genome.genbank_handle_ref);
+//      Genome genome = null; //prodAPI.getGenome("GCF_000008805.1", "ReferenceDataManager");
+//      genome = prodAPI.getGenome("GCF_000005845.2", PROD_RAST_GENOME);
       
-      {
-        Object o = KBaseIOUtils.getObject(null, null, genome.taxon_ref, prodAPI.getWorkspaceClient());
-        try {
-          KBaseId kid = KBaseIOUtils.saveData("taxon", "KBaseGenomeAnnotations.Taxon", o, PROD_RAST_GENOME, prodAPI.getWorkspaceClient());
-          System.out.println(kid);
-        } catch (Exception e) {
-          throw new IOException(e);
-        }
-      }
+//      System.out.println(genome.getTaxonRef());
+//      System.out.println(genome.getAssemblyRef());
+//      System.out.println(genome.getGenbankHandleRef());
+      
+//      {
+//        Object o = KBaseIOUtils.getObject(null, null, genome.getTaxonRef(), prodAPI.getWorkspaceClient());
+//        try {
+//          KBaseId kid = KBaseIOUtils.saveData("taxon", "KBaseGenomeAnnotations.Taxon", o, PROD_RAST_GENOME, prodAPI.getWorkspaceClient());
+//          System.out.println(kid);
+//        } catch (Exception e) {
+//          throw new IOException(e);
+//        }
+//      }
 //      {
 //        Object o = KBaseIOUtils.getObject(null, null, genome.assembly_ref, prodAPI.getWorkspaceClient());
 //        try {
@@ -224,10 +231,10 @@ public class IntegrationLocalRun {
 //        }
 //      }
       
-      genome.assembly_ref = "23373/9/1";
+//      genome.set = "23373/9/1";
 //      genome.taxon_ref = "23373/8/1";
       
-      KBaseIOUtils.getObject(null, null, genome.assembly_ref, prodAPI.getWorkspaceClient());
+//      KBaseIOUtils.getObject(null, null, genome.assembly_ref, prodAPI.getWorkspaceClient());
 //      KBaseIOUtils.getObject(null, null, genome.genbank_handle_ref, prodAPI.getWorkspaceClient());
       
 //      for (KBaseGenome.Feature f : genome.features) {
@@ -237,13 +244,15 @@ public class IntegrationLocalRun {
 //      for (KBaseGenome.Cds cds : genome.cdss) {
 //        System.out.println(cds.ontology_terms);
 //      }
-      prodAPI.saveGenome(genome.id, PROD_RAST_GENOME, genome);
+      
+      prodAPI.saveObject("GCF_000005845.2", PROD_RAST_GENOME, KBaseType.Genome.value(), genome);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
   
-  public static void list() {
+  public static void updateModelGpr() {
+    Map<String, String> defaultBiomass = JoanaConstants.getModelDefaultBiomassReaction();
     String LOGIN_TOKEN = "MO2FCAGI3TLEM3PPRZZ4KH4ZKBJEMRGO";
     try {
       KBaseAPI devAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigDev(), false);
@@ -255,20 +264,27 @@ public class IntegrationLocalRun {
         System.out.println(kid);
         try {
           FBAModel kmodel = KBaseIOUtils.getObject(kid.name, PROD_PUBLISHED_MODEL_REPO, null, FBAModel.class, prodAPI.wsClient);
+          FBAModelAdapter adapter = new FBAModelAdapter(kmodel);
+          if (defaultBiomass.containsKey(kmodel.getId())) {
+            String biomassEntry = defaultBiomass.get(kmodel.getId());
+            logger.info("default biomass: {}", biomassEntry);
+            adapter.convertToBiomass(biomassEntry);
+          }
           updateGpr2(kmodel);
-//          KBaseIOUtils.saveData(kid.name, KBaseType.FBAModel.value(), kmodel, PROD_PUBLISHED_MODEL_REPO, prodAPI.wsClient);
+          System.out.println(adapter.getBiomasses());
+          KBaseIOUtils.saveData(kid.name, KBaseType.FBAModel.value(), kmodel, PROD_PUBLISHED_MODEL_REPO, prodAPI.wsClient);
         } catch (Exception e) {
           e.printStackTrace();
         }
       }
       
-      FBAModel kmodel = KBaseIOUtils.getObject("Ec_core_flux1", DEV_PUBLISHED_MODEL_REPO, null, FBAModel.class, devAPI.wsClient);
+//      FBAModel kmodel = KBaseIOUtils.getObject("Ec_core_flux1", DEV_PUBLISHED_MODEL_REPO, null, FBAModel.class, devAPI.wsClient);
 //      kmodel.setGenomeRef("23373/5/2");
 
       
 //      KBaseIOUtils.saveData("Ec_core_flux1", KBaseType.FBAModel.value(), kmodel, PROD_PUBLISHED_MODEL_REPO, prodAPI.wsClient);
 //      prodAPI.wsClient.sa
-      System.out.println(kmodel);
+//      System.out.println(kmodel);
 //      KBaseIOUtils.getObject("Ec_core_flux1", ws, ref, devAPI.wsClient);
       List<KBaseId> q3 = prodAPI.listNarrative(PROD_RAST_GENOME, "KBaseGenomes.Genome");
       for (KBaseId kid : q3) {
@@ -281,7 +297,7 @@ public class IntegrationLocalRun {
   
   public static void main(String[] args) {
 //    localIntegraiton();
-//    list();
-    listRefGenomes();
+    updateModelGpr();
+//    listRefGenomes();
   }
 }

@@ -22,6 +22,9 @@ import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
+import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
+import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.ParseException;
+import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
 import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
@@ -31,8 +34,10 @@ import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlCompartment;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 
 public class FBAModelFactory {
@@ -226,36 +231,37 @@ public class FBAModelFactory {
     return null;
   }
   
-  public String getGpr(XmlSbmlReaction xrxn, final XmlSbmlModel xmodel) {
-    String fgpr = getFbcGpr(xrxn, xmodel);
-    
-    Map<String, Set<String>> ndata = notesParser.parseNotes2(xrxn.getNotes());
-//    System.out.println(ndata);
-    
-    String ngpr = null;
-    if (ndata.containsKey("gene_association") && 
-        ndata.get("gene_association").size() > 0) {
-      ngpr = ndata.get("gene_association").iterator().next();
+  public static List<ModelReactionProtein> setupModelReactionProteins(Set<String> genes, String genomeRef) {
+    List<ModelReactionProtein> mrpList = new ArrayList<> ();
+    if (genes != null) {
+      List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
+      List<String> features = new ArrayList<> ();
+      for (String g : genes) {
+        features.add(String.format("%s/features/id/%s", genomeRef, g));
+      }
+
+      //1985/8/4/features/id/kb|g.220339.CDS.100
+      ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
+          .withFeatureRefs(features)
+          .withTriggering(0L)
+          .withRole("")
+          .withNote("Imported GPR")
+          .withOptionalSubunit(0L);
+      mrpsLists.add(mrps);
+      ModelReactionProtein mrp = new ModelReactionProtein()
+          .withComplexRef("")
+          .withModelReactionProteinSubunits(mrpsLists)
+          .withNote("").withSource("SBML");
+      mrpList.add(mrp);
     }
     
-    if (fgpr != null && ngpr == null) {
-//      System.out.println("F: " + fgpr);
-      return fgpr;
-    }
-    if (ngpr != null && fgpr == null) {
-//      System.out.println("N: " + ngpr);
-      return ngpr;
-    }
     
-    if (ngpr != null && fgpr != null) {
-      logger.warn("multiple gpr: F:{}, N:{}", fgpr, ngpr);
-    }
-    
-    
-    return ngpr;
+    return mrpList;
   }
 
+
   public FBAModel build() {
+    XmlSbmlModelAdapter xadapter = new XmlSbmlModelAdapter(xmodel);
     FBAModel model = new FBAModel();
     model.setId(modelId);
     model.setName(modelName); //get from xml if exists
@@ -285,9 +291,18 @@ public class FBAModelFactory {
       if (rxnName == null || rxnName.trim().isEmpty()) {
         rxnName = "undefined";
       }
-      String gpr = getGpr(xrxn, xmodel);
-      if (gpr == null) {
+      
+      String gpr = xadapter.getGpr(rxnEntry);
+      Set<String> genes = new HashSet<> ();
+      if (DataUtils.empty(gpr)) {
         gpr = "";
+      } else {
+        try {
+          GeneReactionRuleCI grrci = new GeneReactionRuleCI(gpr);
+          genes = KBaseUtils.getGenes(grrci);
+        } catch (ParseException | TokenMgrError e) {
+          System.out.println(gpr + ": " + e.getMessage());
+        }
       }
       List<ModelReactionReagent> reagents = new ArrayList<> ();
 
@@ -344,20 +359,20 @@ public class FBAModelFactory {
           .withModelcompartmentRef(rxnCmpRef);
       rxn.setModelReactionReagents(reagents);
 
-      ModelReactionProtein protein = new ModelReactionProtein();
-      protein.setModelReactionProteinSubunits(null);
-      protein.setComplexRef("");
-      protein.setSource("");
-      protein.setNote("");
-      ModelReactionProteinSubunit proteinSubunit = new ModelReactionProteinSubunit();
-      List<String> featureRefs = new ArrayList<> ();
-      proteinSubunit.setFeatureRefs(featureRefs);
-      proteinSubunit.setOptionalSubunit(0L);
-      proteinSubunit.setRole("");
-      proteinSubunit.setNote("");
-      proteinSubunit.setTriggering(0L);
-      List<ModelReactionProtein> proteins = new ArrayList<> ();
-      proteins.add(protein);
+//      ModelReactionProtein protein = new ModelReactionProtein();
+//      protein.setModelReactionProteinSubunits(null);
+//      protein.setComplexRef("");
+//      protein.setSource("");
+//      protein.setNote("");
+//      ModelReactionProteinSubunit proteinSubunit = new ModelReactionProteinSubunit();
+//      List<String> featureRefs = new ArrayList<> ();
+//      proteinSubunit.setFeatureRefs(featureRefs);
+//      proteinSubunit.setOptionalSubunit(0L);
+//      proteinSubunit.setRole("");
+//      proteinSubunit.setNote("");
+//      proteinSubunit.setTriggering(0L);
+//      List<ModelReactionProtein> proteins = new ArrayList<> ();
+//      proteins.add(protein);
       //      rxn.setModelReactionProteins(proteins);
       //      
       //      //??
@@ -383,7 +398,7 @@ public class FBAModelFactory {
 //      System.out.println(rxnEntry + " " + lb + " " + ub);
       
       if (biomassSet.contains(rxn.getId())) {
-        Biomass biomass = modelReactionToBiomass(rxn);
+        Biomass biomass = FBAModelAdapter.modelReactionToBiomass(rxn);
         biomass.setId("bio" + biomassCounter++);
         model.getBiomasses().add(biomass);
       } else {
@@ -401,30 +416,9 @@ public class FBAModelFactory {
     return model;
   }
   
-  public static BiomassCompound modelReactionReagentToBiomassCompound(ModelReactionReagent r) {
-    return new BiomassCompound().withCoefficient(r.getCoefficient())
-                                .withModelcompoundRef(r.getModelcompoundRef());
-  }
+
   
-  public static Biomass modelReactionToBiomass(ModelReaction rxn) {
-    List<BiomassCompound> compounds = new ArrayList<> ();
-    
-    for (ModelReactionReagent r : rxn.getModelReactionReagents()) {
-      compounds.add(modelReactionReagentToBiomassCompound(r));
-    }
-//    other, dna, rna, protein, cellwall, lipid, cofactor, energy
-    return new Biomass().withId(rxn.getId())
-                        .withOther(0.0)
-                        .withDna(0.0)
-                        .withRna(0.0)
-                        .withProtein(0.0)
-                        .withCellwall(0.0)
-                        .withLipid(0.0)
-                        .withCofactor(0.0)
-                        .withEnergy(0.0)
-                        .withName(String.format("%s (%s)", rxn.getId(), rxn.getName()))
-                        .withBiomasscompounds(compounds);
-  }
+
 
   /**
    * Determine reaction reversibility

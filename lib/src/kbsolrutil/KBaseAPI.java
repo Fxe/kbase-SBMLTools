@@ -14,6 +14,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import datafileutil.DataFileUtilClient;
+import kbasegenomes.Genome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
@@ -143,14 +144,23 @@ public class KBaseAPI {
     return om.convertValue(o, clazz);
   }
   
-  public KBaseGenome getGenome(String id, String ws) throws IOException {
-    KBaseGenome o = KBaseIOUtils.getObject(id, ws, null, KBaseGenome.class, getWorkspaceClient());
+  public Genome getGenome(String id, String ws) throws IOException {
+    Genome o = KBaseIOUtils.getObject(id, ws, null, Genome.class, getWorkspaceClient());
     return o;
   }
   
-  public KBaseId saveGenome(String id, String ws, KBaseGenome o) throws IOException {
+  public KBaseId saveGenome(String id, String ws, Genome o) throws IOException {
     try {
       KBaseId kid = KBaseIOUtils.saveData(id, KBaseType.Genome.value(), o, ws, getWorkspaceClient());
+      return kid;
+    } catch (Exception e) {
+      throw new IOException(e);
+    }
+  }
+  
+  public KBaseId saveObject(String id, String ws, String otype, Object o) throws IOException {
+    try {
+      KBaseId kid = KBaseIOUtils.saveData(id, otype, o, ws, getWorkspaceClient());
       return kid;
     } catch (Exception e) {
       throw new IOException(e);
