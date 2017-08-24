@@ -53,7 +53,8 @@ public class FBAModelFactory {
   private int counter = 0;
   private Set<String> biomassSet = new HashSet<> ();
   private SbmlNotesParser notesParser = new SbmlNotesParser();
-  private IntegrationMap<String, String> imap = new IntegrationMap<>();
+  private IntegrationMap<String, String> simap = new IntegrationMap<>();
+  private IntegrationMap<String, String> rimap = new IntegrationMap<>();
   private Map<String, String> spiToModelSeedReference = new HashMap<> ();
   private Map<String, ModelCompound> modelCompounds = new HashMap<> ();
   private List<ModelCompartment> modelCompartments = new ArrayList<> ();
@@ -86,9 +87,16 @@ public class FBAModelFactory {
     return this;
   }
   
-  public FBAModelFactory withIntegration(IntegrationMap<String, String> integration) {
+  public FBAModelFactory withSpecieIntegration(IntegrationMap<String, String> integration) {
     if (integration != null) {
-      this.imap = integration;
+      this.simap = integration;
+    }
+    return this;
+  }
+  
+  public FBAModelFactory withReactionIntegration(IntegrationMap<String, String> integration) {
+    if (integration != null) {
+      this.rimap = integration;
     }
     return this;
   }
@@ -173,9 +181,9 @@ public class FBAModelFactory {
       String formula = "*";
       
       Map<String, List<String>> dblinks = new HashMap<> ();
-      if (imap.containsKey(spiEntry)) {
-        for (String db : imap.get(spiEntry).keySet()) {
-          dblinks.put(db, new ArrayList<> (imap.get(spiEntry).get(db)));
+      if (simap.containsKey(spiEntry)) {
+        for (String db : simap.get(spiEntry).keySet()) {
+          dblinks.put(db, new ArrayList<> (simap.get(spiEntry).get(db)));
         }
       }
       ModelCompound cpd = new ModelCompound().withId(spiEntry)
@@ -339,6 +347,13 @@ public class FBAModelFactory {
           reagents.add(r);
         } else {
           logger.info("deleted {}", species);
+        }
+      }
+      
+      Map<String, List<String>> dblinks = new HashMap<> ();
+      if (rimap.containsKey(rxnEntry)) {
+        for (String db : rimap.get(rxnEntry).keySet()) {
+          dblinks.put(db, new ArrayList<> (rimap.get(rxnEntry).get(db)));
         }
       }
 

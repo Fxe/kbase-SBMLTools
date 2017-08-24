@@ -31,7 +31,11 @@ parameters :
         ui-name : Automatically integrate
         short-hint : Automatically run integration after import model in raw form
         long-hint  : Automatically run integration after import model in raw form
-
+        
+    remove_boundary :
+        ui-name : Removes Boundary Metabolites
+        short-hint : Automatically excludes boundary metabolites
+        long-hint  : Automatically excludes boundary metabolites
 description : |
     <p>Please see <a href="http://kbase.us/data-upload-download-guide/fba-model/" target="_blank">http://kbase.us/data-upload-download-guide/fba-model/</a>
     for more information about how to format your FBA model input file.</p>

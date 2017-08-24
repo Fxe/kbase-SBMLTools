@@ -3,6 +3,8 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxTreeNode;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.DataTypeEnum;
@@ -41,5 +43,11 @@ public class KBaseUtils {
     } catch (Exception | TokenMgrError e) {
       return new HashSet<> ();
     }
+  }
+
+  public static<T> T convert(Object object, Class<T> clazz) {
+    ObjectMapper om = new ObjectMapper();
+    T out = om.convertValue(object, clazz);
+    return out;
   }
 }

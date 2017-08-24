@@ -72,6 +72,7 @@ module SBMLTools {
         list<string> biomass;
         string model_name;
         int automatically_integrate;
+        int remove_boundary;
     } SbmlImporterParams;
 
     /*
@@ -101,10 +102,6 @@ module SBMLTools {
         Apps that run in the Narrative, your function should have the 
         'authentication required' modifier.
     */
-    funcdef filter_contigs(SbmlImportParams params)
-        returns (FilterContigsResults output) authentication required;
-    funcdef import_model_xml(SbmlImportParams params)
-        returns (FilterContigsResults output) authentication required;
     funcdef sbml_importer(SbmlImporterParams params)
         returns (SbmlImporterResults output) authentication required;
     funcdef integrate_model(IntegrateModelParams params)

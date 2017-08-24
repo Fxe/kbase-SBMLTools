@@ -17,6 +17,7 @@ import kbasefba.ModelCompound;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionReagent;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.MockData;
 
 public class KBaseIntegration {
@@ -34,18 +35,14 @@ public class KBaseIntegration {
   public KBaseBiodbContainer biodbContainer;
   public Object defaultMedia = null;
   public String genomeRef = null;
+  public KBaseGenome genome = null;
   
   public KBaseIntegration(final FBAModel fbaModel) {
     this.fbaModel = fbaModel;
     this.adapter = new FBAModelAdapter(fbaModel);
   }
   
-  public static final String COMPOUND_PRE = "M";
   public static final String REACTION_PRE = "R";
-  
-  public String buildIdentifier(String id, String cmp) {
-    return String.format("%s_%s_%s", COMPOUND_PRE, id, cmp);
-  }
   
   public String buildRxnIdentifier(String id) {
     return String.format("%s_%s", REACTION_PRE, id);
@@ -54,35 +51,6 @@ public class KBaseIntegration {
   public String getModelCompoundCompartmentEntry(ModelCompound kcpd) {
     String[] tokens = kcpd.getModelcompartmentRef().split("/");
     return tokens[tokens.length - 1];
-  }
-  
-  public void renameMetaboliteEntry(String from, String to) {
-    for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
-      String cpdEntry = kcpd.getId();
-      if (cpdEntry.equals(from)) {
-        to = buildIdentifier(to, getModelCompoundCompartmentEntry(kcpd));
-        
-        logger.trace("{} -> {}", kcpd.getId(), to);
-        
-        kcpd.setId(to);
-        
-        for (ModelReaction krxn : fbaModel.getModelreactions()) {
-          for (ModelReactionReagent r : krxn.getModelReactionReagents()) {
-            if (r.getModelcompoundRef().endsWith("/" + from)) {
-              r.setModelcompoundRef("~/modelcompounds/id/" + to);
-            }
-          }
-        }
-        
-        for (Biomass kbrxn : fbaModel.getBiomasses()) {
-          for (BiomassCompound r : kbrxn.getBiomasscompounds()) {
-            if (r.getModelcompoundRef().endsWith("/" + from)) {
-              r.setModelcompoundRef("~/modelcompounds/id/" + to);
-            }
-          }
-        }
-      }
-    }
   }
   
   public void renameReactionEntry(String from, String to) {
@@ -99,6 +67,15 @@ public class KBaseIntegration {
   public void integrate() {
     if (this.genomeRef != null) {
       fbaModel.setGenomeRef(this.genomeRef);
+      if (genome != null) {
+        for (String mrxnEntry : adapter.rxnMap.keySet()) {
+          ModelReaction mrxn = adapter.rxnMap.get(mrxnEntry);
+          String gpr = mrxn.getImportedGpr();
+          if (!DataUtils.empty(gpr)) {
+            adapter.setupModelReactionProteinsFromGpr(mrxnEntry, gpr, genomeRef);            
+          }
+        }
+      }
     }
     
     for (String b : biomassSet) {
@@ -108,26 +85,27 @@ public class KBaseIntegration {
     for (String cmpOld : compartmentMapping.keySet()) {
       String cmpSwap = compartmentMapping.get(cmpOld);
       adapter.integrateCompartment(cmpOld, cmpSwap);
-//      renameComparmentEntry(cmpOld, cmpSwap);
     }
     
     //integration
     //BiGG, BiGG2, HMDB, LigandCompound, MetaCyc, ModelSeed, Seed
     if (rename != null) {
-      
       logger.info("rename: {}", this.rename);
       
       for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
         List<String> dbRefs = kcpd.getDblinks().get(rename);
         if (dbRefs != null && !dbRefs.isEmpty()) {
-          renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
+          System.out.println(kcpd.getId() + " " + dbRefs.iterator().next());
+          adapter.renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
+//          renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
         }
       }
       
       for (ModelReaction krxn : fbaModel.getModelreactions()) {
         List<String> dbRefs = krxn.getDblinks().get(rename);
         if (dbRefs != null && !dbRefs.isEmpty()) {
-          renameReactionEntry(krxn.getId(), dbRefs.iterator().next());
+          System.out.println(krxn.getId() + " " + dbRefs.iterator().next());
+//          renameReactionEntry(krxn.getId(), dbRefs.iterator().next());
         }
       }
     }
@@ -138,7 +116,6 @@ public class KBaseIntegration {
         List<String> dbRefs = kcpd.getDblinks().get("ModelSeed");
         if (dbRefs != null && !dbRefs.isEmpty()) {
           String cpdEntry = dbRefs.iterator().next();
-          System.out.println(cpdEntry);
           Long cpdId = biodbService.getIdByEntryAndDatabase(cpdEntry, "ModelSeed");
           if (cpdId != null) {
             String name = biodbService.getNamePropertyById(cpdId);

@@ -28,6 +28,7 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
 import sbmltools.KBaseType;
@@ -38,16 +39,25 @@ public class IntegrationLocalRun {
   
   private static final Logger logger = LoggerFactory.getLogger(IntegrationLocalRun.class);
   
+  public static String  DEV_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502428739293";
+  public static String PROD_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502913538729";
+  public static String PROD_RAST_GENOME = "filipeliu:narrative_1502913563238";
+  public static String PROD_GENOME = "filipeliu:narrative_1502913538729";
+  public static String DEV_APP_TEST = "filipeliu:narrative_1503501857164";
+  public static String DEV_SOME_REPO = "filipeliu:narrative_1502474753893";
+  
   public static void localIntegraiton() {
     String LOGIN_TOKEN = "MO2FCAGI3TLEM3PPRZZ4KH4ZKBJEMRGO";
+    String model = "Ec_core_flux1";
+    model = "iJW145";
     try {
       KBaseAPI devAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigDev(), true);
-      String modelWorkspace = "filipeliu:narrative_1502474753893"; //repo
-      List<KBaseId> fbaModelQuery = devAPI.listNarrative(modelWorkspace, "KBaseFBA.FBAModel");
-      KBaseId kid = new KBaseId("Ec_core_flux1", "filipeliu:narrative_1502474753893", "7427/6/15");
+      String wsName = DEV_APP_TEST;
+      List<KBaseId> fbaModelQuery = devAPI.listNarrative(wsName, "KBaseFBA.FBAModel");
+      KBaseId kid = new KBaseId(model, wsName, "7427/6/15");
 //      FBAModel kmodel = devAPI.getWorkspaceObject(kid.name, modelWorkspace, FBAModel.class);
       
-      List<KBaseId> fbaModelQuery2 = devAPI.listNarrative("filipeliu:narrative_1502474753893", "KBaseGenomes.Genome");
+      List<KBaseId> fbaModelQuery2 = devAPI.listNarrative(wsName, "KBaseGenomes.Genome");
       //"   filipeliu:narrative_1502474753893"
       for (KBaseId kid_ : fbaModelQuery2) {
         System.out.println(kid_);
@@ -60,30 +70,30 @@ public class IntegrationLocalRun {
       integration.kbaseIntegrate(
           new IntegrateModelParams().withModelName(kid.name)
           .withCompartmentTranslation(cmap)
-          .withGenomeId("GCF_000022605.2_ASM2260v1_genomic")
-          .withWorkspaceName(modelWorkspace)
+          .withGenomeId("GCF_000027345.1")
+          .withWorkspaceName(wsName)
           .withOutputModelName("kb." + kid.name)
           .withFillMetadata(1L)
-          .withTranslateDatabase("KEGG")
+          .withTranslateDatabase("ModelSeed")
           .withRemoveBoundary(1L)
-          .withBiomassReactions("")
+          .withBiomassReactions("IR09955")
           .withCreateExtracellular(1L)
           .withGeneMappings("")
           .withCompoundMappings("")
           .withTemplateId(""),
-          modelWorkspace);
+          wsName);
       
       
       KBaseSbmlImporter.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
       KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne";
       KBaseSbmlImporter.REPORT_OUTPUT_PATH = "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports/model-integration-report/readerData.json";
       KBaseSbmlImporter.DATA_EXPORT_PATH = "/var/biobase/export";
-      KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(modelWorkspace, devAPI.dfuClient);
+//      KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(modelWorkspace, devAPI.dfuClient);
 //      sbmlTools.
 //      RASTSDKClient rastClient = new RASTSDKClient(devAPI.callbackURL, devAPI.authToken);
 //      rastClient.annotateGenome(new AnnotateGenomeParams());
 ////      rastClient.get
-      SBMLToolsClient stools = new SBMLToolsClient(devAPI.callbackURL, devAPI.authToken);
+//      SBMLToolsClient stools = new SBMLToolsClient(devAPI.callbackURL, devAPI.authToken);
 ////      stools.
 //      System.out.println(stools.isStreamingModeOn());
 //      stools.setStreamingModeOn(true);
@@ -96,10 +106,7 @@ public class IntegrationLocalRun {
     }
   }
   
-  public static String  DEV_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502428739293";
-  public static String PROD_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502913538729";
-  public static String PROD_RAST_GENOME = "filipeliu:narrative_1502913563238";
-  public static String PROD_GENOME = "filipeliu:narrative_1502913538729";
+
   
   public static void updateGpr(FBAModel kmodel) throws Exception {
     for (ModelReaction krxn : kmodel.getModelreactions()) {
@@ -140,37 +147,40 @@ public class IntegrationLocalRun {
         logger.debug("FIX: {} -> {}", krxn.getImportedGpr(), gprString);
         krxn.setImportedGpr(gprString);
       }
-      try {
-        GeneReactionRuleCI grrci = new GeneReactionRuleCI(gprString);
-//        AbstractSyntaxTree<?, ?> rule = grrci.getRule();
-        Set<String> genes = KBaseUtils.getGenes(grrci);
-        List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, kmodel.getGenomeRef());
-        krxn.setModelReactionProteins(mrpList);
-//        if (genes != null) {
-//          krxn.getModelReactionProteins().clear();
-//          List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
-//          List<String> features = new ArrayList<> ();
-//          for (String g : genes) {
-//            features.add(String.format("%s/features/id/%s", kmodel.getGenomeRef(), g));
+      if (!DataUtils.empty(gprString)) {
+        try {
+          GeneReactionRuleCI grrci = new GeneReactionRuleCI(gprString);
+//          AbstractSyntaxTree<?, ?> rule = grrci.getRule();
+          Set<String> genes = KBaseUtils.getGenes(grrci);
+          List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, kmodel.getGenomeRef());
+          krxn.setModelReactionProteins(mrpList);
+//          if (genes != null) {
+//            krxn.getModelReactionProteins().clear();
+//            List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
+//            List<String> features = new ArrayList<> ();
+//            for (String g : genes) {
+//              features.add(String.format("%s/features/id/%s", kmodel.getGenomeRef(), g));
+//            }
+  //
+//            //1985/8/4/features/id/kb|g.220339.CDS.100
+//            ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
+//                .withFeatureRefs(features)
+//                .withTriggering(0L)
+//                .withRole("")
+//                .withNote("Imported GPR")
+//                .withOptionalSubunit(0L);
+//            mrpsLists.add(mrps);
+//            ModelReactionProtein mrp = new ModelReactionProtein()
+//                .withComplexRef("")
+//                .withModelReactionProteinSubunits(mrpsLists)
+//                .withNote(krxn.getImportedGpr()).withSource("SBML");
+//            krxn.getModelReactionProteins().add(mrp);
 //          }
-//
-//          //1985/8/4/features/id/kb|g.220339.CDS.100
-//          ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
-//              .withFeatureRefs(features)
-//              .withTriggering(0L)
-//              .withRole("")
-//              .withNote("Imported GPR")
-//              .withOptionalSubunit(0L);
-//          mrpsLists.add(mrps);
-//          ModelReactionProtein mrp = new ModelReactionProtein()
-//              .withComplexRef("")
-//              .withModelReactionProteinSubunits(mrpsLists)
-//              .withNote(krxn.getImportedGpr()).withSource("SBML");
-//          krxn.getModelReactionProteins().add(mrp);
-//        }
-      } catch (Exception | TokenMgrError e) {
-        badGpr.put(krxn.getId(), gprString);
+        } catch (Exception | TokenMgrError e) {
+          badGpr.put(krxn.getId(), gprString);
+        }
       }
+
     }
     for (String k : badGpr.keySet()) {
       logger.warn("[{}] Invalid GPR: {}", k, badGpr.get(k));
@@ -296,8 +306,8 @@ public class IntegrationLocalRun {
   }
   
   public static void main(String[] args) {
-//    localIntegraiton();
-    updateModelGpr();
+    localIntegraiton();
+//    updateModelGpr();
 //    listRefGenomes();
   }
 }

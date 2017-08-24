@@ -53,6 +53,8 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelMetabolicNetworkFacto
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import pt.uminho.sysbio.biosynthframework.util.ZipContainer;
+import pt.uminho.sysbio.biosynthframework.util.ZipContainer.ZipRecord;
 import pt.uminho.sysbio.ext.BiGGConflictResolver;
 import pt.uminho.sysbio.ext.ModelSeedReactionConflictResolver;
 import pt.uminho.sysbio.ext.ReactionIntegration;
@@ -279,7 +281,8 @@ public class KBaseSbmlImporter {
     modelId = modelId.trim();
     
     Map<String, String> spiToModelSeedReference = new HashMap<> ();
-    IntegrationMap<String, String> integration = new IntegrationMap<>();
+    IntegrationMap<String, String> sintegration = new IntegrationMap<>();
+    IntegrationMap<String, String> rintegration = new IntegrationMap<>();
     //check if integrate
     if (runIntegration) {
       modelSeedIntegration.spiToModelSeedReference.clear();
@@ -287,13 +290,20 @@ public class KBaseSbmlImporter {
 //      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
       Map<String, Map<MetaboliteMajorLabel, String>> imap = 
           modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter, reactionIntegration);
-      
+      Map<String, Map<ReactionMajorLabel, String>> rimap = new HashMap<>();
       spiIntegrationAll.addIntegrationMap(modelId, imap);
       for (String spi : imap.keySet()) {
         for (MetaboliteMajorLabel db : imap.get(spi).keySet()) {
-          integration.addIntegration(spi, db.toString(), imap.get(spi).get(db));
+          sintegration.addIntegration(spi, db.toString(), imap.get(spi).get(db));
         }
       }
+      
+      for (String mrxn : rimap.keySet()) {
+        for (ReactionMajorLabel db : rimap.get(mrxn).keySet()) {
+          sintegration.addIntegration(mrxn, db.toString(), rimap.get(mrxn).get(db));
+        }
+      }
+      
       //get stats
       result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
       spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
@@ -303,7 +313,8 @@ public class KBaseSbmlImporter {
     }
     //order matters ! fix this ... it is a factory ...
     model = new FBAModelFactory()
-        .withIntegration(integration)
+        .withSpecieIntegration(sintegration)
+        .withReactionIntegration(sintegration)
         .withBiomassIds(biomassIds)
         .withModelSeedReference(spiToModelSeedReference)
         .withModelId(modelId)
@@ -336,43 +347,43 @@ public class KBaseSbmlImporter {
     return model;
   }
   
-  public static class ZipContainer implements Closeable {
-    
-    private InputStream is = null; //file input stream
-    private ZipInputStream zis = null; //zip file manipulator
-    private ZipFile zf = null; //zip file pointer
-//    InputStream rfis = null; //file within zip file pointer
-    
-    public ZipContainer(String path) throws IOException {
-      this.is = new FileInputStream(path);
-      this.zis = new ZipInputStream(is);
-      this.zf = new ZipFile(path);
-    }
-    
-    public List<Map<String, Object>> getInputStreams() throws IOException {
-      List<Map<String, Object>> streams = new ArrayList<> ();
-      ZipEntry ze = null;
-      while ((ze = zis.getNextEntry()) != null) {
-        Map<String, Object> record = new HashMap<> ();
-        record.put("name", ze.getName());
-        record.put("size", ze.getSize());
-        record.put("compressed_size", ze.getCompressedSize());
-        record.put("method", ze.getMethod());
-        record.put("is", zf.getInputStream(ze));
-        streams.add(record);
-      }
-      
-      return streams;
-    }
-    
-    @Override
-    public void close() throws IOException {
-      IOUtils.closeQuietly(this.zf);
-      IOUtils.closeQuietly(this.zis);
-      IOUtils.closeQuietly(this.is);
-    }
-    
-  }
+//  public static class ZipContainer implements Closeable {
+//    
+//    private InputStream is = null; //file input stream
+//    private ZipInputStream zis = null; //zip file manipulator
+//    private ZipFile zf = null; //zip file pointer
+////    InputStream rfis = null; //file within zip file pointer
+//    
+//    public ZipContainer(String path) throws IOException {
+//      this.is = new FileInputStream(path);
+//      this.zis = new ZipInputStream(is);
+//      this.zf = new ZipFile(path);
+//    }
+//    
+//    public List<Map<String, Object>> getInputStreams() throws IOException {
+//      List<Map<String, Object>> streams = new ArrayList<> ();
+//      ZipEntry ze = null;
+//      while ((ze = zis.getNextEntry()) != null) {
+//        Map<String, Object> record = new HashMap<> ();
+//        record.put("name", ze.getName());
+//        record.put("size", ze.getSize());
+//        record.put("compressed_size", ze.getCompressedSize());
+//        record.put("method", ze.getMethod());
+//        record.put("is", zf.getInputStream(ze));
+//        streams.add(record);
+//      }
+//      
+//      return streams;
+//    }
+//    
+//    @Override
+//    public void close() throws IOException {
+//      IOUtils.closeQuietly(this.zf);
+//      IOUtils.closeQuietly(this.zis);
+//      IOUtils.closeQuietly(this.is);
+//    }
+//    
+//  }
 
   public ImportModelResult importModel(SbmlImporterParams params) {
     ImportModelResult result = new ImportModelResult();
@@ -404,10 +415,10 @@ public class KBaseSbmlImporter {
       
       if (urlPath.endsWith(".zip")) {
         container = new ZipContainer(localPath);
-        List<Map<String, Object>> streams = container.getInputStreams();
-        for (Map<String, Object> d : streams) {
-          InputStream is = (InputStream) d.get("is");
-          String u = params.getSbmlUrl() + "/" + (String) d.get("name");
+        List<ZipRecord> streams = container.getInputStreams();
+        for (ZipRecord zr : streams) {
+          InputStream is = zr.is;
+          String u = params.getSbmlUrl() + "/" + zr.name;
           inputStreams.put(u, is);
         }
         //ignore modelId when multiple models

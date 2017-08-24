@@ -16,7 +16,12 @@ import kbasefba.FBAModel;
 import kbasefba.ModelCompartment;
 import kbasefba.ModelCompound;
 import kbasefba.ModelReaction;
+import kbasefba.ModelReactionProtein;
+import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
+import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
+import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.ParseException;
+import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
 
 public class FBAModelAdapter {
   
@@ -42,6 +47,97 @@ public class FBAModelAdapter {
         logger.warn("duplicate reacton id {}", kbmrxn.getId());
       }
     }
+  }
+  
+  public void setupModelReactionProteinsFromGpr(String mrxnEntry, String gpr, String genomeRef) {
+    ModelReaction mrxn = rxnMap.get(mrxnEntry);
+    try {
+
+      GeneReactionRuleCI grrci = new GeneReactionRuleCI(gpr);
+      Set<String> genes = KBaseUtils.getGenes(grrci);
+
+      List<ModelReactionProtein> mrpList = new ArrayList<> ();
+      if (genes != null) {
+        List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
+        List<String> features = new ArrayList<> ();
+        for (String g : genes) {
+          features.add(String.format("%s/features/id/%s", genomeRef, g));
+        }
+
+        //1985/8/4/features/id/kb|g.220339.CDS.100
+        ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
+            .withFeatureRefs(features)
+            .withTriggering(0L)
+            .withRole("")
+            .withNote("Imported GPR")
+            .withOptionalSubunit(0L);
+        mrpsLists.add(mrps);
+        ModelReactionProtein mrp = new ModelReactionProtein()
+            .withComplexRef("")
+            .withModelReactionProteinSubunits(mrpsLists)
+            .withNote("").withSource("SBML");
+        mrpList.add(mrp);
+        
+        mrxn.setModelReactionProteins(mrpList);
+      }
+    } catch (TokenMgrError | ParseException e) {
+      logger.warn("invalid imported gpr: {}", gpr);
+    }
+  }
+  
+  public static final String COMPOUND_PRE = null;
+  public static final String REACTION_PRE = null;
+  
+  public String buildSpiIdentifier(String id, String cmp) {
+    if (COMPOUND_PRE == null) {
+      return String.format("%s_%s", id, cmp);
+    }
+    return String.format("%s_%s_%s", COMPOUND_PRE, id, cmp);
+  }
+  
+  public String buildRxnIdentifier(String id, String cmp) {
+    if (REACTION_PRE == null) {
+      return String.format("%s_%s", id, cmp);
+    }
+    return String.format("%s_%s_%s", REACTION_PRE, id, cmp);
+  }
+  
+  public String getModelCompoundCompartmentEntry(ModelCompound kcpd) {
+    String[] tokens = kcpd.getModelcompartmentRef().split("/");
+    return tokens[tokens.length - 1];
+  }
+  
+  public void renameMetaboliteEntry(String from, String to) {
+    for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
+      String cpdEntry = kcpd.getId();
+      if (cpdEntry.equals(from)) {
+        to = buildSpiIdentifier(to, getModelCompoundCompartmentEntry(kcpd));
+        
+        logger.info("{} -> {}", kcpd.getId(), to);
+        
+        kcpd.setId(to);
+        
+        for (ModelReaction krxn : fbaModel.getModelreactions()) {
+          for (ModelReactionReagent r : krxn.getModelReactionReagents()) {
+            if (r.getModelcompoundRef().endsWith("/" + from)) {
+              r.setModelcompoundRef("~/modelcompounds/id/" + to);
+            }
+          }
+        }
+        
+        for (Biomass kbrxn : fbaModel.getBiomasses()) {
+          for (BiomassCompound r : kbrxn.getBiomasscompounds()) {
+            if (r.getModelcompoundRef().endsWith("/" + from)) {
+              r.setModelcompoundRef("~/modelcompounds/id/" + to);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  public void renameSpecie(String spiEntry, String rename) {
+    
   }
   
   public Set<String> getGenes(String rxnEntry) {

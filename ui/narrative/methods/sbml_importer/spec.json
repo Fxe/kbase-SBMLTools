@@ -51,7 +51,22 @@
          "optional" : false,
          "field_type" : "checkbox",
          "id" : "automatically_integrate"
-  } ],
+  }, 
+  {
+         "default_values" : [
+            "1"
+         ],
+         "advanced" : true,
+         "checkbox_options" : {
+            "unchecked_value" : 0,
+            "checked_value" : 1
+         },
+         "allow_multiple" : false,
+         "optional" : false,
+         "field_type" : "checkbox",
+         "id" : "remove_boundary"
+  }
+   ],
   "behavior" : {
     "service-mapping" : {
       "url" : "",
@@ -77,6 +92,10 @@
           {
               "input_parameter": "automatically_integrate",
               "target_property": "automatically_integrate"
+          },
+          {
+              "input_parameter": "remove_boundary",
+              "target_property": "remove_boundary"
           }
       ],
       "output_mapping" : [

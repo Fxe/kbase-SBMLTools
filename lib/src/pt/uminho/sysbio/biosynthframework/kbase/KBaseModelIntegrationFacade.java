@@ -2,9 +2,12 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,6 +113,7 @@ public class KBaseModelIntegrationFacade {
   
   public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName) throws Exception {
     //validate params
+    System.out.println(params);
     String fbaModelName = params.getModelName();
     String outputName = params.getOutputModelName();
 //    Long workspaceId = dfuClient.wsNameToId(workspaceName);
@@ -119,12 +123,24 @@ public class KBaseModelIntegrationFacade {
     //get model
     FBAModel fbaModel = KBaseIOUtils.getObject(fbaModelName, workspaceName, null, FBAModel.class, wspClient);
     //get genome ref
-    String genomeRef = 
-        KBaseIOUtils.getObject2(params.getGenomeId(), workspaceName, null, wspClient).getLeft().reference;
+    
+    Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(params.getGenomeId(), workspaceName, null, wspClient);
+    
+    Set<String> biomassReactions = new HashSet<> ();
+    if (params.getBiomassReactions() != null) {
+      for (String s : params.getBiomassReactions().split(",")) {
+        if (s.trim() != null) {
+          biomassReactions.add(s.trim());
+        }
+      }
+    }
+    
     
     //integrate
     KBaseIntegration integration = new KBaseIntegration(fbaModel);
-    integration.genomeRef = genomeRef;
+    integration.biomassSet.addAll(biomassReactions);
+    integration.genomeRef = kdata.getLeft().reference;
+    integration.genome = KBaseUtils.convert(kdata.getRight(), KBaseGenome.class);
     integration.compartmentMapping = compartmentMapping;
     integration.rename = params.getTranslateDatabase();
     integration.fillMetadata = params.getFillMetadata() == 1L;
@@ -140,10 +156,12 @@ public class KBaseModelIntegrationFacade {
     }
     
     
-    String ref = KBaseIOUtils.saveDataSafe(outputName, KBaseType.FBAModel, fbaModel, workspaceName, dfuClient);
+    KBaseId kid = KBaseIOUtils.saveData(outputName, KBaseType.FBAModel.value(), fbaModel, workspaceName, wspClient);
+    System.out.println(kid);
+//    String ref = KBaseIOUtils.saveDataSafe(outputName, KBaseType.FBAModel, fbaModel, workspaceName, dfuClient);
     
     List<WorkspaceObject> wsObjects = new ArrayList<> ();
-    wsObjects.add(new WorkspaceObject().withDescription("model").withRef(ref));
+    wsObjects.add(new WorkspaceObject().withDescription("model").withRef(kid.reference));
     
     if (kbrClient != null) {
       final ReportInfo reportInfo = kbrClient.create(

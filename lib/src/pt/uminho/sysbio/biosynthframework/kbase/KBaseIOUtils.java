@@ -138,12 +138,14 @@ public class KBaseIOUtils {
         .withObjects(objects);
     List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> mg = 
         wsClient.saveObjects(params);
-    for (Object savedObject : mg) {
-//      System.out.println(savedObject);
+    KBaseId result = null;
+    for (Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>> info : mg) {
+      String ref = KBaseIOUtils.getRefFromObjectInfo(info);
+      result = new KBaseId(info.getE2(), info.getE8(), ref);
     }
 //    String ref = getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
 
-    return null;
+    return result;
   }
 
   public static String saveData(String nameId, String dataType, Object o, String ws, final DataFileUtilClient dfuClient) throws Exception {

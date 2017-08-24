@@ -103,7 +103,10 @@ public class KBaseModelSeedIntegration {
   }
   
   public Map<String, Map<MetaboliteMajorLabel, String>> generateDatabaseReferences(
-      XmlSbmlModel xmodel, String modelEntry, IntegrationReportResultAdapter resultAdapter, ReactionIntegration reactionIntegration) {
+      XmlSbmlModel xmodel, 
+      String modelEntry, 
+      IntegrationReportResultAdapter resultAdapter, 
+      ReactionIntegration reactionIntegration) {
     BiodbService biodbService = biodbContainer.biodbService;
     
 //    BiodbService service = new File
