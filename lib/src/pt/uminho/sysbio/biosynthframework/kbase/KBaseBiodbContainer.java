@@ -24,18 +24,18 @@ public class KBaseBiodbContainer {
     FileImportKb.EXPORT_PATH = path;
     logger.info("loading database from [{}] ...", path);
     biodbService = null;
-//    biodbService = new BiodbServiceFactory()
-//        .withMetaboliteDatabases()
-//        .withMetaboliteFormulas()
-//        .withMetaboliteInchiKeys()
-//        .withMetaboliteSmiles()
-//        .withReactionDatabase(ReactionMajorLabel.BiGG.toString())
-//        .withReactionDatabase(ReactionMajorLabel.LigandReaction.toString())
-//        .withReactionDatabase(ReactionMajorLabel.MetaCyc.toString())
-//        .withReactionDatabase(ReactionMajorLabel.ModelSeedReaction.toString())
-//        .withReactionDatabase(ReactionMajorLabel.Seed.toString())
-//        .build();
+    biodbService = new BiodbServiceFactory()
+        .withMetaboliteDatabases()
+        .withMetaboliteFormulas()
+        .withMetaboliteInchiKeys()
+        .withMetaboliteSmiles()
+        .withReactionDatabase(ReactionMajorLabel.BiGG.toString())
+        .withReactionDatabase(ReactionMajorLabel.LigandReaction.toString())
+        .withReactionDatabase(ReactionMajorLabel.MetaCyc.toString())
+        .withReactionDatabase(ReactionMajorLabel.ModelSeedReaction.toString())
+        .withReactionDatabase(ReactionMajorLabel.Seed.toString())
+        .build();
     logger.info("loading names");
-//    nameMap = NameIntegration.buildNameDictionary();
+    nameMap = NameIntegration.buildNameDictionary();
   }
 }
