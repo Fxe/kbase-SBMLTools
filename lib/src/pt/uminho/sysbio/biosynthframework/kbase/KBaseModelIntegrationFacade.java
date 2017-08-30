@@ -149,12 +149,15 @@ public class KBaseModelIntegrationFacade {
     
     integration.integrate();
     
-    
     String geneData = "";
     if (geneIntegration != null) {
       geneData = geneIntegration.searchGenome(fbaModel);
     }
     
+    KBaseId mediaKid = null;
+    if (integration.defaultMedia != null) {
+      mediaKid = KBaseIOUtils.saveData(outputName + ".media", KBaseType.KBaseBiochemMedia.value(), integration.defaultMedia, workspaceName, wspClient);
+    }
     
     KBaseId kid = KBaseIOUtils.saveData(outputName, KBaseType.FBAModel.value(), fbaModel, workspaceName, wspClient);
     System.out.println(kid);
@@ -162,6 +165,11 @@ public class KBaseModelIntegrationFacade {
     
     List<WorkspaceObject> wsObjects = new ArrayList<> ();
     wsObjects.add(new WorkspaceObject().withDescription("model").withRef(kid.reference));
+    
+    if (mediaKid != null) {
+      wsObjects.add(new WorkspaceObject().withDescription("media").withRef(mediaKid.reference));
+    }
+    
     
     if (kbrClient != null) {
       final ReportInfo reportInfo = kbrClient.create(

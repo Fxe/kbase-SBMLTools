@@ -18,8 +18,13 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.core.io.FileSystemResource;
 //import org.springframework.core.io.Resource;
 
+import com.google.common.collect.Sets;
+
 import kbasefba.FBAModel;
+import kbasegenomes.Feature;
+import kbasegenomes.Genome;
 import kbsolrutil.KBaseAPI;
+import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.DataUtils;
 import pt.uminho.sysbio.biosynthframework.Dataset;
 //import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
@@ -28,6 +33,7 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenomeReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import sbmltools.KBaseType;
 import us.kbase.auth.AuthConfig;
 import us.kbase.auth.AuthException;
@@ -239,12 +245,66 @@ public class WorkspaceNinja {
     }
     return result;
   }
+  
+  public static enum GeneType {
+    METABOLIC_IN_GENOME,
+    NON_METABOLIC_IN_GENOME,
+    METABOLIC_IN_MODEL,
+    NON_METABOLIC_IN_MODEL,
+    METABOLIC,
+    
+  }
+  
+  public static Map<GeneType, Integer> geneCategory(
+      Set<String> modelGenes,
+      Genome genome, Map<String, Set<String>> functionToRxn) {
+    Map<GeneType, Integer> result = new HashMap<> ();
+    
+    Map<String, GeneType> gclass = new HashMap<> ();
+    Set<String> gmetabolic = IntegrationLocalRun.getMetabolic(genome, functionToRxn);
+    
+    for (Feature f : genome.getFeatures()) {
+//      String function = f.getFunction();
+//      if (function != null && function.toUpperCase().contains("16S")) {
+//        System.out.println(function);
+//      }
+      gclass.put(f.getId(), GeneType.NON_METABOLIC_IN_GENOME);
+    }
+    
+    for (String g : gmetabolic) {
+      gclass.put(g, GeneType.METABOLIC_IN_GENOME);
+    }
+    
+    for (String mg : modelGenes) {
+      if (GeneType.METABOLIC_IN_GENOME.equals(gclass.get(mg))) {
+        gclass.put(mg, GeneType.METABOLIC);
+      } else if (GeneType.NON_METABOLIC_IN_GENOME.equals(gclass.get(mg))) {
+        gclass.put(mg, GeneType.METABOLIC_IN_MODEL);
+      }
+    }
+    
+    result = CollectionUtils.count(gclass);
+//    logger.info("Model: {}, Genome: {}, Both: {}", mmetabolic.size(), gmetabolic.size(), shared.size());
+    
+    return result;
+  }
 
   public static void main(String[] args) {
+    Map<String, BFunction<String, String>> modelGeneTransformers = new HashMap<>();
+    modelGeneTransformers.put("iCac802", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iCAC490", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iCac802_V_cobragitsengerpapou", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iJH728", ManualFixes.get_iJH728());
+    modelGeneTransformers.put("iLCBaumannia", ManualFixes.get_iLCBaumannia());
+    modelGeneTransformers.put("iJP962", ManualFixes.get_iJP962_iJP815());
+    modelGeneTransformers.put("iJP815", ManualFixes.get_iJP962_iJP815());
+    modelGeneTransformers.put("iPB890", ManualFixes.get_iPB890());
+    modelGeneTransformers.put("iOD907", ManualFixes.get_iOD907());
     
     Map<String, String> swap = getTsv("/var/argonne/model_gpr/iBsu1103_swap.tsv");
     
     String genomeAnnotationWorkspace = "filipeliu:narrative_1502913563238";
+    Map<String, Set<String>> functionToRxn = IntegrationLocalRun.getFunctionToRxn();
     Map<String, Set<String>> rmap = new HashMap<>(); //getRolesMap();
     Map<String, Set<String>> roles = new HashMap<>(); //getReactionRoles();
     Map<String, Set<String>> roleToRxn = new HashMap<> ();
@@ -269,8 +329,20 @@ public class WorkspaceNinja {
       String modelWorkspace = "filipeliu:narrative_1492697501369"; //small
       modelWorkspace = "filipeliu:narrative_1502428739293"; //repo
       //      devAPI.find("KBaseFBA.FBAModel", "HMRdatabase2_00_Cobra", "filipeliu");
-
+      List<KBaseId> qGenomes = prodAPI.listNarrative(IntegrationLocalRun.PROD_RAST_GENOME, KBaseType.Genome);
+      Set<String> rastGenomes = new HashSet<> ();
+      for (KBaseId id : qGenomes) {
+        if (id.name.endsWith(".rast")) {
+          rastGenomes.add(id.name.replace(".rast", ""));
+        }
+      }
+//      System.out.println(rastGenomes);
       List<KBaseId> fbaModelQuery = devAPI.listNarrative(modelWorkspace, "KBaseFBA.FBAModel");
+//      List<KBaseId> fbaModelQuery = new ArrayList<>();
+//      fbaModelQuery.add(new KBaseId("iJO1366_bigg2", modelWorkspace, null));
+//      fbaModelQuery.add(new KBaseId("iAF1260", modelWorkspace, null));
+//      fbaModelQuery.add(new KBaseId("iJR904", modelWorkspace, null));
+//      fbaModelQuery.add(new KBaseId("iLCBaumannia", modelWorkspace, null));
       Set<String> exclude = new HashSet<> ();
       exclude.add("iJN678");
       exclude.add("iAI549");
@@ -278,9 +350,10 @@ public class WorkspaceNinja {
         FBAModel kmodel = devAPI.getWorkspaceObject(kid.name, modelWorkspace, FBAModel.class);
         kmodel.setGenomeRef("23373/5/2");
         
-        
         if (!kmodel.getId().toLowerCase().contains("neuron") && !exclude.contains(kmodel.getId())) {
+          geneIntegration.geneTransformer = modelGeneTransformers.get(kmodel.getId());
           geneIntegration.searchGenome(kmodel);
+          
           KBaseGenomeReport report = geneIntegration.report;
           System.out.println(report.bestMatch);
           System.out.println(report.bestScore);
@@ -320,9 +393,30 @@ public class WorkspaceNinja {
           }
           
           if (report.bestMatch != null) {
+            Map<GeneType, Integer> geneCategory = new HashMap<>();
+            
+            
             KBaseId genomeKid = report.getGenomeId();
+            String genomeName = "";
             if (genomeKid!= null && genomeKid.reference != null) {
               try {
+                genomeName = genomeKid.name;
+                if (rastGenomes.contains(genomeName)) {
+                  logger.warn("RAST GENOME FOUND !");
+                  Genome rastG = prodAPI.getGenome(genomeName + ".rast", IntegrationLocalRun.PROD_RAST_GENOME);
+                  geneCategory = geneCategory(report.mgenesMapped, rastG, functionToRxn);
+//                  Set<String> gmetabolic = IntegrationLocalRun.getMetabolic(rastG, functionToRxn);
+//                  Set<String> mmetabolic = new HashSet<> (report.mgenesMapped);
+//                  Set<String> shared = Sets.intersection(mmetabolic, gmetabolic);
+                  
+                  
+                  //model metabolic
+                  
+                  //rast metabolic
+                  //intersection
+                  //
+                }
+//                Genome genome = prodAPI.getGenome(id, ws)
                 
                 kmodel.setGenomeRef(genomeKid.reference);
                 KBaseIOUtils.saveData(kmodel.getId(), KBaseType.FBAModel.value(), kmodel, "filipeliu:narrative_1502913538729", prodAPI.wsClient);
@@ -338,6 +432,7 @@ public class WorkspaceNinja {
 //            System.out.println(ref);
             
             data.add(kid.name, "org", report.bestMatch);
+            data.add(kid.name, "genome", genomeName);
             data.add(kid.name, "features", report.geneFunction.size());
             data.add(kid.name, "fmiss", report.getUnmappedFeatures().size());
             data.add(kid.name, "fmetabmiss", metab);
@@ -345,6 +440,12 @@ public class WorkspaceNinja {
             data.add(kid.name, "gprGenes", report.mgenes.size());
             data.add(kid.name, "gprGenesIntegrated", report.mgenesMapped.size());
             data.add(kid.name, "model", kmodel.getId());
+            
+            data.add(kid.name, "g_type_rast_m", geneCategory.get(GeneType.METABOLIC_IN_GENOME));
+            data.add(kid.name, "g_type_non_m", geneCategory.get(GeneType.NON_METABOLIC_IN_GENOME));
+            data.add(kid.name, "g_type_both_m", geneCategory.get(GeneType.METABOLIC));
+            data.add(kid.name, "g_type_model_m", geneCategory.get(GeneType.METABOLIC_IN_MODEL));
+//            data.add(kid.name, "model", kmodel.getId());
           }
         } else {
           System.out.println("SKIP " + kmodel. getId());
@@ -355,7 +456,9 @@ public class WorkspaceNinja {
       e.printStackTrace();
     }
     
-    DataUtils.printData(data.dataset, "id", "features", "fmiss", "org", "gprGenes", "gprGenesIntegrated", "model");
+    DataUtils.printData(data.dataset, 
+        "id", "features", "fmiss", "org", "gprGenes", "gprGenesIntegrated", "model", 
+        "g_type_non_m", "g_type_rast_m", "g_type_model_m", "g_type_both_m");
   }
 }
 

@@ -29,6 +29,7 @@ public class KBaseGenomeReport {
   public Set<String> mgenesMapped = new HashSet<> ();
   public Map<String, String> mgeneToFeature = new HashMap<> ();
   
+  
   public BMap<String, String> geneFunction = new BHashMap<>();
   public Map<String, Set<String>> geneReactions = new HashMap<>();
   

@@ -63,7 +63,7 @@ public class Feature {
     @JsonProperty("id")
     private java.lang.String id;
     @JsonProperty("location")
-    private List<Tuple4 <String, Long, String, Long>> location;
+    public List<Object> location;
     @JsonProperty("type")
     private java.lang.String type;
     @JsonProperty("function")
@@ -81,7 +81,7 @@ public class Feature {
     @JsonProperty("dna_sequence_length")
     private java.lang.Long dnaSequenceLength;
     @JsonProperty("publications")
-    private List<Tuple7 <Long, String, String, String, String, String, String>> publications;
+    public Object publications;
     @JsonProperty("subsystems")
     private List<String> subsystems;
     @JsonProperty("protein_families")
@@ -137,20 +137,20 @@ public class Feature {
         return this;
     }
 
-    @JsonProperty("location")
-    public List<Tuple4 <String, Long, String, Long>> getLocation() {
-        return location;
-    }
-
-    @JsonProperty("location")
-    public void setLocation(List<Tuple4 <String, Long, String, Long>> location) {
-        this.location = location;
-    }
-
-    public Feature withLocation(List<Tuple4 <String, Long, String, Long>> location) {
-        this.location = location;
-        return this;
-    }
+//    @JsonProperty("location")
+//    public List<Tuple4 <String, Long, String, Long>> getLocation() {
+//        return location;
+//    }
+//
+//    @JsonProperty("location")
+//    public void setLocation(List<Tuple4 <String, Long, String, Long>> location) {
+//        this.location = location;
+//    }
+//
+//    public Feature withLocation(List<Tuple4 <String, Long, String, Long>> location) {
+//        this.location = location;
+//        return this;
+//    }
 
     @JsonProperty("type")
     public java.lang.String getType() {
@@ -272,20 +272,20 @@ public class Feature {
         return this;
     }
 
-    @JsonProperty("publications")
-    public List<Tuple7 <Long, String, String, String, String, String, String>> getPublications() {
-        return publications;
-    }
-
-    @JsonProperty("publications")
-    public void setPublications(List<Tuple7 <Long, String, String, String, String, String, String>> publications) {
-        this.publications = publications;
-    }
-
-    public Feature withPublications(List<Tuple7 <Long, String, String, String, String, String, String>> publications) {
-        this.publications = publications;
-        return this;
-    }
+//    @JsonProperty("publications")
+//    public List<Tuple7 <Long, String, String, String, String, String, String>> getPublications() {
+//        return publications;
+//    }
+//
+//    @JsonProperty("publications")
+//    public void setPublications(List<Tuple7 <Long, String, String, String, String, String, String>> publications) {
+//        this.publications = publications;
+//    }
+//
+//    public Feature withPublications(List<Tuple7 <Long, String, String, String, String, String, String>> publications) {
+//        this.publications = publications;
+//        return this;
+//    }
 
     @JsonProperty("subsystems")
     public List<String> getSubsystems() {

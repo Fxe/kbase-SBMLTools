@@ -61,7 +61,7 @@ public class MockKBSolrUtilClient extends KBSolrUtilClient {
       }
     }
     
-    System.out.println(cacheData);
+//    logger.info("cache data: {}", cacheData);
   }
   
   

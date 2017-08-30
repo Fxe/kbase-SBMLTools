@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -142,8 +143,10 @@ public class KBaseIntegration {
 //      biodbService.getNamePropertyById(id)
     }
     
+    mediaName = fbaModel.getId() + ".media";
     if (this.mediaName != null) {
-      Object media = MockData.mockMedia();
+      Map<String, Pair<Double, Double>> dfDrains = adapter.getDefaultDrains();
+      Object media = adapter.convertToMedia(mediaName, dfDrains);
       defaultMedia = media;
     }
   }

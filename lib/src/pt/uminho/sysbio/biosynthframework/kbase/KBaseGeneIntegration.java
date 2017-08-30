@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbsolrutil.KBSolrUtilClient;
 import kbsolrutil.SearchSolrParams;
+import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome.Feature;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import sbmltools.KBaseType;
@@ -41,6 +43,8 @@ public class KBaseGeneIntegration {
   private final KBSolrUtilClient solrClient;
   private final WorkspaceClient wspClient;
   private final DataFileUtilClient dfuClient;
+  public KBaseGenomeReport report;
+  public BFunction<String, String> geneTransformer = null;
   
   public KBaseGeneIntegration(WorkspaceClient wspClient, DataFileUtilClient dfuClient, KBSolrUtilClient solrClient) {
     this.solrClient  = solrClient;
@@ -48,8 +52,9 @@ public class KBaseGeneIntegration {
     this.dfuClient = dfuClient;
   }
   
-  public Map<String, Set<KBaseSolrDocument>> processSolrOutput(String ojson, Map<String, Set<KBaseSolrDocument>> galiasIndex) throws IOException {
-//    Map<String, Set<KBaseSolrDocument>> galiasIndex = new HashMap<> ();
+  public Map<String, Set<KBaseSolrDocument>> processSolrOutput(String ojson, 
+      Map<String, Set<KBaseSolrDocument>> galiasIndex) throws IOException {
+
     ObjectMapper om = new ObjectMapper();
     KBaseSolrResponse solrResponse = om.readValue(ojson, KBaseSolrResponse.class);
     
@@ -73,7 +78,7 @@ public class KBaseGeneIntegration {
     return null;
   }
   
-  public KBaseGenomeReport report;
+  
   
   public String process(Set<String> genes, Map<String, Set<KBaseSolrDocument>> galiasIndex) {
     
@@ -157,7 +162,8 @@ public class KBaseGeneIntegration {
     for (String org : best.keySet()) {
       for (String genome : best.get(org)) {
         String wsName = genomeWorkspace.get(genome);
-        System.out.println(genome + " " + wsName);
+        
+        logger.info("[BEST HIT] Genome: {} @ {}", genome, wsName);
         try {
           KBaseGenome g = KBaseIOUtils.getGenome(genome, wsName, null, wspClient);
           for (Feature f : g.features) {
@@ -272,12 +278,6 @@ public class KBaseGeneIntegration {
         genes.addAll(grp);
       }
     }
-    
-    //split querys
-    //
-
-//    String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));
-
 
     return searchGenome(genes);
   }
@@ -289,15 +289,22 @@ public class KBaseGeneIntegration {
       String gpr = krxn.getImportedGpr();
       Set<String> grp = KBaseUtils.getGenes(gpr);
       if (grp != null && !grp.isEmpty()) {
-        genes.addAll(grp);
+        Set<String> validLocus = new HashSet<> ();
+        for (String g : grp) {
+          if (!NumberUtils.isNumber(g.trim())) {
+            if (geneTransformer != null) {
+              g = geneTransformer.apply(g);
+            }
+            if (g != null && !g.trim().isEmpty()) {
+              validLocus.add(g);
+            }
+          } else {
+            logger.warn("[IGNORE NUMBER LOCUS] gene: {}", g);
+          }
+        }
+        genes.addAll(validLocus);
       }
     }
-    
-    //split querys
-    //
-
-//    String query = String.format("aliases:(%s)", StringUtils.join(genes, " OR "));
-
 
     return searchGenome(genes);
   }

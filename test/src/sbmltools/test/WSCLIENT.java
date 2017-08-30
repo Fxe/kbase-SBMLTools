@@ -10,6 +10,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kbasebiochem.Media;
 import kbasefba.FBAModel;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
@@ -38,6 +39,10 @@ public class WSCLIENT extends WorkspaceClient {
     otypeMap.put("KBaseGenomes.Genome-8.2", KBaseGenome.class);
     otypeMap.put("KBaseGenomes.Genome-8.3", KBaseGenome.class);
     otypeMap.put("KBaseFBA.FBAModel-9.1", FBAModel.class);
+    otypeMap.put("KBaseFBA.FBAModel-11.0", FBAModel.class);
+    otypeMap.put("KBaseBiochem.Media-4.0", Media.class);
+    
+    
   }
   
   @Override

@@ -111,6 +111,10 @@ public class KBaseIOUtils {
     }
   }
   
+  public static KBaseId saveData(String nameId, KBaseType dataType, Object o, String ws, final WorkspaceClient wsClient) throws Exception {
+    return saveData(nameId, dataType.value(), o, ws, wsClient);  
+  }
+  
   public static KBaseId saveData(String nameId, String dataType, Object o, String ws, final WorkspaceClient wsClient) throws Exception {
 //    long wsId = dfuClient.wsNameToId(ws);
 

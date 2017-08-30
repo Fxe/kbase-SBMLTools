@@ -98,7 +98,7 @@ public class Genome {
     @JsonProperty("complete")
     private java.lang.Long complete;
     @JsonProperty("publications")
-    private List<Tuple7 <Long, String, String, String, String, String, String>> publications;
+    public List<Object> publications;
     @JsonProperty("features")
     private List<Feature> features;
     @JsonProperty("contigset_ref")
@@ -345,20 +345,20 @@ public class Genome {
         return this;
     }
 
-    @JsonProperty("publications")
-    public List<Tuple7 <Long, String, String, String, String, String, String>> getPublications() {
-        return publications;
-    }
-
-    @JsonProperty("publications")
-    public void setPublications(List<Tuple7 <Long, String, String, String, String, String, String>> publications) {
-        this.publications = publications;
-    }
-
-    public Genome withPublications(List<Tuple7 <Long, String, String, String, String, String, String>> publications) {
-        this.publications = publications;
-        return this;
-    }
+//    @JsonProperty("publications")
+//    public List<Tuple7 <Long, String, String, String, String, String, String>> getPublications() {
+//        return publications;
+//    }
+//
+//    @JsonProperty("publications")
+//    public void setPublications(List<Tuple7 <Long, String, String, String, String, String, String>> publications) {
+//        this.publications = publications;
+//    }
+//
+//    public Genome withPublications(List<Tuple7 <Long, String, String, String, String, String, String>> publications) {
+//        this.publications = publications;
+//        return this;
+//    }
 
     @JsonProperty("features")
     public List<Feature> getFeatures() {

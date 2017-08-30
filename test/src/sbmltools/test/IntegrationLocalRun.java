@@ -1,43 +1,56 @@
 package sbmltools.test;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
+import kbasebiochem.Media;
+import kbasebiochem.MediaCompound;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
+import kbasegenomes.Contig;
+import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import kbsolrutil.KBaseAPI;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxTree;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
+import pt.uminho.sysbio.biosynthframework.BFunction;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
+import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
+import pt.uminho.sysbio.biosynthframework.kbase.EasyKBase;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.MediaAdapter;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
 import sbmltools.KBaseType;
-import sbmltools.SBMLToolsClient;
-import us.kbase.workspace.WorkspaceIdentity;
 
 public class IntegrationLocalRun {
   
   private static final Logger logger = LoggerFactory.getLogger(IntegrationLocalRun.class);
+  
+  public static String LOGIN_TOKEN = "3OJVW5P6KWFG7AJCNLN7VFUHHIRVOELP";
   
   public static String  DEV_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502428739293";
   public static String PROD_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502913538729";
@@ -47,7 +60,6 @@ public class IntegrationLocalRun {
   public static String DEV_SOME_REPO = "filipeliu:narrative_1502474753893";
   
   public static void localIntegraiton() {
-    String LOGIN_TOKEN = "MO2FCAGI3TLEM3PPRZZ4KH4ZKBJEMRGO";
     String model = "Ec_core_flux1";
     model = "iJW145";
     try {
@@ -137,9 +149,10 @@ public class IntegrationLocalRun {
     }
   }
   
-  public static void updateGpr2(FBAModel kmodel) throws Exception {
+  public static void updateGpr2(FBAModel kmodel, Genome genome, BFunction<String, String> geneTransform) throws Exception {
     Map<String, String> badGpr = new HashMap<> ();
     Map<String, String> fix = getGprFix();
+    System.out.println(kmodel.getGenomeRef());
     for (ModelReaction krxn : kmodel.getModelreactions()) {
       String gprString = krxn.getImportedGpr();
       if (fix.containsKey(gprString)) {
@@ -148,37 +161,42 @@ public class IntegrationLocalRun {
         krxn.setImportedGpr(gprString);
       }
       if (!DataUtils.empty(gprString)) {
-        try {
-          GeneReactionRuleCI grrci = new GeneReactionRuleCI(gprString);
-//          AbstractSyntaxTree<?, ?> rule = grrci.getRule();
-          Set<String> genes = KBaseUtils.getGenes(grrci);
-          List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, kmodel.getGenomeRef());
+        Set<String> genes = KBaseUtils.getGenes(gprString, geneTransform);
+        if (genes != null && !genes.isEmpty()) {
+          List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, kmodel.getGenomeRef());
           krxn.setModelReactionProteins(mrpList);
-//          if (genes != null) {
-//            krxn.getModelReactionProteins().clear();
-//            List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
-//            List<String> features = new ArrayList<> ();
-//            for (String g : genes) {
-//              features.add(String.format("%s/features/id/%s", kmodel.getGenomeRef(), g));
-//            }
-  //
-//            //1985/8/4/features/id/kb|g.220339.CDS.100
-//            ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
-//                .withFeatureRefs(features)
-//                .withTriggering(0L)
-//                .withRole("")
-//                .withNote("Imported GPR")
-//                .withOptionalSubunit(0L);
-//            mrpsLists.add(mrps);
-//            ModelReactionProtein mrp = new ModelReactionProtein()
-//                .withComplexRef("")
-//                .withModelReactionProteinSubunits(mrpsLists)
-//                .withNote(krxn.getImportedGpr()).withSource("SBML");
-//            krxn.getModelReactionProteins().add(mrp);
-//          }
-        } catch (Exception | TokenMgrError e) {
-          badGpr.put(krxn.getId(), gprString);
         }
+//        try {
+//          GeneReactionRuleCI grrci = new GeneReactionRuleCI(gprString);
+////          AbstractSyntaxTree<?, ?> rule = grrci.getRule();
+//          Set<String> genes = KBaseUtils.getGenes(grrci);
+//          
+//          
+////          if (genes != null) {
+////            krxn.getModelReactionProteins().clear();
+////            List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
+////            List<String> features = new ArrayList<> ();
+////            for (String g : genes) {
+////              features.add(String.format("%s/features/id/%s", kmodel.getGenomeRef(), g));
+////            }
+//  //
+////            //1985/8/4/features/id/kb|g.220339.CDS.100
+////            ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
+////                .withFeatureRefs(features)
+////                .withTriggering(0L)
+////                .withRole("")
+////                .withNote("Imported GPR")
+////                .withOptionalSubunit(0L);
+////            mrpsLists.add(mrps);
+////            ModelReactionProtein mrp = new ModelReactionProtein()
+////                .withComplexRef("")
+////                .withModelReactionProteinSubunits(mrpsLists)
+////                .withNote(krxn.getImportedGpr()).withSource("SBML");
+////            krxn.getModelReactionProteins().add(mrp);
+////          }
+//        } catch (Exception | TokenMgrError e) {
+//          badGpr.put(krxn.getId(), gprString);
+//        }
       }
 
     }
@@ -208,13 +226,288 @@ public class IntegrationLocalRun {
     return fix;
   }
   
-  public static void listRefGenomes() {
-    String LOGIN_TOKEN = "MO2FCAGI3TLEM3PPRZZ4KH4ZKBJEMRGO";
-    try {
-      KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), false);
+  public static Map<String, Set<String>> getRolesMap() {
+    Map<String, Set<String>> result = new HashMap<> ();
+    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
+    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao(roleJson);
+    Map<String, Set<String>> aa = new HashMap<> ();
+    for (String k : roleDao.data.keySet()) {
+      ModelSeedRole role = roleDao.data.get(k);
+      //  System.out.println(k + " " + role.name);
+      if (!aa.containsKey(role.name.trim().toLowerCase())) {
+        aa.put(role.name.trim().toLowerCase(), new HashSet<String> ());
+      }
+      aa.get(role.name.trim().toLowerCase()).add(k);
+    }
+    int good = 0;
+    int bad = 0;
+    for (String k : aa.keySet()) {
 
-      Object genome = KBaseIOUtils.getObject("GCF_000005845.2", PROD_RAST_GENOME, null, prodAPI.getWorkspaceClient());
+      if (aa.get(k).size() > 1) {
+        //    System.out.println(k + " " + aa.get(k));
+        result.put(k.trim().toLowerCase(), aa.get(k));
+        bad++;
+      } else {
+        result.put(k.trim().toLowerCase(), aa.get(k));
+        good++;
+      }
+    }
+    logger.debug("roles good: {}, bad: {}", good, bad);
+    return result;
+  }
+
+  public static Map<String, Set<String>> getReactionRoles() {
+    Map<String, Set<String>> result = new HashMap<> ();
+    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
+    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao(roleJson);
+    for (String k : roleDao.data.keySet()) {
+      ModelSeedRole role = roleDao.data.get(k);
+      for (String rxn : role.reactions) {
+        rxn = rxn.split(";")[0].trim();
+        //    System.out.println(rxn + " " + k); 
+        if (!result.containsKey(rxn)) {
+          result.put(rxn, new HashSet<String> ());
+        }
+        result.get(rxn).add(k);
+      }
+      //  System.out.println(k + " " + role.reactions.size());
+
+    }
+    return result;
+  }
+  
+  public static Set<String> annotationSplit(String str) {
+    Set<String> result = new HashSet<> ();
+    for (String s : str.split(" @ |; | / ")) {
+      result.add(s.trim());
+    }
+    
+    if (result.size() != 1) {
+      logger.trace("split! {} - {}", result, str);
+    }
+    
+    return result;
+  };
+  
+  public static Map<String, Set<String>> getFunctionToRxn() {
+    Map<String, Set<String>> rmap = getRolesMap();
+    Map<String, Set<String>> roles = getReactionRoles();
+    Map<String, Set<String>> roleToRxn = new HashMap<> ();
+    Map<String, Set<String>> functionToRxn = new HashMap<> ();
+    for (String rxn : roles.keySet()) {
+      for (String r : roles.get(rxn)) {
+        if (!roleToRxn.containsKey(r)) {
+          roleToRxn.put(r, new HashSet<String> ());
+        }
+        roleToRxn.get(r).add(rxn);
+      }
+    }
+    
+    for (String function : rmap.keySet()) {
+      Set<String> rs = rmap.get(function);
+      Set<String> frxns = new HashSet<> ();
+      for (String r : rs) {
+        Set<String> mseedRxns = roleToRxn.get(r);
+        if (mseedRxns != null && !mseedRxns.isEmpty()) {
+          frxns.addAll(mseedRxns);
+        }
+      }
+      if (!frxns.isEmpty()) {
+        functionToRxn.put(function, frxns);
+        logger.debug("{}: {}", function, frxns);
+      } else {
+        logger.debug("no reactions assigned to: {}", function);
+      }
+    }
+    logger.info("loaded {} functions!", functionToRxn.size());
+    
+    return functionToRxn;
+  }
+  
+  public static Set<String> getMetabolic(Genome a, Map<String, Set<String>> functionToRxn) {
+    Set<String> metabolic = new HashSet<> ();
+    
+    for (Feature f : a.getFeatures()) {
+      String function = f.getFunction();
+      if (function == null) {
+        function = "hypothetical protein";
+      }
+      Set<String> s1 = functionToRxn.get(function);
+      String f_ = function.trim().toLowerCase();
+      Set<String> fs = annotationSplit(f_);
+      Set<String> s2 = new HashSet<> ();
+      for (String ff : fs) {
+        Set<String> s2_ = functionToRxn.get(ff);
+        if (s2_ != null) {
+          s2.addAll(s2_);
+        }
+      }
       
+      if (s1 == null && s2.isEmpty()) {
+        logger.trace(function);
+      } else {
+        metabolic.add(f.getId());
+      }
+    }
+    
+    logger.info("loaded {}/{} metabolic funcions!", metabolic.size(), a.getFeatures().size());
+    return metabolic;
+  }
+  
+  public static void list16SGenomes() {
+    try {
+      KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
+      List<KBaseId> kids = prodAPI.listNarrative(PROD_RAST_GENOME, KBaseType.Genome);
+      Map<String, Map<String, Object>> db = new HashMap<> ();
+      for (KBaseId kid : kids) {
+        if (kid.name.endsWith(".rast")) {
+          Genome genome = prodAPI.getGenome(kid.name, kid.workspace);
+          db.put(kid.name, new HashMap<String, Object> ());
+          Map<String, Object> data = db.get(kid.name);
+          data.put("scientific_name", genome.getScientificName());
+          Map<String, Long> sizes = new HashMap<> ();
+          Map<String, String> gfunctions = new HashMap<> ();
+          Map<String, String> gseq = new HashMap<> ();
+          System.out.println(genome.getScientificName());
+          Object cs = genome.getCloseGenomes();
+          System.out.println(cs);
+          if (cs != null) {
+            
+//            for (Contig c : genome.getContigs()) {
+//              System.out.println(c);
+//            }
+          }
+
+          for (Feature f : genome.getFeatures()) {
+          }
+          long high = 0;
+          String best = null;
+          for (String k : sizes.keySet()) {
+            long s = sizes.get(k);
+            if (s > high) {
+              high = s;
+              best = k;
+            }
+          }
+          if (best != null) {
+            logger.info("{} [{}]: {}", best, high, gfunctions.get(best));
+
+            data.put("feature", best);
+            data.put("function", gfunctions.get(best));
+            data.put("size", high);
+            data.put("seq", gseq.get(best));
+          }
+//          break;
+        }
+      }
+      
+      for (String g : db.keySet()) {
+        Map<String, Object> data = db.get(g);
+        if (data != null && data.get("seq") == null) {
+          logger.warn("[{}]{}", g, data.get("scientific_name"));
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+
+  public static void listPolymeraseGenomes() {
+    try {
+      KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
+      List<KBaseId> kids = prodAPI.listNarrative(PROD_RAST_GENOME, KBaseType.Genome);
+      Map<String, Map<String, Object>> db = new HashMap<> ();
+      for (KBaseId kid : kids) {
+        if (kid.name.endsWith(".rast")) {
+          Genome genome = prodAPI.getGenome(kid.name, kid.workspace);
+          db.put(kid.name, new HashMap<String, Object> ());
+          Map<String, Object> data = db.get(kid.name);
+          data.put("scientific_name", genome.getScientificName());
+          Map<String, Long> sizes = new HashMap<> ();
+          Map<String, String> gfunctions = new HashMap<> ();
+          Map<String, String> gseq = new HashMap<> ();
+          System.out.println(genome.getScientificName());
+          for (Feature f : genome.getFeatures()) {
+            
+            String function = f.getFunction();
+            gfunctions.put(f.getId(), function);
+            gseq.put(f.getId(), f.getDnaSequence());
+            if (function != null && 
+                (function.toUpperCase().contains("2.7.7.6") && function.toUpperCase().contains("BETA"))
+                ) {
+              sizes.put(f.getId(), f.getDnaSequenceLength());
+            }
+          }
+          long high = 0;
+          String best = null;
+          for (String k : sizes.keySet()) {
+            long s = sizes.get(k);
+            if (s > high) {
+              high = s;
+              best = k;
+            }
+          }
+          if (best != null) {
+            logger.info("{} [{}]: {}", best, high, gfunctions.get(best));
+
+            data.put("feature", best);
+            data.put("function", gfunctions.get(best));
+            data.put("size", high);
+            data.put("seq", gseq.get(best));
+          }
+        }
+      }
+      
+      for (String g : db.keySet()) {
+        Map<String, Object> data = db.get(g);
+        if (data != null && data.get("seq") == null) {
+          logger.warn("[{}]{}", g, data.get("scientific_name"));
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  public static void listRefGenomes() {
+    try {
+      KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
+      List<KBaseId> kids = prodAPI.listNarrative(PROD_RAST_GENOME, KBaseType.Genome);
+      Set<String> rast = new HashSet<> ();
+      Set<String> genomes = new HashSet<> ();
+      for (KBaseId kid : kids) {
+        if (kid.name.endsWith(".rast")) {
+          rast.add(kid.name);
+        } else {
+          genomes.add(kid.name);
+        }
+      }
+
+      EasyKBase kBase = new EasyKBase(prodAPI);
+      for (String g : genomes) {
+        String rastG = g.concat(".rast");
+        if (!rast.contains(rastG)) {
+          Genome genome = prodAPI.getGenome(g, PROD_RAST_GENOME);
+          kBase.annotateGenome(PROD_RAST_GENOME, g, rastG);
+        } else {
+          logger.warn("skip: {}", g);
+        }
+      }
+//      Object genome = KBaseIOUtils.getObject("GCF_000005845.2", PROD_RAST_GENOME, null, prodAPI.getWorkspaceClient());
+//      Genome a = prodAPI.getGenome("GCF_000005845.2.rast2", PROD_RAST_GENOME);
+//
+//      Map<String, Set<String>> functionToRxn = getFunctionToRxn();
+//      Set<String> metabolic = getMetabolic(a, functionToRxn);
+
+//      
+//      kBase.annotateGenome(PROD_RAST_GENOME, "GCF_000005845.2", "GCF_000005845.2.rast2");
+//      System.out.println(r);
+
+//      GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(prodAPI.callbackURL, prodAPI.authToken);
+//      SaveOneGenomeParamsV1 params = new SaveOneGenomeParamsV1().withData(a).withWorkspace(PROD_RAST_GENOME).withName("genome");
+////      gaClient.sav
+//      gaClient.saveOneGenomeV1(params);
 //      Genome genome = null; //prodAPI.getGenome("GCF_000008805.1", "ReferenceDataManager");
 //      genome = prodAPI.getGenome("GCF_000005845.2", PROD_RAST_GENOME);
       
@@ -255,37 +548,71 @@ public class IntegrationLocalRun {
 //        System.out.println(cds.ontology_terms);
 //      }
       
-      prodAPI.saveObject("GCF_000005845.2", PROD_RAST_GENOME, KBaseType.Genome.value(), genome);
+//      prodAPI.saveObject("GCF_000005845.2", PROD_RAST_GENOME, KBaseType.Genome.value(), genome);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
   
   public static void updateModelGpr() {
+    Map<String, BFunction<String, String>> modelGeneTransformers = new HashMap<>();
+    modelGeneTransformers.put("iCac802", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iCAC490", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iCac802_V_cobragitsengerpapou", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iJH728", ManualFixes.get_iJH728());
+    modelGeneTransformers.put("iLCBaumannia", ManualFixes.get_iLCBaumannia());
+    modelGeneTransformers.put("iJP962", ManualFixes.get_iJP962_iJP815());
+    modelGeneTransformers.put("iJP815", ManualFixes.get_iJP962_iJP815());
+    modelGeneTransformers.put("iPB890", ManualFixes.get_iPB890());
+    modelGeneTransformers.put("iOD907", ManualFixes.get_iOD907());
+    
     Map<String, String> defaultBiomass = JoanaConstants.getModelDefaultBiomassReaction();
-    String LOGIN_TOKEN = "MO2FCAGI3TLEM3PPRZZ4KH4ZKBJEMRGO";
     try {
-      KBaseAPI devAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigDev(), false);
+      KBaseAPI devAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigDev(), true);
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), false);
+      
+      List<KBaseId> qrast = prodAPI.listNarrative(PROD_RAST_GENOME, KBaseType.Genome);
+      Map<String, KBaseId> rastGenomes = new HashMap<> ();
+      for (KBaseId kid : qrast) {
+        if (kid.name.endsWith(".rast")) {
+          rastGenomes.put(kid.name.replace(".rast", ""), kid);
+        }
+      }
       
       List<KBaseId> q1 = devAPI.listNarrative(DEV_PUBLISHED_MODEL_REPO, "KBaseFBA.FBAModel");
       List<KBaseId> q2 = prodAPI.listNarrative(PROD_PUBLISHED_MODEL_REPO, "KBaseFBA.FBAModel");
+//      q2.clear();
+//      q2.add(new KBaseId("iCM925", PROD_PUBLISHED_MODEL_REPO, null));
       for (KBaseId kid : q2) {
         System.out.println(kid);
         try {
           FBAModel kmodel = KBaseIOUtils.getObject(kid.name, PROD_PUBLISHED_MODEL_REPO, null, FBAModel.class, prodAPI.wsClient);
-          FBAModelAdapter adapter = new FBAModelAdapter(kmodel);
-          if (defaultBiomass.containsKey(kmodel.getId())) {
-            String biomassEntry = defaultBiomass.get(kmodel.getId());
-            logger.info("default biomass: {}", biomassEntry);
-            adapter.convertToBiomass(biomassEntry);
+          if (kmodel.getGenomeRef() != null) {
+            KBaseId gkid = new KBaseId(null, null, kmodel.getGenomeRef());
+            Genome genome = prodAPI.getGenome(gkid);
+            System.out.println(genome.getId() + " " + kmodel.getGenomeRef());
+            if (rastGenomes.containsKey(genome.getId()) && 
+                rastGenomes.get(genome.getId()).reference != null) {
+              logger.info("swap to rast genome ...");
+              kmodel.setGenomeRef(rastGenomes.get(genome.getId()).reference);
+            }
+            
+            FBAModelAdapter adapter = new FBAModelAdapter(kmodel);
+            if (defaultBiomass.containsKey(kmodel.getId())) {
+              String biomassEntry = defaultBiomass.get(kmodel.getId());
+              logger.info("default biomass: {}", biomassEntry);
+              adapter.convertToBiomass(biomassEntry);
+            }
+            BFunction<String, String> gtrans = modelGeneTransformers.get(kmodel.getId());
+            updateGpr2(kmodel, genome, gtrans);
+            System.out.println(adapter.getBiomasses());
+            KBaseIOUtils.saveData(kid.name, KBaseType.FBAModel.value(), kmodel, PROD_PUBLISHED_MODEL_REPO, prodAPI.wsClient);
           }
-          updateGpr2(kmodel);
-          System.out.println(adapter.getBiomasses());
-          KBaseIOUtils.saveData(kid.name, KBaseType.FBAModel.value(), kmodel, PROD_PUBLISHED_MODEL_REPO, prodAPI.wsClient);
+          
         } catch (Exception e) {
           e.printStackTrace();
         }
+//        break;
       }
       
 //      FBAModel kmodel = KBaseIOUtils.getObject("Ec_core_flux1", DEV_PUBLISHED_MODEL_REPO, null, FBAModel.class, devAPI.wsClient);
@@ -298,16 +625,72 @@ public class IntegrationLocalRun {
 //      KBaseIOUtils.getObject("Ec_core_flux1", ws, ref, devAPI.wsClient);
       List<KBaseId> q3 = prodAPI.listNarrative(PROD_RAST_GENOME, "KBaseGenomes.Genome");
       for (KBaseId kid : q3) {
-        System.out.println(kid);
+//        System.out.println(kid);
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
   
+  public static void getModel() {
+    try {
+      KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
+      
+      FBAModel kmodel = KBaseIOUtils.getObject("Ec_core_flux1", PROD_PUBLISHED_MODEL_REPO, null, FBAModel.class, prodAPI.wsClient);
+      FBAModelAdapter madapter = new FBAModelAdapter(kmodel);
+      Media media = madapter.convertToMedia(kmodel.getId() + ".media", madapter.getDefaultDrains());
+      System.out.println(media);
+      KBaseIOUtils.saveData(kmodel.getId() + ".media", KBaseType.KBaseBiochemMedia, media, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
+//      System.out.println(CollectionUtils.print(madapter.getDefaultDrains()));
+//      System.out.println(madapter.kspiMap.get("M_for_e").getDblinks());
+      
+//      Media media = KBaseIOUtils.getObject("Carbon-D-Glucose", "filipeliu:narrative_1503957402064", null, Media.class, prodAPI.wsClient);
+//      {
+//        Media m5 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_5");
+//        for (MediaCompound mc : media.getMediacompounds()) {
+//          MediaAdapter ma = new MediaAdapter(m5);
+//          ma.addMediaCompound(mc);
+//        }
+//        KBaseIOUtils.saveData("Carbon-D-Glucose_5", KBaseType.KBaseBiochemMedia, m5, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
+//      }
+//      {
+//        Media m10 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_10");
+//        MediaAdapter ma = new MediaAdapter(m10);
+//        for (MediaCompound mc : media.getMediacompounds()) {
+//          ma.addMediaCompound(mc);
+//        }
+//        ma.setUptake("cpd00027", 10);
+//        KBaseIOUtils.saveData("Carbon-D-Glucose_10", KBaseType.KBaseBiochemMedia, m10, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
+//      }
+//      {
+//        Media m20 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_20");
+//        MediaAdapter ma = new MediaAdapter(m20);
+//        for (MediaCompound mc : media.getMediacompounds()) {
+//          ma.addMediaCompound(mc);
+//        }
+//        ma.setUptake("cpd00027", 20);
+//        KBaseIOUtils.saveData("Carbon-D-Glucose_20", KBaseType.KBaseBiochemMedia, m20, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
+//      }
+      
+//      System.out.println(media);
+      //templateRef=12998/2/1 iCac802.rast.nofill
+//      FBAModel kmodel2 = KBaseIOUtils.getObject("iCac802.rast.nofill", "filipeliu:narrative_1503957402064", null, FBAModel.class, prodAPI.wsClient);
+//      System.out.println(kmodel2);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
   public static void main(String[] args) {
-    localIntegraiton();
+//    localIntegraiton();
 //    updateModelGpr();
 //    listRefGenomes();
+//    listPolymeraseGenomes();
+//    list16SGenomes();
+    getModel();
   }
+
+
+
 }
+

@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kbasefba.Biomass;
-import kbasefba.BiomassCompound;
 import kbasefba.FBAModel;
 import kbasefba.ModelCompartment;
 import kbasefba.ModelCompound;
@@ -22,6 +21,8 @@ import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
+import kbasegenomes.Feature;
+import kbasegenomes.Genome;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.ParseException;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
@@ -237,6 +238,26 @@ public class FBAModelFactory {
     }
     
     return null;
+  }
+  
+  public static List<ModelReactionProtein> setupModelReactionProteins(Set<String> genes, Genome genome, String genomeRef) {
+    Map<String, Feature> fmap = new HashMap<> ();
+    for (Feature f : genome.getFeatures()) {
+      fmap.put(f.getId(), f);
+      for (String a : f.getAliases()) {
+        fmap.put(a, f);
+      }
+    }
+    
+    Set<String> validGenes = new HashSet<> ();
+    for (String g : genes) {
+      if (fmap.containsKey(g)) {
+        validGenes.add(fmap.get(g).getId());
+      } else {
+        logger.warn("Gene not found within feature set: {}", g);
+      }
+    }
+    return setupModelReactionProteins(genes, genomeRef);
   }
   
   public static List<ModelReactionProtein> setupModelReactionProteins(Set<String> genes, String genomeRef) {

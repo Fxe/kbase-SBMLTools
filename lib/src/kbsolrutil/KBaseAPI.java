@@ -149,6 +149,11 @@ public class KBaseAPI {
     return o;
   }
   
+  public Genome getGenome(KBaseId kid) throws IOException {
+    Genome o = KBaseIOUtils.getObject(kid.name, kid.workspace, kid.reference, Genome.class, getWorkspaceClient());
+    return o;
+  }
+  
   public KBaseId saveGenome(String id, String ws, Genome o) throws IOException {
     try {
       KBaseId kid = KBaseIOUtils.saveData(id, KBaseType.Genome.value(), o, ws, getWorkspaceClient());
@@ -165,6 +170,10 @@ public class KBaseAPI {
     } catch (Exception e) {
       throw new IOException(e);
     }
+  }
+  
+  public List<KBaseId> listNarrative(String ws, KBaseType otype) throws IOException {
+    return listNarrative(ws, otype.value());
   }
   
   public List<KBaseId> listNarrative(String ws, String otype) throws IOException {
