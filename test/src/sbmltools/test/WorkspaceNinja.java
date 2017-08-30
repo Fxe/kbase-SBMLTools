@@ -15,10 +15,6 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.core.io.FileSystemResource;
-//import org.springframework.core.io.Resource;
-
-import com.google.common.collect.Sets;
 
 import kbasefba.FBAModel;
 import kbasegenomes.Feature;
@@ -27,8 +23,6 @@ import kbsolrutil.KBaseAPI;
 import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.DataUtils;
 import pt.uminho.sysbio.biosynthframework.Dataset;
-//import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
-//import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenomeReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;

@@ -12,8 +12,8 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
+//import org.springframework.core.io.FileSystemResource;
+//import org.springframework.core.io.Resource;
 
 import kbasebiochem.Media;
 import kbasebiochem.MediaCompound;
@@ -228,8 +228,8 @@ public class IntegrationLocalRun {
   
   public static Map<String, Set<String>> getRolesMap() {
     Map<String, Set<String>> result = new HashMap<> ();
-    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
-    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao(roleJson);
+//    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
+    JsonModelSeedRoleDao roleDao = null; //new JsonModelSeedRoleDao(roleJson);
     Map<String, Set<String>> aa = new HashMap<> ();
     for (String k : roleDao.data.keySet()) {
       ModelSeedRole role = roleDao.data.get(k);
@@ -258,8 +258,8 @@ public class IntegrationLocalRun {
 
   public static Map<String, Set<String>> getReactionRoles() {
     Map<String, Set<String>> result = new HashMap<> ();
-    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
-    JsonModelSeedRoleDao roleDao = new JsonModelSeedRoleDao(roleJson);
+//    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
+    JsonModelSeedRoleDao roleDao = null; //new JsonModelSeedRoleDao(roleJson);
     for (String k : roleDao.data.keySet()) {
       ModelSeedRole role = roleDao.data.get(k);
       for (String rxn : role.reactions) {

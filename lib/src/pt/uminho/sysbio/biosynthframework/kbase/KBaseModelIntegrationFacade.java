@@ -135,7 +135,6 @@ public class KBaseModelIntegrationFacade {
       }
     }
     
-    
     //integrate
     KBaseIntegration integration = new KBaseIntegration(fbaModel);
     integration.biomassSet.addAll(biomassReactions);
