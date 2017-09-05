@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kbasebiochem.Media;
 import kbasefba.Biomass;
 import kbasefba.BiomassCompound;
 import kbasefba.FBAModel;
@@ -18,12 +19,15 @@ import kbasefba.ModelCompound;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionReagent;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
+import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.MockData;
 
 public class KBaseIntegration {
   
   private static final Logger logger = LoggerFactory.getLogger(KBaseIntegration.class);
+  
+  public KBaseIntegrationReport report = null;
   
   public final FBAModel fbaModel;
   public final FBAModelAdapter adapter;
@@ -33,8 +37,19 @@ public class KBaseIntegration {
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
   public String mediaName = null;
+  
+  /**
+   * rxn -> new gpr <br> <h1>Example</h1><br> "rxn1000" : "b1000 and b1002"
+   */
+  public Map<String, String> gprOverride = new HashMap<> ();
+  
+  /**  
+   * gene -> new gene gpr <br> <h1>Example</h1><br> "peg.1" : "Bsu0001"
+   */
+  public Map<String, String> geneSwap = new HashMap<> ();
+  
   public KBaseBiodbContainer biodbContainer;
-  public Object defaultMedia = null;
+  public Media defaultMedia = null;
   public String genomeRef = null;
   public KBaseGenome genome = null;
   
@@ -66,6 +81,13 @@ public class KBaseIntegration {
   }
   
   public void integrate() {
+    for (String rxn : gprOverride.keySet()) {
+      ModelReaction krxn = adapter.rxnMap.get(rxn);
+      if (krxn != null && gprOverride.get(rxn) != null) {
+        krxn.setImportedGpr(gprOverride.get(rxn));
+      }
+    }
+    
     if (this.genomeRef != null) {
       fbaModel.setGenomeRef(this.genomeRef);
       if (genome != null) {
@@ -80,25 +102,54 @@ public class KBaseIntegration {
     }
     
     for (String b : biomassSet) {
-      adapter.convertToBiomass(b);
+      String brxnEntry = adapter.convertToBiomass(b);
+      if (brxnEntry != null) {
+        
+      }
     }
     
     for (String cmpOld : compartmentMapping.keySet()) {
       String cmpSwap = compartmentMapping.get(cmpOld);
-      adapter.integrateCompartment(cmpOld, cmpSwap);
+      
+      
+      
+      this.report.compartmentReport.cmpName.put(cmpOld, "");
+      
+      
+      for (ModelCompartment mcmp : this.fbaModel.getModelcompartments()) {
+        if (mcmp.getId().equals(cmpOld)) {
+          this.report.compartmentReport.cmpName.put(cmpOld, mcmp.getLabel());
+        }
+      }
+      
+      String indexedCmp =  adapter.integrateCompartment(cmpOld, cmpSwap);
+      
+      this.report.compartmentReport.cmpName.put(indexedCmp, "");
+      this.report.compartmentReport.rename.put(cmpOld, indexedCmp);
     }
     
     //integration
     //BiGG, BiGG2, HMDB, LigandCompound, MetaCyc, ModelSeed, Seed
     if (rename != null) {
+      //needs a better db resolver
+      if (rename.equals("BiGG")) {
+        rename = "BiGG2";
+      }
+      
+      if (rename.equals("KEGG")) {
+        rename = "LigandCompound";
+      }
+      
       logger.info("rename: {}", this.rename);
       
       for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
         List<String> dbRefs = kcpd.getDblinks().get(rename);
         if (dbRefs != null && !dbRefs.isEmpty()) {
-          System.out.println(kcpd.getId() + " " + dbRefs.iterator().next());
-          adapter.renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
-//          renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
+          String ref = dbRefs.iterator().next();
+          String prev = kcpd.getId();
+          if (adapter.renameMetaboliteEntry(prev, dbRefs.iterator().next())) {
+            report.spiTranslationReport.translationMap.put(prev, kcpd.getId());
+          }
         }
       }
       
@@ -111,7 +162,7 @@ public class KBaseIntegration {
       }
     }
     
-    if (fillMetadata && biodbContainer.biodbService != null) {
+    if (fillMetadata && biodbContainer != null && biodbContainer.biodbService != null) {
       BiodbService biodbService = biodbContainer.biodbService;
       for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
         List<String> dbRefs = kcpd.getDblinks().get("ModelSeed");
@@ -146,8 +197,19 @@ public class KBaseIntegration {
     mediaName = fbaModel.getId() + ".media";
     if (this.mediaName != null) {
       Map<String, Pair<Double, Double>> dfDrains = adapter.getDefaultDrains();
-      Object media = adapter.convertToMedia(mediaName, dfDrains);
+      Set<String> drains = adapter.removeDrainReactions();
+      logger.trace("[DRAINS] Removed reactions: {}", drains);
+      Media media = adapter.convertToMedia(mediaName, dfDrains);
       defaultMedia = media;
+      
+      for (String d : drains) {
+        report.drainReport.deletedReactions.put(d, new HashMap<String, Double> ());
+      }
+      
+      for (String d : dfDrains.keySet()) {
+        Pair<Double, Double> p = dfDrains.get(d);
+        report.drainReport.media.put(d, new double[]{p.getLeft(), p.getRight()});
+      }
     }
   }
 }

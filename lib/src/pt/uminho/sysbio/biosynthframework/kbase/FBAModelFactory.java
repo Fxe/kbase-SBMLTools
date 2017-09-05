@@ -257,7 +257,7 @@ public class FBAModelFactory {
         logger.warn("Gene not found within feature set: {}", g);
       }
     }
-    return setupModelReactionProteins(genes, genomeRef);
+    return setupModelReactionProteins(validGenes, genomeRef);
   }
   
   public static List<ModelReactionProtein> setupModelReactionProteins(Set<String> genes, String genomeRef) {
@@ -298,6 +298,7 @@ public class FBAModelFactory {
     model.setSource("External");
     model.setSourceId(modelId);
     model.setType("SBML Model");
+//    FBAModelAdapter.getTemplateRef("", "", null); //get core template
     model.setTemplateRef("50/1/1");
     model.setGapfillings(new ArrayList<ModelGapfill> ());
     model.setGapgens(new ArrayList<ModelGapgen> ());
@@ -387,7 +388,7 @@ public class FBAModelFactory {
           .withImportedGpr(gpr)
           .withDirection("=")
           .withProtons(1.0)
-          .withReactionRef("50/1/1/reactions/id/rxn00000_c")
+          .withReactionRef("~/template/reactions/id/rxn00000_c")
           .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
           .withProbability(1.0)
           .withPathway("entire model")

@@ -123,6 +123,9 @@ public class KBaseModelIntegrationFacade {
     //get model
     FBAModel fbaModel = KBaseIOUtils.getObject(fbaModelName, workspaceName, null, FBAModel.class, wspClient);
     //get genome ref
+    KBaseIntegrationReport kir = new KBaseIntegrationReport();
+    kir.model = fbaModel.getId();
+    kir.objName = fbaModel.getName();
     
     Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(params.getGenomeId(), workspaceName, null, wspClient);
     
@@ -137,6 +140,7 @@ public class KBaseModelIntegrationFacade {
     
     //integrate
     KBaseIntegration integration = new KBaseIntegration(fbaModel);
+    integration.report = kir;
     integration.biomassSet.addAll(biomassReactions);
     integration.genomeRef = kdata.getLeft().reference;
     integration.genome = KBaseUtils.convert(kdata.getRight(), KBaseGenome.class);
@@ -153,14 +157,17 @@ public class KBaseModelIntegrationFacade {
       geneData = geneIntegration.searchGenome(fbaModel);
     }
     
+    kir.fillGenomeData(geneIntegration);
+    
     KBaseId mediaKid = null;
     if (integration.defaultMedia != null) {
       mediaKid = KBaseIOUtils.saveData(outputName + ".media", KBaseType.KBaseBiochemMedia.value(), integration.defaultMedia, workspaceName, wspClient);
     }
     
     KBaseId kid = KBaseIOUtils.saveData(outputName, KBaseType.FBAModel.value(), fbaModel, workspaceName, wspClient);
-    System.out.println(kid);
 //    String ref = KBaseIOUtils.saveDataSafe(outputName, KBaseType.FBAModel, fbaModel, workspaceName, dfuClient);
+    
+    
     
     List<WorkspaceObject> wsObjects = new ArrayList<> ();
     wsObjects.add(new WorkspaceObject().withDescription("model").withRef(kid.reference));

@@ -48,6 +48,7 @@ public class WSCLIENT extends WorkspaceClient {
   @Override
   public GetObjects2Results getObjects2(GetObjects2Params params, RpcContext... jsonRpcContext)
       throws IOException, JsonClientException {
+    
     GetObjects2Results results = new GetObjects2Results();
     List<ObjectData> odata = new ArrayList<> ();
     results.withData(odata);

@@ -32,6 +32,10 @@ parameters :
         ui-name : kbase_compartment_id
         short-hint : kbase_compartment_id_hint
         long-hint  : kbase_compartment_id_lhint
+    output_media_name :
+        ui-name : Export Default media
+        short-hint : Extracts SBML Model Default media into media object
+        long-hint  : Extracts SBML Model Default media into media object
     translate_database :
         ui-name : Translate Metabolite and Reaction identifiers
         short-hint : Rename metabolites and reactions to another database identifiers

@@ -1,7 +1,9 @@
 package sbmltools.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -112,5 +114,31 @@ public class ManualFixes {
       }
     };
     return f;
+  }
+  
+  public static Map<String, BFunction<String, String>> getModelGeneTransformers() {
+    Map<String, BFunction<String, String>> modelGeneTransformers = new HashMap<>();
+    modelGeneTransformers.put("iCac802", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iCAC490", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iCac802_V_cobragitsengerpapou", ManualFixes.get_iCAC());
+    modelGeneTransformers.put("iJH728", ManualFixes.get_iJH728());
+    modelGeneTransformers.put("iLCBaumannia", ManualFixes.get_iLCBaumannia());
+    modelGeneTransformers.put("iJP962", ManualFixes.get_iJP962_iJP815());
+    modelGeneTransformers.put("iJP815", ManualFixes.get_iJP962_iJP815());
+    modelGeneTransformers.put("iPB890", ManualFixes.get_iPB890());
+    modelGeneTransformers.put("iOD907", ManualFixes.get_iOD907());
+    
+    return modelGeneTransformers;
+  }
+  
+  public static Map<String, Map<String, String>> getGprSwap() {
+    Map<String, Map<String, String>> gswap = new HashMap<> ();
+    gswap.put("C_tropcalis", new HashMap<String, String> ());
+    gswap.get("C_tropcalis").put("R_FAS100", "CTRG_02936 OR (CTRG_05241 AND CTRG_02501)");
+    gswap.put("iCM925", new HashMap<String, String> ());
+    gswap.get("iCM925").put("R_FDXNRy", "( Cbei_0661 or Cbei_2182 )");
+    gswap.get("iCM925").put("R_URIK9", "( Cbei_1559 or Cbei_2856 or Cbei_4512 )");
+    gswap.get("iCM925").put("R_CYTDK9", "( Cbei_1559 or Cbei_2856 or Cbei_4512 )");
+    return gswap;
   }
 }

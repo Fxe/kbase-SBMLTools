@@ -8,6 +8,7 @@ import rastsdk.AnnotateGenomeParams;
 import rastsdk.AnnotateGenomeResults;
 import rastsdk.RASTSDKClient;
 import us.kbase.auth.AuthToken;
+import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.UnauthorizedException;
 
 public class EasyKBase {
@@ -34,7 +35,17 @@ public class EasyKBase {
       if (rastClient == null) {
         initRastClient();
       }
+      AnnotateGenomeResults r = EasyKBase.annotateGenome(workspace, genomeIn, genomeOut, rastClient);
+      System.out.println(r);
+    } catch (Exception e) {
+      throw new IOException(e);
+    }
+  }
+  
+  public static AnnotateGenomeResults annotateGenome(String workspace, 
+      String genomeIn, String genomeOut, RASTSDKClient rastClient) throws IOException {
 
+    try {
       AnnotateGenomeParams params = new AnnotateGenomeParams()
           .withInputGenome(genomeIn)               //"input_genome": "GCF_000005845.2",
           .withOutputGenome(genomeOut)             //"output_genome": "GCF_000005845.2.rast",
@@ -57,9 +68,8 @@ public class EasyKBase {
           .withResolveOverlappingFeatures(0L)      //"resolve_overlapping_features": 0,
           .withFindCloseNeighbors(1L)              //"find_close_neighbors": 1,
           .withCallFeaturesProphagePhispy(0L);     //"call_features_prophage_phispy": 0
-      AnnotateGenomeResults r = rastClient.annotateGenome(params);
-      System.out.println(r);
-    } catch (Exception e) {
+      return rastClient.annotateGenome(params);
+    } catch (JsonClientException e) {
       throw new IOException(e);
     }
   }

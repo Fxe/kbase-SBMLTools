@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
+import sbmltools.KBaseType;
 import sbmltools.test.CacheEngine.CacheFieldType;
 import us.kbase.common.service.Tuple11;
 
@@ -55,6 +56,7 @@ public class CacheEngine {
 //  public Map<Pair<String, String>, Map<CacheFieldType, String>> cacheIndexMapOthers = null;
   public final Map<String, Map<Pair<String, String>, Map<CacheFieldType, String>>> cacheIndex;
   public File cacheIndexFile = new File("/var/argonne/kbase_object_cache/index.txt");
+  public String base = "/var/argonne/kcache";
   
   public void status() {
     logger.info("{} cache index loaded. records {}, total {}", 
@@ -102,6 +104,13 @@ public class CacheEngine {
     }
   }
   
+  public boolean isCached(String id, String ws, KBaseType ktype) {
+    File folder = new File(String.format("%s/%s/%s", base, version, StringUtils.replaceChars(ws, ':', '_')));
+    File jfile = new File(String.format("%s/%s.json", folder.getAbsolutePath(), id));
+    
+    return jfile.exists();
+  }
+  
   public boolean isCached(String id, String ws) {
     Pair<String, String> p = new ImmutablePair<String, String>(id, ws);
     return this.cacheIndex.get(version).containsKey(p);
@@ -142,15 +151,15 @@ public class CacheEngine {
   }
   
   public String getCacheData(String id, String ws) {
-    
     String response = null;
-    Pair<String, String> p = new ImmutablePair<String, String>(id, ws);
-    if (cacheIndex.get(version).containsKey(p)) {
-      File f = new File(cacheIndexFile.getParent() + "/" + 
-          cacheIndex.get(version).get(p).get(CacheFieldType.FILENAME));
+    
+    File folder = new File(String.format("%s/%s/%s", base, version, StringUtils.replaceChars(ws, ':', '_')));
+    File jfile = new File(String.format("%s/%s.json", folder.getAbsolutePath(), id));
+    if (jfile.exists()) {
+      logger.info("read {}", jfile.getAbsolutePath());
       InputStream is = null;
       try {
-        is = new FileInputStream(f);
+        is = new FileInputStream(jfile);
         List<String> data = IOUtils.readLines(is);
         response = StringUtils.join(data, "");
       } catch (IOException e) {
@@ -158,33 +167,71 @@ public class CacheEngine {
       } finally {
         IOUtils.closeQuietly(is);
       }
+    } else {
+      response = null;
+      Pair<String, String> p = new ImmutablePair<String, String>(id, ws);
+      if (cacheIndex.get(version).containsKey(p)) {
+        File f = new File(cacheIndexFile.getParent() + "/" + 
+            cacheIndex.get(version).get(p).get(CacheFieldType.FILENAME));
+        InputStream is = null;
+        try {
+          is = new FileInputStream(f);
+          List<String> data = IOUtils.readLines(is);
+          response = StringUtils.join(data, "");
+        } catch (IOException e) {
+          e.printStackTrace();
+        } finally {
+          IOUtils.closeQuietly(is);
+        }
+      }
     }
     
     return response;
   }
   
   public void save(String id, String ws, String ref, String type, String author, String data) {
-    logger.info("saving {} bytes", data.length());
+//    logger.info("{} {} {} {} {} {}", id, ws, ref, type, author, version);
+    File folder = new File(String.format("%s/%s/%s", base, version, StringUtils.replaceChars(ws, ':', '_')));
+    if (!folder.exists()) {
+      logger.warn("path not found creating ... [{}]", folder.getAbsolutePath());
+      folder.mkdirs();
+    }
+    File jfile = new File(String.format("%s/%s.json", folder.getAbsolutePath(), id));
+    {
+      OutputStream os = null;
+      try {
+        os = new FileOutputStream(jfile);
+        IOUtils.write(data, os);
+        logger.info("saving {} bytes", data.length());
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        IOUtils.closeQuietly(os);
+      }
+    }
+    
     String uuid = UUID.randomUUID().toString();
-    OutputStream os = null;
-    try {
-      File f = new File(cacheIndexFile.getParent() + "/" + uuid + ".json");
-      os = new FileOutputStream(f);
-      IOUtils.write(data, os);
-      Map<CacheFieldType, String> cdata = new HashMap<> ();
-      cdata.put(CacheFieldType.FILENAME, f.getName());
-      cdata.put(CacheFieldType.VERSION, version);
-      cdata.put(CacheFieldType.OTYPE, type);
-      cdata.put(CacheFieldType.AUTHOR, author);
-      cdata.put(CacheFieldType.REFERENCE, ref);
-      this.cacheIndex.get(version).put(new ImmutablePair<String, String>(id, ws), cdata);
-
-      logger.info("object cached!");
-      updateIndex();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      IOUtils.closeQuietly(os);
+    {
+      OutputStream os = null;
+      try {
+        File f = new File(cacheIndexFile.getParent() + "/" + uuid + ".json");
+        os = new FileOutputStream(f);
+        IOUtils.write(data, os);
+        Map<CacheFieldType, String> cdata = new HashMap<> ();
+        cdata.put(CacheFieldType.FILENAME, f.getName());
+        cdata.put(CacheFieldType.VERSION, version);
+        cdata.put(CacheFieldType.OTYPE, type);
+        cdata.put(CacheFieldType.AUTHOR, author);
+        cdata.put(CacheFieldType.REFERENCE, ref);
+        this.cacheIndex.get(version).put(new ImmutablePair<String, String>(id, ws), cdata);
+  
+        logger.info("object cached!");
+        updateIndex();
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        IOUtils.closeQuietly(os);
+      }
     }
 //  KBaseIOUtils.writeStringFile(KBaseIOUtils.toJson(g), 
 //  "/var/argonne/kbase_object_cache/" + UUID.randomUUID().toString() + ".json");

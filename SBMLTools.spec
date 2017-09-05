@@ -53,6 +53,7 @@ module SBMLTools {
         string model_name;
         string workspace_name;
         string output_model_name;
+        string output_media_name;
         string template_id;
         string genome_id;
         list<CompartmentMapping> compartment_translation;

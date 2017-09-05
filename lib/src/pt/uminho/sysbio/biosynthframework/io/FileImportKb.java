@@ -504,7 +504,7 @@ public class FileImportKb {
             rxnIdToEntry.put(rxnId, rxnEntry);
             rxnStoichMap.put(rxnId, stoichiometry);
           } else {
-            logger.debug("Invalid: {}", line);
+            logger.trace("Invalid: {}", line);
           }
           
           if (name != null && !name.trim().isEmpty()) {

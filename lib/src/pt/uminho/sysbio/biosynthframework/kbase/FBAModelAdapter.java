@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,10 +33,17 @@ import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import us.kbase.common.service.Tuple11;
+import us.kbase.workspace.GetObjectInfo3Params;
+import us.kbase.workspace.GetObjectInfo3Results;
+import us.kbase.workspace.ObjectSpecification;
+import us.kbase.workspace.WorkspaceClient;
 
 public class FBAModelAdapter implements ModelAdapter {
   
   private static final Logger logger = LoggerFactory.getLogger(FBAModelAdapter.class);
+  
+  public static String PROD_KBASE_TEMPLATES = "NewKBaseModelTemplates";
   
   public final FBAModel fbaModel;
   
@@ -43,6 +51,8 @@ public class FBAModelAdapter implements ModelAdapter {
   public Map<String, ModelCompound> kspiMap = new HashMap<> ();
   public Map<String, ModelReaction> rxnMap = new HashMap<> ();
   public BMap<String, EntityType> krxnType = new BHashMap<> ();
+  public BMap<String, EntityType> kspiType = new BHashMap<> ();
+  public BMap<String, String> kspiCmp = new BHashMap<> ();
   public Map<String, Biomass> brxnMap = new HashMap<> ();
   protected Set<String> boundarySpecies = new HashSet<> ();
   protected BMap<String, Integer> kspiDegreeMap = new BHashMap<> ();
@@ -60,13 +70,13 @@ public class FBAModelAdapter implements ModelAdapter {
     this.fbaModel = fbaModel;
     for (ModelCompound mc : fbaModel.getModelcompounds()) {
       String kspiEntry = mc.getId();
+      kspiCmp.put(kspiEntry, getEntryFromRef(mc.getModelcompartmentRef()));
       if (kspiMap.put(kspiEntry, mc) != null) {
         logger.warn("duplicate reacton id {}", kspiEntry);
       }
     }
     for (ModelReaction krxn : fbaModel.getModelreactions()) {
       String krxnEntry = krxn.getId();
-
       if (rxnMap.put(krxnEntry, krxn) != null) {
         logger.warn("duplicate reacton id {}", krxnEntry);
       }
@@ -81,8 +91,21 @@ public class FBAModelAdapter implements ModelAdapter {
     for (String krxnEntry : rxnMap.keySet()) {
       if (isDrain(krxnEntry)) {
         krxnType.put(krxnEntry, EntityType.DRAIN);
+      } else if (isTranslocation(krxnEntry)) {
+        krxnType.put(krxnEntry, EntityType.TRANSLOCATION);
       } else {
         krxnType.put(krxnEntry, EntityType.REACTION);
+      }
+    }
+    
+    for (String kspiEntry : kspiMap.keySet()) {
+      int degree = getSpecieDegree(kspiEntry);
+      if (degree == 0) {
+        kspiType.put(kspiEntry, EntityType.ERROR);
+      } else if (isBoundarySpecie(kspiEntry)) {
+        kspiType.put(kspiEntry, EntityType.SPECIE_BOUNDARY);
+      } else {
+        kspiType.put(kspiEntry, EntityType.SPECIE);
       }
     }
   }
@@ -145,33 +168,38 @@ public class FBAModelAdapter implements ModelAdapter {
     return tokens[tokens.length - 1];
   }
   
-  public void renameMetaboliteEntry(String from, String to) {
-    for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
-      String cpdEntry = kcpd.getId();
-      if (cpdEntry.equals(from)) {
-        to = buildSpiIdentifier(to, getModelCompoundCompartmentEntry(kcpd));
-        
-        logger.info("{} -> {}", kcpd.getId(), to);
-        
-        kcpd.setId(to);
-        
-        for (ModelReaction krxn : fbaModel.getModelreactions()) {
-          for (ModelReactionReagent r : krxn.getModelReactionReagents()) {
-            if (r.getModelcompoundRef().endsWith("/" + from)) {
-              r.setModelcompoundRef("~/modelcompounds/id/" + to);
-            }
-          }
-        }
-        
-        for (Biomass kbrxn : fbaModel.getBiomasses()) {
-          for (BiomassCompound r : kbrxn.getBiomasscompounds()) {
-            if (r.getModelcompoundRef().endsWith("/" + from)) {
-              r.setModelcompoundRef("~/modelcompounds/id/" + to);
-            }
+  public boolean renameMetaboliteEntry(String from, String to) {
+    ModelCompound kcpd = kspiMap.get(from);
+    to = buildSpiIdentifier(to, getModelCompoundCompartmentEntry(kcpd));
+    
+    
+    if (!kcpd.getId().equals(to)) {
+      logger.info("{} -> {}", kcpd.getId(), to);
+      kcpd.setId(to);
+      for (ModelReaction krxn : fbaModel.getModelreactions()) {
+        for (ModelReactionReagent r : krxn.getModelReactionReagents()) {
+          if (r.getModelcompoundRef().endsWith("/" + from)) {
+            r.setModelcompoundRef("~/modelcompounds/id/" + to);
           }
         }
       }
+      
+      for (Biomass kbrxn : fbaModel.getBiomasses()) {
+        for (BiomassCompound r : kbrxn.getBiomasscompounds()) {
+          if (r.getModelcompoundRef().endsWith("/" + from)) {
+            r.setModelcompoundRef("~/modelcompounds/id/" + to);
+          }
+        }
+      }
+      
+      
+//      kspiDegreeMap.put(to, kspiDegreeMap.get(from));
+      kspiMap.put(to, kspiMap.remove(from));
+      
+      return true;
     }
+    
+    return false;
   }
   
   public void renameSpecie(String spiEntry, String rename) {
@@ -182,11 +210,23 @@ public class FBAModelAdapter implements ModelAdapter {
     return null;
   }
   
-  public void integrateCompartment(String cmp, String kcmp) {
-    renameComparmentEntry(cmp, kcmp);
+  public String integrateCompartment(String cmp, String kcmp) {
+    return renameComparmentEntry(cmp, kcmp);
   }
   
-  public void renameComparmentEntry(String from, String to) {
+  public String getReagentCompartmentRef(ModelReactionReagent reagent) {
+    String kspiEntry = getEntryFromRef(reagent.getModelcompoundRef());
+    ModelCompound kspi = kspiMap.get(kspiEntry);
+    
+    return kspi.getModelcompartmentRef();
+  }
+  
+  public String decideCompartment(Set<String> cmp) {
+    return cmp.iterator().next();
+  }
+  
+  public String renameComparmentEntry(String from, String to) {
+    String indexedCmp = null;
     for (ModelCompartment kcmp : fbaModel.getModelcompartments()) {
       String cmpEntry = kcmp.getId();
       if (cmpEntry.equals(from)) {
@@ -197,8 +237,14 @@ public class FBAModelAdapter implements ModelAdapter {
           kcmp.setCompartmentIndex(index);
         }
         
-        kcmp.setId(to + index);
+        indexedCmp = to + index;
+        
+        
+        
+        kcmp.setId(indexedCmp);
         kcmp.setCompartmentRef("~/template/compartments/id/" + to);
+        
+        
         
         logger.debug("AFTER: {}", kcmp);
         
@@ -206,12 +252,24 @@ public class FBAModelAdapter implements ModelAdapter {
           String cmpRef = kcpd.getModelcompartmentRef();
           if (cmpRef.endsWith("/" + from)) {
             logger.trace("BEFOR: {}", kcpd);
-            kcpd.setModelcompartmentRef("~/modelcompartments/id/" + to + index);
+            kcpd.setModelcompartmentRef("~/modelcompartments/id/" + indexedCmp);
             logger.trace("AFTER: {}", kcpd);
+            kspiCmp.put(kcpd.getId(), indexedCmp);
           }
         }
       }
     }
+    
+    for (String krxnEntry : rxnMap.keySet()) {
+      ModelReaction krxn = rxnMap.get(krxnEntry);
+      Set<String> kcmpRefs = new HashSet<> ();
+      for (ModelReactionReagent reagent : krxn.getModelReactionReagents()) {
+        kcmpRefs.add(getReagentCompartmentRef(reagent));
+      }
+      krxn.setModelcompartmentRef(decideCompartment(kcmpRefs));
+    }
+    
+    return indexedCmp;
   }
   
   public Set<String> getBiomasses() {
@@ -223,7 +281,7 @@ public class FBAModelAdapter implements ModelAdapter {
     return result;
   }
   
-  public void convertToBiomass(String rxnEntry) {
+  public String convertToBiomass(String rxnEntry) {
     ModelReaction krxn = this.rxnMap.get(rxnEntry);
     if (krxn != null) {
       logger.info("rxn: {}, bio: {}", fbaModel.getModelreactions().size(), fbaModel.getBiomasses().size()); 
@@ -241,8 +299,11 @@ public class FBAModelAdapter implements ModelAdapter {
       fbaModel.getBiomasses().add(bm);
       
       logger.info("rxn: {}, bio: {}", fbaModel.getModelreactions().size(), fbaModel.getBiomasses().size());
+      
+      return bioEntry;
     } else {
       logger.warn("rxn {} not found", rxnEntry);
+      return null;
     }
   }
   
@@ -296,6 +357,21 @@ public class FBAModelAdapter implements ModelAdapter {
       }
     }
     return media;
+  }
+  
+  public Set<String> removeDrainReactions() {
+    Set<String> drains = krxnType.bget(EntityType.DRAIN);
+    
+    for (String krxnEntry : drains) {
+      ModelReaction krxn = this.rxnMap.remove(krxnEntry);
+      if (krxn != null) {
+        deleted.put(krxnEntry, krxn);
+      }
+    }
+    
+    List<ModelReaction> update = new ArrayList<> (this.rxnMap.values());
+    this.fbaModel.setModelreactions(update);
+    return drains;
   }
   
   public Map<String, Pair<Double, Double>> getDefaultDrains() {
@@ -368,7 +444,7 @@ public class FBAModelAdapter implements ModelAdapter {
     return result;
   }
   
-  public String getEntryFromRef(String ref) {
+  public static String getEntryFromRef(String ref) {
     String[] tks = ref.split("/");
     String s = tks[tks.length - 1];
     return s;
@@ -464,8 +540,23 @@ public class FBAModelAdapter implements ModelAdapter {
   }
 
   @Override
-  public boolean isBoundarySpecie(String arg0) {
-    // TODO Auto-generated method stub
+  public boolean isBoundarySpecie(String spiEntry) {
+    if (kspiType.containsKey(spiEntry) && 
+        EntityType.SPECIE_BOUNDARY.equals(kspiType.get(spiEntry))) {
+      return true;
+    }
+    
+    ModelCompound mc = this.kspiMap.get(spiEntry);
+    
+    
+    if (mc.getStringAttributes() != null) {
+      String bc = mc.getStringAttributes().get("boundary");
+      if (bc != null) {
+        return Boolean.parseBoolean(bc);
+      }
+    }
+
+    
     return false;
   }
 
@@ -508,8 +599,64 @@ public class FBAModelAdapter implements ModelAdapter {
   }
 
   @Override
-  public boolean isTranslocation(String arg0) {
-    // TODO Auto-generated method stub
-    return false;
+  public boolean isTranslocation(String mrxnEntry) {
+    if (krxnType.containsKey(mrxnEntry) && 
+        EntityType.TRANSLOCATION.equals(krxnType.get(mrxnEntry))) {
+      return true;
+    }
+    
+    Map<String, Double> stoich = getStoichiometry(mrxnEntry);
+    Set<String> cmpSet = new HashSet<> ();
+    for (String k : stoich.keySet()) {
+      String cmp = this.kspiMap.get(k).getModelcompartmentRef();
+      cmpSet.add(cmp);
+    }
+    
+    return cmpSet.size() != 1;
+  }
+  
+  public static String getTemplateRef(String t, String ws, WorkspaceClient wsClient) throws IOException {
+    try {
+      List<ObjectSpecification> oparams = new ArrayList<> ();
+      oparams.add(new ObjectSpecification().withName(t).withWorkspace(ws));
+      GetObjectInfo3Params params = new GetObjectInfo3Params().withObjects(oparams);
+      GetObjectInfo3Results res = wsClient.getObjectInfo3(params);
+      String ref = null;
+      for (Tuple11<?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?> i : res.getInfos()) {
+        ref = KBaseIOUtils.getRefFromObjectInfo(i);
+      }
+      return ref;
+    } catch (Exception e) {
+      throw new IOException(e);
+    }
+  }
+  
+  public boolean setTemplate(String template, WorkspaceClient wsClient) {
+    String templateRef = null;
+    try {
+      switch (template) {
+        case "GramNegModelTemplate":
+        case "gramneg": template = "GramNegModelTemplate"; break;
+        case "GramPosModelTemplate":
+        case "grampos": template = "GramPosModelTemplate"; break;
+        case "PlantModelTemplate":
+        case "plant": template = "PlantModelTemplate"; break;
+        case "CoreModelTemplate":
+        case "core": template = "CoreModelTemplate"; break;
+        default:  
+          logger.warn("unknown template assume core: {}", template);
+          template = "CoreModelTemplate"; break;
+      }
+      templateRef = getTemplateRef(template, PROD_KBASE_TEMPLATES, wsClient);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    if (templateRef != null) {
+      this.fbaModel.setTemplateRef(templateRef);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

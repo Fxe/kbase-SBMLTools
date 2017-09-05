@@ -100,7 +100,7 @@ public class KBaseUtils {
           grrci = new GeneReactionRuleCI(subgpr);
           genes.addAll(getGenes(grrci));
         } catch (Exception | TokenMgrError e) {
-          logger.warn("invalid gpr: {}, {}", subgpr, e.getMessage());
+          logger.warn("invalid gpr: [{}], {}", subgpr, e.getMessage());
         }
       }
 

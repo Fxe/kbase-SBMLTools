@@ -8,8 +8,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
@@ -24,6 +26,7 @@ import kbsolrutil.SearchSolrParams;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.RpcContext;
+import us.kbase.common.service.ServerException;
 import us.kbase.common.service.UnauthorizedException;
 
 public class MockKBSolrUtilClient extends KBSolrUtilClient {
@@ -35,6 +38,9 @@ public class MockKBSolrUtilClient extends KBSolrUtilClient {
   public boolean cache = true;
   public Map<String, String> cacheData = null;
   public File cacheIndex = new File("/var/argonne/solr_cache/index.txt");
+  public File badQueryFile = new File("/var/argonne/solr_cache/bad_query.txt");
+  
+  public Set<String> badQuery = new HashSet<> ();
 
   public MockKBSolrUtilClient() {
     super(null);
@@ -61,6 +67,14 @@ public class MockKBSolrUtilClient extends KBSolrUtilClient {
       }
     }
     
+    
+    InputStream is = null;
+    try {
+      is = new FileInputStream(badQueryFile);
+      badQuery.addAll(IOUtils.readLines(is));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 //    logger.info("cache data: {}", cacheData);
   }
   
@@ -127,14 +141,32 @@ public class MockKBSolrUtilClient extends KBSolrUtilClient {
     String q = params.getSearchQuery().get("q");
 
     Map<String, String> result = new HashMap<> ();
-
+    result.put("solr_search_result", "{\"response\":{}}");
+    if (badQuery.contains(q)) {
+      logger.warn("bad query {}:", q);
+      return result;
+    }
+    
     if (!cacheData.containsKey(q)) {
+      try {
 //      result.put("solr_search_result", EMPTY_RESPONSE);
-      params.getSearchParam().put("fl", "*");
-      logger.info("query {} not found. live search ...", q);
-      result = super.searchKbaseSolr(params, jsonRpcContext);
-      String rdata = result.get("solr_search_result");
-      saveCache(q, rdata);
+        params.getSearchParam().put("fl", "*");
+        logger.info("query {} not found. live search ...", q);
+        result = super.searchKbaseSolr(params, jsonRpcContext);
+        String rdata = result.get("solr_search_result");
+        saveCache(q, rdata);
+      } catch (ServerException e) {
+        badQuery.add(q);
+        OutputStream os = null;
+        try {
+          os = new FileOutputStream(badQueryFile, true);
+          os.write((q + "\n").getBytes());
+        } catch (IOException ee) {
+          ee.printStackTrace();
+        } finally {
+          IOUtils.closeQuietly(os);
+        }
+      }
     } else {
 //      
       logger.info("query {} found. get cache ...", q);

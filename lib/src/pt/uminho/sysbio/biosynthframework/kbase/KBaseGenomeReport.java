@@ -29,7 +29,6 @@ public class KBaseGenomeReport {
   public Set<String> mgenesMapped = new HashSet<> ();
   public Map<String, String> mgeneToFeature = new HashMap<> ();
   
-  
   public BMap<String, String> geneFunction = new BHashMap<>();
   public Map<String, Set<String>> geneReactions = new HashMap<>();
   
@@ -52,6 +51,10 @@ public class KBaseGenomeReport {
   
   public Set<String> getUnmappedFeatures() {
     return Sets.difference(geneFunction.keySet(), new HashSet<> (mgeneToFeature.values()));
+  }
+  
+  public Set<String> getUnmappedGenes() {
+    return Sets.difference(mgenes.keySet(), mgeneToFeature.keySet());
   }
   
   public void mapGeneToFeature(Set<String> gene, String feature) {

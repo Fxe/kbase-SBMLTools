@@ -1,6 +1,7 @@
 package kbsolrutil;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -37,6 +38,7 @@ import us.kbase.workspace.WorkspaceClient;
 import us.kbase.workspace.WorkspaceIdentity;
 
 public class KBaseAPI {
+  
   public static Map<String, String> getConfigProd() {
     Map<String, String> config = new HashMap<String, String> ();
     if (!config.containsKey("kbase-endpoint")) {
@@ -176,14 +178,21 @@ public class KBaseAPI {
     return listNarrative(ws, otype.value());
   }
   
+  public List<KBaseId> listNarrative(String ws) throws IOException {
+    return listNarrative(ws, KBaseType.Any.value());
+  }
+  
   public List<KBaseId> listNarrative(String ws, String otype) throws IOException {
     List<KBaseId> result = new ArrayList<> ();
     List<String> workspaces = new ArrayList<> ();
     workspaces.add(ws);
     try {
+      ListObjectsParams lparams = new ListObjectsParams().withWorkspaces(workspaces);
+      if (!"Any".equals(otype)) {
+        lparams.withType(otype);
+      }
       List<Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>>> o = 
-      wsClient.listObjects(
-          new ListObjectsParams().withType(otype).withWorkspaces(workspaces));
+      wsClient.listObjects(lparams);
       for (Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>> t : o) {
         String oref = String.format("%d/%d/%d", t.getE7(), t.getE1(), t.getE5());
         String oname = t.getE2();
@@ -243,5 +252,13 @@ public class KBaseAPI {
     } catch (IOException | JsonClientException e) {
       throw new IOException(e);
     }
+  }
+  
+  public void importModel(String path) {
+    
+  }
+  
+  public void importModel(InputStream is) {
+    
   }
 }

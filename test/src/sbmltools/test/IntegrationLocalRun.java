@@ -1,46 +1,62 @@
 package sbmltools.test;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
-import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.biojava.nbio.alignment.template.PairwiseSequenceAligner;
+import org.biojava.nbio.core.sequence.DNASequence;
+import org.biojava.nbio.core.sequence.compound.NucleotideCompound;
+import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.core.io.FileSystemResource;
 //import org.springframework.core.io.Resource;
 
 import kbasebiochem.Media;
-import kbasebiochem.MediaCompound;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
-import kbasegenomes.Contig;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import kbsolrutil.KBaseAPI;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxTree;
-import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
 import pt.uminho.sysbio.biosynthframework.BFunction;
+import pt.uminho.sysbio.biosynthframework.Dataset;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
+import pt.uminho.sysbio.biosynthframework.genome.Aligner;
+import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
+import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
 import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
 import pt.uminho.sysbio.biosynthframework.kbase.EasyKBase;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegrationReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
-import pt.uminho.sysbio.biosynthframework.kbase.MediaAdapter;
-import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
@@ -54,10 +70,15 @@ public class IntegrationLocalRun {
   
   public static String  DEV_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502428739293";
   public static String PROD_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502913538729";
+  public static String PROD_KBASE_TEMPLATES = "NewKBaseModelTemplates";
+  public static String PROD_QZ_GENOMES = "ReferenceDataManager";
   public static String PROD_RAST_GENOME = "filipeliu:narrative_1502913563238";
   public static String PROD_GENOME = "filipeliu:narrative_1502913538729";
+  public static String PROD_1000_MODELS = "chenry:narrative_1493799658132";
+  public static String PROD_1000_RAST_GENOMES = "jplfaria:narrative_1492808527866";
   public static String DEV_APP_TEST = "filipeliu:narrative_1503501857164";
   public static String DEV_SOME_REPO = "filipeliu:narrative_1502474753893";
+  public static String PROD_ECOLI_CORES = "filipeliu:narrative_1504192868437";
   
   public static void localIntegraiton() {
     String model = "Ec_core_flux1";
@@ -324,6 +345,8 @@ public class IntegrationLocalRun {
     return functionToRxn;
   }
   
+
+  
   public static Set<String> getMetabolic(Genome a, Map<String, Set<String>> functionToRxn) {
     Set<String> metabolic = new HashSet<> ();
     
@@ -413,56 +436,39 @@ public class IntegrationLocalRun {
   }
   
 
-  public static void listPolymeraseGenomes() {
+  public static void buildPolymeraseGenomes(OutputStream os) {
+    
+    
+    
     try {
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
       List<KBaseId> kids = prodAPI.listNarrative(PROD_RAST_GENOME, KBaseType.Genome);
-      Map<String, Map<String, Object>> db = new HashMap<> ();
+      Map<String, Map<String, String>> db = new HashMap<> ();
       for (KBaseId kid : kids) {
         if (kid.name.endsWith(".rast")) {
           Genome genome = prodAPI.getGenome(kid.name, kid.workspace);
-          db.put(kid.name, new HashMap<String, Object> ());
-          Map<String, Object> data = db.get(kid.name);
+          db.put(kid.name, new HashMap<String, String> ());
+          Map<String, String> data = db.get(kid.name);
           data.put("scientific_name", genome.getScientificName());
-          Map<String, Long> sizes = new HashMap<> ();
-          Map<String, String> gfunctions = new HashMap<> ();
-          Map<String, String> gseq = new HashMap<> ();
-          System.out.println(genome.getScientificName());
-          for (Feature f : genome.getFeatures()) {
-            
-            String function = f.getFunction();
-            gfunctions.put(f.getId(), function);
-            gseq.put(f.getId(), f.getDnaSequence());
-            if (function != null && 
-                (function.toUpperCase().contains("2.7.7.6") && function.toUpperCase().contains("BETA"))
-                ) {
-              sizes.put(f.getId(), f.getDnaSequenceLength());
-            }
-          }
-          long high = 0;
-          String best = null;
-          for (String k : sizes.keySet()) {
-            long s = sizes.get(k);
-            if (s > high) {
-              high = s;
-              best = k;
-            }
-          }
-          if (best != null) {
-            logger.info("{} [{}]: {}", best, high, gfunctions.get(best));
-
-            data.put("feature", best);
-            data.put("function", gfunctions.get(best));
-            data.put("size", high);
-            data.put("seq", gseq.get(best));
+          Feature polymeraseBetaUnit = KbaseGenomeUtils.findRnaPolymeraseBetaUnit(genome);
+          if (polymeraseBetaUnit != null) {
+            data.put("feature", polymeraseBetaUnit.getId());
+            data.put("function", polymeraseBetaUnit.getFunction());
+            data.put("size", Long.toString(polymeraseBetaUnit.getDnaSequenceLength()));
+            data.put("seq", polymeraseBetaUnit.getDnaSequence());
           }
         }
       }
       
       for (String g : db.keySet()) {
-        Map<String, Object> data = db.get(g);
+        Map<String, String> data = db.get(g);
         if (data != null && data.get("seq") == null) {
           logger.warn("[{}]{}", g, data.get("scientific_name"));
+        } else {
+          String h = String.format(">%s|%s|%s\n", g, data.get("function"), data.get("scientific_name"));
+          os.write(h.getBytes());
+          os.write(data.get("seq").getBytes());
+          os.write("\n".getBytes());
         }
       }
     } catch (Exception e) {
@@ -632,62 +638,435 @@ public class IntegrationLocalRun {
     }
   }
   
-  public static void getModel() {
+  public static void getModel(KBaseAPI prodAPI) throws Exception {
+    KBaseSbmlImporter.DATA_EXPORT_PATH = FileImportKb.EXPORT_PATH;
+    
+    Map<String, BFunction<String, String>> modelGeneTransformers = 
+        ManualFixes.getModelGeneTransformers();
+    Map<String, Map<String, String>> gswap = 
+        ManualFixes.getGprSwap();
+    
+    
+    String model = "Ec_core_flux1";
+//    model = "iCM925";
+//    model = "iJO1366_bigg2";
+    FBAModel kmodel = KBaseIOUtils.getObject(model, PROD_PUBLISHED_MODEL_REPO, null, FBAModel.class, prodAPI.wsClient);
+//    FBAModel kmode2 = KBaseIOUtils.getObject("Ec_core_flux1.kbase", PROD_ECOLI_CORES, null, FBAModel.class, prodAPI.wsClient);
+    FBAModelAdapter ma = new FBAModelAdapter(kmodel);
+    KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(prodAPI.getWorkspaceClient(), prodAPI.dfuClient, prodAPI.getKBSolrUtilClient());
+    geneIntegration.geneTransformer = modelGeneTransformers.get(kmodel.getId());
+    geneIntegration.searchGenome(kmodel);
+    
+    KBaseIntegrationReport kir = new KBaseIntegrationReport();
+    kir.model = kmodel.getId();
+    kir.objName = kmodel.getName();
+    
+    kir.fillGenomeData(geneIntegration);
+    
+//    System.out.println(geneIntegration.report.getUnmappedGenes());
+//    System.out.println(geneIntegration.report.bestScore);
+//    System.out.println(geneIntegration.report.features);
+//    System.out.println(geneIntegration.report.matchScores);
+//    System.out.println(geneIntegration.report.matchOrganism);
+//    System.out.println(geneIntegration.report.getUnmappedFeatures());
+    
+//    CompareFbaModel compareFbaModel = new CompareFbaModel(kmodel, kmode2);
+//    compareFbaModel.compare();
+    
+    KBaseIntegration integration = new KBaseIntegration(kmodel);
+    integration.report = kir;
+//    integration.biodbContainer = new KBaseBiodbContainer(KBaseSbmlImporter.DATA_EXPORT_PATH);
+//    integration.
+    integration.compartmentMapping.put("z0", "e");
+    integration.compartmentMapping.put("z1", "c");
+    integration.rename = "KEGG";
+    integration.fillMetadata = true;
+    integration.integrate();
+    
+    ma.setTemplate("gramneg", prodAPI.getWorkspaceClient());
+//    Media media = ma.convertToMedia(kmodel.getId() + ".media", ma.getDefaultDrains());
+    Media media = integration.defaultMedia;
+    KBaseIOUtils.saveData(kmodel.getId() + ".media", KBaseType.KBaseBiochemMedia, media, PROD_ECOLI_CORES, prodAPI.getWorkspaceClient());
+    
+    
+//    KBaseGenomeReport report = geneIntegration.report;
+//    System.out.println(report.bestMatch);
+//    System.out.println(report.bestScore);
+//    System.out.println(report.matchScores);
+//    System.out.println(report.matchOrganism);
+    for (ModelReaction o : kmodel.getModelreactions()) {
+      
+      if (o.getReactionRef().startsWith("50/1/1")) {
+        String rxnEntry = FBAModelAdapter.getEntryFromRef(o.getReactionRef());
+        o.setReactionRef("~/template/reactions/id/" + rxnEntry);
+      }
+      
+//      System.out.println(o);
+//      System.out.println(o.getReactionRef());
+//
+//      System.out.println(o.getModelcompartmentRef());
+//      System.out.println(o.getImportedGpr());
+
+      
+//      ma.getGpr(arg0)
+//      for (ModelReactionReagent rg : o.getModelReactionReagents()) {
+//        System.out.println("\t" + rg);
+//      }
+    }
+    
+//    System.out.println(kir);
+    
+    kir.fillModelData(integration.adapter);
+    KBaseIOUtils.writeStringFile(KBaseIOUtils.toJson(kir), "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports/model-report/data.json");
+    
+//    if (report.bestGenomeKID.size() == 1) {
+//      KBaseId genomeKid = report.bestGenomeKID.iterator().next();
+//      Genome g = prodAPI.getGenome(genomeKid);
+////      KbaseGenomeUtils.integrateGenes(kmodel, g, null, geneIntegration.geneTransformer);
+//
+//    }
+    
+    //      for (ModelCompartment cmp : kmodel.getModelcompartments()) {
+    //        System.out.println(cmp);
+    //      }
+    
+
+
+
+//
+//    for (ModelCompartment o : kmodel.getModelcompartments()) {
+//      System.out.println(o);
+//    }
+//    for (ModelCompound o : kmodel.getModelcompounds()) {
+//      System.out.println(o);
+//    }
+
+
+
+    //      long id = integration.biodbContainer.biodbService.getIdByEntryAndDatabase("cpd02557", "ModelSeed");
+    //      System.out.println(id + " " + integration.biodbContainer.biodbService.getFormulaPropertyById(id));
+    //      System.out.println(id + " " + integration.biodbContainer.biodbService.getEntityProperty(id, "name"));
+    //      System.out.println(id + " " + integration.biodbContainer.biodbService.getEntityProperty(id, "formula"));
+    //      System.out.println(id + " " + integration.biodbContainer.biodbService.getEntityProperty(id, "smiles"));
+    //      System.out.println(id + " " + integration.biodbContainer.biodbService.getEntityProperty(id, "inchikey"));
+
+//    KBaseIOUtils.saveData(kmodel.getId() + ".integrated", KBaseType.FBAModel, kmodel, PROD_ECOLI_CORES, prodAPI.wsClient);
+    //      FBAModelAdapter madapter = new FBAModelAdapter(kmodel);
+
+    //      System.out.println(media);
+    //      
+
+
+    //      System.out.println(CollectionUtils.print(madapter.getDefaultDrains()));
+    //      System.out.println(madapter.kspiMap.get("M_for_e").getDblinks());
+
+    //      Media media = KBaseIOUtils.getObject("Carbon-D-Glucose", "filipeliu:narrative_1503957402064", null, Media.class, prodAPI.wsClient);
+    //      {
+    //        Media m5 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_5");
+    //        for (MediaCompound mc : media.getMediacompounds()) {
+    //          MediaAdapter ma = new MediaAdapter(m5);
+    //          ma.addMediaCompound(mc);
+    //        }
+    //        KBaseIOUtils.saveData("Carbon-D-Glucose_5", KBaseType.KBaseBiochemMedia, m5, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
+    //      }
+    //      {
+    //        Media m10 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_10");
+    //        MediaAdapter ma = new MediaAdapter(m10);
+    //        for (MediaCompound mc : media.getMediacompounds()) {
+    //          ma.addMediaCompound(mc);
+    //        }
+    //        ma.setUptake("cpd00027", 10);
+    //        KBaseIOUtils.saveData("Carbon-D-Glucose_10", KBaseType.KBaseBiochemMedia, m10, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
+    //      }
+    //      {
+    //        Media m20 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_20");
+    //        MediaAdapter ma = new MediaAdapter(m20);
+    //        for (MediaCompound mc : media.getMediacompounds()) {
+    //          ma.addMediaCompound(mc);
+    //        }
+    //        ma.setUptake("cpd00027", 20);
+    //        KBaseIOUtils.saveData("Carbon-D-Glucose_20", KBaseType.KBaseBiochemMedia, m20, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
+    //      }
+
+    //      System.out.println(media);
+    //templateRef=12998/2/1 iCac802.rast.nofill
+    //      FBAModel kmodel2 = KBaseIOUtils.getObject("iCac802.rast.nofill", "filipeliu:narrative_1503957402064", null, FBAModel.class, prodAPI.wsClient);
+    //      System.out.println(kmodel2);
+  }
+  
+  public static void buildBlastDb(String path) {
+    OutputStream os = null;
     try {
-      KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
-      
-      FBAModel kmodel = KBaseIOUtils.getObject("Ec_core_flux1", PROD_PUBLISHED_MODEL_REPO, null, FBAModel.class, prodAPI.wsClient);
-      FBAModelAdapter madapter = new FBAModelAdapter(kmodel);
-      Media media = madapter.convertToMedia(kmodel.getId() + ".media", madapter.getDefaultDrains());
-      System.out.println(media);
-      KBaseIOUtils.saveData(kmodel.getId() + ".media", KBaseType.KBaseBiochemMedia, media, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
-//      System.out.println(CollectionUtils.print(madapter.getDefaultDrains()));
-//      System.out.println(madapter.kspiMap.get("M_for_e").getDblinks());
-      
-//      Media media = KBaseIOUtils.getObject("Carbon-D-Glucose", "filipeliu:narrative_1503957402064", null, Media.class, prodAPI.wsClient);
-//      {
-//        Media m5 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_5");
-//        for (MediaCompound mc : media.getMediacompounds()) {
-//          MediaAdapter ma = new MediaAdapter(m5);
-//          ma.addMediaCompound(mc);
-//        }
-//        KBaseIOUtils.saveData("Carbon-D-Glucose_5", KBaseType.KBaseBiochemMedia, m5, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
-//      }
-//      {
-//        Media m10 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_10");
-//        MediaAdapter ma = new MediaAdapter(m10);
-//        for (MediaCompound mc : media.getMediacompounds()) {
-//          ma.addMediaCompound(mc);
-//        }
-//        ma.setUptake("cpd00027", 10);
-//        KBaseIOUtils.saveData("Carbon-D-Glucose_10", KBaseType.KBaseBiochemMedia, m10, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
-//      }
-//      {
-//        Media m20 = MediaAdapter.buildDefaultEmptyMedia("Carbon-D-Glucose_20");
-//        MediaAdapter ma = new MediaAdapter(m20);
-//        for (MediaCompound mc : media.getMediacompounds()) {
-//          ma.addMediaCompound(mc);
-//        }
-//        ma.setUptake("cpd00027", 20);
-//        KBaseIOUtils.saveData("Carbon-D-Glucose_20", KBaseType.KBaseBiochemMedia, m20, "filipeliu:narrative_1503957402064", prodAPI.getWorkspaceClient());
-//      }
-      
-//      System.out.println(media);
-      //templateRef=12998/2/1 iCac802.rast.nofill
-//      FBAModel kmodel2 = KBaseIOUtils.getObject("iCac802.rast.nofill", "filipeliu:narrative_1503957402064", null, FBAModel.class, prodAPI.wsClient);
-//      System.out.println(kmodel2);
-    } catch (Exception e) {
+      os = new FileOutputStream(path);
+      buildPolymeraseGenomes(os);
+    } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      IOUtils.closeQuietly(os);
     }
   }
   
+  public static class MassAligner {
+    
+    private static final Logger logger = LoggerFactory.getLogger(MassAligner.class);
+    
+    List<Pair<String, String>> aaa = new ArrayList<> ();
+    Iterator<Pair<String, String>> jobIt;
+    
+    int t = 4;
+    private final Aligner aligner;
+    
+    public synchronized Pair<String, String> getJob() {
+      if (jobIt.hasNext()) {
+        return jobIt.next();
+      }
+      return null;
+    }
+    
+    public List<Runnable> runners = new ArrayList<> ();
+    
+    public static class AlignWorker implements Runnable {
+      
+      private static final Logger logger = LoggerFactory.getLogger(MassAligner.class);
+      
+      private final int workerId;
+      private final MassAligner ma;
+      
+      public AlignWorker(MassAligner ma, int workerId) {
+        logger.info("");
+        this.workerId = workerId;
+        this.ma = ma;
+        logger.trace("created workder [{}]", this.workerId);
+      }
+
+      public int getWorkerId() { return workerId;}
+
+      @Override
+      public void run() {
+        Pair<String, String> p = null;
+        while ((p = ma.getJob()) != null) {
+          logger.trace("[{}] worker running job ..", this.workerId);
+          String seq1 = p.getLeft();
+          String seq2 = p.getRight();
+          Object res = ma.aligner.localAlignment(seq1, seq2);
+          @SuppressWarnings("unchecked")
+          PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = PairwiseSequenceAligner.class.cast(res);
+          
+          List<Object> data = new ArrayList<> ();
+          int length = psa.getPair().getLength();
+//          data.add(k);
+//          data.add(rgenome.getScientificName());
+          data.add(psa.getPair().getNumIdenticals());
+          data.add(psa.getPair().getNumSimilars());
+          data.add(psa.getPair().getLength());
+          data.add((double) psa.getPair().getNumIdenticals() / length);
+          data.add((double) psa.getPair().getNumSimilars() / length);
+          data.add(psa.getSimilarity());
+          data.add(psa.getDistance());
+          logger.trace("[{}] worker done job ..", this.workerId);
+        }
+        logger.info("[{}] done!", this.workerId);
+      }
+    }
+    
+    public MassAligner(final Aligner aligner) {
+      this.aligner = aligner;
+      int id = 0;
+      for (int i = 0; i < t; i++) {
+        runners.add(new AlignWorker(this, id++));
+      }
+    }
+    
+    public void run() {
+      long start = System.currentTimeMillis();
+      
+      logger.info("running ... jobs: {}", aaa.size());
+      jobIt = aaa.iterator();
+      List<Thread> threads = new ArrayList<> ();
+      for (Runnable r : runners) {
+        Thread t = new Thread(r);
+        t.start();
+        threads.add(t);
+      }
+      for (Thread t : threads) {
+        try {
+          t.join();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      
+      long end = System.currentTimeMillis();
+      logger.info("Time: {}", (end - start) / 1000);
+    }
+  }
+  
+  public static String NUC44 = 
+      "#\n" +
+      "# This matrix was created by Todd Lowe   12/10/92\n"+ 
+      "#\n" + 
+      "# Uses ambiguous nucleotide codes, probabilities rounded to\n" + 
+      "#  nearest integer\n" +
+      "#\n" +
+      "# Lowest score = -4, Highest score = 5\n" +
+      "#\n" +
+      "    A   T   G   C   S   W   R   Y   K   M   B   V   H   D   N\n" +
+      "A   5  -4  -4  -4  -4   1   1  -4  -4   1  -4  -1  -1  -1  -2\n" +
+      "T  -4   5  -4  -4  -4   1  -4   1   1  -4  -1  -4  -1  -1  -2\n" +
+      "G  -4  -4   5  -4   1  -4   1  -4   1  -4  -1  -1  -4  -1  -2\n" +
+      "C  -4  -4  -4   5   1  -4  -4   1  -4   1  -1  -1  -1  -4  -2\n" +
+      "S  -4  -4   1   1  -1  -4  -2  -2  -2  -2  -1  -1  -3  -3  -1\n" +
+      "W   1   1  -4  -4  -4  -1  -2  -2  -2  -2  -3  -3  -1  -1  -1\n" +
+      "R   1  -4   1  -4  -2  -2  -1  -4  -2  -2  -3  -1  -3  -1  -1\n" +
+      "Y  -4   1  -4   1  -2  -2  -4  -1  -2  -2  -1  -3  -1  -3  -1\n" +
+      "K  -4   1   1  -4  -2  -2  -2  -2  -1  -4  -1  -3  -3  -1  -1\n" +
+      "M   1  -4  -4   1  -2  -2  -2  -2  -4  -1  -3  -1  -1  -3  -1\n" +
+      "B  -4  -1  -1  -1  -1  -3  -3  -1  -1  -3  -1  -2  -2  -2  -1\n" +
+      "V  -1  -4  -1  -1  -1  -3  -1  -3  -3  -1  -2  -1  -2  -2  -1\n" +
+      "H  -1  -1  -4  -1  -3  -1  -3  -1  -3  -1  -2  -2  -1  -2  -1\n" +
+      "D  -1  -1  -1  -4  -3  -1  -1  -3  -1  -3  -2  -2  -2  -1  -1\n" +
+      "N  -2  -2  -2  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1\n";
+  
+  public static void propagationKernel(KBaseAPI prodAPI) throws IOException {
+    NAlignTool tool = new NAlignTool(NUC44);
+    InputStream is = new FileInputStream("/var/biobase/export/blast_db.faa");
+    Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
+    Map<String, Genome> seqsGenome = new HashMap<> ();
+    for (String k : seqs.keySet()) {
+      Genome rgenome = prodAPI.getGenome(k, PROD_RAST_GENOME);
+      seqsGenome.put(k, rgenome);
+    }
+    
+    Map<String, String> genomeToRast = new HashMap<> ();
+    for (KBaseId kid : prodAPI.listNarrative(PROD_1000_RAST_GENOMES, KBaseType.Genome)) {
+      if (kid.name.contains(".RAST")) {
+        String base = kid.name.substring(0, kid.name.length() - ".RAST".length());
+        genomeToRast.put(base, kid.name);
+      }
+    }
+    List<KBaseId> q = prodAPI.listNarrative(PROD_1000_MODELS, KBaseType.FBAModel);
+    
+    Dataset<String, String, Object> gdata = new Dataset<>();
+    
+    for (KBaseId kid : q) {
+      String genomeName = kid.name.replace(".mdl", "");
+      if (genomeToRast.containsKey(genomeName)) {
+        logger.info("found RAST genome: {}", genomeToRast.get(genomeName));
+        Genome kgenome = prodAPI.getGenome(genomeToRast.get(genomeName), PROD_1000_RAST_GENOMES);
+        gdata.add(genomeName, "sn", kgenome.getScientificName());
+        gdata.add(genomeName, "lineage", kgenome.getTaxonomy());
+        System.out.println(kgenome.getScientificName());
+        Feature poly = null;
+        if (kgenome != null && 
+            (poly = KbaseGenomeUtils.findRnaPolymeraseBetaUnit(kgenome)) != null) {
+          logger.info("yes !");
+          String dnaA = poly.getDnaSequence();
+          gdata.add(genomeName, "seqL", poly.getDnaSequenceLength());
+          gdata.add(genomeName, "function", poly.getFunction());
+          gdata.add(genomeName, "locus", poly.getId());
+
+            
+            MassAligner ma = new MassAligner(tool);
+            
+//            DNASequence seqA = new DNASequence(dnaA);
+            List<String> o = new ArrayList<> ();
+            for (String k : seqs.keySet()) {
+//              Genome rgenome = seqsGenome.get(k);
+//              @SuppressWarnings("unchecked")
+//              PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = (PairwiseSequenceAligner<DNASequence, NucleotideCompound>) tool.localAlignment(dnaA, seqs.get(k).getSequenceAsString());
+
+//              o.add(StringUtils.join(data, '\t'));
+              ma.aaa.add(new ImmutablePair<String, String>(dnaA, seqs.get(k).getSequenceAsString()));
+            }
+            ma.run();
+            System.out.println(StringUtils.join(o, '\n'));
+//              
+//              DNASequence seqB = seqs.get(k);
+//              PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = tool.lalign(seqA, seqB);
+//              List<Object> data = new ArrayList<> ();
+//              int length = psa.getPair().getLength();
+//              
+
+//              
+//            }
+            
+            
+            
+//            System.out.println("G!");
+//            o = new ArrayList<> ();
+//            for (String k : seqs.keySet()) {
+//              Genome rgenome = prodAPI.getGenome(k, PROD_RAST_GENOME);
+//              DNASequence seqB = seqs.get(k);
+//              PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = tool.galign(seqA, seqB);
+//              List<Object> data = new ArrayList<> ();
+//              int length = psa.getPair().getLength();
+//              
+//              data.add(k);
+//              data.add(rgenome.getScientificName());
+////              data.add(modelTaxaEntry);
+////              data.add(distance);
+////              data.add(txId);
+////              data.add(biodbService.getEntryById(txId));
+////              data.add(bb);
+////              data.add(aaSeqEntry);
+////              data.add(modelSeqId);
+//              data.add(psa.getPair().getNumIdenticals());
+//              data.add(psa.getPair().getNumSimilars());
+//              data.add(psa.getPair().getLength());
+//              data.add((double) psa.getPair().getNumIdenticals() / length);
+//              data.add((double) psa.getPair().getNumSimilars() / length);
+//              data.add(psa.getSimilarity());
+//              data.add(psa.getDistance());
+//              o.add(StringUtils.join(data, '\t'));
+//            }
+//            System.out.println(StringUtils.join(o, '\n'));
+//            DNASequence seqB = new DNASequence(dnaA);
+
+//            double psa.get
+//            psa.getProfile().get
+
+//          tool.galign(seqs);
+        } else {
+          logger.warn("polymerase not found {}", poly);
+        }
+      } else {
+        logger.warn("no RAST genome: {}", genomeName);
+      }
+//      Genome kgenome = prodAPI.getGenome(genomeName, PROD_QZ_GENOMES);
+
+      //get genome
+      //get seq method
+      //local align
+      //best hit
+      //proteome compare
+      //propragate
+      //get genes ! (pmodel)
+      //get genes ! (kmodel)
+    }
+    
+    pt.uminho.sysbio.biosynthframework.DataUtils.printData(gdata.dataset, "gid");
+
+    logger.info("FBAModels: {}", q.size());
+  }
+  
   public static void main(String[] args) {
-//    localIntegraiton();
-//    updateModelGpr();
+    try {
+      KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
+//      propagationKernel(prodAPI);
+//      localIntegraiton();
+//      updateModelGpr();
+      getModel(prodAPI);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+
+
 //    listRefGenomes();
-//    listPolymeraseGenomes();
+//    buildBlastDb("/var/biobase/export/blast_db.faa");
+
 //    list16SGenomes();
-    getModel();
+
   }
 
 

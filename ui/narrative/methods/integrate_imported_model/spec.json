@@ -53,6 +53,22 @@
       }
     },
     {
+      "id": "output_media_name",
+      "optional": true,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "text",
+      "text_options": {
+        "valid_ws_types": [
+          "KBaseBiochem.Media"
+        ],
+        "is_output_name": true
+      }
+    },
+    {
       "allow_multiple": false,
       "optional": false,
       "field_type": "textsubdata",
@@ -369,7 +385,13 @@
         {
           "input_parameter": "translate_database",
           "target_property": "translate_database"
+        },
+        {
+          "input_parameter": "output_media_name",
+          "target_property": "output_media_name"
         }
+        
+        
       ],
       "output_mapping": [
         {
