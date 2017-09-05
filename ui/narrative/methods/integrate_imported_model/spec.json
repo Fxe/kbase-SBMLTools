@@ -75,7 +75,7 @@
       "id": "model_compartment_id",
       "advanced": false,
       "default_values": [
-        
+        ""
       ],
       "text_options": {
         "valid_ws_types": [
