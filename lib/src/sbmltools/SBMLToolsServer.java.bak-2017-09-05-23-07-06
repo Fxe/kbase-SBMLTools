@@ -61,7 +61,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
     private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "a8a4df4f477f85164f8b6b23dc0a9fa689d2f139";
+    private static final String gitCommitHash = "cceec9274df32d7cec7d22652ee2d09c17bcbf94";
 
     //BEGIN_CLASS_HEADER
   private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
@@ -217,21 +217,6 @@ public class SBMLToolsServer extends JsonServerServlet {
                           scratch).kbaseIntegrate(params, workspaceName);
     
         //END integrate_model
-        return returnVal;
-    }
-
-    /**
-     * <p>Original spec-file function name: auto_propagate_genome</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link sbmltools.AutoPropagateModelParams AutoPropagateModelParams}
-     * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
-     */
-    @JsonServerMethod(rpc = "SBMLTools.auto_propagate_genome", async=true)
-    public SbmlImporterResults autoPropagateGenome(AutoPropagateModelParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        SbmlImporterResults returnVal = null;
-        //BEGIN auto_propagate_genome
-        //END auto_propagate_genome
         return returnVal;
     }
     @JsonServerMethod(rpc = "SBMLTools.status")

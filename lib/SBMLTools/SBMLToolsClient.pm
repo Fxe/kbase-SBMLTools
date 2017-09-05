@@ -340,6 +340,104 @@ SbmlImporterResults is a reference to a hash where the following keys are define
     }
 }
  
+
+
+=head2 auto_propagate_genome
+
+  $output = $obj->auto_propagate_genome($params)
+
+=over 4
+
+=item Parameter and return types
+
+=begin html
+
+<pre>
+$params is a SBMLTools.AutoPropagateModelParams
+$output is a SBMLTools.SbmlImporterResults
+AutoPropagateModelParams is a reference to a hash where the following keys are defined:
+	genome_id has a value which is a string
+	workspace_name has a value which is a string
+	output_model_name has a value which is a string
+SbmlImporterResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	fbamodel_id has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+$params is a SBMLTools.AutoPropagateModelParams
+$output is a SBMLTools.SbmlImporterResults
+AutoPropagateModelParams is a reference to a hash where the following keys are defined:
+	genome_id has a value which is a string
+	workspace_name has a value which is a string
+	output_model_name has a value which is a string
+SbmlImporterResults is a reference to a hash where the following keys are defined:
+	report_name has a value which is a string
+	report_ref has a value which is a string
+	fbamodel_id has a value which is a string
+
+
+=end text
+
+=item Description
+
+
+
+=back
+
+=cut
+
+ sub auto_propagate_genome
+{
+    my($self, @args) = @_;
+
+# Authentication: required
+
+    if ((my $n = @args) != 1)
+    {
+	Bio::KBase::Exceptions::ArgumentValidationError->throw(error =>
+							       "Invalid argument count for function auto_propagate_genome (received $n, expecting 1)");
+    }
+    {
+	my($params) = @args;
+
+	my @_bad_arguments;
+        (ref($params) eq 'HASH') or push(@_bad_arguments, "Invalid type for argument 1 \"params\" (value was \"$params\")");
+        if (@_bad_arguments) {
+	    my $msg = "Invalid arguments passed to auto_propagate_genome:\n" . join("", map { "\t$_\n" } @_bad_arguments);
+	    Bio::KBase::Exceptions::ArgumentValidationError->throw(error => $msg,
+								   method_name => 'auto_propagate_genome');
+	}
+    }
+
+    my $url = $self->{url};
+    my $result = $self->{client}->call($url, $self->{headers}, {
+	    method => "SBMLTools.auto_propagate_genome",
+	    params => \@args,
+    });
+    if ($result) {
+	if ($result->is_error) {
+	    Bio::KBase::Exceptions::JSONRPC->throw(error => $result->error_message,
+					       code => $result->content->{error}->{code},
+					       method_name => 'auto_propagate_genome',
+					       data => $result->content->{error}->{error} # JSON::RPC::ReturnObject only supports JSONRPC 1.1 or 1.O
+					      );
+	} else {
+	    return wantarray ? @{$result->result} : $result->result->[0];
+	}
+    } else {
+        Bio::KBase::Exceptions::HTTP->throw(error => "Error invoking method auto_propagate_genome",
+					    status_line => $self->{client}->status_line,
+					    method_name => 'auto_propagate_genome',
+				       );
+    }
+}
+ 
   
 sub status
 {
@@ -383,16 +481,16 @@ sub version {
             Bio::KBase::Exceptions::JSONRPC->throw(
                 error => $result->error_message,
                 code => $result->content->{code},
-                method_name => 'integrate_model',
+                method_name => 'auto_propagate_genome',
             );
         } else {
             return wantarray ? @{$result->result} : $result->result->[0];
         }
     } else {
         Bio::KBase::Exceptions::HTTP->throw(
-            error => "Error invoking method integrate_model",
+            error => "Error invoking method auto_propagate_genome",
             status_line => $self->{client}->status_line,
-            method_name => 'integrate_model',
+            method_name => 'auto_propagate_genome',
         );
     }
 }
@@ -675,6 +773,40 @@ biomass has a value which is a reference to a list where each element is a strin
 model_name has a value which is a string
 automatically_integrate has a value which is an int
 remove_boundary has a value which is an int
+
+
+=end text
+
+=back
+
+
+
+=head2 AutoPropagateModelParams
+
+=over 4
+
+
+
+=item Definition
+
+=begin html
+
+<pre>
+a reference to a hash where the following keys are defined:
+genome_id has a value which is a string
+workspace_name has a value which is a string
+output_model_name has a value which is a string
+
+</pre>
+
+=end html
+
+=begin text
+
+a reference to a hash where the following keys are defined:
+genome_id has a value which is a string
+workspace_name has a value which is a string
+output_model_name has a value which is a string
 
 
 =end text

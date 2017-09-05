@@ -76,6 +76,19 @@ class SBMLTools(object):
             'SBMLTools.integrate_model',
             [params], self._service_ver, context)
 
+    def auto_propagate_genome(self, params, context=None):
+        """
+        :param params: instance of type "AutoPropagateModelParams" ->
+           structure: parameter "genome_id" of String, parameter
+           "workspace_name" of String, parameter "output_model_name" of String
+        :returns: instance of type "SbmlImporterResults" -> structure:
+           parameter "report_name" of String, parameter "report_ref" of
+           String, parameter "fbamodel_id" of String
+        """
+        return self._client.call_method(
+            'SBMLTools.auto_propagate_genome',
+            [params], self._service_ver, context)
+
     def status(self, context=None):
         return self._client.call_method('SBMLTools.status',
                                         [], self._service_ver, context)
