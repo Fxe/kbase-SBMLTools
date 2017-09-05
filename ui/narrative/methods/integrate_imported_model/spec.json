@@ -64,7 +64,8 @@
       "text_options": {
         "valid_ws_types": [
           "KBaseBiochem.Media"
-        ]
+        ],
+        "is_output_name": true
       }
     },
     {
@@ -74,7 +75,7 @@
       "id": "model_compartment_id",
       "advanced": false,
       "default_values": [
-        ""
+        
       ],
       "text_options": {
         "valid_ws_types": [
@@ -134,9 +135,7 @@
         "c"
       ],
       "text_options": {
-        "valid_ws_types": [
-          
-        ]
+        "valid_ws_types": [ ]
       }
     },
     {
@@ -177,9 +176,7 @@
         "modelseed"
       ],
       "text_options": {
-        "valid_ws_types": [
-          
-        ]
+        "valid_ws_types": [ ]
       }
     },
     {

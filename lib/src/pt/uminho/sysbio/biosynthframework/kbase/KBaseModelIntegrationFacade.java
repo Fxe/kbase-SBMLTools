@@ -185,6 +185,7 @@ public class KBaseModelIntegrationFacade {
     
 //    String uuString = UUID.randomUUID().toString();
     
+    kir.fillModelData(integration.adapter);
     KBaseIOUtils.writeStringFile(KBaseIOUtils.toJson(kir), "/kb/module/data/data.json");
     
     List<WorkspaceObject> wsObjects = new ArrayList<> ();
