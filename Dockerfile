@@ -27,6 +27,10 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/biosynth-core-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-aux-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-biodb-0.0.1-SNAPSHOT.jar \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-genome-0.0.1-SNAPSHOT.jar \
+    && wget http://193.137.11.210/fliu/kbase/biojava3-alignment-3.0.jar \
+    && wget http://193.137.11.210/fliu/kbase/biojava3-core-3.0.jar \
+    && wget http://193.137.11.210/fliu/kbase/biojava3-phylo-3.0.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-io-2.4.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-lang3-3.4.jar \
     && wget http://193.137.11.210/fliu/kbase/commons-math3-3.1.1.jar \

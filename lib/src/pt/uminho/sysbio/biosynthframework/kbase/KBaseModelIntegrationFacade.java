@@ -147,7 +147,7 @@ public class KBaseModelIntegrationFacade {
     integration.compartmentMapping = compartmentMapping;
     integration.rename = params.getTranslateDatabase();
     integration.fillMetadata = params.getFillMetadata() == 1L;
-    integration.mediaName = "importer.media";
+    integration.mediaName = params.getOutputMediaName();
     integration.biodbContainer = this.biodbContainer;
     
     integration.integrate();
