@@ -679,7 +679,7 @@ public class IntegrationLocalRun {
 //    integration.
     integration.compartmentMapping.put("z0", "e");
     integration.compartmentMapping.put("z1", "c");
-    integration.rename = "KEGG";
+    integration.rename = "modelseed";
     integration.fillMetadata = true;
     integration.integrate();
     

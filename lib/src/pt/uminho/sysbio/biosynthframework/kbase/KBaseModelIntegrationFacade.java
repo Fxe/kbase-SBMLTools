@@ -148,9 +148,17 @@ public class KBaseModelIntegrationFacade {
     integration.rename = params.getTranslateDatabase();
     integration.fillMetadata = params.getFillMetadata() == 1L;
     integration.mediaName = params.getOutputMediaName();
-    integration.biodbContainer = this.biodbContainer;
     
+    integration.biodbContainer = this.biodbContainer;
     integration.integrate();
+    
+    try {
+      if (params.getTemplateId() != null) {
+        integration.adapter.setTemplate(params.getTemplateId(), wspClient);
+      }
+    } catch (Exception e) {
+      logger.error("Set Template: [{}] - {}", params.getTemplateId(), e.getMessage());
+    }
     
     String geneData = "";
     if (geneIntegration != null) {
@@ -161,7 +169,7 @@ public class KBaseModelIntegrationFacade {
     
     KBaseId mediaKid = null;
     if (integration.defaultMedia != null) {
-      mediaKid = KBaseIOUtils.saveData(outputName + ".media", KBaseType.KBaseBiochemMedia.value(), integration.defaultMedia, workspaceName, wspClient);
+      mediaKid = KBaseIOUtils.saveData(params.getOutputMediaName(), KBaseType.KBaseBiochemMedia.value(), integration.defaultMedia, workspaceName, wspClient);
     }
     
     KBaseId kid = KBaseIOUtils.saveData(outputName, KBaseType.FBAModel.value(), fbaModel, workspaceName, wspClient);

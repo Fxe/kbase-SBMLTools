@@ -34,6 +34,7 @@ public class KBaseIntegration {
   public Map<String, String> compartmentMapping = new HashMap<> ();
   public Set<String> biomassSet = new HashSet<> ();
   public String rename = null;
+  public String template = null;
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
   public String mediaName = null;
@@ -81,6 +82,7 @@ public class KBaseIntegration {
   }
   
   public void integrate() {
+    
     for (String rxn : gprOverride.keySet()) {
       ModelReaction krxn = adapter.rxnMap.get(rxn);
       if (krxn != null && gprOverride.get(rxn) != null) {
@@ -132,11 +134,13 @@ public class KBaseIntegration {
     //BiGG, BiGG2, HMDB, LigandCompound, MetaCyc, ModelSeed, Seed
     if (rename != null) {
       //needs a better db resolver
-      if (rename.equals("BiGG")) {
+      if (rename.equals("modelseed")) {
+        rename = "ModelSeed";
+      }
+      if (rename.equals("BiGG") || rename.equals("bigg")) {
         rename = "BiGG2";
       }
-      
-      if (rename.equals("KEGG")) {
+      if (rename.equals("KEGG") || rename.equals("kegg")) {
         rename = "LigandCompound";
       }
       
