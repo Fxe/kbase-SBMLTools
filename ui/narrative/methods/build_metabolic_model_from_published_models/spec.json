@@ -45,7 +45,7 @@
     "service-mapping": {
       "url": "",
       "name": "SBMLTools",
-      "method": "integrate_model",
+      "method": "auto_propagate_genome",
       "input_mapping": [
         {
           "narrative_system_variable": "workspace",
