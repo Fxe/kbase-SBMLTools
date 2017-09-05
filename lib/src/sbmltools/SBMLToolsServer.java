@@ -143,7 +143,6 @@ public class SBMLToolsServer extends JsonServerServlet {
     }
 
 
-
     ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
 
     File f = new File("/kb/module/data/readerData.json");

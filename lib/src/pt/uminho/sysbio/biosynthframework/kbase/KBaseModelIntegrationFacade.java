@@ -214,7 +214,7 @@ public class KBaseModelIntegrationFacade {
     if (kbrClient != null) {
       KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
       reporter.addWsObjects(wsObjects);
-      reporter.addHtmlFolderShock("importer report", "index.html", reportFiles.baseFolder, dfuClient);
+      reporter.addHtmlFolderShock("Integration report", "index.html", reportFiles.baseFolder, dfuClient);
       final ReportInfo reportInfo = reporter.extendedReport();
       
 //      final ReportInfo reportInfo = kbrClient.create(

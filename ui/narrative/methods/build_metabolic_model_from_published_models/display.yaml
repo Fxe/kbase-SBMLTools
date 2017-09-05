@@ -1,0 +1,27 @@
+name     : Build Metabolic Model From Published Models
+subtitle : none
+tooltip  : Automatically translate closest published genome scale model from KBase catalog, using a mapping of similar proteins between their genomes.
+
+screenshots : []
+icon: null
+
+method-suggestions :
+    related :
+        []
+    next :
+        []
+
+parameters :
+    genome_id :
+        ui-name : Genome ID
+        short-hint : ID of genome to associate with the new model
+        long-hint  : ID of genome to associate with the new model
+    output_model_name :
+        ui-name : Output ID
+        short-hint : Name to use for the new model
+        long-hint  : Name to use for the new model
+        
+description : |
+    <p>Accurate metabolic models are based on well-curated genome annotations which are labor intensive and thus highly valuable. This method permits users to construct a metabolic model of a new organism based on previously published models in the KBase catalog by translating to another organism rather than constructing and curating it from scratch. The method selects the closest published models and performs proteome comparison between the genomes to identify genes encoding potentially orthologous proteins in the two organisms.</p>
+
+technical-description : none

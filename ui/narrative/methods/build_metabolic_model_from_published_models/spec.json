@@ -1,0 +1,98 @@
+{
+  "ver": "0.0.1",
+  "authors": [ "filipeliu"],
+  "contact": "help@kbase.us",
+  "visble": true,
+  "categories": [ "active", "metabolic_modeling", "comparative_genomics"],
+  "widgets": {
+    "output": "kbaseTabTable",
+    "input": null
+  },
+  "parameters": [
+    {
+      "id": "genome_id",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "text",
+      "text_options": {
+        "valid_ws_types": [
+          "KBaseGenomes.Genome"
+        ]
+      }
+    },
+    {
+      "id": "output_model_name",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [
+        ""
+      ],
+      "field_type": "text",
+      "text_options": {
+        "valid_ws_types": [
+          "KBaseFBA.FBAModel"
+        ],
+        "is_output_name": true
+      }
+    }
+  ],
+  "behavior": {
+    "service-mapping": {
+      "url": "",
+      "name": "SBMLTools",
+      "method": "integrate_model",
+      "input_mapping": [
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "input_parameter": "genome_id",
+          "target_property": "genome_id"
+        },
+        {
+          "input_parameter": "output_model_name",
+          "target_property": "output_model_name"
+        }
+      ],
+      "output_mapping": [
+        {
+          "service_method_output_path": [
+            0,
+            "report_name"
+          ],
+          "target_property": "report_name"
+        },
+        {
+          "service_method_output_path": [
+            0,
+            "report_ref"
+          ],
+          "target_property": "report_ref"
+        },
+        {
+          "narrative_system_variable": "workspace",
+          "target_property": "workspace_name"
+        },
+        {
+          "target_property": "ws",
+          "narrative_system_variable": "workspace"
+        },
+        {
+          "constant_value": "KBaseFBA.FBAModel",
+          "target_property": "type"
+        },
+        {
+          "target_property": "obj",
+          "input_parameter": "output_model_name"
+        }
+      ]
+    }
+  },
+  "job_id_output_field": "docker"
+}

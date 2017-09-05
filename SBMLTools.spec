@@ -75,6 +75,13 @@ module SBMLTools {
         int automatically_integrate;
         int remove_boundary;
     } SbmlImporterParams;
+    
+    typedef structure {
+        string genome_id;
+        string workspace_name;
+        string output_model_name;
+    } AutoPropagateModelParams;
+
 
     /*
         Here is the definition of the output of the function.  The output
@@ -92,6 +99,8 @@ module SBMLTools {
         int n_contigs_remaining;
     } FilterContigsResults;
     
+    
+    
     typedef structure {
         string report_name;
         string report_ref;
@@ -105,6 +114,10 @@ module SBMLTools {
     */
     funcdef sbml_importer(SbmlImporterParams params)
         returns (SbmlImporterResults output) authentication required;
+        
     funcdef integrate_model(IntegrateModelParams params)
-        returns (SbmlImporterResults output) authentication required;              
+        returns (SbmlImporterResults output) authentication required;
+        
+    funcdef auto_propagate_genome(AutoPropagateModelParams params)
+        returns (SbmlImporterResults output) authentication required;
 };
