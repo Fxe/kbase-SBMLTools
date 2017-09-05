@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "model_name",
     "workspace_name",
     "output_model_name",
+    "output_media_name",
     "template_id",
     "genome_id",
     "compartment_translation",
@@ -44,6 +45,8 @@ public class IntegrateModelParams {
     private String workspaceName;
     @JsonProperty("output_model_name")
     private String outputModelName;
+    @JsonProperty("output_media_name")
+    private String outputMediaName;
     @JsonProperty("template_id")
     private String templateId;
     @JsonProperty("genome_id")
@@ -108,6 +111,21 @@ public class IntegrateModelParams {
 
     public IntegrateModelParams withOutputModelName(String outputModelName) {
         this.outputModelName = outputModelName;
+        return this;
+    }
+
+    @JsonProperty("output_media_name")
+    public String getOutputMediaName() {
+        return outputMediaName;
+    }
+
+    @JsonProperty("output_media_name")
+    public void setOutputMediaName(String outputMediaName) {
+        this.outputMediaName = outputMediaName;
+    }
+
+    public IntegrateModelParams withOutputMediaName(String outputMediaName) {
+        this.outputMediaName = outputMediaName;
         return this;
     }
 
@@ -273,7 +291,7 @@ public class IntegrateModelParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((("IntegrateModelParams"+" [modelName=")+ modelName)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", templateId=")+ templateId)+", genomeId=")+ genomeId)+", compartmentTranslation=")+ compartmentTranslation)+", biomassReactions=")+ biomassReactions)+", compoundMappings=")+ compoundMappings)+", geneMappings=")+ geneMappings)+", createExtracellular=")+ createExtracellular)+", removeBoundary=")+ removeBoundary)+", fillMetadata=")+ fillMetadata)+", translateDatabase=")+ translateDatabase)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((("IntegrateModelParams"+" [modelName=")+ modelName)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", outputMediaName=")+ outputMediaName)+", templateId=")+ templateId)+", genomeId=")+ genomeId)+", compartmentTranslation=")+ compartmentTranslation)+", biomassReactions=")+ biomassReactions)+", compoundMappings=")+ compoundMappings)+", geneMappings=")+ geneMappings)+", createExtracellular=")+ createExtracellular)+", removeBoundary=")+ removeBoundary)+", fillMetadata=")+ fillMetadata)+", translateDatabase=")+ translateDatabase)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

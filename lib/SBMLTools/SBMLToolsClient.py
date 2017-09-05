@@ -58,8 +58,9 @@ class SBMLTools(object):
            (list<mapping<string, string>> compartment_translation;) ->
            structure: parameter "model_name" of String, parameter
            "workspace_name" of String, parameter "output_model_name" of
-           String, parameter "template_id" of String, parameter "genome_id"
-           of String, parameter "compartment_translation" of list of type
+           String, parameter "output_media_name" of String, parameter
+           "template_id" of String, parameter "genome_id" of String,
+           parameter "compartment_translation" of list of type
            "CompartmentMapping" -> structure: parameter
            "kbase_compartment_id" of String, parameter "model_compartment_id"
            of list of String, parameter "biomass_reactions" of String,

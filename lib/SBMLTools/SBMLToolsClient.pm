@@ -233,6 +233,7 @@ IntegrateModelParams is a reference to a hash where the following keys are defin
 	model_name has a value which is a string
 	workspace_name has a value which is a string
 	output_model_name has a value which is a string
+	output_media_name has a value which is a string
 	template_id has a value which is a string
 	genome_id has a value which is a string
 	compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
@@ -263,6 +264,7 @@ IntegrateModelParams is a reference to a hash where the following keys are defin
 	model_name has a value which is a string
 	workspace_name has a value which is a string
 	output_model_name has a value which is a string
+	output_media_name has a value which is a string
 	template_id has a value which is a string
 	genome_id has a value which is a string
 	compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
@@ -600,6 +602,7 @@ a reference to a hash where the following keys are defined:
 model_name has a value which is a string
 workspace_name has a value which is a string
 output_model_name has a value which is a string
+output_media_name has a value which is a string
 template_id has a value which is a string
 genome_id has a value which is a string
 compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
@@ -621,6 +624,7 @@ a reference to a hash where the following keys are defined:
 model_name has a value which is a string
 workspace_name has a value which is a string
 output_model_name has a value which is a string
+output_media_name has a value which is a string
 template_id has a value which is a string
 genome_id has a value which is a string
 compartment_translation has a value which is a reference to a list where each element is a SBMLTools.CompartmentMapping
