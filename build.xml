@@ -40,9 +40,8 @@
     <include name="biosynth-biodb-0.0.1-SNAPSHOT.jar"/>
     <include name="biosynth-integration-0.0.1-SNAPSHOT.jar"/>
     <include name="biosynth-genome-0.0.1-SNAPSHOT.jar"/>
-    <include name="biojava3-alignment-3.0.jar"/>
-    <include name="biojava3-core-3.0.jar"/>
-    <include name="biojava3-phylo-3.0.jar"/>
+    <include name="biojava-alignment-4.2.5.jar"/>
+    <include name="biojava-core-4.2.5.jar"/>
     <include name="neo4j-kernel-2.1.5.jar"/>
     <include name="commons-io-2.4.jar"/>
     <include name="commons-math-2.2.jar"/>
