@@ -132,7 +132,7 @@ public class KBaseIntegration {
     
     //integration
     //BiGG, BiGG2, HMDB, LigandCompound, MetaCyc, ModelSeed, Seed
-    if (rename != null) {
+    if (rename != null && !rename.equals("none")) {
       //needs a better db resolver
       if (rename.equals("modelseed")) {
         rename = "ModelSeed";

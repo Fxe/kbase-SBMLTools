@@ -211,10 +211,12 @@ public class SBMLToolsServer extends JsonServerServlet {
 
     //    KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
     returnVal = new KBaseModelIntegrationFacade(wspClient, 
-        dfuClient, 
-        kbrClient,
-        geneIntegration,
-        "/data/integration/export").kbaseIntegrate(params, workspaceName);
+                          dfuClient, 
+                          kbrClient,
+                          geneIntegration,
+                          "/data/integration/export",
+                          scratch).kbaseIntegrate(params, workspaceName);
+    
         //END integrate_model
         return returnVal;
     }

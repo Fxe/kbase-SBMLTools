@@ -99,7 +99,7 @@ public class IntegrationLocalRun {
       cmap.add(new CompartmentMapping().withKbaseCompartmentId("c").withModelCompartmentId(Arrays.asList(new String[]{"z1"})));
       cmap.add(new CompartmentMapping().withKbaseCompartmentId("e").withModelCompartmentId(Arrays.asList(new String[]{"z0"})));
       KBaseModelIntegrationFacade integration = 
-          new KBaseModelIntegrationFacade(devAPI.wsClient, devAPI.dfuClient, null, null, "/var/biobase/export");
+          new KBaseModelIntegrationFacade(devAPI.wsClient, devAPI.dfuClient, null, null, "/var/biobase/export", null);
       integration.kbaseIntegrate(
           new IntegrateModelParams().withModelName(kid.name)
           .withCompartmentTranslation(cmap)

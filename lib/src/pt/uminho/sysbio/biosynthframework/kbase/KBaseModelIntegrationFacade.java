@@ -1,11 +1,14 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -18,6 +21,7 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
 import sbmltools.KBaseType;
@@ -33,17 +37,21 @@ public class KBaseModelIntegrationFacade {
   private final KBaseReportClient kbrClient;
   private final KBaseBiodbContainer biodbContainer;
   private final KBaseGeneIntegration geneIntegration;
+  private final Path scratch;
   
   public KBaseModelIntegrationFacade(WorkspaceClient    wspClient,
                                      DataFileUtilClient dfuClient, 
                                      KBaseReportClient  kbrClient,
                                      KBaseGeneIntegration geneIntegration,
-                                     String biodbPath) {
+                                     String biodbPath,
+                                     Path scratch) {
+    
     this.wspClient = wspClient;
     this.dfuClient = dfuClient;
     this.kbrClient = kbrClient;
     this.geneIntegration = geneIntegration;
     this.biodbContainer = new KBaseBiodbContainer(biodbPath);
+    this.scratch = scratch;
   }
   
   public static Map<String, String> getCompartmentMapping(List<CompartmentMapping> compartmentMappings) {
@@ -175,7 +183,9 @@ public class KBaseModelIntegrationFacade {
     KBaseId kid = KBaseIOUtils.saveData(outputName, KBaseType.FBAModel.value(), fbaModel, workspaceName, wspClient);
 //    String ref = KBaseIOUtils.saveDataSafe(outputName, KBaseType.FBAModel, fbaModel, workspaceName, dfuClient);
     
+//    String uuString = UUID.randomUUID().toString();
     
+    KBaseIOUtils.writeStringFile(KBaseIOUtils.toJson(kir), "/kb/module/data/data.json");
     
     List<WorkspaceObject> wsObjects = new ArrayList<> ();
     wsObjects.add(new WorkspaceObject().withDescription("model").withRef(kid.reference));
@@ -184,13 +194,33 @@ public class KBaseModelIntegrationFacade {
       wsObjects.add(new WorkspaceObject().withDescription("media").withRef(mediaKid.reference));
     }
     
+    KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
+    List<String> files = new ArrayList<> ();
+    files.add("index.html");
+    List<String> datas = new ArrayList<> ();
+    for (String f : files) {
+      datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-report/" + f));
+    }
+    
+    ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
+    
+    File f = new File("/kb/module/data/data.json");
+    if (f.exists()) {
+      logger.info("copy {} -> {}", f.getAbsolutePath(), reportFiles.baseFolder);
+      KBaseIOUtils.copy(f.getAbsolutePath(), reportFiles.baseFolder + "/");
+    }
     
     if (kbrClient != null) {
-      final ReportInfo reportInfo = kbrClient.create(
-          new CreateParams().withWorkspaceName(workspaceName)
-                            .withReport(new Report()
-                                .withObjectsCreated(wsObjects)
-                                .withTextMessage(String.format("%s\n%s", params, geneData))));
+      KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
+      reporter.addWsObjects(wsObjects);
+      reporter.addHtmlFolderShock("importer report", "index.html", reportFiles.baseFolder, dfuClient);
+      final ReportInfo reportInfo = reporter.extendedReport();
+      
+//      final ReportInfo reportInfo = kbrClient.create(
+//          new CreateParams().withWorkspaceName(workspaceName)
+//                            .withReport(new Report()
+//                                .withObjectsCreated(wsObjects)
+//                                .withTextMessage(String.format("%s\n%s", params, geneData))));
       
       SbmlImporterResults returnVal = new SbmlImporterResults().withFbamodelId(outputName)
                                                                .withReportName(reportInfo.getName())
