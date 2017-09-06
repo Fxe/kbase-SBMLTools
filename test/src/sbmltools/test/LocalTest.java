@@ -44,7 +44,7 @@ public class LocalTest {
     
     FBAModel fbaModel = new FBAModelFactory()
 //        .withModelSeedReference(spiToModelSeedReference)
-        .withXmlSbmlModel(xmodel)
+        .withXmlSbmlModel(xmodel, false)
         .build();
     System.out.println(fbaModel.getModelcompartments());
 

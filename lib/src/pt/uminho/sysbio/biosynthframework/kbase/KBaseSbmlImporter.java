@@ -225,7 +225,7 @@ public class KBaseSbmlImporter {
       ImportModelResult result, String modelId, String url, 
       boolean runIntegration, Collection<String> biomassIds, 
       IntegrationByDatabase spiIntegrationAll,
-      IntegrationReport jsonResult) throws Exception {
+      IntegrationReport jsonResult, boolean allowBoundary) throws Exception {
     //import
     FBAModel model = null;
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
@@ -319,7 +319,7 @@ public class KBaseSbmlImporter {
         .withModelSeedReference(spiToModelSeedReference)
         .withModelId(modelId)
         .withModelName(modelId)
-        .withXmlSbmlModel(xmodel)
+        .withXmlSbmlModel(xmodel, allowBoundary)
         .build();
     
     if (!model.getBiomasses().isEmpty()) {
@@ -452,10 +452,12 @@ public class KBaseSbmlImporter {
         spiIntegrationAll.databases.add(db.toString());
       }
       
+      boolean removeBoundary = params.getRemoveBoundary() == 1;
+      
       for (String u : inputStreams.keySet()) {
         InputStream is = inputStreams.get(u);
         try {
-          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, spiIntegrationAll, jsonResult);
+          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, spiIntegrationAll, jsonResult, !removeBoundary);
           
           if (fbaModel != null) {
             KBaseObject o = new KBaseObject();

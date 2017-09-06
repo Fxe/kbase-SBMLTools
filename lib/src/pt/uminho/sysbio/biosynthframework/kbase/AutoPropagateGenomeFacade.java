@@ -142,6 +142,7 @@ public class AutoPropagateGenomeFacade {
               String.format("%s_%s", targetGenomeKid.name, genome2.name), workspace, null);
           logger.info("compareProteomes: {} start", kout);
           String res = easyKBase.compareProteomes(targetGenomeKid, genome2, kout);
+          outputObjects.put(res, String.format("%s - %s", targetGenomeKid.name, genome2.name));
           logger.info("compareProteomes: {} done! {}", kout, res);
         }
         

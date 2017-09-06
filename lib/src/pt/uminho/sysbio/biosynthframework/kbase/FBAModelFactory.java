@@ -113,29 +113,23 @@ public class FBAModelFactory {
     if (spiName == null || spiName.trim().isEmpty()) {
       spiName = "undefined";
     }
-    
+    Map<String, String> extraAttributes = new HashMap<> ();
+    extraAttributes.put("original_id", spiEntry);
     ModelCompound cpd = new ModelCompound().withId(spiEntry)
         .withCompoundRef(String.format(MODEL_SEED_COMPOUND_REF_PATTERN, modelSeedRef))
         .withModelcompartmentRef(
             String.format("~/modelcompartments/id/%s", cmpMap.get(cmpEntry)))
         .withFormula("R")
         .withCharge(1.0)
+        .withStringAttributes(extraAttributes)
         .withName(spiName);
     
     this.modelCompounds.put(spiEntry, cpd);
     return this;
   }
 
-  public FBAModelFactory withXmlSbmlModel(XmlSbmlModel xmodel) {
+  public FBAModelFactory withXmlSbmlModel(XmlSbmlModel xmodel, boolean allowBoundary) {
     this.xmodel = xmodel;
-    
-//    List<String> cmpArray = new ArrayList<> ();
-//
-//    //do Zs
-//    cmpArray.add("z");
-    //    cmpArray.add("d");s
-//    Iterator<String> cmpIt = cmpArray.iterator();
-
     long cmpIndex = 0;
     for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
       String cmpEntry = xcmp.getAttributes().get("id");
@@ -158,18 +152,25 @@ public class FBAModelFactory {
     }
     
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
+      Map<String, String> extraAttributes = new HashMap<> ();
+      
       String spiEntry = xspi.getAttributes().get("id");
       String cmpEntry = xspi.getAttributes().get("compartment");
       String spiName = xspi.getAttributes().get("name");
       boolean boundaryCondition = false;
+      
       try {
         String b = xspi.getAttributes().get("boundaryCondition");
-        if (b != null && Boolean.parseBoolean(b)) {
-          boundaryCondition = true;
+        if (b != null) {
+          extraAttributes.put("boundary_condition", b);
+          if (Boolean.parseBoolean(b)) {
+            boundaryCondition = true;
+          }
         }
       } catch (Exception e) {
         
       }
+      
       if (spiName == null || spiName.trim().isEmpty()) {
         spiName = "undefined";
       }
@@ -187,6 +188,8 @@ public class FBAModelFactory {
           dblinks.put(db, new ArrayList<> (simap.get(spiEntry).get(db)));
         }
       }
+      
+      
       ModelCompound cpd = new ModelCompound().withId(spiEntry)
           .withCompoundRef(String.format(MODEL_SEED_COMPOUND_REF_PATTERN, ref))
           .withModelcompartmentRef(
@@ -194,13 +197,12 @@ public class FBAModelFactory {
           .withFormula(formula)
           .withCharge(1.0)
           .withDblinks(dblinks)
+          .withStringAttributes(extraAttributes)
           .withName(spiName);
       
-      if (!boundaryCondition) {
+      if (allowBoundary || !boundaryCondition) {
         modelCompounds.put(cpd.getId(), cpd);
-//        modelCompounds.add(cpd);
       }
-      
     }
     
     return this;
@@ -312,7 +314,7 @@ public class FBAModelFactory {
     
     
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
-
+      Map<String, String> extraAttributes = new HashMap<> ();
       String rxnEntry = xrxn.getAttributes().get("id");
       if (rxnEntry == null || rxnEntry.trim().isEmpty()) {
         rxnEntry = "R_rxn" + counter++;
@@ -321,6 +323,8 @@ public class FBAModelFactory {
       if (rxnName == null || rxnName.trim().isEmpty()) {
         rxnName = "undefined";
       }
+      
+      extraAttributes.put("original_id", rxnEntry);
       
       String gpr = xadapter.getGpr(rxnEntry);
       Set<String> genes = new HashSet<> ();
@@ -393,6 +397,7 @@ public class FBAModelFactory {
           .withProbability(1.0)
           .withPathway("entire model")
           .withDblinks(new HashMap<String, List<String>>())
+          .withStringAttributes(extraAttributes)
           .withModelcompartmentRef(rxnCmpRef);
       rxn.setModelReactionReagents(reagents);
 
