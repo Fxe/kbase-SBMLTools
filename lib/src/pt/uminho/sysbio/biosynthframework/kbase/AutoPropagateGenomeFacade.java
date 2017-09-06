@@ -42,6 +42,9 @@ public class AutoPropagateGenomeFacade {
     this.workspace = params.getWorkspaceName();
     this.wsClient = new WorkspaceClient(callbackUrl, token);
     this.gpcClient = new GenomeProteomeComparisonClient(callbackUrl, token);
+    
+    this.wsClient.setIsInsecureHttpConnectionAllowed(true);
+    this.gpcClient.setIsInsecureHttpConnectionAllowed(true);
   }
   
   public void run() {
