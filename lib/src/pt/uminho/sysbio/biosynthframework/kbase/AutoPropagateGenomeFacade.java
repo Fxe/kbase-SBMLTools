@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +19,16 @@ import org.slf4j.LoggerFactory;
 
 import datafileutil.DataFileUtilClient;
 import genomeannotationapi.GenomeAnnotationAPIClient;
+import genomeannotationapi.SaveGenomeResultV1;
 import genomeannotationapi.SaveOneGenomeParamsV1;
 import genomeproteomecomparison.GenomeProteomeComparisonClient;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
+import kbasereport.CreateParams;
+import kbasereport.KBaseReportClient;
+import kbasereport.Report;
+import kbasereport.ReportInfo;
+import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
@@ -45,23 +52,29 @@ public class AutoPropagateGenomeFacade {
   private final DataFileUtilClient dfuClient;
   private final GenomeProteomeComparisonClient gpcClient;
   private final GenomeAnnotationAPIClient gaClient;
+  private final KBaseReportClient kbrClient;
   
-  public AutoPropagateGenomeFacade(AutoPropagateModelParams params, WorkspaceClient wsClient,
+  public AutoPropagateGenomeFacade(AutoPropagateModelParams params, 
+      WorkspaceClient wsClient,
+      KBaseReportClient kbrClient,
       URL callbackUrl, AuthToken token) throws IOException, UnauthorizedException {
     this.alignTool = new NAlignTool(KbaseGenomeUtils.NUC44);
     this.genomeId = params.getGenomeId();
     this.workspace = params.getWorkspaceName();
     this.wsClient = wsClient;
+    this.kbrClient = kbrClient;
     this.dfuClient = new DataFileUtilClient(callbackUrl, token);
     this.gpcClient = new GenomeProteomeComparisonClient(callbackUrl, token);
     this.gaClient = new GenomeAnnotationAPIClient(callbackUrl, token);
     this.dfuClient.setIsInsecureHttpConnectionAllowed(true);
     this.gpcClient.setIsInsecureHttpConnectionAllowed(true);
     this.gaClient.setIsInsecureHttpConnectionAllowed(true);
+    
   }
   
-  public Object run() {
+  public ReportInfo run() {
     String out = "";
+    Map<String, String> outputObjects = new HashMap<> ();
     try {
       InputStream is = new FileInputStream(BLAST_DB_PATH);
       Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
@@ -92,7 +105,9 @@ public class AutoPropagateGenomeFacade {
         }
         
         SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
-        gaClient.saveOneGenomeV1(gparams);
+        SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
+        String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
+        outputObjects.put(ref, "test save genome");
         //collect the best genomes
         
       } else {
@@ -103,6 +118,25 @@ public class AutoPropagateGenomeFacade {
       e.printStackTrace();
     }
     
-    return out;
+    try {
+      List<WorkspaceObject> wsObjects = new ArrayList<> ();
+      for (String ref : outputObjects.keySet()) {
+        String def = outputObjects.get(ref);
+        wsObjects.add(new WorkspaceObject().withDescription(def)
+                                           .withRef(ref));
+      }
+      
+      final ReportInfo reportInfo = kbrClient.create(
+          new CreateParams().withWorkspaceName(workspace)
+          .withReport(new Report()
+              .withObjectsCreated(wsObjects)
+              .withTextMessage(out)));
+      
+      return reportInfo;
+    } catch (IOException | JsonClientException e) {
+      e.printStackTrace();
+    }
+    
+    return null;
   }
 }

@@ -10,15 +10,12 @@ import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
 
 //BEGIN_HEADER
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,9 +130,6 @@ public class SBMLToolsServer extends JsonServerServlet {
     files.add("js/jquery-2.2.2.min.js");
     files.add("js/underscore-min.js");
     files.add("js/plotly-1.28.3.min.js");
-    //    files.add("ids.json");
-    //    files.add("names.json");
-    //    files.add("refs.json");
     List<String> datas = new ArrayList<> ();
 
     for (String f : files) {
@@ -234,22 +228,13 @@ public class SBMLToolsServer extends JsonServerServlet {
     
     System.out.println(params);
     
-    final String workspaceName = params.getWorkspaceName();
-    
     final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
     kbrClient.setIsInsecureHttpConnectionAllowed(true);
     wspClient.setIsInsecureHttpConnectionAllowed(true);
     
-    AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(params, wspClient, callbackURL, authPart);
-    facade.run();
-    List<WorkspaceObject> wsObjects = new ArrayList<> ();
-    wsObjects.add(new WorkspaceObject().withDescription("a").withRef("7925/7/1"));
-    final ReportInfo reportInfo = kbrClient.create(
-        new CreateParams().withWorkspaceName(workspaceName)
-        .withReport(new Report()
-            .withObjectsCreated(wsObjects)
-            .withTextMessage(String.format("%s", params))));
+    AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(params, wspClient, kbrClient, callbackURL, authPart);
+    ReportInfo reportInfo = facade.run();
     
     System.out.println(params);
     
