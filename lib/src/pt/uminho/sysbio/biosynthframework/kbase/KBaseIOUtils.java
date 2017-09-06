@@ -31,6 +31,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import datafileutil.DataFileUtilClient;
 import datafileutil.FileToShockOutput;
 import datafileutil.FileToShockParams;
+import datafileutil.GetObjectsParams;
+import datafileutil.GetObjectsResults;
 import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
 import kbasefba.FBAModel;
@@ -386,6 +388,28 @@ public class KBaseIOUtils {
       
       Object o = odata.getData().asInstance();
       return new ImmutablePair<KBaseId, Object>(new KBaseId(name, ws, ref), o);
+    } catch (IOException | JsonClientException e) {
+      throw new IOException(e);
+    }
+  }
+  
+  public static Pair<KBaseId, Object> getObject(String ref, 
+      DataFileUtilClient dfuClient) throws IOException {
+    try {
+      
+      List<String> refs = new ArrayList<> ();
+      if (ref != null) {
+        refs.add(ref);
+      }
+
+      GetObjectsParams params = new GetObjectsParams().withObjectRefs(refs);
+      GetObjectsResults result = dfuClient.getObjects(params);
+      List<datafileutil.ObjectData> odatas = result.getData();
+      datafileutil.ObjectData odata = odatas.iterator().next();
+      ref = KBaseIOUtils.getRefFromObjectInfo(odata.getInfo());
+      
+      Object o = odata.getData().asInstance();
+      return new ImmutablePair<KBaseId, Object>(new KBaseId(null, null, ref), o);
     } catch (IOException | JsonClientException e) {
       throw new IOException(e);
     }

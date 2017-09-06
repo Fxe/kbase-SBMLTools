@@ -236,9 +236,12 @@ public class SBMLToolsServer extends JsonServerServlet {
     
     final String workspaceName = params.getWorkspaceName();
     
+    final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
+    kbrClient.setIsInsecureHttpConnectionAllowed(true);
+    wspClient.setIsInsecureHttpConnectionAllowed(true);
     
-    AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(params, callbackURL, authPart);
+    AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(params, wspClient, callbackURL, authPart);
     facade.run();
     
     final ReportInfo reportInfo = kbrClient.create(
