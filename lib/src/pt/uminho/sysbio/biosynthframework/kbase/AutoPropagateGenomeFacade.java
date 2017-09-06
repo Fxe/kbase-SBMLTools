@@ -133,8 +133,12 @@ public class AutoPropagateGenomeFacade {
         
         
         for (KBaseId genome2 : genomesToCompare) {
+          String other = genome2.name;
+          if (other.endsWith(".rast")) {
+            other = other.replace(".rast", "");
+          }
           KBaseId kout = new KBaseId(
-              String.format("%s_%s", targetGenomeKid.name, genome2.name), workspace, null);
+              String.format("%s_%s", targetGenomeKid.name, other), workspace, null);
           logger.info("compareProteomes: {} start", kout);
           String res = easyKBase.compareProteomes(targetGenomeKid, genome2, kout);
           logger.info("compareProteomes: {} done! {}", kout, res);
