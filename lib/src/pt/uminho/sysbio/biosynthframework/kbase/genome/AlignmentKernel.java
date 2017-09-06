@@ -1,8 +1,10 @@
 package pt.uminho.sysbio.biosynthframework.kbase.genome;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.biojava.nbio.alignment.template.PairwiseSequenceAligner;
@@ -17,8 +19,11 @@ public class AlignmentKernel {
   
   private static final Logger logger = LoggerFactory.getLogger(AlignmentKernel.class);
   
-  public List<Pair<String, String>> aaa = new ArrayList<> ();
-  Iterator<Pair<String, String>> jobIt;
+  public List<Pair<String, String>> jobs = new ArrayList<> ();
+  
+  private boolean running = false;
+  private Iterator<Pair<String, String>> jobIt;
+  private Map<Pair<String, String>, List<Object>> results = new HashMap<> ();
   
   private final int t;
   private final Aligner aligner;
@@ -28,6 +33,17 @@ public class AlignmentKernel {
       return jobIt.next();
     }
     return null;
+  }
+  
+  public Map<Pair<String, String>, List<Object>> getResults() {
+    if (!running) {
+      return this.results;
+    }
+    return null;
+  }
+  
+  public synchronized void saveResult(Pair<String, String> job, List<Object> result) {
+    this.results.put(job, result);
   }
   
   public List<Runnable> runners = new ArrayList<> ();
@@ -40,7 +56,7 @@ public class AlignmentKernel {
     private final AlignmentKernel ma;
     
     public AlignWorker(AlignmentKernel ma, int workerId) {
-      logger.info("");
+      logger.info("[{}] worker created.", workerId);
       this.workerId = workerId;
       this.ma = ma;
       logger.trace("created workder [{}]", this.workerId);
@@ -71,6 +87,7 @@ public class AlignmentKernel {
         data.add(psa.getSimilarity());
         data.add(psa.getDistance());
         logger.trace("[{}] worker done job ..", this.workerId);
+        ma.saveResult(p, data);
       }
       logger.info("[{}] done!", this.workerId);
     }
@@ -90,10 +107,13 @@ public class AlignmentKernel {
   }
   
   public void run() {
+    this.running = true;
+    this.results.clear();
+    this.jobIt = jobs.iterator();
+    
+    logger.info("running ... jobs: {}", jobs.size());
     long start = System.currentTimeMillis();
     
-    logger.info("running ... jobs: {}", aaa.size());
-    jobIt = aaa.iterator();
     List<Thread> threads = new ArrayList<> ();
     for (Runnable r : runners) {
       Thread t = new Thread(r);
@@ -110,5 +130,6 @@ public class AlignmentKernel {
     
     long end = System.currentTimeMillis();
     logger.info("Time: {}", (end - start) / 1000);
+    this.running = false;
   }
 }

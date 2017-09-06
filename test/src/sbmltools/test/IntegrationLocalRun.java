@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 //import org.springframework.core.io.FileSystemResource;
 //import org.springframework.core.io.Resource;
 
+import genomeproteomecomparison.GenomeProteomeComparisonClient;
 import kbasebiochem.Media;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
@@ -780,7 +781,7 @@ public class IntegrationLocalRun {
 //              PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = (PairwiseSequenceAligner<DNASequence, NucleotideCompound>) tool.localAlignment(dnaA, seqs.get(k).getSequenceAsString());
 
 //              o.add(StringUtils.join(data, '\t'));
-              ma.aaa.add(new ImmutablePair<String, String>(dnaA, seqs.get(k).getSequenceAsString()));
+              ma.jobs.add(new ImmutablePair<String, String>(dnaA, seqs.get(k).getSequenceAsString()));
             }
             ma.run();
             System.out.println(StringUtils.join(o, '\n'));

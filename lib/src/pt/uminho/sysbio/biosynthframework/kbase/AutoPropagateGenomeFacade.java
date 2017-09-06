@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.biojava.nbio.core.sequence.DNASequence;
@@ -58,7 +60,8 @@ public class AutoPropagateGenomeFacade {
     this.gaClient.setIsInsecureHttpConnectionAllowed(true);
   }
   
-  public void run() {
+  public Object run() {
+    String out = "";
     try {
       InputStream is = new FileInputStream(BLAST_DB_PATH);
       Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
@@ -77,10 +80,16 @@ public class AutoPropagateGenomeFacade {
         String dnaA = poly.getDnaSequence();
         
         for (String k : seqs.keySet()) {
-          ma.aaa.add(new ImmutablePair<String, String>(dnaA, seqs.get(k).getSequenceAsString()));
+          ma.jobs.add(new ImmutablePair<String, String>(dnaA, seqs.get(k).getSequenceAsString()));
         }
         
         ma.run();
+        
+        Map<Pair<String, String>, List<Object>> alignData = ma.getResults();
+        for (Pair<String, String> k : alignData.keySet()) {
+          out += "\n" + StringUtils.join(alignData.get(k), "; ");
+          System.out.println(StringUtils.join(alignData.get(k), "; "));
+        }
         
         SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
         gaClient.saveOneGenomeV1(gparams);
@@ -90,7 +99,10 @@ public class AutoPropagateGenomeFacade {
         logger.warn("unable to find feature");
       }
     } catch (IOException | JsonClientException e) {
+      out += e.getMessage();
       e.printStackTrace();
     }
+    
+    return out;
   }
 }
