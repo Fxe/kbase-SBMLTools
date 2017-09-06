@@ -242,7 +242,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         new CreateParams().withWorkspaceName(workspaceName)
         .withReport(new Report()
 //            .withObjectsCreated(wsObjects)
-            .withTextMessage(String.format("%s\n%s", params))));
+            .withTextMessage(String.format("%s", params))));
     
     System.out.println(params);
     
