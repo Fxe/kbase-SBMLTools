@@ -186,10 +186,6 @@ public class KbaseGenomeUtils {
     }
     if (best != null) {
       logger.info("{} [{}]: {}", best, high, gfeatures.get(best).getFunction());
-//      data.put("feature", best);
-//      data.put("function", gfunctions.get(best));
-//      data.put("size", Long.toString(high));
-//      data.put("seq", gseq.get(best));
       result = gfeatures.get(best);
     }
     

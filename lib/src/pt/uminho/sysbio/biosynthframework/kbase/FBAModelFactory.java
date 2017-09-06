@@ -294,7 +294,7 @@ public class FBAModelFactory {
     FBAModel model = new FBAModel();
     model.setId(modelId);
     model.setName(modelName); //get from xml if exists
-    model.setGenomeRef("6464/242/1");
+    model.setGenomeRef("PlantSEED/Empty");
     model.setSource("External");
     model.setSourceId(modelId);
     model.setType("SBML Model");

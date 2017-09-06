@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.kbase.genome;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,6 +37,11 @@ public class AlignmentKernel {
     public String dna1;
     public String dna2;
     public String targetOrganism;
+    
+    @Override
+    public String toString() {
+      return String.format("%s / %s (%s)", genome1, genome2, targetOrganism);
+    }
   }
   
   public synchronized AlignmentJob getJob() {
@@ -55,7 +61,8 @@ public class AlignmentKernel {
   public Map<Double, Set<AlignmentJob>> getSortedResults() {
     if (!running) {
       Map<AlignmentJob, Double> results = this.getResults();
-      Map<Double, Set<AlignmentJob>> sortedResults = new TreeMap<> ();
+      Map<Double, Set<AlignmentJob>> sortedResults = 
+          new TreeMap<> (Collections.reverseOrder());
       for (AlignmentJob job : results.keySet()) {
         Double score = results.get(job);
         if (!sortedResults.containsKey(score)) {
@@ -85,7 +92,6 @@ public class AlignmentKernel {
       logger.info("[{}] worker created.", workerId);
       this.workerId = workerId;
       this.ma = ma;
-      logger.trace("created workder [{}]", this.workerId);
     }
 
     public int getWorkerId() { return workerId;}

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,13 +48,14 @@ public class AutoPropagateGenomeFacade {
 //  /kb/module/data/
   public static String BLAST_DB_PATH = "/kb/module/data/blast_db.faa";
   
+  private int p = 3;
   private String genomeId;
   private String workspace;
   private final WorkspaceClient wsClient;
   private final DataFileUtilClient dfuClient;
-  private final GenomeProteomeComparisonClient gpcClient;
   private final GenomeAnnotationAPIClient gaClient;
   private final KBaseReportClient kbrClient;
+  private final EasyKBase easyKBase;
   
   public AutoPropagateGenomeFacade(AutoPropagateModelParams params, 
       WorkspaceClient wsClient,
@@ -65,12 +67,10 @@ public class AutoPropagateGenomeFacade {
     this.wsClient = wsClient;
     this.kbrClient = kbrClient;
     this.dfuClient = new DataFileUtilClient(callbackUrl, token);
-    this.gpcClient = new GenomeProteomeComparisonClient(callbackUrl, token);
     this.gaClient = new GenomeAnnotationAPIClient(callbackUrl, token);
     this.dfuClient.setIsInsecureHttpConnectionAllowed(true);
-    this.gpcClient.setIsInsecureHttpConnectionAllowed(true);
     this.gaClient.setIsInsecureHttpConnectionAllowed(true);
-    
+    easyKBase = new EasyKBase(callbackUrl, token);
   }
   
   public ReportInfo run() {
@@ -86,7 +86,7 @@ public class AutoPropagateGenomeFacade {
       
       Pair<KBaseId, Object> data = KBaseIOUtils.getObject2(genomeId, workspace, null, wsClient);
       Genome genome = KBaseUtils.convert(data.getRight(), Genome.class);
-      
+      KBaseId targetGenomeKid = data.getLeft();
       Feature poly = null;
       if (genome != null && 
           (poly = KbaseGenomeUtils.findRnaPolymeraseBetaUnit(genome)) != null) {
@@ -112,12 +112,40 @@ public class AutoPropagateGenomeFacade {
           }
         }
         
+        Iterator<Double> it = sortedResults.keySet().iterator();
+        List<KBaseId> genomesToCompare = new ArrayList<> ();
+        
+      //collect the best genomes
+        while (it.hasNext() && genomesToCompare.size() < p) {
+          try {
+            double score = it.next();
+            AlignmentJob job = sortedResults.get(score).iterator().next();
+            logger.info("Added to proteome compare: {}", job);
+            genomesToCompare.add(new KBaseId(job.genome2, "ReferenceDataManager", null));
+//            Pair<KBaseId, Object> data_ = KBaseIOUtils.getObject2(job.genome2, workspace, null, wsClient);
+//            Genome otherGenome = KBaseUtils.convert(data_.getRight(), Genome.class);
+//            genomesToCompare.add(otherGenome);
+          } catch (Exception e) {
+            logger.error("");
+          }
+//          Genome otherGenome = KBaseIOUtils.getObject2(genomeId, workspace, null, wsClient);
+        }
+        
+        
+        for (KBaseId genome2 : genomesToCompare) {
+          KBaseId kout = new KBaseId(
+              String.format("%s_%s", targetGenomeKid.name, genome2.name), workspace, null);
+          logger.info("compareProteomes: {}", kout);
+//          easyKBase.compareProteomes(targetGenomeKid, genome2, kout);
+        }
+        
+        
         SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
         SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
         String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
         outputObjects.put(ref, "test save genome");
-        //collect the best genomes
         
+
       } else {
         logger.warn("unable to find feature");
       }

@@ -191,7 +191,6 @@ public class IntegrationLocalRun {
           krxn.setModelReactionProteins(mrpList);
         }
       }
-
     }
     for (String k : badGpr.keySet()) {
       logger.warn("[{}] Invalid GPR: {}", k, badGpr.get(k));
