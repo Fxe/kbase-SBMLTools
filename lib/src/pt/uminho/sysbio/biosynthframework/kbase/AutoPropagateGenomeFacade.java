@@ -11,10 +11,13 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import datafileutil.DataFileUtilClient;
+import genomeannotationapi.GenomeAnnotationAPIClient;
+import genomeannotationapi.SaveOneGenomeParamsV1;
 import genomeproteomecomparison.GenomeProteomeComparisonClient;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
@@ -23,6 +26,7 @@ import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import sbmltools.AutoPropagateModelParams;
 import us.kbase.auth.AuthToken;
+import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.UnauthorizedException;
 import us.kbase.workspace.WorkspaceClient;
 
@@ -39,6 +43,7 @@ public class AutoPropagateGenomeFacade {
   private final WorkspaceClient wsClient;
   private final DataFileUtilClient dfuClient;
   private final GenomeProteomeComparisonClient gpcClient;
+  private final GenomeAnnotationAPIClient gaClient;
   
   public AutoPropagateGenomeFacade(AutoPropagateModelParams params, WorkspaceClient wsClient,
       URL callbackUrl, AuthToken token) throws IOException, UnauthorizedException {
@@ -48,8 +53,10 @@ public class AutoPropagateGenomeFacade {
     this.wsClient = wsClient;
     this.dfuClient = new DataFileUtilClient(callbackUrl, token);
     this.gpcClient = new GenomeProteomeComparisonClient(callbackUrl, token);
+    this.gaClient = new GenomeAnnotationAPIClient(callbackUrl, token);
     this.dfuClient.setIsInsecureHttpConnectionAllowed(true);
     this.gpcClient.setIsInsecureHttpConnectionAllowed(true);
+    this.gaClient.setIsInsecureHttpConnectionAllowed(true);
   }
   
   public void run() {
@@ -58,7 +65,6 @@ public class AutoPropagateGenomeFacade {
       Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
       Map<String, Genome> seqsGenome = new HashMap<> ();
       for (String k : seqs.keySet()) {
-        System.out.println(k);
         seqsGenome.put(k, null);
       }
       
@@ -68,7 +74,7 @@ public class AutoPropagateGenomeFacade {
       Feature poly = null;
       if (genome != null && 
           (poly = KbaseGenomeUtils.findRnaPolymeraseBetaUnit(genome)) != null) {
-        AlignmentKernel ma = new AlignmentKernel(alignTool, 2);
+        AlignmentKernel ma = new AlignmentKernel(alignTool, 4);
         String dnaA = poly.getDnaSequence();
         
         for (String k : seqs.keySet()) {
@@ -77,12 +83,14 @@ public class AutoPropagateGenomeFacade {
         
         ma.run();
         
+        SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
+        gaClient.saveOneGenomeV1(gparams);
         //collect the best genomes
         
       } else {
         logger.warn("unable to find feature");
       }
-    } catch (IOException e) {
+    } catch (IOException | JSONException | JsonClientException e) {
       e.printStackTrace();
     }
   }
