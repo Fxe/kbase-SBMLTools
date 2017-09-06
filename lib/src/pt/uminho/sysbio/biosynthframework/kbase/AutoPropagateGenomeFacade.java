@@ -145,7 +145,6 @@ public class AutoPropagateGenomeFacade {
         SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
         String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
         outputObjects.put(ref, "test save genome");
-        
 
       } else {
         logger.warn("unable to find feature");
