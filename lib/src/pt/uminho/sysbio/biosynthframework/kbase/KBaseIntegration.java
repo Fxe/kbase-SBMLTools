@@ -17,7 +17,9 @@ import kbasefba.FBAModel;
 import kbasefba.ModelCompartment;
 import kbasefba.ModelCompound;
 import kbasefba.ModelReaction;
+import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionReagent;
+import kbasegenomes.Genome;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
@@ -38,7 +40,6 @@ public class KBaseIntegration {
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
   public String mediaName = null;
-  
   /**
    * rxn -> new gpr <br> <h1>Example</h1><br> "rxn1000" : "b1000 and b1002"
    */
@@ -52,7 +53,7 @@ public class KBaseIntegration {
   public KBaseBiodbContainer biodbContainer;
   public Media defaultMedia = null;
   public String genomeRef = null;
-  public KBaseGenome genome = null;
+  public Genome genome = null;
   
   public KBaseIntegration(final FBAModel fbaModel) {
     this.fbaModel = fbaModel;
@@ -81,6 +82,26 @@ public class KBaseIntegration {
     }
   }
   
+  public void integrateGprGenes() {
+    if (this.genomeRef != null) {
+      fbaModel.setGenomeRef(this.genomeRef);
+      if (genome != null) {
+        for (String mrxnEntry : adapter.rxnMap.keySet()) {
+          ModelReaction mr = adapter.rxnMap.get(mrxnEntry);
+          String gprString = mr.getImportedGpr();
+          if (!DataUtils.empty(gprString)) {
+            Set<String> genes = KBaseUtils.getGenes(gprString, null);
+            if (genes != null && !genes.isEmpty()) {
+              List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, fbaModel.getGenomeRef());
+              mr.setModelReactionProteins(mrpList);
+            }
+//            adapter.setupModelReactionProteinsFromGpr(mrxnEntry, gpr, genomeRef);            
+          }
+        }
+      }
+    }
+  }
+  
   public void integrate() {
     
     for (String rxn : gprOverride.keySet()) {
@@ -90,18 +111,7 @@ public class KBaseIntegration {
       }
     }
     
-    if (this.genomeRef != null) {
-      fbaModel.setGenomeRef(this.genomeRef);
-      if (genome != null) {
-        for (String mrxnEntry : adapter.rxnMap.keySet()) {
-          ModelReaction mrxn = adapter.rxnMap.get(mrxnEntry);
-          String gpr = mrxn.getImportedGpr();
-          if (!DataUtils.empty(gpr)) {
-            adapter.setupModelReactionProteinsFromGpr(mrxnEntry, gpr, genomeRef);            
-          }
-        }
-      }
-    }
+
     
     for (String b : biomassSet) {
       String brxnEntry = adapter.convertToBiomass(b);
@@ -215,5 +225,7 @@ public class KBaseIntegration {
         report.drainReport.media.put(d, new double[]{p.getLeft(), p.getRight()});
       }
     }
+    
+    integrateGprGenes();
   }
 }

@@ -30,6 +30,7 @@ public class KBaseIntegrationReport {
   }
 
   public class GenomeReport {
+    public String status = null; //user, auto, auto_fail
     public Map<String, String> scName = new HashMap<> ();
     public Map<Double, TreeSet<String>> hits = new TreeMap<>();
     public Set<String> miss = new HashSet<> ();

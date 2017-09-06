@@ -102,7 +102,7 @@ public class IntegrationLocalRun {
       cmap.add(new CompartmentMapping().withKbaseCompartmentId("c").withModelCompartmentId(Arrays.asList(new String[]{"z1"})));
       cmap.add(new CompartmentMapping().withKbaseCompartmentId("e").withModelCompartmentId(Arrays.asList(new String[]{"z0"})));
       KBaseModelIntegrationFacade integration = 
-          new KBaseModelIntegrationFacade(devAPI.wsClient, devAPI.dfuClient, null, null, "/var/biobase/export", null);
+          new KBaseModelIntegrationFacade(devAPI.wsClient, devAPI.dfuClient, null, null, null, "/var/biobase/export", null);
       integration.kbaseIntegrate(
           new IntegrateModelParams().withModelName(kid.name)
           .withCompartmentTranslation(cmap)
@@ -190,37 +190,6 @@ public class IntegrationLocalRun {
           List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, kmodel.getGenomeRef());
           krxn.setModelReactionProteins(mrpList);
         }
-//        try {
-//          GeneReactionRuleCI grrci = new GeneReactionRuleCI(gprString);
-////          AbstractSyntaxTree<?, ?> rule = grrci.getRule();
-//          Set<String> genes = KBaseUtils.getGenes(grrci);
-//          
-//          
-////          if (genes != null) {
-////            krxn.getModelReactionProteins().clear();
-////            List<ModelReactionProteinSubunit> mrpsLists = new ArrayList<> (); 
-////            List<String> features = new ArrayList<> ();
-////            for (String g : genes) {
-////              features.add(String.format("%s/features/id/%s", kmodel.getGenomeRef(), g));
-////            }
-//  //
-////            //1985/8/4/features/id/kb|g.220339.CDS.100
-////            ModelReactionProteinSubunit mrps = new ModelReactionProteinSubunit()
-////                .withFeatureRefs(features)
-////                .withTriggering(0L)
-////                .withRole("")
-////                .withNote("Imported GPR")
-////                .withOptionalSubunit(0L);
-////            mrpsLists.add(mrps);
-////            ModelReactionProtein mrp = new ModelReactionProtein()
-////                .withComplexRef("")
-////                .withModelReactionProteinSubunits(mrpsLists)
-////                .withNote(krxn.getImportedGpr()).withSource("SBML");
-////            krxn.getModelReactionProteins().add(mrp);
-////          }
-//        } catch (Exception | TokenMgrError e) {
-//          badGpr.put(krxn.getId(), gprString);
-//        }
       }
 
     }

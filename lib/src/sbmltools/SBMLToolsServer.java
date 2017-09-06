@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import datafileutil.DataFileUtilClient;
+import genomeannotationapi.GenomeAnnotationAPIClient;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
@@ -189,10 +190,11 @@ public class SBMLToolsServer extends JsonServerServlet {
     final String workspaceName = params.getWorkspaceName();
 
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
+    final GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(callbackURL, authPart);
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
     final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
     final KBSolrUtilClient  solrClient = new KBSolrUtilClient(callbackURL, authPart);
-    //    wspClient.setServiceVersion("beta");
+    gaClient.setIsInsecureHttpConnectionAllowed(true);
     dfuClient.setIsInsecureHttpConnectionAllowed(true);
     kbrClient.setIsInsecureHttpConnectionAllowed(true);
     wspClient.setIsInsecureHttpConnectionAllowed(true);
@@ -204,11 +206,10 @@ public class SBMLToolsServer extends JsonServerServlet {
 
     //    KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
     returnVal = new KBaseModelIntegrationFacade(wspClient, 
-        dfuClient, 
-        kbrClient,
-        geneIntegration,
-        "/data/integration/export",
-        scratch).kbaseIntegrate(params, workspaceName);
+                                dfuClient, gaClient, kbrClient,
+                                geneIntegration,
+                                "/data/integration/export",
+                                scratch).kbaseIntegrate(params, workspaceName);
 
     //END integrate_model
     return returnVal;
