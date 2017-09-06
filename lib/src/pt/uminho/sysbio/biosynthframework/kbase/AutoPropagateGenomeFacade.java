@@ -99,7 +99,7 @@ public class AutoPropagateGenomeFacade {
           job.dna2 = seqs.get(k).getSequenceAsString();
           job.genome1 = genome.getId();
           job.genome2 = k;
-          job.targetOrganism = seqs.get(k).getOriginalHeader().split("|")[2];
+          job.targetOrganism = seqs.get(k).getOriginalHeader().split("\\|")[2];
           ma.jobs.add(job);
         }
         
