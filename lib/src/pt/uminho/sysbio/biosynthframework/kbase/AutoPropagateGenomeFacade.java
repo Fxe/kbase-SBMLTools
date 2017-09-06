@@ -135,8 +135,9 @@ public class AutoPropagateGenomeFacade {
         for (KBaseId genome2 : genomesToCompare) {
           KBaseId kout = new KBaseId(
               String.format("%s_%s", targetGenomeKid.name, genome2.name), workspace, null);
-          logger.info("compareProteomes: {}", kout);
-//          easyKBase.compareProteomes(targetGenomeKid, genome2, kout);
+          logger.info("compareProteomes: {} start", kout);
+          String res = easyKBase.compareProteomes(targetGenomeKid, genome2, kout);
+          logger.info("compareProteomes: {} done! {}", kout, res);
         }
         
         

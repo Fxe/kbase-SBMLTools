@@ -299,7 +299,7 @@ public class FBAModelFactory {
     model.setSourceId(modelId);
     model.setType("SBML Model");
 //    FBAModelAdapter.getTemplateRef("", "", null); //get core template
-    model.setTemplateRef("50/1/1");
+    model.setTemplateRef("NewKBaseModelTemplates/CoreModelTemplate");
     model.setGapfillings(new ArrayList<ModelGapfill> ());
     model.setGapgens(new ArrayList<ModelGapgen> ());
     model.setBiomasses(new ArrayList<Biomass> ());
