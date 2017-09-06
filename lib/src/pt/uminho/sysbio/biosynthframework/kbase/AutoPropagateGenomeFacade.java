@@ -1,7 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -12,6 +11,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import datafileutil.DataFileUtilClient;
 import genomeproteomecomparison.GenomeProteomeComparisonClient;
@@ -26,6 +27,8 @@ import us.kbase.common.service.UnauthorizedException;
 import us.kbase.workspace.WorkspaceClient;
 
 public class AutoPropagateGenomeFacade {
+  
+  private static final Logger logger = LoggerFactory.getLogger(AutoPropagateGenomeFacade.class);
   
   private final NAlignTool alignTool;
 //  /kb/module/data/
@@ -55,6 +58,7 @@ public class AutoPropagateGenomeFacade {
       Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
       Map<String, Genome> seqsGenome = new HashMap<> ();
       for (String k : seqs.keySet()) {
+        System.out.println(k);
         seqsGenome.put(k, null);
       }
       
@@ -75,6 +79,8 @@ public class AutoPropagateGenomeFacade {
         
         //collect the best genomes
         
+      } else {
+        logger.warn("unable to find feature");
       }
     } catch (IOException e) {
       e.printStackTrace();

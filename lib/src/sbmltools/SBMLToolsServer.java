@@ -243,11 +243,12 @@ public class SBMLToolsServer extends JsonServerServlet {
     
     AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(params, wspClient, callbackURL, authPart);
     facade.run();
-    
+    List<WorkspaceObject> wsObjects = new ArrayList<> ();
+    wsObjects.add(new WorkspaceObject().withDescription("a").withRef("7925/7/1"));
     final ReportInfo reportInfo = kbrClient.create(
         new CreateParams().withWorkspaceName(workspaceName)
         .withReport(new Report()
-//            .withObjectsCreated(wsObjects)
+            .withObjectsCreated(wsObjects)
             .withTextMessage(String.format("%s", params))));
     
     System.out.println(params);
