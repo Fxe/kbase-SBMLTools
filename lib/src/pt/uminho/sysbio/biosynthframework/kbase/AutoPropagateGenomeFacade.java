@@ -32,6 +32,7 @@ import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel.AlignmentJob;
 import sbmltools.AutoPropagateModelParams;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientException;
@@ -93,15 +94,20 @@ public class AutoPropagateGenomeFacade {
         String dnaA = poly.getDnaSequence();
         
         for (String k : seqs.keySet()) {
-          ma.jobs.add(new ImmutablePair<String, String>(dnaA, seqs.get(k).getSequenceAsString()));
+          AlignmentJob job = new AlignmentJob();
+          job.dna1 = dnaA;
+          job.dna2 = seqs.get(k).getSequenceAsString();
+          job.genome1 = genome.getId();
+          job.genome2 = k;
+          ma.jobs.add(job);
         }
         
         ma.run();
         
-        Map<Pair<String, String>, List<Object>> alignData = ma.getResults();
-        for (Pair<String, String> k : alignData.keySet()) {
-          out += "\n" + StringUtils.join(alignData.get(k), "; ");
-          System.out.println(StringUtils.join(alignData.get(k), "; "));
+        Map<AlignmentJob, List<Object>> alignData = ma.getResults();
+        for (AlignmentJob k : alignData.keySet()) {
+          out += "\n" + StringUtils.join(alignData.get(k), "; ") + k.genome1 + "; " + k.genome2;
+          System.out.println(StringUtils.join(alignData.get(k), "; ") + k.genome1 + "; " + k.genome2);
         }
         
         SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");

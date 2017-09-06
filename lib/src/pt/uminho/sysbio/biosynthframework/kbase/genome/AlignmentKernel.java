@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.biojava.nbio.alignment.template.PairwiseSequenceAligner;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.compound.NucleotideCompound;
@@ -19,30 +18,37 @@ public class AlignmentKernel {
   
   private static final Logger logger = LoggerFactory.getLogger(AlignmentKernel.class);
   
-  public List<Pair<String, String>> jobs = new ArrayList<> ();
+  public List<AlignmentJob> jobs = new ArrayList<> ();
   
   private boolean running = false;
-  private Iterator<Pair<String, String>> jobIt;
-  private Map<Pair<String, String>, List<Object>> results = new HashMap<> ();
+  private Iterator<AlignmentJob> jobIt;
+  private Map<AlignmentJob, List<Object>> results = new HashMap<> ();
   
   private final int t;
   private final Aligner aligner;
   
-  public synchronized Pair<String, String> getJob() {
+  public static class AlignmentJob {
+    public String genome1;
+    public String genome2;
+    public String dna1;
+    public String dna2;
+  }
+  
+  public synchronized AlignmentJob getJob() {
     if (jobIt.hasNext()) {
       return jobIt.next();
     }
     return null;
   }
   
-  public Map<Pair<String, String>, List<Object>> getResults() {
+  public Map<AlignmentJob, List<Object>> getResults() {
     if (!running) {
       return this.results;
     }
     return null;
   }
   
-  public synchronized void saveResult(Pair<String, String> job, List<Object> result) {
+  public synchronized void saveResult(AlignmentJob job, List<Object> result) {
     this.results.put(job, result);
   }
   
@@ -66,11 +72,11 @@ public class AlignmentKernel {
 
     @Override
     public void run() {
-      Pair<String, String> p = null;
+      AlignmentJob p = null;
       while ((p = ma.getJob()) != null) {
         logger.trace("[{}] worker running job ..", this.workerId);
-        String seq1 = p.getLeft();
-        String seq2 = p.getRight();
+        String seq1 = p.dna1;
+        String seq2 = p.dna2;
         Object res = ma.aligner.localAlignment(seq1, seq2);
         @SuppressWarnings("unchecked")
         PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = PairwiseSequenceAligner.class.cast(res);

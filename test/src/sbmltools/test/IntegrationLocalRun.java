@@ -59,6 +59,7 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel.AlignmentJob;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
@@ -781,7 +782,10 @@ public class IntegrationLocalRun {
 //              PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = (PairwiseSequenceAligner<DNASequence, NucleotideCompound>) tool.localAlignment(dnaA, seqs.get(k).getSequenceAsString());
 
 //              o.add(StringUtils.join(data, '\t'));
-              ma.jobs.add(new ImmutablePair<String, String>(dnaA, seqs.get(k).getSequenceAsString()));
+              AlignmentJob job = new AlignmentJob();
+              job.dna1 = dnaA;
+              job.dna2 = seqs.get(k).getSequenceAsString();
+              ma.jobs.add(job);
             }
             ma.run();
             System.out.println(StringUtils.join(o, '\n'));
