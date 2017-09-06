@@ -39,7 +39,7 @@ import us.kbase.common.service.RpcContext;
 import us.kbase.workspace.ListAllTypesParams;
 import us.kbase.workspace.ListObjectsParams;
 import us.kbase.workspace.WorkspaceClient;
-
+import pt.uminho.sysbio.biosynthframework.kbase.AutoPropagateGenomeFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
@@ -237,6 +237,9 @@ public class SBMLToolsServer extends JsonServerServlet {
     final String workspaceName = params.getWorkspaceName();
     
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
+    
+    AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(params, callbackURL, authPart);
+    facade.run();
     
     final ReportInfo reportInfo = kbrClient.create(
         new CreateParams().withWorkspaceName(workspaceName)

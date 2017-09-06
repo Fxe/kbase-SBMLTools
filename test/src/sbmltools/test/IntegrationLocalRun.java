@@ -56,7 +56,8 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegrationReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
-import pt.uminho.sysbio.biosynthframework.kbase.KbaseGenomeUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
@@ -247,35 +248,7 @@ public class IntegrationLocalRun {
     return fix;
   }
   
-  public static Map<String, Set<String>> getRolesMap() {
-    Map<String, Set<String>> result = new HashMap<> ();
-//    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
-    JsonModelSeedRoleDao roleDao = null; //new JsonModelSeedRoleDao(roleJson);
-    Map<String, Set<String>> aa = new HashMap<> ();
-    for (String k : roleDao.data.keySet()) {
-      ModelSeedRole role = roleDao.data.get(k);
-      //  System.out.println(k + " " + role.name);
-      if (!aa.containsKey(role.name.trim().toLowerCase())) {
-        aa.put(role.name.trim().toLowerCase(), new HashSet<String> ());
-      }
-      aa.get(role.name.trim().toLowerCase()).add(k);
-    }
-    int good = 0;
-    int bad = 0;
-    for (String k : aa.keySet()) {
 
-      if (aa.get(k).size() > 1) {
-        //    System.out.println(k + " " + aa.get(k));
-        result.put(k.trim().toLowerCase(), aa.get(k));
-        bad++;
-      } else {
-        result.put(k.trim().toLowerCase(), aa.get(k));
-        good++;
-      }
-    }
-    logger.debug("roles good: {}, bad: {}", good, bad);
-    return result;
-  }
 
   public static Map<String, Set<String>> getReactionRoles() {
     Map<String, Set<String>> result = new HashMap<> ();
@@ -311,7 +284,7 @@ public class IntegrationLocalRun {
   };
   
   public static Map<String, Set<String>> getFunctionToRxn() {
-    Map<String, Set<String>> rmap = getRolesMap();
+    Map<String, Set<String>> rmap = KbaseGenomeUtils.getRolesMap();
     Map<String, Set<String>> roles = getReactionRoles();
     Map<String, Set<String>> roleToRxn = new HashMap<> ();
     Map<String, Set<String>> functionToRxn = new HashMap<> ();
@@ -436,45 +409,7 @@ public class IntegrationLocalRun {
   }
   
 
-  public static void buildPolymeraseGenomes(OutputStream os) {
-    
-    
-    
-    try {
-      KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
-      List<KBaseId> kids = prodAPI.listNarrative(PROD_RAST_GENOME, KBaseType.Genome);
-      Map<String, Map<String, String>> db = new HashMap<> ();
-      for (KBaseId kid : kids) {
-        if (kid.name.endsWith(".rast")) {
-          Genome genome = prodAPI.getGenome(kid.name, kid.workspace);
-          db.put(kid.name, new HashMap<String, String> ());
-          Map<String, String> data = db.get(kid.name);
-          data.put("scientific_name", genome.getScientificName());
-          Feature polymeraseBetaUnit = KbaseGenomeUtils.findRnaPolymeraseBetaUnit(genome);
-          if (polymeraseBetaUnit != null) {
-            data.put("feature", polymeraseBetaUnit.getId());
-            data.put("function", polymeraseBetaUnit.getFunction());
-            data.put("size", Long.toString(polymeraseBetaUnit.getDnaSequenceLength()));
-            data.put("seq", polymeraseBetaUnit.getDnaSequence());
-          }
-        }
-      }
-      
-      for (String g : db.keySet()) {
-        Map<String, String> data = db.get(g);
-        if (data != null && data.get("seq") == null) {
-          logger.warn("[{}]{}", g, data.get("scientific_name"));
-        } else {
-          String h = String.format(">%s|%s|%s\n", g, data.get("function"), data.get("scientific_name"));
-          os.write(h.getBytes());
-          os.write(data.get("seq").getBytes());
-          os.write("\n".getBytes());
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+
   
   public static void listRefGenomes() {
     try {
@@ -794,141 +729,10 @@ public class IntegrationLocalRun {
     //      System.out.println(kmodel2);
   }
   
-  public static void buildBlastDb(String path) {
-    OutputStream os = null;
-    try {
-      os = new FileOutputStream(path);
-      buildPolymeraseGenomes(os);
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      IOUtils.closeQuietly(os);
-    }
-  }
-  
-  public static class MassAligner {
-    
-    private static final Logger logger = LoggerFactory.getLogger(MassAligner.class);
-    
-    List<Pair<String, String>> aaa = new ArrayList<> ();
-    Iterator<Pair<String, String>> jobIt;
-    
-    int t = 4;
-    private final Aligner aligner;
-    
-    public synchronized Pair<String, String> getJob() {
-      if (jobIt.hasNext()) {
-        return jobIt.next();
-      }
-      return null;
-    }
-    
-    public List<Runnable> runners = new ArrayList<> ();
-    
-    public static class AlignWorker implements Runnable {
-      
-      private static final Logger logger = LoggerFactory.getLogger(MassAligner.class);
-      
-      private final int workerId;
-      private final MassAligner ma;
-      
-      public AlignWorker(MassAligner ma, int workerId) {
-        logger.info("");
-        this.workerId = workerId;
-        this.ma = ma;
-        logger.trace("created workder [{}]", this.workerId);
-      }
 
-      public int getWorkerId() { return workerId;}
-
-      @Override
-      public void run() {
-        Pair<String, String> p = null;
-        while ((p = ma.getJob()) != null) {
-          logger.trace("[{}] worker running job ..", this.workerId);
-          String seq1 = p.getLeft();
-          String seq2 = p.getRight();
-          Object res = ma.aligner.localAlignment(seq1, seq2);
-          @SuppressWarnings("unchecked")
-          PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = PairwiseSequenceAligner.class.cast(res);
-          
-          List<Object> data = new ArrayList<> ();
-          int length = psa.getPair().getLength();
-//          data.add(k);
-//          data.add(rgenome.getScientificName());
-          data.add(psa.getPair().getNumIdenticals());
-          data.add(psa.getPair().getNumSimilars());
-          data.add(psa.getPair().getLength());
-          data.add((double) psa.getPair().getNumIdenticals() / length);
-          data.add((double) psa.getPair().getNumSimilars() / length);
-          data.add(psa.getSimilarity());
-          data.add(psa.getDistance());
-          logger.trace("[{}] worker done job ..", this.workerId);
-        }
-        logger.info("[{}] done!", this.workerId);
-      }
-    }
-    
-    public MassAligner(final Aligner aligner) {
-      this.aligner = aligner;
-      int id = 0;
-      for (int i = 0; i < t; i++) {
-        runners.add(new AlignWorker(this, id++));
-      }
-    }
-    
-    public void run() {
-      long start = System.currentTimeMillis();
-      
-      logger.info("running ... jobs: {}", aaa.size());
-      jobIt = aaa.iterator();
-      List<Thread> threads = new ArrayList<> ();
-      for (Runnable r : runners) {
-        Thread t = new Thread(r);
-        t.start();
-        threads.add(t);
-      }
-      for (Thread t : threads) {
-        try {
-          t.join();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-      
-      long end = System.currentTimeMillis();
-      logger.info("Time: {}", (end - start) / 1000);
-    }
-  }
-  
-  public static String NUC44 = 
-      "#\n" +
-      "# This matrix was created by Todd Lowe   12/10/92\n"+ 
-      "#\n" + 
-      "# Uses ambiguous nucleotide codes, probabilities rounded to\n" + 
-      "#  nearest integer\n" +
-      "#\n" +
-      "# Lowest score = -4, Highest score = 5\n" +
-      "#\n" +
-      "    A   T   G   C   S   W   R   Y   K   M   B   V   H   D   N\n" +
-      "A   5  -4  -4  -4  -4   1   1  -4  -4   1  -4  -1  -1  -1  -2\n" +
-      "T  -4   5  -4  -4  -4   1  -4   1   1  -4  -1  -4  -1  -1  -2\n" +
-      "G  -4  -4   5  -4   1  -4   1  -4   1  -4  -1  -1  -4  -1  -2\n" +
-      "C  -4  -4  -4   5   1  -4  -4   1  -4   1  -1  -1  -1  -4  -2\n" +
-      "S  -4  -4   1   1  -1  -4  -2  -2  -2  -2  -1  -1  -3  -3  -1\n" +
-      "W   1   1  -4  -4  -4  -1  -2  -2  -2  -2  -3  -3  -1  -1  -1\n" +
-      "R   1  -4   1  -4  -2  -2  -1  -4  -2  -2  -3  -1  -3  -1  -1\n" +
-      "Y  -4   1  -4   1  -2  -2  -4  -1  -2  -2  -1  -3  -1  -3  -1\n" +
-      "K  -4   1   1  -4  -2  -2  -2  -2  -1  -4  -1  -3  -3  -1  -1\n" +
-      "M   1  -4  -4   1  -2  -2  -2  -2  -4  -1  -3  -1  -1  -3  -1\n" +
-      "B  -4  -1  -1  -1  -1  -3  -3  -1  -1  -3  -1  -2  -2  -2  -1\n" +
-      "V  -1  -4  -1  -1  -1  -3  -1  -3  -3  -1  -2  -1  -2  -2  -1\n" +
-      "H  -1  -1  -4  -1  -3  -1  -3  -1  -3  -1  -2  -2  -1  -2  -1\n" +
-      "D  -1  -1  -1  -4  -3  -1  -1  -3  -1  -3  -2  -2  -2  -1  -1\n" +
-      "N  -2  -2  -2  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1\n";
   
   public static void propagationKernel(KBaseAPI prodAPI) throws IOException {
-    NAlignTool tool = new NAlignTool(NUC44);
+    NAlignTool tool = new NAlignTool(KbaseGenomeUtils.NUC44);
     InputStream is = new FileInputStream("/var/biobase/export/blast_db.faa");
     Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
     Map<String, Genome> seqsGenome = new HashMap<> ();
@@ -966,7 +770,7 @@ public class IntegrationLocalRun {
           gdata.add(genomeName, "locus", poly.getId());
 
             
-            MassAligner ma = new MassAligner(tool);
+          AlignmentKernel ma = new AlignmentKernel(tool);
             
 //            DNASequence seqA = new DNASequence(dnaA);
             List<String> o = new ArrayList<> ();
@@ -1052,10 +856,10 @@ public class IntegrationLocalRun {
   public static void main(String[] args) {
     try {
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
-//      propagationKernel(prodAPI);
+      propagationKernel(prodAPI);
 //      localIntegraiton();
 //      updateModelGpr();
-      getModel(prodAPI);
+//      getModel(prodAPI);
     } catch (Exception e) {
       e.printStackTrace();
     }

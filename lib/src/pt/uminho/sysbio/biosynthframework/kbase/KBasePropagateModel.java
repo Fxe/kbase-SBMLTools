@@ -10,6 +10,7 @@ import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import pt.uminho.sysbio.biosynthframework.genome.AlignTool;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import rastsdk.RASTSDKClient;
 import us.kbase.common.service.JsonClientException;
 
