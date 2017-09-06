@@ -232,6 +232,8 @@ public class SBMLToolsServer extends JsonServerServlet {
     SbmlImporterResults returnVal = null;
     //BEGIN auto_propagate_genome
     
+    System.out.println(params);
+    
     final String workspaceName = params.getWorkspaceName();
     
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
@@ -241,6 +243,8 @@ public class SBMLToolsServer extends JsonServerServlet {
         .withReport(new Report()
 //            .withObjectsCreated(wsObjects)
             .withTextMessage(String.format("%s\n%s", params))));
+    
+    System.out.println(params);
     
     returnVal = new SbmlImporterResults()
         .withFbamodelId("Ec_core_flux1")
