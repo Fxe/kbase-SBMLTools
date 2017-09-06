@@ -2,9 +2,12 @@ package pt.uminho.sysbio.biosynthframework.kbase.genome;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import org.biojava.nbio.alignment.template.PairwiseSequenceAligner;
 import org.biojava.nbio.core.sequence.DNASequence;
@@ -22,7 +25,7 @@ public class AlignmentKernel {
   
   private boolean running = false;
   private Iterator<AlignmentJob> jobIt;
-  private Map<AlignmentJob, List<Object>> results = new HashMap<> ();
+  private Map<AlignmentJob, Double> results = new HashMap<> ();
   
   private final int t;
   private final Aligner aligner;
@@ -32,6 +35,7 @@ public class AlignmentKernel {
     public String genome2;
     public String dna1;
     public String dna2;
+    public String targetOrganism;
   }
   
   public synchronized AlignmentJob getJob() {
@@ -41,14 +45,30 @@ public class AlignmentKernel {
     return null;
   }
   
-  public Map<AlignmentJob, List<Object>> getResults() {
+  public Map<AlignmentJob, Double> getResults() {
     if (!running) {
       return this.results;
     }
     return null;
   }
   
-  public synchronized void saveResult(AlignmentJob job, List<Object> result) {
+  public Map<Double, Set<AlignmentJob>> getSortedResults() {
+    if (!running) {
+      Map<AlignmentJob, Double> results = this.getResults();
+      Map<Double, Set<AlignmentJob>> sortedResults = new TreeMap<> ();
+      for (AlignmentJob job : results.keySet()) {
+        Double score = results.get(job);
+        if (!sortedResults.containsKey(score)) {
+          sortedResults.put(score, new HashSet<AlignmentJob>());
+        }
+        sortedResults.get(score).add(job);
+      }
+      return sortedResults;
+    }
+    return null;
+  }
+  
+  public synchronized void saveResult(AlignmentJob job, Double result) {
     this.results.put(job, result);
   }
   
@@ -93,7 +113,7 @@ public class AlignmentKernel {
         data.add(psa.getSimilarity());
         data.add(psa.getDistance());
         logger.trace("[{}] worker done job ..", this.workerId);
-        ma.saveResult(p, data);
+        ma.saveResult(p, (double) psa.getPair().getNumIdenticals() / length);
       }
       logger.info("[{}] done!", this.workerId);
     }

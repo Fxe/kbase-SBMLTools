@@ -739,8 +739,8 @@ public class IntegrationLocalRun {
     Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
     Map<String, Genome> seqsGenome = new HashMap<> ();
     for (String k : seqs.keySet()) {
-      Genome rgenome = prodAPI.getGenome(k, PROD_RAST_GENOME);
-      seqsGenome.put(k, rgenome);
+//      Genome rgenome = prodAPI.getGenome(k, PROD_RAST_GENOME);
+//      seqsGenome.put(k, rgenome);
     }
     
     Map<String, String> genomeToRast = new HashMap<> ();
@@ -782,13 +782,23 @@ public class IntegrationLocalRun {
 //              PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = (PairwiseSequenceAligner<DNASequence, NucleotideCompound>) tool.localAlignment(dnaA, seqs.get(k).getSequenceAsString());
 
 //              o.add(StringUtils.join(data, '\t'));
+              DNASequence s = seqs.get(k);
+              System.out.println(s.getOriginalHeader());
               AlignmentJob job = new AlignmentJob();
               job.dna1 = dnaA;
-              job.dna2 = seqs.get(k).getSequenceAsString();
+              job.dna2 = s.getSequenceAsString();
+              job.targetOrganism = seqs.get(k).getOriginalHeader().split("\\|")[2];
+              System.out.println(job.targetOrganism);
               ma.jobs.add(job);
             }
             ma.run();
-            System.out.println(StringUtils.join(o, '\n'));
+            
+            Map<Double, Set<AlignmentJob>> sortedResults = ma.getSortedResults();
+            for (Double score : sortedResults.keySet()) {
+              for (AlignmentJob job : sortedResults.get(score)) {
+                System.out.println(score + ", " + job.genome2);
+              }
+            }
 //              
 //              DNASequence seqB = seqs.get(k);
 //              PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = tool.lalign(seqA, seqB);

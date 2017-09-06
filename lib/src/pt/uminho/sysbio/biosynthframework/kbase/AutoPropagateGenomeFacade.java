@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
@@ -31,8 +31,8 @@ import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
-import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel.AlignmentJob;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import sbmltools.AutoPropagateModelParams;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientException;
@@ -99,15 +99,17 @@ public class AutoPropagateGenomeFacade {
           job.dna2 = seqs.get(k).getSequenceAsString();
           job.genome1 = genome.getId();
           job.genome2 = k;
+          job.targetOrganism = seqs.get(k).getOriginalHeader().split("|")[2];
           ma.jobs.add(job);
         }
         
         ma.run();
         
-        Map<AlignmentJob, List<Object>> alignData = ma.getResults();
-        for (AlignmentJob k : alignData.keySet()) {
-          out += "\n" + StringUtils.join(alignData.get(k), "; ") + k.genome1 + "; " + k.genome2;
-          System.out.println(StringUtils.join(alignData.get(k), "; ") + k.genome1 + "; " + k.genome2);
+        Map<Double, Set<AlignmentJob>> sortedResults = ma.getSortedResults();
+        for (Double score : sortedResults.keySet()) {
+          for (AlignmentJob job : sortedResults.get(score)) {
+            out += "\n" + score + ", " + job.targetOrganism + ", " + job.genome2;
+          }
         }
         
         SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
