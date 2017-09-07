@@ -264,12 +264,15 @@ public class AutoPropagateGenomeFacade {
         for (PropagationTask ptask : genomesToCompare) {
           Set<String> genes = new HashSet<> ();
           if (!DataUtils.empty(ptask.pmodelId)) {
+            System.out.println(ptask.pcompId + " " +  ptask.pmodelWs);
             FBAModel fbaModel = KBaseIOUtils.getObject(ptask.pcompId, ptask.pmodelWs, null, FBAModel.class, wsClient);
+            System.out.println(fbaModel.getId());
             for (ModelReaction mr : fbaModel.getModelreactions()) {
+              System.out.println(mr.getId());
               for (ModelReactionProtein mrp : mr.getModelReactionProteins()) {
                 for (ModelReactionProteinSubunit mrps : mrp.getModelReactionProteinSubunits()) {
                   List<String> f = mrps.getFeatureRefs();
-                  genes.addAll(genes);
+                  genes.addAll(f);
                 }
               }
             }
