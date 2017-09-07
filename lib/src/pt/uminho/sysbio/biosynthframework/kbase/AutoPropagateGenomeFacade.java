@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,8 @@ import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Sets;
 
 import datafileutil.DataFileUtilClient;
 import genomeannotationapi.GenomeAnnotationAPIClient;
@@ -33,11 +37,14 @@ import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel.AlignmentJob;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import sbmltools.AutoPropagateModelParams;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientException;
+import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UnauthorizedException;
+import us.kbase.workspace.ListObjectsParams;
 import us.kbase.workspace.WorkspaceClient;
 
 public class AutoPropagateGenomeFacade {
@@ -47,6 +54,9 @@ public class AutoPropagateGenomeFacade {
   private final NAlignTool alignTool;
 //  /kb/module/data/
   public static String BLAST_DB_PATH = "/kb/module/data/blast_db.faa";
+  
+  public static final String REF_GENOME_WORLSPACE = "ReferenceDataManager";
+  public static final String REF_PMODEL_WORLSPACE = "filipeliu:narrative_1504796314698";
   
   private int p = 3;
   private String genomeId;
@@ -73,15 +83,67 @@ public class AutoPropagateGenomeFacade {
     easyKBase = new EasyKBase(callbackUrl, token);
   }
   
+  public static class PropagationTask {
+    public String genomeId;
+    public String genomeWs;
+    public String modelId;
+    public String modelWs;
+    public String pcompId;
+    public String pcompWs;
+    
+    @Override
+    public String toString() {
+      return String.format("%s %s %s", genomeId, modelId, pcompId);
+    }
+  }
+  
+  public List<KBaseId> listModels(String ws) throws IOException {
+    List<KBaseId> result = new ArrayList<> ();
+    List<String> workspaces = new ArrayList<> ();
+    workspaces.add(ws);
+    try {
+      ListObjectsParams lparams = new ListObjectsParams().withWorkspaces(workspaces);
+      lparams.withType("KBaseFBA.FBAModel");
+      List<Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>>> o = 
+      wsClient.listObjects(lparams);
+      for (Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>> t : o) {
+        String oref = String.format("%d/%d/%d", t.getE7(), t.getE1(), t.getE5());
+        String oname = t.getE2();
+        String ows = t.getE8();
+        KBaseId kid = new KBaseId(oname, ows, oref);
+        result.add(kid);
+      }
+    } catch (IOException | JsonClientException e) {
+      throw new IOException(e);
+    }
+    
+    return result;
+  }
+  
   public ReportInfo run() {
     String out = "";
     Map<String, String> outputObjects = new HashMap<> ();
     try {
+      List<KBaseId> repomodels = listModels(REF_PMODEL_WORLSPACE);
+      Set<String> imodels = new HashSet<> ();
+      for (KBaseId kid : repomodels) {
+        if (kid.name.startsWith("kb.")) {
+          imodels.add(kid.name.replace("kb.", ""));
+        }
+      }
+      
       InputStream is = new FileInputStream(BLAST_DB_PATH);
       Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
-      Map<String, Genome> seqsGenome = new HashMap<> ();
+      //model + locus
+//      Map<String, Genome> seqsGenome_ = new HashMap<> ();
+      Map<String, Set<String>> genomeToModels = new HashMap<> ();
       for (String k : seqs.keySet()) {
-        seqsGenome.put(k, null);
+        String h[] = seqs.get(k).getOriginalHeader().split("\\|");
+        Set<String> models = new HashSet<> (Arrays.asList(h[3].split(";")));
+        models = Sets.intersection(models, imodels);
+        //filter models
+//        seqsGenome.put(k, null);
+        genomeToModels.put(k, models);
       }
       
       Pair<KBaseId, Object> data = KBaseIOUtils.getObject2(genomeId, workspace, null, wsClient);
@@ -108,12 +170,12 @@ public class AutoPropagateGenomeFacade {
         Map<Double, Set<AlignmentJob>> sortedResults = ma.getSortedResults();
         for (Double score : sortedResults.keySet()) {
           for (AlignmentJob job : sortedResults.get(score)) {
-            out += "\n" + score + ", " + job.targetOrganism + ", " + job.genome2;
+            out += "\n" + score + ", " + job.targetOrganism + ", " + job.genome2 + " " + genomeToModels.get(job.genome2);
           }
         }
         
         Iterator<Double> it = sortedResults.keySet().iterator();
-        List<KBaseId> genomesToCompare = new ArrayList<> ();
+        List<PropagationTask> genomesToCompare = new ArrayList<> ();
         
       //collect the best genomes
         while (it.hasNext() && genomesToCompare.size() < p) {
@@ -121,31 +183,61 @@ public class AutoPropagateGenomeFacade {
             double score = it.next();
             AlignmentJob job = sortedResults.get(score).iterator().next();
             logger.info("Added to proteome compare: {}", job);
-            genomesToCompare.add(new KBaseId(job.genome2, "ReferenceDataManager", null));
+            PropagationTask ptask = new PropagationTask();
+            ptask.genomeId = job.genome2;
+            //Get genome FBAModel
+            ptask.genomeWs = REF_GENOME_WORLSPACE;
+            ptask.modelWs = REF_PMODEL_WORLSPACE;
+            Set<String> g = genomeToModels.get(job.genome2);
+            if (g != null && !g.isEmpty()) {
+              ptask.modelId = g.iterator().next();
+            }
+            
+            if (!DataUtils.empty(ptask.modelId)) {
+              genomesToCompare.add(ptask);
+            } else {
+              logger.warn("skip: {}", ptask);
+            }
+            
 //            Pair<KBaseId, Object> data_ = KBaseIOUtils.getObject2(job.genome2, workspace, null, wsClient);
 //            Genome otherGenome = KBaseUtils.convert(data_.getRight(), Genome.class);
 //            genomesToCompare.add(otherGenome);
           } catch (Exception e) {
-            logger.error("");
+            logger.error("{}", e.getMessage());
           }
 //          Genome otherGenome = KBaseIOUtils.getObject2(genomeId, workspace, null, wsClient);
         }
         
+        Map<String, String> proteomes = new HashMap<> ();
         
-        for (KBaseId genome2 : genomesToCompare) {
-          String other = genome2.name;
+        for (PropagationTask ptask : genomesToCompare) {
+          KBaseId genome2 = new KBaseId(ptask.genomeId, ptask.genomeWs, null);
+          String other = ptask.genomeId;
           if (other.endsWith(".rast")) {
             other = other.replace(".rast", "");
+            ptask.genomeId = other;
             genome2 = new KBaseId(other, genome2.workspace, genome2.reference);
           }
           KBaseId kout = new KBaseId(
-              String.format("%s_%s", targetGenomeKid.name, genome2.name), workspace, null);
+              String.format("%s_%s", targetGenomeKid.name, ptask.genomeId), workspace, null);
           logger.info("compareProteomes: {} start", kout);
           String res = easyKBase.compareProteomes(targetGenomeKid, genome2, kout);
-          outputObjects.put(res, String.format("%s - %s", targetGenomeKid.name, genome2.name));
+          if (!DataUtils.empty(res)) {
+            outputObjects.put(res, String.format("%s - %s", targetGenomeKid.name, genome2.name));
+            ptask.pcompId = kout.name;
+            ptask.pcompWs = workspace;
+          }
+          
           logger.info("compareProteomes: {} done! {}", kout, res);
         }
         
+        for (PropagationTask ptask : genomesToCompare) {
+          //fetch FBAModel
+          String fbaModelId = ptask.modelId;
+          String fbaModelRepo = ptask.modelWs;
+//          easyKBase.propagateModelToNewGenome(fbaModelId, fbaModelRepo, ptask.pcompId, ptask.pcompWs, ptask.pcompId + ".fbamodel", workspace);
+        }
+
         
         SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
         SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);

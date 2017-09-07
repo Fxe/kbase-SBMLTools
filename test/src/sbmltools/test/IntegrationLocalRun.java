@@ -1,33 +1,23 @@
 package sbmltools.test;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.biojava.nbio.alignment.template.PairwiseSequenceAligner;
 import org.biojava.nbio.core.sequence.DNASequence;
-import org.biojava.nbio.core.sequence.compound.NucleotideCompound;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.core.io.FileSystemResource;
 //import org.springframework.core.io.Resource;
 
-import genomeproteomecomparison.GenomeProteomeComparisonClient;
 import kbasebiochem.Media;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
@@ -39,16 +29,15 @@ import kbsolrutil.KBaseAPI;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxTree;
 import pt.uminho.sysbio.biosynthframework.BFunction;
+import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.Dataset;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
-import pt.uminho.sysbio.biosynthframework.genome.Aligner;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
 import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
 import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
 import pt.uminho.sysbio.biosynthframework.kbase.EasyKBase;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
@@ -58,8 +47,8 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
-import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel.AlignmentJob;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
@@ -699,14 +688,30 @@ public class IntegrationLocalRun {
     //      System.out.println(kmodel2);
   }
   
-
+  public static void pmodel(KBaseAPI prodAPI) {
+    EasyKBase kbase = new EasyKBase(prodAPI);
+    String ws = "filipeliu:narrative_1504192868437";
+    //
+    try {
+//      kbase.annotateGenome(ws, "GCF_000010485.1", "GCF_000010485.1.rast");
+      kbase.propagateModelToNewGenome("Ec_core_flux1.kbase", ws, "ECOLI_SE15", ws, "EcSE15_core_flux1.prop", ws);
+      kbase.propagateModelToNewGenome("Ec_core_flux1.kbase", ws, "ECOLI_DH10B", ws, "EcDH10B_core_flux1.prop", ws);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
   
   public static void propagationKernel(KBaseAPI prodAPI) throws IOException {
     NAlignTool tool = new NAlignTool(KbaseGenomeUtils.NUC44);
-    InputStream is = new FileInputStream("/var/biobase/export/blast_db.faa");
+    InputStream is = new FileInputStream("/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/blast_db_latest.faa");
     Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
     Map<String, Genome> seqsGenome = new HashMap<> ();
+    Map<String, Set<String>> genomeToModels = new HashMap<> ();
     for (String k : seqs.keySet()) {
+      String h[] = seqs.get(k).getOriginalHeader().split("\\|");
+      logger.info("OriginalHeader: {}", Arrays.toString(h));
+      Set<String> models = new HashSet<> (Arrays.asList(h[3].split(";")));
+      genomeToModels.put(k, models);
 //      Genome rgenome = prodAPI.getGenome(k, PROD_RAST_GENOME);
 //      seqsGenome.put(k, rgenome);
     }
@@ -836,10 +841,16 @@ public class IntegrationLocalRun {
     logger.info("FBAModels: {}", q.size());
   }
   
+
+  
   public static void main(String[] args) {
     try {
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
-      propagationKernel(prodAPI);
+      
+//      pmodel(prodAPI);
+//      BMap<String, String> modelToGenome = KbaseGenomeUtils.getModelGenomeAssignment("/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/sbml_genome_map.tsv");
+//      KbaseGenomeUtils.buildBlastDb("/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/blast_db_latest.faa", modelToGenome, LOGIN_TOKEN, PROD_RAST_GENOME);
+//      propagationKernel(prodAPI);
 //      localIntegraiton();
 //      updateModelGpr();
 //      getModel(prodAPI);
@@ -850,7 +861,7 @@ public class IntegrationLocalRun {
 
 
 //    listRefGenomes();
-//    buildBlastDb("/var/biobase/export/blast_db.faa");
+    
 
 //    list16SGenomes();
 

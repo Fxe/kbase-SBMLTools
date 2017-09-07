@@ -2,7 +2,14 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import fbatools.FbaToolsClient;
+import fbatools.PropagateModelToNewGenomeParams;
+import fbatools.PropagateModelToNewGenomeResults;
 import genomeproteomecomparison.BlastProteomesParams;
 import genomeproteomecomparison.GenomeProteomeComparisonClient;
 import kbsolrutil.KBaseAPI;
@@ -15,10 +22,13 @@ import us.kbase.common.service.UnauthorizedException;
 
 public class EasyKBase {
   
+  private static final Logger logger = LoggerFactory.getLogger(EasyKBase.class);
+  
   private final URL callback;
   private final AuthToken token;
   public RASTSDKClient rastClient = null;
   private GenomeProteomeComparisonClient gpcClient = null;
+  private FbaToolsClient fbaClient = null;
   
   public EasyKBase(URL callback, AuthToken auth) {
     this.callback = callback;
@@ -31,15 +41,28 @@ public class EasyKBase {
   
   
   
+  public FbaToolsClient getFbaClient() throws IOException, UnauthorizedException {
+    if (this.fbaClient == null) {
+      logger.info("[INIT] building FbaToolsClient ...");
+      this.fbaClient = new FbaToolsClient(callback, token);
+      this.fbaClient.setIsInsecureHttpConnectionAllowed(true);
+    }
+    return this.fbaClient;
+  }
+
   public RASTSDKClient getRastClient() throws IOException, UnauthorizedException {
-    this.rastClient = new RASTSDKClient(callback, token);
-    this.rastClient.setIsInsecureHttpConnectionAllowed(true);
+    if (this.rastClient == null) {
+      this.rastClient = new RASTSDKClient(callback, token);
+      this.rastClient.setIsInsecureHttpConnectionAllowed(true);
+    }
     return this.rastClient;
   }
   
   public GenomeProteomeComparisonClient getGpcClient() throws IOException, UnauthorizedException {
-    this.gpcClient = new GenomeProteomeComparisonClient(callback, token);
-    this.gpcClient.setIsInsecureHttpConnectionAllowed(true);
+    if (this.gpcClient == null) {
+      this.gpcClient = new GenomeProteomeComparisonClient(callback, token);
+      this.gpcClient.setIsInsecureHttpConnectionAllowed(true);
+    }
     return this.gpcClient;
   }
 
@@ -59,6 +82,34 @@ public class EasyKBase {
           .withOutputWs(kidOut.workspace);
       String res = client.blastProteomes(bparams);
       return res;
+    } catch (Exception e) {
+      throw new IOException(e);
+    }
+  }
+  
+  public String propagateModelToNewGenome(String modelName, String workspace, String pcompName, String pcompWs, String outModel, String outWs) throws IOException {
+    logger.info("model: {} -> {}", modelName, outModel);
+    try {
+//      "translation_policy": "translate_only" ?????????????????????????
+      FbaToolsClient client = getFbaClient();
+      PropagateModelToNewGenomeParams params = new PropagateModelToNewGenomeParams()
+          .withFbamodelId(modelName)               //"fbamodel_id": "Ec_core_flux1",
+          .withProteincomparisonId(pcompName)      //"proteincomparison_id": "ecoli.comp",
+          .withMediaId("None")                     //"media_id": None,
+          .withFbamodelOutputId(outModel)          //"fbamodel_output_id": "EcBw_core_flux1",
+          .withKeepNogeneRxn(0L)                   //"keep_nogene_rxn": 0,
+          .withGapfillModel(0L)                    //"gapfill_model": 0,
+          .withCustomBoundList(new ArrayList<String> ())     //"custom_bound_list": [],
+          .withMediaSupplementList(new ArrayList<String> ()) //"media_supplement_list": [],
+          .withMinimumTargetFlux(0.1d)                       //"minimum_target_flux": 0.1,
+          .withFbamodelWorkspace(workspace)
+          .withWorkspace(outWs)
+          .withProteincomparisonWorkspace(pcompWs);
+      PropagateModelToNewGenomeResults results = client.propagateModelToNewGenome(params);
+      
+      logger.info("model created {}, fba {}", results.getNewFbamodelRef(), results.getNewFbaRef());
+      
+      return results.getNewFbamodelRef();
     } catch (Exception e) {
       throw new IOException(e);
     }

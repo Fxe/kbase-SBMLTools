@@ -1,7 +1,9 @@
 package pt.uminho.sysbio.biosynthframework.kbase.genome;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +24,8 @@ import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import kbsolrutil.KBaseAPI;
 import pt.uminho.sysbio.biosynthframework.BFunction;
+import pt.uminho.sysbio.biosynthframework.BHashMap;
+import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
 import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
@@ -58,7 +63,28 @@ public class KbaseGenomeUtils {
       "D  -1  -1  -1  -4  -3  -1  -1  -3  -1  -3  -2  -2  -2  -1  -1\n" +
       "N  -2  -2  -2  -2  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1  -1\n";
   
-  public static void buildPolymeraseGenomes(String loginToken, String workspace, OutputStream os) {
+  public static BMap<String, String> getModelGenomeAssignment(String path) {
+    BMap<String, String> result = new BHashMap<> ();
+    
+    InputStream is = null;
+    try {
+      is = new FileInputStream(path);
+      List<String> lines = IOUtils.readLines(is);
+      
+      for (int i = 1; i < lines.size(); i++) {
+        String row[] = lines.get(i).split("\t");
+        String model = row[0];
+        String genome = row[1];
+        result.put(model, genome);
+      }
+    } catch (IOException e) {
+      IOUtils.closeQuietly(is);
+    }
+    
+    return result;
+  }
+  
+  public static void buildPolymeraseGenomes(BMap<String, String> modelToGenome, String loginToken, String workspace, OutputStream os) {
     try {
       KBaseAPI prodAPI = new KBaseAPI(loginToken, KBaseAPI.getConfigProd(), true);
       List<KBaseId> kids = prodAPI.listNarrative(workspace, KBaseType.Genome);
@@ -68,6 +94,8 @@ public class KbaseGenomeUtils {
           Genome genome = prodAPI.getGenome(kid.name, kid.workspace);
           db.put(kid.name, new HashMap<String, String> ());
           Map<String, String> data = db.get(kid.name);
+          String genomeId = kid.name.replace(".rast", "");
+          data.put("genome", genomeId);
           data.put("scientific_name", genome.getScientificName());
           Feature polymeraseBetaUnit = KbaseGenomeUtils.findRnaPolymeraseBetaUnit(genome);
           if (polymeraseBetaUnit != null) {
@@ -82,9 +110,15 @@ public class KbaseGenomeUtils {
       for (String g : db.keySet()) {
         Map<String, String> data = db.get(g);
         if (data != null && data.get("seq") == null) {
+          
           logger.warn("[{}]{}", g, data.get("scientific_name"));
         } else {
-          String h = String.format(">%s|%s|%s\n", g, data.get("function"), data.get("scientific_name"));
+          Set<String> models = modelToGenome.bget(data.get("genome"));
+          if (models == null) {
+            models = new HashSet<> ();
+          }
+          
+          String h = String.format(">%s|%s|%s|%s|%s\n", g, data.get("function"), data.get("scientific_name"), StringUtils.join(models, ';'), data.get("feature"));
           os.write(h.getBytes());
           os.write(data.get("seq").getBytes());
           os.write("\n".getBytes());
@@ -95,11 +129,12 @@ public class KbaseGenomeUtils {
     }
   }
   
-  public static void buildBlastDb(String path, String loginToken, String workspace) {
+  public static void buildBlastDb(String path, BMap<String, String> modelToGenome, 
+      String loginToken, String workspace) {
     OutputStream os = null;
     try {
       os = new FileOutputStream(path);
-      buildPolymeraseGenomes(loginToken, workspace, os);
+      buildPolymeraseGenomes(modelToGenome, loginToken, workspace, os);
     } catch (IOException e) {
       e.printStackTrace();
     } finally {
