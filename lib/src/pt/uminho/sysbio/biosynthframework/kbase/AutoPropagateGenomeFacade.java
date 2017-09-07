@@ -27,6 +27,10 @@ import genomeannotationapi.GenomeAnnotationAPIClient;
 import genomeannotationapi.SaveGenomeResultV1;
 import genomeannotationapi.SaveOneGenomeParamsV1;
 import genomeproteomecomparison.GenomeProteomeComparisonClient;
+import kbasefba.FBAModel;
+import kbasefba.ModelReaction;
+import kbasefba.ModelReactionProtein;
+import kbasefba.ModelReactionProteinSubunit;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import kbasereport.CreateParams;
@@ -60,7 +64,7 @@ public class AutoPropagateGenomeFacade {
   
   public String modelToShow = "";
   
-  private int p = 3;
+  private int p = 1;
   private String genomeId;
   private String workspace;
   private final WorkspaceClient wsClient;
@@ -92,6 +96,8 @@ public class AutoPropagateGenomeFacade {
     public String modelWs;
     public String pcompId;
     public String pcompWs;
+    public String pmodelId;
+    public String pmodelWs;
     
     @Override
     public String toString() {
@@ -240,26 +246,51 @@ public class AutoPropagateGenomeFacade {
             fbaModelId = "kb." + fbaModelId;
           }
           String fbaModelRepo = ptask.modelWs;
-          String modelRef = easyKBase.propagateModelToNewGenome(fbaModelId, fbaModelRepo, ptask.pcompId, ptask.pcompWs, ptask.pcompId + ".fbamodel", workspace);
+          String pmodelId = ptask.pcompId + ".fbamodel";
+          String modelRef = easyKBase.propagateModelToNewGenome(fbaModelId, fbaModelRepo, ptask.pcompId, ptask.pcompWs, pmodelId, workspace);
           if (!DataUtils.empty(modelRef)) {
             modelToShow = ptask.pcompId + ".fbamodel";
             outputObjects.put(modelRef, "model");
+            ptask.pmodelId = pmodelId;
+            ptask.pmodelWs = workspace;
           }
         }
 
+        /*
+         * Compare created models to see which genes were transfered based on published model / genome
+         */
+        
         //fetch models
-        //compare models
+        for (PropagationTask ptask : genomesToCompare) {
+          Set<String> genes = new HashSet<> ();
+          if (!DataUtils.empty(ptask.pmodelId)) {
+            FBAModel fbaModel = KBaseIOUtils.getObject(ptask.pcompId, ptask.pmodelWs, null, FBAModel.class, wsClient);
+            for (ModelReaction mr : fbaModel.getModelreactions()) {
+              for (ModelReactionProtein mrp : mr.getModelReactionProteins()) {
+                for (ModelReactionProteinSubunit mrps : mrp.getModelReactionProteinSubunits()) {
+                  List<String> f = mrps.getFeatureRefs();
+                  genes.addAll(genes);
+                }
+              }
+            }
+          }
+          
+          for (String g : genes) {
+            System.out.println(ptask + " " + g);
+          }
+          //get genes
+        }
         //HEAT MAP
         
-        SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
-        SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
-        String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
-        outputObjects.put(ref, "test save genome");
+//        SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
+//        SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
+//        String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
+//        outputObjects.put(ref, "test save genome");
 
       } else {
         logger.warn("unable to find feature");
       }
-    } catch (IOException | JsonClientException e) {
+    } catch (IOException e) {
       out += e.getMessage();
       e.printStackTrace();
     }
