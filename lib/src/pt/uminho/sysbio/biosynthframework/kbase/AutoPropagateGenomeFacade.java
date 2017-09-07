@@ -64,7 +64,7 @@ public class AutoPropagateGenomeFacade {
   
   public String modelToShow = "";
   
-  private int p = 1;
+  private int p = 5;
   private String genomeId;
   private String workspace;
   private final WorkspaceClient wsClient;
@@ -261,14 +261,12 @@ public class AutoPropagateGenomeFacade {
          */
         
         //fetch models
+        Map<String, Set<String>> genesPropByModel = new HashMap<> ();
         for (PropagationTask ptask : genomesToCompare) {
           Set<String> genes = new HashSet<> ();
           if (!DataUtils.empty(ptask.pmodelId)) {
-            System.out.println(ptask.pmodelId + " " +  ptask.pmodelWs);
             FBAModel fbaModel = KBaseIOUtils.getObject(ptask.pmodelId, ptask.pmodelWs, null, FBAModel.class, wsClient);
-            System.out.println(fbaModel.getId());
             for (ModelReaction mr : fbaModel.getModelreactions()) {
-              System.out.println(mr.getId());
               for (ModelReactionProtein mrp : mr.getModelReactionProteins()) {
                 for (ModelReactionProteinSubunit mrps : mrp.getModelReactionProteinSubunits()) {
                   List<String> f = mrps.getFeatureRefs();
@@ -279,9 +277,27 @@ public class AutoPropagateGenomeFacade {
           }
           
           for (String g : genes) {
-            System.out.println(ptask + " " + g);
+            if (!genesPropByModel.containsKey(g)) {
+              genesPropByModel.put(g, new HashSet<String>());
+            }
+            
+            genesPropByModel.get(g).add(ptask.modelId);
           }
           //get genes
+        }
+        
+        out += "\n\n";
+        
+        for (String g : genesPropByModel.keySet()) {
+          out += '\n' + g;
+          Set<String> m = genesPropByModel.get(g);
+          for (PropagationTask ptask : genomesToCompare) {
+            if (m.contains(ptask.modelId)) {
+              out += " X";
+            } else {
+              out += " _";
+            }
+          }
         }
         //HEAT MAP
         

@@ -367,9 +367,6 @@ public class IntegrationLocalRun {
     }
   }
   
-
-
-  
   public static void listRefGenomes() {
     try {
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
