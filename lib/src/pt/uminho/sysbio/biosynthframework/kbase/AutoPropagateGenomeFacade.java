@@ -182,7 +182,7 @@ public class AutoPropagateGenomeFacade {
           try {
             double score = it.next();
             AlignmentJob job = sortedResults.get(score).iterator().next();
-            logger.info("Added to proteome compare: {}", job);
+            
             PropagationTask ptask = new PropagationTask();
             ptask.genomeId = job.genome2;
             //Get genome FBAModel
@@ -194,6 +194,7 @@ public class AutoPropagateGenomeFacade {
             }
             
             if (!DataUtils.empty(ptask.modelId)) {
+              logger.info("Added to proteome compare: {} [{}]", job, ptask.modelId);
               genomesToCompare.add(ptask);
             } else {
               logger.warn("skip: {}", ptask);
@@ -232,12 +233,17 @@ public class AutoPropagateGenomeFacade {
         }
         
         for (PropagationTask ptask : genomesToCompare) {
-          //fetch FBAModel
           String fbaModelId = ptask.modelId;
           String fbaModelRepo = ptask.modelWs;
-//          easyKBase.propagateModelToNewGenome(fbaModelId, fbaModelRepo, ptask.pcompId, ptask.pcompWs, ptask.pcompId + ".fbamodel", workspace);
+          String modelRef = easyKBase.propagateModelToNewGenome(fbaModelId, fbaModelRepo, ptask.pcompId, ptask.pcompWs, ptask.pcompId + ".fbamodel", workspace);
+          if (!DataUtils.empty(modelRef)) {
+            outputObjects.put(modelRef, "model");
+          }
         }
 
+        //fetch models
+        //compare models
+        //HEAT MAP
         
         SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1().withData(genome).withWorkspace(workspace).withName("genome");
         SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
