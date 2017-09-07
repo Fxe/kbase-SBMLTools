@@ -234,6 +234,9 @@ public class AutoPropagateGenomeFacade {
         
         for (PropagationTask ptask : genomesToCompare) {
           String fbaModelId = ptask.modelId;
+          if (!fbaModelId.startsWith("kb.")) {
+            fbaModelId = "kb." + fbaModelId;
+          }
           String fbaModelRepo = ptask.modelWs;
           String modelRef = easyKBase.propagateModelToNewGenome(fbaModelId, fbaModelRepo, ptask.pcompId, ptask.pcompWs, ptask.pcompId + ".fbamodel", workspace);
           if (!DataUtils.empty(modelRef)) {
