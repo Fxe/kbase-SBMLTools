@@ -58,6 +58,8 @@ public class AutoPropagateGenomeFacade {
   public static final String REF_GENOME_WORLSPACE = "ReferenceDataManager";
   public static final String REF_PMODEL_WORLSPACE = "filipeliu:narrative_1504796314698";
   
+  public String modelToShow = "";
+  
   private int p = 3;
   private String genomeId;
   private String workspace;
@@ -240,6 +242,7 @@ public class AutoPropagateGenomeFacade {
           String fbaModelRepo = ptask.modelWs;
           String modelRef = easyKBase.propagateModelToNewGenome(fbaModelId, fbaModelRepo, ptask.pcompId, ptask.pcompWs, ptask.pcompId + ".fbamodel", workspace);
           if (!DataUtils.empty(modelRef)) {
+            modelToShow = ptask.pcompId + ".fbamodel";
             outputObjects.put(modelRef, "model");
           }
         }
