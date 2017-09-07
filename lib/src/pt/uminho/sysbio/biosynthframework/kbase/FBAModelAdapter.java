@@ -361,6 +361,9 @@ public class FBAModelAdapter implements ModelAdapter {
   
   public Set<String> removeDrainReactions() {
     Set<String> drains = krxnType.bget(EntityType.DRAIN);
+    if (drains == null) {
+      drains = new HashSet<> ();
+    }
     
     for (String krxnEntry : drains) {
       ModelReaction krxn = this.rxnMap.remove(krxnEntry);

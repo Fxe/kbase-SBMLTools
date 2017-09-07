@@ -211,19 +211,26 @@ public class KBaseIntegration {
     mediaName = fbaModel.getId() + ".media";
     if (this.mediaName != null) {
       Map<String, Pair<Double, Double>> dfDrains = adapter.getDefaultDrains();
-      Set<String> drains = adapter.removeDrainReactions();
-      logger.trace("[DRAINS] Removed reactions: {}", drains);
-      Media media = adapter.convertToMedia(mediaName, dfDrains);
-      defaultMedia = media;
       
-      for (String d : drains) {
-        report.drainReport.deletedReactions.put(d, new HashMap<String, Double> ());
+      if (dfDrains != null && !dfDrains.isEmpty()) {
+        Set<String> drains = adapter.removeDrainReactions();
+        logger.trace("[DRAINS] Removed reactions: {}", drains);
+        Media media = adapter.convertToMedia(mediaName, dfDrains);
+        defaultMedia = media;
+        
+        for (String d : drains) {
+          report.drainReport.deletedReactions.put(d, new HashMap<String, Double> ());
+        }
+        
+        for (String d : dfDrains.keySet()) {
+          Pair<Double, Double> p = dfDrains.get(d);
+          report.drainReport.media.put(d, new double[]{p.getLeft(), p.getRight()});
+        }  
+      } else {
+        logger.warn("unable to detect default media");
       }
       
-      for (String d : dfDrains.keySet()) {
-        Pair<Double, Double> p = dfDrains.get(d);
-        report.drainReport.media.put(d, new double[]{p.getLeft(), p.getRight()});
-      }
+      
     }
     
     integrateGprGenes();
