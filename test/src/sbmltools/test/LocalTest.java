@@ -150,7 +150,7 @@ public class LocalTest {
     sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
     
     try {
-      KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(null, null);
+      KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(null, null, null);
       List<String> biomass = new ArrayList<> ();
       biomass.add("R_R07230_B");
       biomass.add("R_R374");
@@ -175,7 +175,7 @@ public class LocalTest {
     KBaseSbmlImporter.CURATION_DATA = b;
     KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne";
     try {
-      KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(null, null);
+      KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(null, null, null);
       SbmlImportParams params = new SbmlImportParams()
           .withAssemblyInputRef("111")
           .withMinLength(10L)
