@@ -437,4 +437,35 @@ public class KBaseIOUtils {
       throw new IOException(e);
     }
   }
+  
+  public static String fetchAndCache(String urlString, String cache) {
+    File file2 = null;
+    URLConnection connection = null;
+    OutputStream os = null;
+    try {
+      URL url = new URL(urlString);
+      connection = url.openConnection();
+      
+      String uuid = UUID.randomUUID().toString();
+      File file = new File(String.format("%s/%s", cache, uuid));
+      if (file.mkdirs()) {
+        logger.info("created {}", file.getAbsolutePath());
+      }
+      file2 = new File(String.format("%s/%s", file.getAbsolutePath(), uuid));
+      os = new FileOutputStream(file2);
+      logger.info("copy {} -> {}", urlString, file2.getAbsolutePath());
+      IOUtils.copy(connection.getInputStream(), os);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      IOUtils.close(connection);
+      IOUtils.closeQuietly(os);
+    }
+    
+    if (file2 != null) {
+      return file2.getAbsolutePath();
+    }
+    
+    return null;
+  }
 }

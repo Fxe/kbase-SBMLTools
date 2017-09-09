@@ -13,7 +13,7 @@ public class IntegrationReport {
   
   private static final Logger logger = LoggerFactory.getLogger(IntegrationReport.class);
   
-  public Map<String, Object> models = new HashMap<> ();
+  public Map<String, IntegrationReportResult> models = new HashMap<> ();
   public Map<String, Object> all = new HashMap<String, Object> ();
   
   public void setSpeciesIntegrationSummary(IntegrationByDatabase summary) {

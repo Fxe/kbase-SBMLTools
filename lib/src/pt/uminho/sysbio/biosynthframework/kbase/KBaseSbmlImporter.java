@@ -66,6 +66,7 @@ import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UObject;
 import us.kbase.common.service.UnauthorizedException;
+import us.kbase.workspace.WorkspaceClient;
 
 public class KBaseSbmlImporter {
 
@@ -81,14 +82,16 @@ public class KBaseSbmlImporter {
 //  public final URL callbackURL;
   public final String workspace;
   private final DataFileUtilClient dfuClient;
+  private final WorkspaceClient wsClient;
   public KBaseModelSeedIntegration modelSeedIntegration = null;
   public final ReactionIntegration reactionIntegration;
   public final KBaseBiodbContainer biodbContainer;
   
   public KBaseSbmlImporter(
-      String workspace, DataFileUtilClient dfuClient) throws UnauthorizedException, IOException {
+      String workspace, DataFileUtilClient dfuClient, WorkspaceClient wsClient) throws UnauthorizedException, IOException {
     this.workspace = workspace;
     this.dfuClient = dfuClient;
+    this.wsClient = wsClient;
     this.biodbContainer = new KBaseBiodbContainer(DATA_EXPORT_PATH);
     this.modelSeedIntegration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA, biodbContainer);
     
@@ -162,39 +165,6 @@ public class KBaseSbmlImporter {
 
 
   
-  
-  
-  public static String fetchAndCache(String urlString) {
-    File file2 = null;
-    URLConnection connection = null;
-    OutputStream os = null;
-    try {
-      URL url = new URL(urlString);
-      connection = url.openConnection();
-      
-      String uuid = UUID.randomUUID().toString();
-      File file = new File(String.format("%s/%s", LOCAL_CACHE, uuid));
-      if (file.mkdirs()) {
-        logger.info("created {}", file.getAbsolutePath());
-      }
-      file2 = new File(String.format("%s/%s", file.getAbsolutePath(), uuid));
-      os = new FileOutputStream(file2);
-      logger.info("copy {} -> {}", urlString, file2.getAbsolutePath());
-      IOUtils.copy(connection.getInputStream(), os);
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      IOUtils.close(connection);
-      IOUtils.closeQuietly(os);
-    }
-    
-    if (file2 != null) {
-      return file2.getAbsolutePath();
-    }
-    
-    return null;
-  }
-  
   public static String status2(Map<String, Map<MetaboliteMajorLabel, String>> imap, int total) {
     Map<Object, Integer> counter = new HashMap<> ();
     Map<Object, Double> cover = new HashMap<> ();
@@ -232,7 +202,7 @@ public class KBaseSbmlImporter {
     XmlSbmlModel xmodel = reader.parse();
     
     if (modelId == null || modelId.trim().isEmpty()) {
-      modelId = getNameFromUrl(url);
+      modelId = KBaseUtils.getNameFromUrl(url);
       logger.info("auto model id: {}", modelId);
     }
     
@@ -264,6 +234,11 @@ public class KBaseSbmlImporter {
     List<XmlMessage> msgs2 = validator2.validate();
     resultAdapter.fillValidationData(msgs2);
     
+    if (resultAdapter.getMessageTypeCount(MessageType.CRITICAL) > 0) {
+      result.message += "\n" + String.format("Unable to import model {}", url);
+      return null;
+    }
+    
     result.message += "\n" + String.format("Species %d, Reactions %s, %s", 
         xmodel.getSpecies().size(), 
         xmodel.getReactions().size(), 
@@ -286,8 +261,7 @@ public class KBaseSbmlImporter {
     //check if integrate
     if (runIntegration) {
       modelSeedIntegration.spiToModelSeedReference.clear();
-//      String imodelEntry = "i" + modelId;
-//      KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA);
+
       Map<String, Map<MetaboliteMajorLabel, String>> imap = 
           modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter, reactionIntegration);
       Map<String, Map<ReactionMajorLabel, String>> rimap = new HashMap<>();
@@ -316,7 +290,7 @@ public class KBaseSbmlImporter {
         .withSpecieIntegration(sintegration)
         .withReactionIntegration(sintegration)
         .withBiomassIds(biomassIds)
-        .withModelSeedReference(spiToModelSeedReference)
+        .withMetaboliteModelSeedReference(spiToModelSeedReference)
         .withModelId(modelId)
         .withModelName(modelId)
         .withXmlSbmlModel(xmodel, allowBoundary)
@@ -333,57 +307,9 @@ public class KBaseSbmlImporter {
     jsonResult.addIntegrationReport(modelId, reportData);
     
 //    KBaseIOUtils.toJson(model);
-    if (model != null) {
-      String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
-          KBaseType.FBAModel.value(), model, workspace, dfuClient);
-      if (fbaModelRef != null) {
-        result.objects.add(new WorkspaceObject().withDescription(url)
-            .withRef(fbaModelRef));
-      } else {
-        logger.warn("unable to save {}", modelId);
-      }
-    }
     
     return model;
   }
-  
-//  public static class ZipContainer implements Closeable {
-//    
-//    private InputStream is = null; //file input stream
-//    private ZipInputStream zis = null; //zip file manipulator
-//    private ZipFile zf = null; //zip file pointer
-////    InputStream rfis = null; //file within zip file pointer
-//    
-//    public ZipContainer(String path) throws IOException {
-//      this.is = new FileInputStream(path);
-//      this.zis = new ZipInputStream(is);
-//      this.zf = new ZipFile(path);
-//    }
-//    
-//    public List<Map<String, Object>> getInputStreams() throws IOException {
-//      List<Map<String, Object>> streams = new ArrayList<> ();
-//      ZipEntry ze = null;
-//      while ((ze = zis.getNextEntry()) != null) {
-//        Map<String, Object> record = new HashMap<> ();
-//        record.put("name", ze.getName());
-//        record.put("size", ze.getSize());
-//        record.put("compressed_size", ze.getCompressedSize());
-//        record.put("method", ze.getMethod());
-//        record.put("is", zf.getInputStream(ze));
-//        streams.add(record);
-//      }
-//      
-//      return streams;
-//    }
-//    
-//    @Override
-//    public void close() throws IOException {
-//      IOUtils.closeQuietly(this.zf);
-//      IOUtils.closeQuietly(this.zis);
-//      IOUtils.closeQuietly(this.is);
-//    }
-//    
-//  }
 
   public ImportModelResult importModel(SbmlImporterParams params) {
     ImportModelResult result = new ImportModelResult();
@@ -401,7 +327,7 @@ public class KBaseSbmlImporter {
 
       String urlPath = params.getSbmlUrl();
       //check url type
-      String localPath = fetchAndCache(params.getSbmlUrl());
+      String localPath = KBaseIOUtils.fetchAndCache(params.getSbmlUrl(), LOCAL_CACHE);
       if (localPath == null) {
         throw new IOException("unable to create temp file");
       }
@@ -467,6 +393,24 @@ public class KBaseSbmlImporter {
             if (result.modelName == null || result.modelName.isEmpty()) {
               result.modelName = fbaModel.getId();
             }
+            
+            try {
+              KBaseId kid = KBaseIOUtils.saveData(fbaModel.getId(), KBaseType.FBAModel, fbaModel, workspace, wsClient);
+              result.objects.add(new WorkspaceObject()
+                  .withDescription(u)
+                  .withRef(kid.toString()));
+            } catch (Exception e) {
+              result.message += "\nERROR: " + u + " " + e.getMessage();
+            }
+//            if (model != null) {
+//              String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
+//                  KBaseType.FBAModel.value(), model, workspace, dfuClient);
+//              if (fbaModelRef != null) {
+
+//              } else {
+//                logger.warn("unable to save {}", modelId);
+//              }
+//            }
           }
 //          KBaseIOUtils.saveData(objects, workspace, dfuClient);
         } catch (Exception e) {
@@ -531,45 +475,6 @@ public class KBaseSbmlImporter {
   }
 
 
-
-
-  @Deprecated
-  public String saveData(String nameId, String dataType, Object o) throws Exception {
-    //  Object o = null;
-    //  String nameId = "";
-    //  String dataType = "";
-//    final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
-//    dfuClient.setIsInsecureHttpConnectionAllowed(true);
-    long wsId = dfuClient.wsNameToId(workspace);
-
-    SaveObjectsParams params = new SaveObjectsParams()
-        .withId(wsId)
-        .withObjects(Arrays.asList(
-            new ObjectSaveData().withName(nameId)
-            .withType(dataType)
-            .withData(new UObject(o))));
-    ////  params.setId(wsId);
-    ////  List<ObjectSaveData> saveData = new ArrayList<> ();
-    ////  ObjectSaveData odata = new ObjectSaveData();
-    ////  odata.set
-    ////  
-    ////  params.setObjects(saveData);
-    ////  ;
-    String ref = KBaseIOUtils.getRefFromObjectInfo(dfuClient.saveObjects(params).get(0));
-
-    return ref;
-  }
-  
-
-
-  public static String getNameFromUrl(String urlStr) {
-    String[] strs = urlStr.split("/");
-    String last = strs[strs.length - 1];
-    if (last.contains(".")) {
-      last = last.substring(0, last.indexOf('.'));
-    }
-    return last;
-  }
 
 
 

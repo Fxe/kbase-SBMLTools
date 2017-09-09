@@ -27,6 +27,7 @@ import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReact
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.ParseException;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
 import pt.uminho.sysbio.biosynthframework.BFunction;
+import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
@@ -57,6 +58,7 @@ public class FBAModelFactory {
   private IntegrationMap<String, String> simap = new IntegrationMap<>();
   private IntegrationMap<String, String> rimap = new IntegrationMap<>();
   private Map<String, String> spiToModelSeedReference = new HashMap<> ();
+  private Map<String, String> rxnToModelSeedReference = new HashMap<> ();
   private Map<String, ModelCompound> modelCompounds = new HashMap<> ();
   private List<ModelCompartment> modelCompartments = new ArrayList<> ();
   private List<ModelReaction> modelReactions = new ArrayList<> ();
@@ -78,8 +80,13 @@ public class FBAModelFactory {
     return this;
   }
   
-  public FBAModelFactory withModelSeedReference(Map<String, String> spiToModelSeedReference) {
+  public FBAModelFactory withMetaboliteModelSeedReference(Map<String, String> spiToModelSeedReference) {
     this.spiToModelSeedReference.putAll(spiToModelSeedReference);
+    return this;
+  }
+  
+  public FBAModelFactory withReactionModelSeedReference(Map<String, String> rxnToModelSeedReference) {
+    this.rxnToModelSeedReference.putAll(rxnToModelSeedReference);
     return this;
   }
   
@@ -384,8 +391,11 @@ public class FBAModelFactory {
       }
 
       String rxnCmpRef = String.format("~/modelcompartments/id/%s", cmpMap.values().iterator().next());
-      //      System.out.println(rxnCmpRef);
-      //      System.out.println(reagents);
+      String rxnRef = "rxn00000";
+      if (this.rxnToModelSeedReference.containsKey(rxnEntry)) {
+        rxnRef = rxnToModelSeedReference.get(rxnRef);
+      }
+      
       ModelReaction rxn = new ModelReaction().withId(rxnEntry)
           .withAliases(new ArrayList<String> ())
           .withName(rxnName)
@@ -401,26 +411,6 @@ public class FBAModelFactory {
           .withModelcompartmentRef(rxnCmpRef);
       rxn.setModelReactionReagents(reagents);
 
-//      ModelReactionProtein protein = new ModelReactionProtein();
-//      protein.setModelReactionProteinSubunits(null);
-//      protein.setComplexRef("");
-//      protein.setSource("");
-//      protein.setNote("");
-//      ModelReactionProteinSubunit proteinSubunit = new ModelReactionProteinSubunit();
-//      List<String> featureRefs = new ArrayList<> ();
-//      proteinSubunit.setFeatureRefs(featureRefs);
-//      proteinSubunit.setOptionalSubunit(0L);
-//      proteinSubunit.setRole("");
-//      proteinSubunit.setNote("");
-//      proteinSubunit.setTriggering(0L);
-//      List<ModelReactionProtein> proteins = new ArrayList<> ();
-//      proteins.add(protein);
-      //      rxn.setModelReactionProteins(proteins);
-      //      
-      //      //??
-      //      rxn.setDirection("=");
-      //      //LB, UB
-      //      xrxn.get
       String[] boundStr = validateReactionContraint(rxnEntry, xmodel, xrxn, xrxn.getListOfParameters());
 
       double lb = -1000;
@@ -453,6 +443,14 @@ public class FBAModelFactory {
 //      } else {
 //        
 //      }
+    }
+    
+    for (String spi : xadapter.xspiType.keySet()) {
+      EntityType etype = xadapter.xspiType.get(spi);
+      if (EntityType.GENE.equals(etype)) {
+        ModelCompound mc = this.modelCompounds.get(spi);
+        mc.getAdditionalProperties().put("type", "GENE");
+      }
     }
     
     return model;

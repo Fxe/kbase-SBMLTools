@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.integration.model.SpecieIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
@@ -106,6 +107,17 @@ public class IntegrationReportResultAdapter {
     this.report.importData.put("validation_summary", messageTypeCount);
     
     return this;
+  }
+  
+  public int getMessageTypeCount(MessageType type) {
+    @SuppressWarnings("unchecked")
+    Map<MessageType, Integer> m = (Map<MessageType, Integer>) this.report.importData.get("validation_summary");
+    Integer i = m.get(type);
+    if (i == null) {
+      i = 0;
+    }
+    
+    return i;
   }
   
   public IntegrationReportResultAdapter fillSpeciesIntegrationData(

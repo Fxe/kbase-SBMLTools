@@ -13,6 +13,6 @@ public class KBaseId {
   
   @Override
   public String toString() {
-    return String.format("[%s] %s@%s", reference, name, workspace);
+    return String.format("%s/%s", workspace, name);
   }
 }

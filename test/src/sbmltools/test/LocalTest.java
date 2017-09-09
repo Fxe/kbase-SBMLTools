@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter.ImportModelResult;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
@@ -71,7 +72,7 @@ public class LocalTest {
     ZipInputStream zis = null; //zip file manipulator
     ZipFile zf = null; //zip file pointer
     InputStream rfis = null; //file within zip file pointer
-    String local = KBaseSbmlImporter.fetchAndCache(sbmlPath);
+    String local = KBaseIOUtils.fetchAndCache(sbmlPath, KBaseSbmlImporter.LOCAL_CACHE);
     
     
     if (urlPath.endsWith(".zip") && local != null) {

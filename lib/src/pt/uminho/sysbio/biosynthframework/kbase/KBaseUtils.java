@@ -113,4 +113,13 @@ public class KBaseUtils {
     T out = om.convertValue(object, clazz);
     return out;
   }
+  
+  public static String getNameFromUrl(String urlStr) {
+    String[] strs = urlStr.split("/");
+    String last = strs[strs.length - 1];
+    if (last.contains(".")) {
+      last = last.substring(0, last.indexOf('.'));
+    }
+    return last;
+  }
 }

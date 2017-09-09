@@ -103,19 +103,16 @@ public class SBMLToolsServer extends JsonServerServlet {
     //BEGIN sbml_importer
     final String workspaceName = params.getWorkspaceName();
 
-
+    final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
     // see note above about bad practice
-    if (dfuClient != null) {
-      dfuClient.setIsInsecureHttpConnectionAllowed(true);
-    }
-    if (kbrClient != null) {
-      kbrClient.setIsInsecureHttpConnectionAllowed(true);
-    }
+    dfuClient.setIsInsecureHttpConnectionAllowed(true);
+    kbrClient.setIsInsecureHttpConnectionAllowed(true);
+    wspClient.setIsInsecureHttpConnectionAllowed(true);
 
 
-    KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(workspaceName, dfuClient);
+    KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(workspaceName, dfuClient, wspClient);
 
     ImportModelResult result = sbmlTools.importModel(params);
     List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);
@@ -127,7 +124,6 @@ public class SBMLToolsServer extends JsonServerServlet {
 
     List<String> files = new ArrayList<> ();
     files.add("index.html");
-    //    files.add("css/bootstrap.min.css");
     files.add("js/jquery-2.2.2.min.js");
     files.add("js/underscore-min.js");
     files.add("js/plotly-1.28.3.min.js");
