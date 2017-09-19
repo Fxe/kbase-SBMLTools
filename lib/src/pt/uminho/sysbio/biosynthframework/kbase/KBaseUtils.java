@@ -1,9 +1,12 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
@@ -22,6 +25,14 @@ import pt.uminho.sysbio.biosynthframework.BFunction;
 public class KBaseUtils {
   
   private static final Logger logger = LoggerFactory.getLogger(KBaseUtils.class);
+  
+  public static String toString(Exception e) {
+    OutputStream os = new ByteArrayOutputStream();
+    PrintWriter pw = new PrintWriter(os);
+    e.printStackTrace(pw);
+    pw.close();
+    return os.toString();
+  }
   
   public static Set<String> collect(AbstractSyntaxTreeNode<DataTypeEnum, IValue> root) {
     Set<String> data = new HashSet<> ();

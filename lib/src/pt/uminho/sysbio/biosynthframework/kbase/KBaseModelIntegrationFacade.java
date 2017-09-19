@@ -80,6 +80,8 @@ public class KBaseModelIntegrationFacade {
     return result;
   }
   
+  
+  
   public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName) throws Exception {
     //validate params
     System.out.println(params);
@@ -99,7 +101,6 @@ public class KBaseModelIntegrationFacade {
     
     
     Genome genome = null;
-    
     
     Set<String> biomassReactions = new HashSet<> ();
     if (params.getBiomassReactions() != null) {
@@ -137,6 +138,7 @@ public class KBaseModelIntegrationFacade {
       logger.error("Set Template: [{}] - {}", params.getTemplateId(), e.getMessage());
     }
     
+    kir.genomeReport.status = "auto_genome_get_fail";
     if (genome == null) {
       logger.info("auto detect genome...");
       String geneData = "";

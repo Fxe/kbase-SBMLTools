@@ -29,6 +29,7 @@ import kbasefba.ModelReaction;
 import kbsolrutil.KBSolrUtilClient;
 import kbsolrutil.SearchSolrParams;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
@@ -237,10 +238,10 @@ public class SBMLToolsServerTest {
         .withBiomass(Arrays.asList(new String[]{"bio1"}))
         .withSbmlUrl(url);
     
-    KBaseSbmlImporter.DATA_EXPORT_PATH = "/var/biobase/export";;
-    KBaseSbmlImporter.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
+    KBaseConfig.DATA_EXPORT_PATH = "/var/biobase/export";;
+    KBaseConfig.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
     KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne/data";
-    KBaseSbmlImporter.REPORT_OUTPUT_PATH = "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports/model-integration-report/readerData.json";
+    KBaseConfig.REPORT_OUTPUT_FILE = "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports/model-integration-report/readerData.json";
     impl.sbmlImporter(params, token, getContext());
     
     System.out.println(getWsName());

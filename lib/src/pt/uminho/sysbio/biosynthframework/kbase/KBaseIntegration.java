@@ -104,6 +104,7 @@ public class KBaseIntegration {
   
   public void integrate() {
     
+    logger.info("[GPR Override]");
     for (String rxn : gprOverride.keySet()) {
       ModelReaction krxn = adapter.rxnMap.get(rxn);
       if (krxn != null && gprOverride.get(rxn) != null) {
@@ -111,8 +112,7 @@ public class KBaseIntegration {
       }
     }
     
-
-    
+    logger.info("[Biomass Convertion]");
     for (String b : biomassSet) {
       String brxnEntry = adapter.convertToBiomass(b);
       if (brxnEntry != null) {
@@ -120,6 +120,7 @@ public class KBaseIntegration {
       }
     }
     
+    logger.info("[Compartment Mapping]");
     for (String cmpOld : compartmentMapping.keySet()) {
       String cmpSwap = compartmentMapping.get(cmpOld);
       

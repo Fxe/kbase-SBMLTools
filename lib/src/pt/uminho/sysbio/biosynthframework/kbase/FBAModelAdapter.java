@@ -87,6 +87,18 @@ public class FBAModelAdapter implements ModelAdapter {
         logger.warn("duplicate reacton id {}", kbmrxn.getId());
       }
     }
+    for (String kspiEntry : kspiMap.keySet()) {
+      int degree = getSpecieDegree(kspiEntry);
+      if (degree == 0) {
+        kspiType.put(kspiEntry, EntityType.ERROR);
+      } else if (isBoundarySpecie(kspiEntry)) {
+//        logger.info("SPECIE_BOUNDARY" + kspiEntry);
+        kspiType.put(kspiEntry, EntityType.SPECIE_BOUNDARY);
+        boundarySpecies.add(kspiEntry);
+      } else {
+        kspiType.put(kspiEntry, EntityType.SPECIE);
+      }
+    }
     
     for (String krxnEntry : rxnMap.keySet()) {
       if (isDrain(krxnEntry)) {
@@ -98,16 +110,7 @@ public class FBAModelAdapter implements ModelAdapter {
       }
     }
     
-    for (String kspiEntry : kspiMap.keySet()) {
-      int degree = getSpecieDegree(kspiEntry);
-      if (degree == 0) {
-        kspiType.put(kspiEntry, EntityType.ERROR);
-      } else if (isBoundarySpecie(kspiEntry)) {
-        kspiType.put(kspiEntry, EntityType.SPECIE_BOUNDARY);
-      } else {
-        kspiType.put(kspiEntry, EntityType.SPECIE);
-      }
-    }
+
   }
   
   public void setupModelReactionProteinsFromGpr(String mrxnEntry, String gpr, String genomeRef) {
@@ -348,12 +351,17 @@ public class FBAModelAdapter implements ModelAdapter {
       if (kspiMap.containsKey(k) && 
           kspiMap.get(k).getDblinks() != null && 
           kspiMap.get(k).getDblinks().containsKey("ModelSeed")) {
+        //addModelSeedMetabolite
         List<String> id_ = kspiMap.get(k).getDblinks().get("ModelSeed");
         if (id_ != null && !id_.isEmpty()) {
           String id = id_.iterator().next();
           Pair<Double, Double> b = drains.get(k);
           ma.addModelSeedMetabolite(id, b.getLeft(), b.getRight());
         }
+      } else {
+        //addCustomMetabolite
+        Pair<Double, Double> b = drains.get(k);
+        ma.addCustomMetabolite(k, b.getLeft(), b.getRight());
       }
     }
     return media;
@@ -553,7 +561,7 @@ public class FBAModelAdapter implements ModelAdapter {
     
     
     if (mc.getStringAttributes() != null) {
-      String bc = mc.getStringAttributes().get("boundary");
+      String bc = mc.getStringAttributes().get(KBAModelStringAttributes.boundary_condition.toString());
       if (bc != null) {
         return Boolean.parseBoolean(bc);
       }
@@ -578,7 +586,10 @@ public class FBAModelAdapter implements ModelAdapter {
     Map<String, Double> stoich = getStoichiometry(mrxnEntry);
     
     if (drainBoundaryCondition) {
+//      System.out.println(drainBoundaryCondition);
+//      System.out.println(stoich.size() + " " + boundarySpecies.size());
       stoich.keySet().removeAll(boundarySpecies);
+//      System.out.println(stoich.size());
     }
     
     if (stoich.size() == 1) {
@@ -611,8 +622,12 @@ public class FBAModelAdapter implements ModelAdapter {
     Map<String, Double> stoich = getStoichiometry(mrxnEntry);
     Set<String> cmpSet = new HashSet<> ();
     for (String k : stoich.keySet()) {
-      String cmp = this.kspiMap.get(k).getModelcompartmentRef();
-      cmpSet.add(cmp);
+      if (this.kspiMap.containsKey(k)) {
+        String cmp = this.kspiMap.get(k).getModelcompartmentRef();
+        cmpSet.add(cmp);
+      }
+      
+      
     }
     
     return cmpSet.size() != 1;

@@ -165,7 +165,7 @@ public class FBAModelFactory {
       String cmpEntry = xspi.getAttributes().get("compartment");
       String spiName = xspi.getAttributes().get("name");
       boolean boundaryCondition = false;
-      
+      extraAttributes.put("original_id", spiEntry);
       try {
         String b = xspi.getAttributes().get("boundaryCondition");
         if (b != null) {
@@ -303,22 +303,19 @@ public class FBAModelFactory {
     FBAModel model = new FBAModel();
     model.setId(modelId);
     model.setName(modelName); //get from xml if exists
-    model.setGenomeRef("PlantSEED/Empty");
+    model.setGenomeRef(KBaseConfig.REF_EMPTY_GENOME);
     model.setSource("External");
     model.setSourceId(modelId);
     model.setType("SBML Model");
-//    FBAModelAdapter.getTemplateRef("", "", null); //get core template
-    model.setTemplateRef("NewKBaseModelTemplates/CoreModelTemplate");
+    model.setTemplateRef(KBaseConfig.REF_TEMPLATE_G_NEG);
     model.setGapfillings(new ArrayList<ModelGapfill> ());
     model.setGapgens(new ArrayList<ModelGapgen> ());
     model.setBiomasses(new ArrayList<Biomass> ());
     model.setModelcompounds(new ArrayList<> (modelCompounds.values()));
     model.setModelcompartments(modelCompartments);
     model.setModelreactions(new ArrayList<ModelReaction> ());
-
+    
     int biomassCounter = 1;
-    
-    
     
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
       Map<String, String> extraAttributes = new HashMap<> ();
@@ -409,6 +406,7 @@ public class FBAModelFactory {
           .withDblinks(new HashMap<String, List<String>>())
           .withStringAttributes(extraAttributes)
           .withModelcompartmentRef(rxnCmpRef);
+      
       rxn.setModelReactionReagents(reagents);
 
       String[] boundStr = validateReactionContraint(rxnEntry, xmodel, xrxn, xrxn.getListOfParameters());

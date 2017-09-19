@@ -38,6 +38,7 @@ import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
 import pt.uminho.sysbio.biosynthframework.kbase.EasyKBase;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
@@ -58,10 +59,12 @@ public class IntegrationLocalRun {
   
   private static final Logger logger = LoggerFactory.getLogger(IntegrationLocalRun.class);
   
-  public static String LOGIN_TOKEN = "3OJVW5P6KWFG7AJCNLN7VFUHHIRVOELP";
+  public static String LOGIN_TOKEN = "6ZTI37IMCHC4SU26TVYLJ4BC6MPFKWLU";
   
+  public static String  DEV_JUNK_REPO = "filipeliu:narrative_1505405117321";
   public static String  DEV_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502428739293";
   public static String PROD_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502913538729";
+  public static String PROD_PUBLISHED_KMODEL_REPO = "filipeliu:narrative_1504796314698";
   public static String PROD_KBASE_TEMPLATES = "NewKBaseModelTemplates";
   public static String PROD_QZ_GENOMES = "ReferenceDataManager";
   public static String PROD_RAST_GENOME = "filipeliu:narrative_1502913563238";
@@ -109,10 +112,11 @@ public class IntegrationLocalRun {
           wsName);
       
       
-      KBaseSbmlImporter.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
+      KBaseConfig.DATA_EXPORT_PATH = "/var/biobase/export";
+      KBaseConfig.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
       KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne";
-      KBaseSbmlImporter.REPORT_OUTPUT_PATH = "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports/model-integration-report/readerData.json";
-      KBaseSbmlImporter.DATA_EXPORT_PATH = "/var/biobase/export";
+      KBaseConfig.REPORT_OUTPUT_FILE = "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports/model-integration-report/readerData.json";
+      
 //      KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(modelWorkspace, devAPI.dfuClient);
 //      sbmlTools.
 //      RASTSDKClient rastClient = new RASTSDKClient(devAPI.callbackURL, devAPI.authToken);
@@ -529,18 +533,36 @@ public class IntegrationLocalRun {
     }
   }
   
+  public static void getFixModel(KBaseAPI prodAPI, String ws) throws Exception {
+    for (KBaseId kid : prodAPI.listNarrative(ws, KBaseType.FBAModel)) {
+      System.out.println(kid);
+      if (kid.name.startsWith("kb.")) {
+        FBAModel kmodel = KBaseIOUtils.getObject(kid.name, ws, null, FBAModel.class, prodAPI.wsClient);
+        for (ModelReaction o : kmodel.getModelreactions()) {
+          
+          if (o.getReactionRef().startsWith("50/1/1")) {
+            String rxnEntry = FBAModelAdapter.getEntryFromRef(o.getReactionRef());
+            o.setReactionRef("~/template/reactions/id/" + rxnEntry);
+            logger.info("[{}] FIX: {}", kid, o.getId());
+          }
+        }
+        KBaseIOUtils.saveData(kid.name, KBaseType.FBAModel, kmodel, ws, prodAPI.wsClient);
+      }
+    }
+  }
+  
   public static void getModel(KBaseAPI prodAPI) throws Exception {
-    KBaseSbmlImporter.DATA_EXPORT_PATH = FileImportKb.EXPORT_PATH;
+    KBaseConfig.DATA_EXPORT_PATH = FileImportKb.EXPORT_PATH;
     
     Map<String, BFunction<String, String>> modelGeneTransformers = 
         ManualFixes.getModelGeneTransformers();
     Map<String, Map<String, String>> gswap = 
         ManualFixes.getGprSwap();
     
-    
     String model = "Ec_core_flux1";
 //    model = "iCM925";
 //    model = "iJO1366_bigg2";
+    model = "iCC908";
     FBAModel kmodel = KBaseIOUtils.getObject(model, PROD_PUBLISHED_MODEL_REPO, null, FBAModel.class, prodAPI.wsClient);
 //    FBAModel kmode2 = KBaseIOUtils.getObject("Ec_core_flux1.kbase", PROD_ECOLI_CORES, null, FBAModel.class, prodAPI.wsClient);
     FBAModelAdapter ma = new FBAModelAdapter(kmodel);
@@ -568,8 +590,8 @@ public class IntegrationLocalRun {
     integration.report = kir;
 //    integration.biodbContainer = new KBaseBiodbContainer(KBaseSbmlImporter.DATA_EXPORT_PATH);
 //    integration.
-    integration.compartmentMapping.put("z0", "e");
-    integration.compartmentMapping.put("z1", "c");
+//    integration.compartmentMapping.put("z0", "e");
+//    integration.compartmentMapping.put("z1", "c");
     integration.rename = "modelseed";
     integration.fillMetadata = true;
     integration.integrate();
@@ -641,7 +663,7 @@ public class IntegrationLocalRun {
     //      System.out.println(id + " " + integration.biodbContainer.biodbService.getEntityProperty(id, "smiles"));
     //      System.out.println(id + " " + integration.biodbContainer.biodbService.getEntityProperty(id, "inchikey"));
 
-//    KBaseIOUtils.saveData(kmodel.getId() + ".integrated", KBaseType.FBAModel, kmodel, PROD_ECOLI_CORES, prodAPI.wsClient);
+    KBaseIOUtils.saveData("kb." + kmodel.getId(), KBaseType.FBAModel, kmodel, PROD_PUBLISHED_KMODEL_REPO, prodAPI.wsClient);
     //      FBAModelAdapter madapter = new FBAModelAdapter(kmodel);
 
     //      System.out.println(media);
@@ -843,7 +865,7 @@ public class IntegrationLocalRun {
   public static void main(String[] args) {
     try {
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
-      
+      getFixModel(prodAPI, PROD_PUBLISHED_KMODEL_REPO);
 //      pmodel(prodAPI);
 //      BMap<String, String> modelToGenome = KbaseGenomeUtils.getModelGenomeAssignment("/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/sbml_genome_map.tsv");
 //      KbaseGenomeUtils.buildBlastDb("/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/blast_db_latest.faa", modelToGenome, LOGIN_TOKEN, PROD_RAST_GENOME);

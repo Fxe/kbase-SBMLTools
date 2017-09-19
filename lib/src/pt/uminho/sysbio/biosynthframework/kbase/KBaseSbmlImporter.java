@@ -26,6 +26,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils.KBaseObject;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration.KBaseMappingResult;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationByDatabase;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReport;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResult;
@@ -72,29 +74,29 @@ public class KBaseSbmlImporter {
 
   private static final Logger logger = LoggerFactory.getLogger(KBaseSbmlImporter.class);
 
-  public static String DATA_EXPORT_PATH = "/data/integration/export";
-  public static String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
+
   public static String LOCAL_CACHE = "./cache";
-  public static String REPORT_OUTPUT_PATH = "/kb/module/data/readerData.json";
-  
-//  public final AuthToken authPart;
-//  public final RpcContext jsonRpcContext;
-//  public final URL callbackURL;
+
+
+  //  public final AuthToken authPart;
+  //  public final RpcContext jsonRpcContext;
+  //  public final URL callbackURL;
   public final String workspace;
   private final DataFileUtilClient dfuClient;
   private final WorkspaceClient wsClient;
   public KBaseModelSeedIntegration modelSeedIntegration = null;
   public final ReactionIntegration reactionIntegration;
   public final KBaseBiodbContainer biodbContainer;
-  
+
   public KBaseSbmlImporter(
       String workspace, DataFileUtilClient dfuClient, WorkspaceClient wsClient) throws UnauthorizedException, IOException {
     this.workspace = workspace;
     this.dfuClient = dfuClient;
     this.wsClient = wsClient;
-    this.biodbContainer = new KBaseBiodbContainer(DATA_EXPORT_PATH);
-    this.modelSeedIntegration = new KBaseModelSeedIntegration(DATA_EXPORT_PATH, CURATION_DATA, biodbContainer);
-    
+    this.biodbContainer = new KBaseBiodbContainer(KBaseConfig.DATA_EXPORT_PATH);
+    this.modelSeedIntegration = new KBaseModelSeedIntegration(
+        KBaseConfig.DATA_EXPORT_PATH, KBaseConfig.CURATION_DATA, biodbContainer);
+
     reactionIntegration = new ReactionIntegration(biodbContainer.biodbService);
     reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h");
     reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h2o");
@@ -106,18 +108,18 @@ public class KBaseSbmlImporter {
     reactionIntegration.exclude(ReactionMajorLabel.Seed, "cpd00067");
     reactionIntegration.exclude(ReactionMajorLabel.ModelSeedReaction, "cpd00001");
     reactionIntegration.exclude(ReactionMajorLabel.ModelSeedReaction, "cpd00067");
-    
+
     Set<ReactionMajorLabel> rxnDbs = new HashSet<> ();
     rxnDbs.add(ReactionMajorLabel.BiGG);
     rxnDbs.add(ReactionMajorLabel.LigandReaction);
     rxnDbs.add(ReactionMajorLabel.MetaCyc);
     rxnDbs.add(ReactionMajorLabel.ModelSeedReaction);
     rxnDbs.add(ReactionMajorLabel.Seed);
-    
+
     for (ReactionMajorLabel db : rxnDbs) {
       reactionIntegration.setupStoichDictionary(db);
     }
-    
+
     reactionIntegration.rMap.put(ReactionMajorLabel.BiGG, new BiGGConflictResolver());
     reactionIntegration.rMap.put(ReactionMajorLabel.ModelSeedReaction, new ModelSeedReactionConflictResolver());
     reactionIntegration.rMap.put(ReactionMajorLabel.Seed, new ModelSeedReactionConflictResolver());
@@ -156,7 +158,7 @@ public class KBaseSbmlImporter {
     public String modelRef = "";
     public String modelName = "";
     public List<WorkspaceObject> objects = new ArrayList<> ();
-    
+
     @Override
     public String toString() {
       return String.format("%s, %s, %s, %s", message, modelRef, modelName, objects);
@@ -164,11 +166,11 @@ public class KBaseSbmlImporter {
   }
 
 
-  
+
   public static String status2(Map<String, Map<MetaboliteMajorLabel, String>> imap, int total) {
     Map<Object, Integer> counter = new HashMap<> ();
     Map<Object, Double> cover = new HashMap<> ();
-    
+
     for (String e : imap.keySet()) {
       Map<MetaboliteMajorLabel, String> a = imap.get(e);
       boolean any = false;
@@ -183,130 +185,149 @@ public class KBaseSbmlImporter {
         CollectionUtils.increaseCount(counter, "has_reference", 1);
       }
     }
-    
+
     for (Object k : counter.keySet()) {
       int count = counter.get(k);
       cover.put(k, (double) count / total);
     }
     return Joiner.on(", ").withKeyValueSeparator(": ").join(cover);
   }
-  
+
   public FBAModel importModel(InputStream is, 
       ImportModelResult result, String modelId, String url, 
       boolean runIntegration, Collection<String> biomassIds, 
       IntegrationByDatabase spiIntegrationAll,
-      IntegrationReport jsonResult, boolean allowBoundary) throws Exception {
-    //import
-    FBAModel model = null;
-    XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
-    XmlSbmlModel xmodel = reader.parse();
+      IntegrationReport jsonResult, boolean allowBoundary) {
     
     if (modelId == null || modelId.trim().isEmpty()) {
       modelId = KBaseUtils.getNameFromUrl(url);
       logger.info("auto model id: {}", modelId);
     }
-    
-    IntegrationReportResult reportData = new IntegrationReportResult();
-    IntegrationReportResultAdapter resultAdapter = 
-        new IntegrationReportResultAdapter(reportData);
-    reportData.name = modelId;
-    reportData.epochTime = System.currentTimeMillis();
-    reportData.date = new GregorianCalendar().getTime().toString();
-    resultAdapter.fillImportData(xmodel);
-    spiIntegrationAll.modelTotal.put(modelId, xmodel.getSpecies().size());
-    
-
-    
-    logger.info("validate");
-//    pt.uminho.sysbio.biosynthframework.sbml.
-    XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel);
-    XmlSbmlModelValidator.initializeDefaults(validator);
-
-    List<XmlMessage> msgs = validator.validate();
-    XmlSbmlModelAutofix autofix = new XmlSbmlModelAutofix();
-    autofix.fix(xmodel, msgs);
-    
-    List<XmlMessage> fmsgs = autofix.messages;
-    resultAdapter.fillValidationData(fmsgs);
-    
-    XmlSbmlModelValidator validator2 = new XmlSbmlModelValidator(xmodel);
-    XmlSbmlModelValidator.initializeDefaults(validator2);
-    List<XmlMessage> msgs2 = validator2.validate();
-    resultAdapter.fillValidationData(msgs2);
-    
-    if (resultAdapter.getMessageTypeCount(MessageType.CRITICAL) > 0) {
-      result.message += "\n" + String.format("Unable to import model {}", url);
-      return null;
-    }
-    
-    result.message += "\n" + String.format("Species %d, Reactions %s, %s", 
-        xmodel.getSpecies().size(), 
-        xmodel.getReactions().size(), 
-        url);
-    //      String txt = "";
-    Map<MessageType, Integer> typeCounterMap = new HashMap<> ();
-    for (XmlMessage m : msgs) {
-      CollectionUtils.increaseCount(typeCounterMap, m.type, 1);
-    }
-    
-    if (!typeCounterMap.isEmpty()) {
-      result.message +="\n" + modelId + " "+ String.format("%s", Joiner.on(' ').withKeyValueSeparator(": ").join(typeCounterMap));
-    }
-    
     modelId = modelId.trim();
     
-    Map<String, String> spiToModelSeedReference = new HashMap<> ();
-    IntegrationMap<String, String> sintegration = new IntegrationMap<>();
-    IntegrationMap<String, String> rintegration = new IntegrationMap<>();
-    //check if integrate
-    if (runIntegration) {
-      modelSeedIntegration.spiToModelSeedReference.clear();
+    FBAModel model = null;
+    try {
+      //import
+      XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
+      XmlSbmlModel xmodel = reader.parse();
 
-      Map<String, Map<MetaboliteMajorLabel, String>> imap = 
-          modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter, reactionIntegration);
-      Map<String, Map<ReactionMajorLabel, String>> rimap = new HashMap<>();
-      spiIntegrationAll.addIntegrationMap(modelId, imap);
-      for (String spi : imap.keySet()) {
-        for (MetaboliteMajorLabel db : imap.get(spi).keySet()) {
-          sintegration.addIntegration(spi, db.toString(), imap.get(spi).get(db));
-        }
-      }
-      
-      for (String mrxn : rimap.keySet()) {
-        for (ReactionMajorLabel db : rimap.get(mrxn).keySet()) {
-          sintegration.addIntegration(mrxn, db.toString(), rimap.get(mrxn).get(db));
-        }
-      }
-      
-      //get stats
-      result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
-      spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
-      result.message += String.format("\ni: %d", spiToModelSeedReference.size());
-      
+      jsonResult.addIntegrationReport(modelId, new IntegrationReportResult());
 
-    }
-    //order matters ! fix this ... it is a factory ...
-    model = new FBAModelFactory()
-        .withSpecieIntegration(sintegration)
-        .withReactionIntegration(sintegration)
-        .withBiomassIds(biomassIds)
-        .withMetaboliteModelSeedReference(spiToModelSeedReference)
-        .withModelId(modelId)
-        .withModelName(modelId)
-        .withXmlSbmlModel(xmodel, allowBoundary)
-        .build();
-    
-    if (!model.getBiomasses().isEmpty()) {
-      Set<String> biomass = new HashSet<> ();
-      for (Biomass b : model.getBiomasses()) {
-        biomass.add(b.getId());
+      IntegrationReportResult reportData = new IntegrationReportResult();
+      IntegrationReportResultAdapter resultAdapter = 
+          new IntegrationReportResultAdapter(reportData);
+      reportData.name = modelId;
+      reportData.epochTime = System.currentTimeMillis();
+      reportData.date = new GregorianCalendar().getTime().toString();
+      resultAdapter.fillImportData(xmodel);
+      spiIntegrationAll.modelTotal.put(modelId, xmodel.getSpecies().size());
+
+      logger.info("validate");
+      
+      List<XmlMessage> vmsg = new ArrayList<> ();
+      //    pt.uminho.sysbio.biosynthframework.sbml.
+      XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel);
+      XmlSbmlModelValidator.initializeDefaults(validator);
+
+      List<XmlMessage> msgs = validator.validate();
+      XmlSbmlModelAutofix autofix = new XmlSbmlModelAutofix();
+      autofix.fix(xmodel, msgs);
+
+      List<XmlMessage> fmsgs = autofix.messages;
+      vmsg.addAll(fmsgs);
+//      resultAdapter.fillValidationData(fmsgs);
+
+      XmlSbmlModelValidator validator2 = new XmlSbmlModelValidator(xmodel);
+      XmlSbmlModelValidator.initializeDefaults(validator2);
+      List<XmlMessage> msgs2 = validator2.validate();
+      vmsg.addAll(msgs2);
+//      resultAdapter.fillValidationData(msgs2);
+
+      if (resultAdapter.getMessageTypeCount(MessageType.CRITICAL) > 0) {
+        result.message += "\n" + String.format("Unable to import model %s", url);
+        IntegrationReportResult iresult = new IntegrationReportResult();
+        iresult.error = String.format("Unable to import model %s", url);
+        jsonResult.addIntegrationReport(modelId, iresult);
+        return null;
       }
-      result.message +="\n" + modelId + " biomass: " + biomass;
+
+      result.message += "\n" + String.format("Species %d, Reactions %s, %s", 
+          xmodel.getSpecies().size(), 
+          xmodel.getReactions().size(), 
+          url);
+      //      String txt = "";
+      for (XmlMessage m : vmsg) {
+        CollectionUtils.increaseCount(reportData.validationCount, m.type, 1);
+      }
+      
+      //write message json for model
+      if (!vmsg.isEmpty()) {
+        reportData.validationData = modelId + "_msg.json";
+        String jsonData = KBaseIOUtils.toJson(vmsg, true);
+        Integer i = KBaseIOUtils.writeStringFile(jsonData, KBaseConfig.REPORT_OUTPUT_PATH + "/" + reportData.validationData);
+        logger.info("written {} bytes", i);
+      }
+
+      Map<String, String> spiToModelSeedReference = new HashMap<> ();
+      IntegrationMap<String, String> sintegration = new IntegrationMap<>();
+      IntegrationMap<String, String> rintegration = new IntegrationMap<>();
+      //check if integrate
+      if (runIntegration) {
+        modelSeedIntegration.spiToModelSeedReference.clear();
+
+        KBaseMappingResult mapping = modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter, reactionIntegration);
+
+        Map<String, Map<MetaboliteMajorLabel, String>> imap = mapping.species;
+        Map<String, Map<ReactionMajorLabel, String>> rimap = mapping.reactions;
+
+        spiIntegrationAll.addIntegrationMap(modelId, imap);
+        for (String spi : imap.keySet()) {
+          for (MetaboliteMajorLabel db : imap.get(spi).keySet()) {
+            sintegration.addIntegration(spi, db.toString(), imap.get(spi).get(db));
+          }
+        }
+
+        for (String mrxn : rimap.keySet()) {
+          for (ReactionMajorLabel db : rimap.get(mrxn).keySet()) {
+            rintegration.addIntegration(mrxn, db.toString(), rimap.get(mrxn).get(db));
+          }
+        }
+
+        //get stats
+        result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
+        spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
+        result.message += String.format("\ni: %d", spiToModelSeedReference.size());
+
+
+      }
+      //order matters ! fix this ... it is a factory ...
+      model = new FBAModelFactory()
+          .withSpecieIntegration(sintegration)
+          .withReactionIntegration(rintegration)
+          .withBiomassIds(biomassIds)
+          .withMetaboliteModelSeedReference(spiToModelSeedReference)
+          .withModelId(modelId)
+          .withModelName(modelId)
+          .withXmlSbmlModel(xmodel, allowBoundary)
+          .build();
+
+      if (!model.getBiomasses().isEmpty()) {
+        Set<String> biomass = new HashSet<> ();
+        for (Biomass b : model.getBiomasses()) {
+          biomass.add(b.getId());
+        }
+        result.message +="\n" + modelId + " biomass: " + biomass;
+      }
+
+      jsonResult.addIntegrationReport(modelId, reportData);
+
+      //    KBaseIOUtils.toJson(model);
+    } catch (Exception e) {
+      e.printStackTrace();
+      IntegrationReportResult iresult = new IntegrationReportResult();
+      iresult.error = KBaseUtils.toString(e);
+      jsonResult.addIntegrationReport(modelId, iresult);
     }
-    
-    jsonResult.addIntegrationReport(modelId, reportData);
-    
-//    KBaseIOUtils.toJson(model);
     
     return model;
   }
@@ -322,7 +343,7 @@ public class KBaseSbmlImporter {
         params.getAutomaticallyIntegrate(),
         params.getModelName());
     ZipContainer container = null;
-    
+
     try {
 
       String urlPath = params.getSbmlUrl();
@@ -337,8 +358,8 @@ public class KBaseSbmlImporter {
       if (biomass == null) {
         biomass = new ArrayList<> ();
       }
+
       Map<String, InputStream> inputStreams = new HashMap<> ();
-      
       if (urlPath.endsWith(".zip")) {
         container = new ZipContainer(localPath);
         List<ZipRecord> streams = container.getInputStreams();
@@ -354,12 +375,12 @@ public class KBaseSbmlImporter {
       } else {
         inputStreams.put(params.getSbmlUrl(), new FileInputStream(localPath));
       }
-      
+
       IntegrationReport jsonResult = new IntegrationReport();
-      
-//      Map<String, Map<String, Object>> jsonResult = new HashMap<> ();
-//      jsonResult.put("models", new HashMap<String, Object> ());
-//      jsonResult.put("all", new HashMap<String, Object> ());
+
+      //      Map<String, Map<String, Object>> jsonResult = new HashMap<> ();
+      //      jsonResult.put("models", new HashMap<String, Object> ());
+      //      jsonResult.put("all", new HashMap<String, Object> ());
       IntegrationByDatabase spiIntegrationAll = new IntegrationByDatabase();
       List<MetaboliteMajorLabel> dbs = new ArrayList<> ();
       dbs.add(MetaboliteMajorLabel.BiGG);
@@ -372,19 +393,19 @@ public class KBaseSbmlImporter {
       dbs.add(MetaboliteMajorLabel.LipidMAPS);
       dbs.add(MetaboliteMajorLabel.ChEBI);
       dbs.add(MetaboliteMajorLabel.MetaCyc);
-//      dbs.add(MetaboliteMajorLabel.)~
-      
+      //      dbs.add(MetaboliteMajorLabel.)~
+
       for (MetaboliteMajorLabel db : dbs) {
         spiIntegrationAll.databases.add(db.toString());
       }
-      
+
       boolean removeBoundary = params.getRemoveBoundary() == 1;
-      
+
       for (String u : inputStreams.keySet()) {
         InputStream is = inputStreams.get(u);
         try {
           FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, spiIntegrationAll, jsonResult, !removeBoundary);
-          
+
           if (fbaModel != null) {
             KBaseObject o = new KBaseObject();
             o.dataType = KBaseType.FBAModel;
@@ -393,7 +414,7 @@ public class KBaseSbmlImporter {
             if (result.modelName == null || result.modelName.isEmpty()) {
               result.modelName = fbaModel.getId();
             }
-            
+
             try {
               KBaseId kid = KBaseIOUtils.saveData(fbaModel.getId(), KBaseType.FBAModel, fbaModel, workspace, wsClient);
               result.objects.add(new WorkspaceObject()
@@ -402,38 +423,37 @@ public class KBaseSbmlImporter {
             } catch (Exception e) {
               result.message += "\nERROR: " + u + " " + e.getMessage();
             }
-//            if (model != null) {
-//              String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
-//                  KBaseType.FBAModel.value(), model, workspace, dfuClient);
-//              if (fbaModelRef != null) {
+            //            if (model != null) {
+            //              String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
+            //                  KBaseType.FBAModel.value(), model, workspace, dfuClient);
+            //              if (fbaModelRef != null) {
 
-//              } else {
-//                logger.warn("unable to save {}", modelId);
-//              }
-//            }
+            //              } else {
+            //                logger.warn("unable to save {}", modelId);
+            //              }
+            //            }
           }
-//          KBaseIOUtils.saveData(objects, workspace, dfuClient);
+          //          KBaseIOUtils.saveData(objects, workspace, dfuClient);
         } catch (Exception e) {
           result.message += "\nERROR: " + u + " " + e.getMessage();
         }
       }
-      
+
       jsonResult.setSpeciesIntegrationSummary(spiIntegrationAll);
-//      jsonResult.get("all").put("species", spiIntegrationAll);
-      
+
       String jsonData = KBaseIOUtils.toJson(jsonResult, true);
       logger.info("written {}", jsonData.length());
-      
+
       OutputStream os = null;
       try {
-        os = new FileOutputStream(REPORT_OUTPUT_PATH);
+        os = new FileOutputStream(KBaseConfig.REPORT_OUTPUT_FILE);
         IOUtils.write(jsonData, os);
       } catch (IOException e) {
         e.printStackTrace();
       } finally {
         IOUtils.closeQuietly(os);
       }
-      
+
     } catch (Exception e) {
       e.printStackTrace();
       logger.error("{}", e.getMessage());
@@ -450,9 +470,9 @@ public class KBaseSbmlImporter {
     ImportModelResult result = new ImportModelResult();
     String reportText = params.toString();
     result.message = reportText;
-    
+
     try {
-      KBaseBiodbContainer biodbContainer = new KBaseBiodbContainer(DATA_EXPORT_PATH);
+      KBaseBiodbContainer biodbContainer = new KBaseBiodbContainer(KBaseConfig.DATA_EXPORT_PATH);
       int nsize = biodbContainer.nameMap.size();
       result.message += String.format("\nName Dictionary: %d", nsize);
       Set<String> databases = new HashSet<> ();
@@ -461,16 +481,16 @@ public class KBaseSbmlImporter {
       databases.add("BiGG2");
       databases.add("LigandCompound");
       databases.add("MetaCyc");
-      
+
       for (String db : databases) {
         Set<Long> ids = biodbContainer.biodbService.getIdsByDatabaseAndType(db, "Metabolite");
         result.message += String.format("\n%s: %d", db, ids.size());
       }
-      
+
     } catch (Exception e) {
       result.message += "\n ERROR " + e.getMessage();
     }
-    
+
     return result;
   }
 

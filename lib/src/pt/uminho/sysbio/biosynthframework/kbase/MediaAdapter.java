@@ -39,7 +39,7 @@ public class MediaAdapter {
   public void addModelSeedMetabolite(String cpdEntry) {
     MediaCompound mc = new MediaCompound().withCompoundRef(getCompoundRef(cpdEntry))
                                           .withId(null)
-                                          .withName(null)
+                                          .withName(cpdEntry)
                                           .withSmiles(null)
                                           .withInchikey(null)
                                           .withConcentration(0.001)
@@ -55,7 +55,23 @@ public class MediaAdapter {
     double kub = -1 * lb;
     MediaCompound mc = new MediaCompound().withCompoundRef(getCompoundRef(cpdEntry))
                                           .withId(null)
-                                          .withName(null)
+                                          .withName(cpdEntry)
+                                          .withSmiles(null)
+                                          .withInchikey(null)
+                                          .withConcentration(0.001)
+                                          .withMaxFlux(kub)
+                                          .withMinFlux(klb);
+    
+    this.media.getMediacompounds().add(mc);
+  }
+  
+  public void addCustomMetabolite(String cpdEntry, double lb, double ub) {
+    //-10 10000 LB is output ! 
+    double klb = -1 * ub;
+    double kub = -1 * lb;
+    MediaCompound mc = new MediaCompound().withCompoundRef(getCompoundRef("cpd00000"))
+                                          .withId(cpdEntry)
+                                          .withName(cpdEntry)
                                           .withSmiles(null)
                                           .withInchikey(null)
                                           .withConcentration(0.001)

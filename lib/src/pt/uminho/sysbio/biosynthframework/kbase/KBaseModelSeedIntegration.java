@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
-import pt.uminho.sysbio.biosynth.integration.IntegrationUtils;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
@@ -36,16 +35,19 @@ import pt.uminho.sysbio.biosynthframework.integration.model.SearchTableFactory;
 import pt.uminho.sysbio.biosynthframework.integration.model.SpecieIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.integration.model.TrieIdBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseIntegrationEngine;
-import pt.uminho.sysbio.biosynthframework.io.BiodbServiceFactory;
 import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
-import pt.uminho.sysbio.biosynthframework.util.IntegrationMapUtils;
 import pt.uminho.sysbio.ext.MethoBuilder;
 import pt.uminho.sysbio.ext.ReactionIntegration;
 
 public class KBaseModelSeedIntegration {
+  
+  public static class KBaseMappingResult {
+    Map<String, Map<MetaboliteMajorLabel, String>> species = new HashMap<> ();
+    Map<String, Map<ReactionMajorLabel, String>> reactions = new HashMap<> ();
+  }
   
   private static final Logger logger = LoggerFactory.getLogger(KBaseModelSeedIntegration.class);
   
@@ -102,7 +104,7 @@ public class KBaseModelSeedIntegration {
     return ccs;
   }
   
-  public Map<String, Map<MetaboliteMajorLabel, String>> generateDatabaseReferences(
+  public KBaseMappingResult generateDatabaseReferences(
       XmlSbmlModel xmodel, 
       String modelEntry, 
       IntegrationReportResultAdapter resultAdapter, 
@@ -217,11 +219,14 @@ public class KBaseModelSeedIntegration {
     reactionIntegration.integrate(ReactionMajorLabel.BiGG, xmodel, integration.clean);
     reactionIntegration.integrate(ReactionMajorLabel.MetaCyc, xmodel, integration.clean);
     reactionIntegration.integrate(ReactionMajorLabel.ModelSeedReaction, xmodel, integration.clean);
-    
-    System.out.println(reactionIntegration.imap);
+
     resultAdapter.fillReactionIntegrationData(reactionIntegration.imap);
     
-    return imap;
+    KBaseMappingResult result = new KBaseMappingResult();
+    result.species = imap;
+    result.reactions = reactionIntegration.imap;
+    
+    return result;
 
 //    ObjectMapper om = new ObjectMapper();
 //    System.out.println(om.writeValueAsString(fbaModel));

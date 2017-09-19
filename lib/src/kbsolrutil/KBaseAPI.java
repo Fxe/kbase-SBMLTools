@@ -174,6 +174,15 @@ public class KBaseAPI {
     }
   }
   
+  public KBaseId saveObject(String id, String ws, KBaseType otype, Object o) throws IOException {
+    try {
+      KBaseId kid = KBaseIOUtils.saveData(id, otype, o, ws, getWorkspaceClient());
+      return kid;
+    } catch (Exception e) {
+      throw new IOException(e);
+    }
+  }
+  
   public List<KBaseId> listNarrative(String ws, KBaseType otype) throws IOException {
     return listNarrative(ws, otype.value());
   }

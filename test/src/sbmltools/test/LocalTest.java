@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter.ImportModelResult;
@@ -138,8 +139,8 @@ public class LocalTest {
   
   
   public static void integrationTest() {
-    KBaseSbmlImporter.DATA_EXPORT_PATH = a;
-    KBaseSbmlImporter.CURATION_DATA = b;
+    KBaseConfig.DATA_EXPORT_PATH = a;
+    KBaseConfig.CURATION_DATA = b;
     KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne/data";
     String sbmlPath = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
@@ -171,8 +172,8 @@ public class LocalTest {
   }
   
   public static void dataTest() {
-    KBaseSbmlImporter.DATA_EXPORT_PATH = a;
-    KBaseSbmlImporter.CURATION_DATA = b;
+    KBaseConfig.DATA_EXPORT_PATH = a;
+    KBaseConfig.CURATION_DATA = b;
     KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne";
     try {
       KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(null, null, null);
