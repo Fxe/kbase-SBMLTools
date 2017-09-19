@@ -124,9 +124,9 @@ public class SBMLToolsServer extends JsonServerServlet {
 
     List<String> files = new ArrayList<> ();
     files.add("index.html");
-    files.add("js/jquery-2.2.2.min.js");
-    files.add("js/underscore-min.js");
-    files.add("js/plotly-1.28.3.min.js");
+//    files.add("js/jquery-2.2.2.min.js");
+//    files.add("js/underscore-min.js");
+//    files.add("js/plotly-1.28.3.min.js");
     List<String> datas = new ArrayList<> ();
 
     for (String f : files) {
@@ -140,6 +140,13 @@ public class SBMLToolsServer extends JsonServerServlet {
     if (f.exists()) {
       logger.info("copy {} -> {}", f.getAbsolutePath(), reportFiles.baseFolder);
       KBaseIOUtils.copy(f.getAbsolutePath(), reportFiles.baseFolder + "/");
+    }
+    
+    for (File jsFile : result.jsonDataFiles) {
+      if (jsFile.exists() && jsFile.isFile()) {
+        logger.info("copy {} -> {}", jsFile.getAbsolutePath(), reportFiles.baseFolder);
+        KBaseIOUtils.copy(jsFile.getAbsolutePath(), reportFiles.baseFolder + "/");
+      }
     }
 
     KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
@@ -196,7 +203,6 @@ public class SBMLToolsServer extends JsonServerServlet {
     wspClient.setIsInsecureHttpConnectionAllowed(true);
     solrClient.setServiceVersion("beta");
     solrClient.setIsInsecureHttpConnectionAllowed(true);
-
 
     KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(wspClient, dfuClient, solrClient);
 

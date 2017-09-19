@@ -158,6 +158,7 @@ public class KBaseSbmlImporter {
     public String modelRef = "";
     public String modelName = "";
     public List<WorkspaceObject> objects = new ArrayList<> ();
+    public List<File> jsonDataFiles = new ArrayList<> ();
 
     @Override
     public String toString() {
@@ -453,13 +454,30 @@ public class KBaseSbmlImporter {
       } finally {
         IOUtils.closeQuietly(os);
       }
-
+      
+      for (String m : jsonResult.models.keySet()) {
+        IntegrationReportResult irr = jsonResult.models.get(m);
+        String vr = irr.validationData;
+        if (vr != null) {
+          File jsFile = new File(KBaseConfig.REPORT_OUTPUT_PATH + "/" + vr);
+          if (jsFile.exists()) {
+            result.jsonDataFiles.add(new File(vr));
+          } else {
+            logger.warn("file not found: {}", jsFile.getAbsolutePath());
+          }
+        }
+      }
     } catch (Exception e) {
       e.printStackTrace();
       logger.error("{}", e.getMessage());
     } finally {
       IOUtils.closeQuietly(container);
     }
+    
+    
+//    for (jsonResult.) {
+//      
+//    }
 
     return result;
   }
