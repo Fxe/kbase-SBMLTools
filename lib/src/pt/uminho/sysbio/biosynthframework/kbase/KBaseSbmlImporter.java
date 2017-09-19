@@ -455,6 +455,9 @@ public class KBaseSbmlImporter {
         IOUtils.closeQuietly(os);
       }
       
+      //[S4_File_fix_msg.json, iRL766_msg.json, iLC915_msg.json, aORYZAE_fix_msg.json, 
+      // iCY1106_msg.json, S4_File_msg.json, iSS884 v1_msg.json, iMA871_msg.json, aORYZAE_msg.json, 
+      // iAl1006 v1_msg.json, C_tropcalis_msg.json, iNL895_msg.json, SpoMBEL1693_msg.json, iOD907_msg.json]
       for (String m : jsonResult.models.keySet()) {
         IntegrationReportResult irr = jsonResult.models.get(m);
         String vr = irr.validationData;
@@ -462,7 +465,7 @@ public class KBaseSbmlImporter {
         if (vr != null) {
           File jsFile = new File(KBaseConfig.REPORT_OUTPUT_PATH + "/" + vr);
           if (jsFile.exists()) {
-            result.jsonDataFiles.add(new File(vr));
+            result.jsonDataFiles.add(jsFile);
           } else {
             logger.warn("file not found: {}", jsFile.getAbsolutePath());
           }
