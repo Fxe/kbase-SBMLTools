@@ -135,7 +135,7 @@ public class SBMLToolsServer extends JsonServerServlet {
 
 
     ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
-
+    System.out.println(result.jsonDataFiles);
     File f = new File("/kb/module/data/readerData.json");
     if (f.exists()) {
       logger.info("copy {} -> {}", f.getAbsolutePath(), reportFiles.baseFolder);

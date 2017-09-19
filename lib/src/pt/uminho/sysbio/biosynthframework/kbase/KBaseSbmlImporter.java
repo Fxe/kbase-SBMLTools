@@ -458,6 +458,7 @@ public class KBaseSbmlImporter {
       for (String m : jsonResult.models.keySet()) {
         IntegrationReportResult irr = jsonResult.models.get(m);
         String vr = irr.validationData;
+        System.out.println(vr);
         if (vr != null) {
           File jsFile = new File(KBaseConfig.REPORT_OUTPUT_PATH + "/" + vr);
           if (jsFile.exists()) {
@@ -473,11 +474,6 @@ public class KBaseSbmlImporter {
     } finally {
       IOUtils.closeQuietly(container);
     }
-    
-    
-//    for (jsonResult.) {
-//      
-//    }
 
     return result;
   }
