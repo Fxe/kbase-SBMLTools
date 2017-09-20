@@ -96,6 +96,7 @@ public class KBaseIntegration {
         report = new KBaseGenomeReport();
         report.bestMatch = genome.getScientificName();
         report.bestScore = -1;
+        report.addMatchGenome(genome.getId(), genome.getScientificName(), -1);
         
         Set<String> deleted = new HashSet<> ();
         Set<String> added = new HashSet<> ();

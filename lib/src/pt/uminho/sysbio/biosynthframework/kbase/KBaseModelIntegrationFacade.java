@@ -128,6 +128,10 @@ public class KBaseModelIntegrationFacade {
       integration.genome = genome;
     }
     
+
+    
+    integration.integrate();
+    
     kir.genomeReport.status = "auto_genome_get_fail";
     if (genome == null) {
       logger.info("auto detect genome...");
@@ -157,16 +161,14 @@ public class KBaseModelIntegrationFacade {
           } catch (IOException e) {
             kir.genomeReport.status = "auto_genome_get_fail";
           }
-//          logger.info("[GPR Gene Integration]");
-//          integration.integrateGprGenes();
+          logger.info("[GPR Gene Integration]");
+          integration.integrateGprGenes();
         }
       }
     } else {
       kir.fillGenomeData(integration.greport);
       kir.genomeReport.status = "user";
     }
-    
-    integration.integrate();
     
     try {
       if (params.getTemplateId() != null) {
