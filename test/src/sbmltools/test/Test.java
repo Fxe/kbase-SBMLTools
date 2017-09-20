@@ -182,7 +182,7 @@ public class Test {
       if (geneIntegration != null) {
         geneData = geneIntegration.searchGenome(fbaModel);
         System.out.println(geneData);
-        kir.fillGenomeData(geneIntegration);
+        kir.fillGenomeData(geneIntegration.report);
         if (geneIntegration.report != null && 
             geneIntegration.report.bestGenomeKID != null && 
             geneIntegration.report.bestGenomeKID.size() >= 1) {

@@ -110,17 +110,21 @@ public class KBaseIntegrationReport {
     //   }
   }
 
-  public void fillGenomeData(KBaseGeneIntegration geneIntegration) {
-    this.genomeReport.scName.putAll(geneIntegration.report.matchOrganism);
-    this.genomeReport.best = geneIntegration.report.bestScore;
-    for (String k : geneIntegration.report.matchScores.keySet()) {
-      double score = geneIntegration.report.matchScores.get(k);
-      if (!genomeReport.hits.containsKey(score)) {
-        this.genomeReport.hits.put(score, new TreeSet<String>());
+  public void fillGenomeData(KBaseGenomeReport report) {
+    if (report != null) {
+      this.genomeReport.scName.putAll(report.matchOrganism);
+      this.genomeReport.best = report.bestScore;
+      
+      for (String k : report.matchScores.keySet()) {
+        double score = report.matchScores.get(k);
+        if (!genomeReport.hits.containsKey(score)) {
+          this.genomeReport.hits.put(score, new TreeSet<String>());
+        }
+        this.genomeReport.hits.get(score).add(k);
       }
-      this.genomeReport.hits.get(score).add(k);
+      
+      this.genomeReport.miss.addAll(report.getUnmappedGenes());
     }
-    this.genomeReport.miss.addAll(geneIntegration.report.getUnmappedGenes());
   }
 
   @Override

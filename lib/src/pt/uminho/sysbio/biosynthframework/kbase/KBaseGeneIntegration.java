@@ -135,7 +135,6 @@ public class KBaseGeneIntegration {
         best.get(org).addAll(orgGenomeIds.get(org));
         report.bestMatch = org;
         report.bestScore = coverage;
-        
       }
       
       wut += org + " " + coverage + "\n";

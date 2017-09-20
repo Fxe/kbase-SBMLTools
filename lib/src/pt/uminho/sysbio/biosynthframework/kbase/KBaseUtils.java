@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import kbasefba.ModelReactionProtein;
+import kbasefba.ModelReactionProteinSubunit;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxTreeNode;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.DataTypeEnum;
@@ -78,6 +81,22 @@ public class KBaseUtils {
     }
     
     logger.trace("GPR: {}, Genes: {}", gpr, genes);
+    
+    return genes;
+  }
+  
+  public static Set<String> getGenes(List<ModelReactionProtein> mrpList) {
+    Set<String> genes = new TreeSet<> ();
+    
+    for (ModelReactionProtein mrp : mrpList) {
+      for (ModelReactionProteinSubunit mrps : mrp.getModelReactionProteinSubunits()) {
+        for (String f : mrps.getFeatureRefs()) {
+          String[] f_ = f.split("/");
+          String feature = f_[f_.length - 1];
+          genes.add(feature);
+        }
+      }
+    }
     
     return genes;
   }

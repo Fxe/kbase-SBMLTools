@@ -128,16 +128,6 @@ public class KBaseModelIntegrationFacade {
       integration.genome = genome;
     }
     
-    integration.integrate();
-    
-    try {
-      if (params.getTemplateId() != null) {
-        integration.adapter.setTemplate(params.getTemplateId(), wspClient);
-      }
-    } catch (Exception e) {
-      logger.error("Set Template: [{}] - {}", params.getTemplateId(), e.getMessage());
-    }
-    
     kir.genomeReport.status = "auto_genome_get_fail";
     if (genome == null) {
       logger.info("auto detect genome...");
@@ -145,7 +135,7 @@ public class KBaseModelIntegrationFacade {
       if (geneIntegration != null) {
         geneData = geneIntegration.searchGenome(fbaModel);
         System.out.println(geneData);
-        kir.fillGenomeData(geneIntegration);
+        kir.fillGenomeData(geneIntegration.report);
         if (geneIntegration.report != null && 
             geneIntegration.report.bestGenomeKID != null && 
             geneIntegration.report.bestGenomeKID.size() >= 1) {
@@ -167,19 +157,34 @@ public class KBaseModelIntegrationFacade {
           } catch (IOException e) {
             kir.genomeReport.status = "auto_genome_get_fail";
           }
-          integration.integrateGprGenes();
+//          logger.info("[GPR Gene Integration]");
+//          integration.integrateGprGenes();
         }
       }
     } else {
+      kir.fillGenomeData(integration.greport);
       kir.genomeReport.status = "user";
     }
+    
+    integration.integrate();
+    
+    try {
+      if (params.getTemplateId() != null) {
+        integration.adapter.setTemplate(params.getTemplateId(), wspClient);
+      }
+    } catch (Exception e) {
+      logger.error("Set Template: [{}] - {}", params.getTemplateId(), e.getMessage());
+    }
+    
+
     
 
     
     
     
     KBaseId mediaKid = null;
-    if (integration.defaultMedia != null) {
+    if (!DataUtils.empty(params.getOutputMediaName())&&
+        integration.defaultMedia != null) {
       mediaKid = KBaseIOUtils.saveData(params.getOutputMediaName(), KBaseType.KBaseBiochemMedia.value(), integration.defaultMedia, workspaceName, wspClient);
       outputObjects.put(mediaKid.reference, "detected media");
     }

@@ -10,6 +10,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Sets;
+
 import kbasebiochem.Media;
 import kbasefba.Biomass;
 import kbasefba.BiomassCompound;
@@ -22,6 +24,7 @@ import kbasefba.ModelReactionReagent;
 import kbasegenomes.Genome;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynthframework.EntityType;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.MockData;
 
@@ -40,6 +43,8 @@ public class KBaseIntegration {
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
   public String mediaName = null;
+  
+  public KBaseGenomeReport greport = null;
   /**
    * rxn -> new gpr <br> <h1>Example</h1><br> "rxn1000" : "b1000 and b1002"
    */
@@ -82,10 +87,19 @@ public class KBaseIntegration {
     }
   }
   
-  public void integrateGprGenes() {
+  public KBaseGenomeReport integrateGprGenes() {
+    KBaseGenomeReport report = null;
+    
     if (this.genomeRef != null) {
       fbaModel.setGenomeRef(this.genomeRef);
       if (genome != null) {
+        report = new KBaseGenomeReport();
+        report.bestMatch = genome.getScientificName();
+        report.bestScore = -1;
+        
+        Set<String> deleted = new HashSet<> ();
+        Set<String> added = new HashSet<> ();
+        Set<String> model = new HashSet<> ();
         for (String mrxnEntry : adapter.rxnMap.keySet()) {
           ModelReaction mr = adapter.rxnMap.get(mrxnEntry);
           String gprString = mr.getImportedGpr();
@@ -94,12 +108,30 @@ public class KBaseIntegration {
             if (genes != null && !genes.isEmpty()) {
               List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, fbaModel.getGenomeRef());
               mr.setModelReactionProteins(mrpList);
+              
+              Set<String> kgenes = KBaseUtils.getGenes(mrpList);
+              
+              for (String g : kgenes) {
+                report.mgeneToFeature.put(g, null);
+              }
+              for (String g : genes) {
+                report.mgenes.put(g, null);
+              }
+              added.addAll(kgenes);
+              model.addAll(genes);
+            } else {
+              logger.warn("[{}] invalid gpr: {}", mrxnEntry, gprString);
             }
-//            adapter.setupModelReactionProteinsFromGpr(mrxnEntry, gpr, genomeRef);            
           }
         }
+        
+//        deleted.addAll(Sets.difference(model, added));
+//        
+//        report.mgeneToFeature.addAll(added);
       }
     }
+    
+    return report;
   }
   
   public void integrate() {
@@ -230,10 +262,9 @@ public class KBaseIntegration {
       } else {
         logger.warn("unable to detect default media");
       }
-      
-      
     }
     
-    integrateGprGenes();
+    logger.info("[GPR Gene Integration]");
+    greport = integrateGprGenes();
   }
 }
