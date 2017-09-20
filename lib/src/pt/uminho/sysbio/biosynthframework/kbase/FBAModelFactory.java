@@ -253,8 +253,10 @@ public class FBAModelFactory {
     Map<String, Feature> fmap = new HashMap<> ();
     for (Feature f : genome.getFeatures()) {
       fmap.put(f.getId(), f);
-      for (String a : f.getAliases()) {
-        fmap.put(a, f);
+      if (f.getAliases() != null) {
+        for (String a : f.getAliases()) {
+          fmap.put(a, f);
+        }
       }
     }
     
