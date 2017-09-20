@@ -574,7 +574,7 @@ public class IntegrationLocalRun {
     kir.model = kmodel.getId();
     kir.objName = kmodel.getName();
     
-    kir.fillGenomeData(geneIntegration);
+    kir.fillGenomeData(geneIntegration.report);
     
 //    System.out.println(geneIntegration.report.getUnmappedGenes());
 //    System.out.println(geneIntegration.report.bestScore);
