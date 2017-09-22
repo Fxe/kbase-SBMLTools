@@ -116,17 +116,12 @@ public class SBMLToolsServer extends JsonServerServlet {
 
     ImportModelResult result = sbmlTools.importModel(params);
     List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);
-    //        Report kbaseReport = new Report().withTextMessage(result.message)
-    //                                         .withObjectsCreated(objs);
-
 
     KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
 
     List<String> files = new ArrayList<> ();
     files.add("index.html");
-//    files.add("js/jquery-2.2.2.min.js");
-//    files.add("js/underscore-min.js");
-//    files.add("js/plotly-1.28.3.min.js");
+    
     List<String> datas = new ArrayList<> ();
 
     for (String f : files) {
@@ -236,8 +231,11 @@ public class SBMLToolsServer extends JsonServerServlet {
     kbrClient.setIsInsecureHttpConnectionAllowed(true);
     wspClient.setIsInsecureHttpConnectionAllowed(true);
     
-    AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(params, wspClient, kbrClient, callbackURL, authPart);
+    AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(
+        params, wspClient, kbrClient, callbackURL, authPart, scratch);
     ReportInfo reportInfo = facade.run();
+    
+
     
     System.out.println(params);
     

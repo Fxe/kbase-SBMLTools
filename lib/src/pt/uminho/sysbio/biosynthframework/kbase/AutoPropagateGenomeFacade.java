@@ -1,9 +1,11 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,8 +41,10 @@ import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel.AlignmentJob;
+import pt.uminho.sysbio.biosynthframework.kbase.report.PropagationReport;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import sbmltools.AutoPropagateModelParams;
@@ -64,7 +68,7 @@ public class AutoPropagateGenomeFacade {
   
   public String modelToShow = "";
   
-  private int p = 5;
+  private int p = 2;
   private String genomeId;
   private String workspace;
   private final WorkspaceClient wsClient;
@@ -72,11 +76,13 @@ public class AutoPropagateGenomeFacade {
   private final GenomeAnnotationAPIClient gaClient;
   private final KBaseReportClient kbrClient;
   private final EasyKBase easyKBase;
+  public PropagationReport report;
+  private final Path scratch;
   
   public AutoPropagateGenomeFacade(AutoPropagateModelParams params, 
       WorkspaceClient wsClient,
       KBaseReportClient kbrClient,
-      URL callbackUrl, AuthToken token) throws IOException, UnauthorizedException {
+      URL callbackUrl, AuthToken token, Path scratch) throws IOException, UnauthorizedException {
     this.alignTool = new NAlignTool(KbaseGenomeUtils.NUC44);
     this.genomeId = params.getGenomeId();
     this.workspace = params.getWorkspaceName();
@@ -87,6 +93,7 @@ public class AutoPropagateGenomeFacade {
     this.dfuClient.setIsInsecureHttpConnectionAllowed(true);
     this.gaClient.setIsInsecureHttpConnectionAllowed(true);
     easyKBase = new EasyKBase(callbackUrl, token);
+    this.scratch = scratch;
   }
   
   public static class PropagationTask {
@@ -129,6 +136,9 @@ public class AutoPropagateGenomeFacade {
   }
   
   public ReportInfo run() {
+    
+    PropagationReport htmlReportData = new PropagationReport(p);
+    
     String out = "";
     Map<String, String> outputObjects = new HashMap<> ();
     try {
@@ -179,6 +189,7 @@ public class AutoPropagateGenomeFacade {
         for (Double score : sortedResults.keySet()) {
           for (AlignmentJob job : sortedResults.get(score)) {
             out += "\n" + score + ", " + job.targetOrganism + ", " + job.genome2 + " " + genomeToModels.get(job.genome2);
+            htmlReportData.add(job.targetOrganism, score);
           }
         }
         
@@ -293,6 +304,7 @@ public class AutoPropagateGenomeFacade {
           Set<String> m = genesPropByModel.get(g);
           for (PropagationTask ptask : genomesToCompare) {
             if (m.contains(ptask.modelId)) {
+              htmlReportData.addGene(g, ptask.modelId);
               out += " X";
             } else {
               out += " _";
@@ -314,7 +326,10 @@ public class AutoPropagateGenomeFacade {
       e.printStackTrace();
     }
     
+    report = htmlReportData;
+    
     try {
+      
       List<WorkspaceObject> wsObjects = new ArrayList<> ();
       for (String ref : outputObjects.keySet()) {
         String def = outputObjects.get(ref);
@@ -322,13 +337,43 @@ public class AutoPropagateGenomeFacade {
                                            .withRef(ref));
       }
       
-      final ReportInfo reportInfo = kbrClient.create(
-          new CreateParams().withWorkspaceName(workspace)
-          .withReport(new Report()
-              .withObjectsCreated(wsObjects)
-              .withTextMessage(out)));
+      if (this.report != null) {
+        KBaseIOUtils.writeStringFile(
+            KBaseIOUtils.toJson(this.report), 
+            "/kb/module/data/data.json");
+      }
       
-      return reportInfo;
+      KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
+      List<String> files = new ArrayList<> ();
+      files.add("index.html");
+      List<String> datas = new ArrayList<> ();
+      
+      for (String f : files) {
+        datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/report-propagation/" + f));
+      }
+      
+      ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
+      File f = new File("/kb/module/data/data.json");
+      
+      if (f.exists()) {
+        logger.info("copy {} -> {}", f.getAbsolutePath(), reportFiles.baseFolder);
+        KBaseIOUtils.copy(f.getAbsolutePath(), reportFiles.baseFolder + "/");
+      }
+      
+      if (kbrClient != null) {
+        KBaseReporter reporter = new KBaseReporter(kbrClient, workspace);
+        reporter.addWsObjects(wsObjects);
+        reporter.addHtmlFolderShock("Propagation Report", "index.html", reportFiles.baseFolder, dfuClient);
+        final ReportInfo reportInfo = reporter.extendedReport();
+        return reportInfo;
+      }
+//      final ReportInfo reportInfo = kbrClient.create(
+//          new CreateParams().withWorkspaceName(workspace)
+//          .withReport(new Report()
+//              .withObjectsCreated(wsObjects)
+//              .withTextMessage(out)));
+      
+//      return reportInfo;
     } catch (IOException | JsonClientException e) {
       e.printStackTrace();
     }
