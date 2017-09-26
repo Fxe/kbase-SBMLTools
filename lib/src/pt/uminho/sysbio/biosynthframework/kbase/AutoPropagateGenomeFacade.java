@@ -78,6 +78,7 @@ public class AutoPropagateGenomeFacade {
   private final EasyKBase easyKBase;
   public PropagationReport report;
   private final Path scratch;
+  public String kbaseModelOutput = "";
   
   public AutoPropagateGenomeFacade(AutoPropagateModelParams params, 
       WorkspaceClient wsClient,
@@ -263,6 +264,7 @@ public class AutoPropagateGenomeFacade {
             outputObjects.put(modelRef, "model");
             ptask.pmodelId = pmodelId;
             ptask.pmodelWs = workspace;
+            kbaseModelOutput = modelRef;
           }
         }
 

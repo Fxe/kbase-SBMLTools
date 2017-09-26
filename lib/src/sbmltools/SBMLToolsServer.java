@@ -237,10 +237,10 @@ public class SBMLToolsServer extends JsonServerServlet {
     
 
     
-    System.out.println(params);
+//    System.out.println(params);
     
     returnVal = new SbmlImporterResults()
-        .withFbamodelId("Ec_core_flux1")
+        .withFbamodelId(facade.kbaseModelOutput)
         .withReportName(reportInfo.getName())
         .withReportRef(reportInfo.getRef());
     
