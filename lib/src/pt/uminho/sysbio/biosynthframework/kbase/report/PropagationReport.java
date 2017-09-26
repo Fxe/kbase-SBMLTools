@@ -34,10 +34,10 @@ public class PropagationReport {
     
     int index = modelIndex.get(model);
     
-    if (!genePropagation.containsKey(model)) {
+    if (!genePropagation.containsKey(gene)) {
       genePropagation.put(gene, new double[size]);
     }
     
-    genePropagation.get(model)[index] = 1;
+    genePropagation.get(gene)[index] = 1;
   }
 }
