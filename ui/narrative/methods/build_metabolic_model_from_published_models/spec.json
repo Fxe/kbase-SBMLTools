@@ -25,6 +25,18 @@
       }
     },
     {
+      "id": "num_models_propagate",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": [ "3" ],
+      "field_type": "text",
+      "text_options": {
+      "validate_as": "int",
+         "min_integer" : 1
+           }
+    },
+    {
       "id": "output_model_name",
       "optional": false,
       "advanced": false,
@@ -54,6 +66,10 @@
         {
           "input_parameter": "genome_id",
           "target_property": "genome_id"
+        },
+        {
+          "input_parameter": "num_models_propagate",
+          "target_property": "num_models_propagate"
         },
         {
           "input_parameter": "output_model_name",

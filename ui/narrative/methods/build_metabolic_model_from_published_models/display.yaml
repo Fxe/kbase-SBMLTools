@@ -16,6 +16,10 @@ parameters :
         ui-name : Genome ID
         short-hint : ID of genome to associate with the new model
         long-hint  : ID of genome to associate with the new model
+    num_models_propagate :
+        ui-name : Number of models
+        short-hint : Number of published models to propagate
+        long-hint  : Number of published models to propagate
     output_model_name :
         ui-name : Output ID
         short-hint : Name to use for the new model

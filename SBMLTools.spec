@@ -25,8 +25,8 @@ module SBMLTools {
         To define lists and maps, use a syntax similar to C++ templates
         to indicate the type contained in the list or map.  For example:
 
-            list <string> list_of_strings;
-            mapping <string, int> map_of_ints;
+        list <string> list_of_strings;
+        mapping <string, int> map_of_ints;
     */
     typedef structure {
         assembly_ref assembly_input_ref;
@@ -80,6 +80,7 @@ module SBMLTools {
         string genome_id;
         string workspace_name;
         string output_model_name;
+        int num_models_propagate;
     } AutoPropagateModelParams;
 
 

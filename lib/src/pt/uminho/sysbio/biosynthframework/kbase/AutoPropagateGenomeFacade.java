@@ -95,6 +95,9 @@ public class AutoPropagateGenomeFacade {
     this.gaClient.setIsInsecureHttpConnectionAllowed(true);
     easyKBase = new EasyKBase(callbackUrl, token);
     this.scratch = scratch;
+    if (params.getNumModelsPropagate() != null) {
+      p = params.getNumModelsPropagate();
+    }
   }
   
   public static class PropagationTask {
@@ -292,7 +295,6 @@ public class AutoPropagateGenomeFacade {
             if (!genesPropByModel.containsKey(g)) {
               genesPropByModel.put(g, new HashSet<String>());
             }
-            
             genesPropByModel.get(g).add(ptask.modelId);
           }
           //get genes
@@ -305,6 +307,11 @@ public class AutoPropagateGenomeFacade {
           Set<String> m = genesPropByModel.get(g);
           for (PropagationTask ptask : genomesToCompare) {
             if (m.contains(ptask.modelId)) {
+              String gene = g;
+              if (gene.contains("/")) {
+                String[] cols = gene.split("/");
+                g = cols[cols.length - 1];
+              }
               htmlReportData.addGene(g, ptask.modelId);
 //              out += " X";
             } else {

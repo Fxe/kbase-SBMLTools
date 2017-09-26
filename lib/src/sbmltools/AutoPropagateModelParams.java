@@ -31,6 +31,9 @@ public class AutoPropagateModelParams {
     private String workspaceName;
     @JsonProperty("output_model_name")
     private String outputModelName;
+    @JsonProperty("num_models_propagate")
+    private Integer numModelsPropagate;
+    
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("genome_id")
@@ -41,6 +44,16 @@ public class AutoPropagateModelParams {
     @JsonProperty("genome_id")
     public void setGenomeId(String genomeId) {
         this.genomeId = genomeId;
+    }
+    
+    @JsonProperty("num_models_propagate")
+    public Integer getNumModelsPropagate() {
+      return numModelsPropagate;
+    }
+
+    @JsonProperty("num_models_propagate")
+    public void setNumModelsPropagate(Integer numModelsPropagate) {
+      this.numModelsPropagate = numModelsPropagate;
     }
 
     public AutoPropagateModelParams withGenomeId(String genomeId) {

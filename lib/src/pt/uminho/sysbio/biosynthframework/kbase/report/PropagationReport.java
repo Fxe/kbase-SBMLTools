@@ -10,6 +10,7 @@ public class PropagationReport {
   
   private Map<Double, Set<String>> genomeMatchData = new TreeMap<> ();
   
+  public String matchMethod = "DNA Polymerase";
   private final int msize;
   private int mindex = 0;
   private Map<String, Integer> modelIndex = new HashMap<>();
