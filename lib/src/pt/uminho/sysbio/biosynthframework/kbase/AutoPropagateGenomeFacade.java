@@ -139,7 +139,6 @@ public class AutoPropagateGenomeFacade {
     
     PropagationReport htmlReportData = new PropagationReport(p);
     
-    String out = "";
     Map<String, String> outputObjects = new HashMap<> ();
     try {
       List<KBaseId> repomodels = listModels(REF_PMODEL_WORLSPACE);
@@ -188,7 +187,7 @@ public class AutoPropagateGenomeFacade {
         Map<Double, Set<AlignmentJob>> sortedResults = ma.getSortedResults();
         for (Double score : sortedResults.keySet()) {
           for (AlignmentJob job : sortedResults.get(score)) {
-            out += "\n" + score + ", " + job.targetOrganism + ", " + job.genome2 + " " + genomeToModels.get(job.genome2);
+//            out += "\n" + score + ", " + job.targetOrganism + ", " + job.genome2 + " " + genomeToModels.get(job.genome2);
             htmlReportData.add(job.targetOrganism, score);
           }
         }
@@ -297,17 +296,17 @@ public class AutoPropagateGenomeFacade {
           //get genes
         }
         
-        out += "\n\n";
+//        out += "\n\n";
         
         for (String g : genesPropByModel.keySet()) {
-          out += '\n' + g;
+//          out += '\n' + g;
           Set<String> m = genesPropByModel.get(g);
           for (PropagationTask ptask : genomesToCompare) {
             if (m.contains(ptask.modelId)) {
               htmlReportData.addGene(g, ptask.modelId);
-              out += " X";
+//              out += " X";
             } else {
-              out += " _";
+//              out += " _";
             }
           }
         }
@@ -322,14 +321,13 @@ public class AutoPropagateGenomeFacade {
         logger.warn("unable to find feature");
       }
     } catch (IOException e) {
-      out += e.getMessage();
+//      out += e.getMessage();
       e.printStackTrace();
     }
     
     this.report = htmlReportData;
     
     try {
-      
       List<WorkspaceObject> wsObjects = new ArrayList<> ();
       for (String ref : outputObjects.keySet()) {
         String def = outputObjects.get(ref);
@@ -340,7 +338,8 @@ public class AutoPropagateGenomeFacade {
       if (this.report != null) {
         String js = KBaseIOUtils.toJson(this.report);
         System.out.println(js);
-        KBaseIOUtils.writeStringFile(js, "/kb/module/data/data.json");
+        Integer fsize = KBaseIOUtils.writeStringFile(js, "/kb/module/data/data.json");
+        logger.info("Data file: {}", fsize);
       }
       
       KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
