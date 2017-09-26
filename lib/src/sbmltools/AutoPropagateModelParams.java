@@ -32,7 +32,7 @@ public class AutoPropagateModelParams {
     @JsonProperty("output_model_name")
     private String outputModelName;
     @JsonProperty("num_models_propagate")
-    private Integer numModelsPropagate;
+    private Long numModelsPropagate;
     
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -52,7 +52,7 @@ public class AutoPropagateModelParams {
     }
 
     @JsonProperty("num_models_propagate")
-    public void setNumModelsPropagate(Integer numModelsPropagate) {
+    public void setNumModelsPropagate(Long numModelsPropagate) {
       this.numModelsPropagate = numModelsPropagate;
     }
 
