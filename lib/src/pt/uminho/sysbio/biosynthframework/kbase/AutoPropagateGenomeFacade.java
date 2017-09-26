@@ -326,7 +326,7 @@ public class AutoPropagateGenomeFacade {
       e.printStackTrace();
     }
     
-    report = htmlReportData;
+    this.report = htmlReportData;
     
     try {
       
@@ -338,9 +338,9 @@ public class AutoPropagateGenomeFacade {
       }
       
       if (this.report != null) {
-        KBaseIOUtils.writeStringFile(
-            KBaseIOUtils.toJson(this.report), 
-            "/kb/module/data/data.json");
+        String js = KBaseIOUtils.toJson(this.report);
+        System.out.println(js);
+        KBaseIOUtils.writeStringFile(js, "/kb/module/data/data.json");
       }
       
       KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);

@@ -321,20 +321,24 @@ public class KBaseIOUtils {
   }
   
   public static Integer writeStringFile(String string, String path) {
-    Integer size = null;
-    OutputStream os = null;
-    try {
-      File f = new File(path);
-      os = new FileOutputStream(f);
-      IOUtils.write(string, os);
-      size = string.length();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } finally {
-      IOUtils.closeQuietly(os);
+    if (string != null) {
+      Integer size = null;
+      OutputStream os = null;
+      try {
+        File f = new File(path);
+        os = new FileOutputStream(f);
+        IOUtils.write(string, os);
+        size = string.length();
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        IOUtils.closeQuietly(os);
+      }
+      
+      return size;
+    } else {
+      return null;
     }
-    
-    return size;
   }
 
   public static Object getObject(String name, String ws, String ref, 
