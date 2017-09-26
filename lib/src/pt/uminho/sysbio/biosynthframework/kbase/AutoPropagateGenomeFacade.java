@@ -96,7 +96,7 @@ public class AutoPropagateGenomeFacade {
     easyKBase = new EasyKBase(callbackUrl, token);
     this.scratch = scratch;
     if (params.getNumModelsPropagate() != null) {
-      p = params.getNumModelsPropagate();
+      p = Math.toIntExact(params.getNumModelsPropagate());
     }
   }
   

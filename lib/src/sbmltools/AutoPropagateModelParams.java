@@ -47,7 +47,7 @@ public class AutoPropagateModelParams {
     }
     
     @JsonProperty("num_models_propagate")
-    public Integer getNumModelsPropagate() {
+    public Long getNumModelsPropagate() {
       return numModelsPropagate;
     }
 
