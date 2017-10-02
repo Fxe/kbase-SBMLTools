@@ -164,6 +164,18 @@
             "display": "Peroxisome"
           },
           {
+            "id": "a",
+            "value": "a",
+            "ui_name": "Carboxysome",
+            "display": "Carboxysome"
+          },
+          {
+            "id": "l",
+            "value": "l",
+            "ui_name": "Lysosome",
+            "display": "Lysosome"
+          },
+          {
             "id": "b",
             "value": "b",
             "ui_name": "Boundary",
