@@ -162,6 +162,12 @@
             "value": "x",
             "ui_name": "Peroxisome",
             "display": "Peroxisome"
+          },
+          {
+            "id": "b",
+            "value": "b",
+            "ui_name": "Boundary",
+            "display": "Boundary"
           }
         ]
       },
