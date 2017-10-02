@@ -234,7 +234,6 @@ public class SBMLToolsServer extends JsonServerServlet {
     AutoPropagateGenomeFacade facade = new AutoPropagateGenomeFacade(
         params, wspClient, kbrClient, callbackURL, authPart, scratch);
     ReportInfo reportInfo = facade.run();
-    
 
     
 //    System.out.println(params);

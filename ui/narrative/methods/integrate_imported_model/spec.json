@@ -126,6 +126,42 @@
             "value": "p",
             "ui_name": "Periplasm",
             "display": "Periplasm"
+          },
+          {
+            "id": "m",
+            "value": "m",
+            "ui_name": "Mitochondria",
+            "display": "Mitochondria"
+          },
+          {
+            "id": "n",
+            "value": "n",
+            "ui_name": "Nucleus",
+            "display": "Nucleus"
+          },
+          {
+            "id": "r",
+            "value": "r",
+            "ui_name": "Endoplasmic Reticulum",
+            "display": "Endoplasmic Reticulum"
+          },
+          {
+            "id": "g",
+            "value": "g",
+            "ui_name": "Golgi",
+            "display": "Golgi"
+          },
+          {
+            "id": "v",
+            "value": "v",
+            "ui_name": "Vacuole",
+            "display": "Vacuole"
+          },
+          {
+            "id": "x",
+            "value": "x",
+            "ui_name": "Peroxisome",
+            "display": "Peroxisome"
           }
         ]
       },

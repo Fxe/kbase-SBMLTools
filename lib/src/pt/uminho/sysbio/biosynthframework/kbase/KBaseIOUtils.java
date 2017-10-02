@@ -275,12 +275,12 @@ public class KBaseIOUtils {
       Object o = odata.iterator().next().getData().asInstance();
       ObjectMapper om = new ObjectMapper();
       FBAModel fbaModel = om.convertValue(o, FBAModel.class);
-//      om.readValue(src, FBAModel.class);
       System.out.println(o.getClass().getSimpleName());
+      return fbaModel;
+//      om.readValue(src, FBAModel.class);
     } catch (IOException | JsonClientException e) {
       throw new IOException(e);
     }
-    return null;
   }
   
   public static KBaseGenome getGenome(String name, String ws, String ref, 

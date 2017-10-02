@@ -39,6 +39,7 @@ import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.ext.MethoBuilder;
 import pt.uminho.sysbio.ext.ReactionIntegration;
 
@@ -116,6 +117,8 @@ public class KBaseModelSeedIntegration {
     SpecieIntegrationFacade integration = new SpecieIntegrationFacade();
     
     BMap<String, String> spiEntryToName = new BHashMap<> ();
+    //names with split _
+    BMap<String, String> spiEntryToName2 = new BHashMap<> ();
     Set<String> spiEntrySet = new HashSet<> ();
     BoundaryConflictResolver r1 = new BoundaryConflictResolver();
     ModelSeedMultiMatchResolver r2 = new ModelSeedMultiMatchResolver();
@@ -145,11 +148,22 @@ public class KBaseModelSeedIntegration {
 //          xspi.getAttributes().get("id"), 
 //          xspi.getAttributes().get("compartment"));
 
-      if (spiEntry != null && !spiEntry.trim().isEmpty()) {
+      if (!DataUtils.empty(spiEntry)) {
         spiEntrySet.add(spiEntry);
       }
-      if (sname != null && !sname.trim().isEmpty()) {
+      
+      if (!DataUtils.empty(sname)) {
         String t = sname.trim().toLowerCase();
+
+        int sepIndex = sname.lastIndexOf('_');
+        if (sepIndex > -1) {
+          String part1 = sname.substring(0, sepIndex);
+          String part2 = sname.substring(sepIndex + 1);
+          if (!DataUtils.empty(part1)) {
+            spiEntryToName2.put(sname, part1.trim());
+          }
+        }
+        
         if (t.startsWith("m_")) {
           if (t.contains("_")) {
             t = t.substring(0, t.lastIndexOf('_'));
@@ -163,6 +177,8 @@ public class KBaseModelSeedIntegration {
       }
     }
     
+    
+    
     integration.generatePatterns();
     
     // /data/biobase/export
@@ -170,6 +186,7 @@ public class KBaseModelSeedIntegration {
     TrieIdBaseIntegrationEngine be2 = builder.buildTrieIdBaseIntegrationEngine();
     be2.ids = new HashSet<> (spiEntrySet);
     NameBaseIntegrationEngine be3 = builder.buildNameBaseIntegrationEngine();
+    NameBaseIntegrationEngine be3split = builder.buildNameBaseIntegrationEngine();
     XmlReferencesBaseIntegrationEngine be0 = builder.buildXmlReferencesBaseIntegrationEngine();
     be0.xmlSpecies = new ArrayList<> (xmodel.getSpecies());
     DictionaryBaseIntegrationEngine beX = builder.buildDictionaryBaseIntegrationEngine();
@@ -178,12 +195,14 @@ public class KBaseModelSeedIntegration {
     IntegrationEngine ie2 = new FirstDegreeReferences(biodbService);
     
     be3.spiEntryToName = spiEntryToName;
+    be3split.spiEntryToName = spiEntryToName2;
     be1.patterns = integration.getPatterns();
     integration.baseEngines.put("dict", beX);
     integration.baseEngines.put("refs", be0);
     integration.baseEngines.put("pattern", be1);
     integration.baseEngines.put("trie", be2);
     integration.baseEngines.put("name", be3);
+    integration.baseEngines.put("nameSplit", be3split);
     List<IntegrationEngine> l1 = new ArrayList<> ();
     l1.add(ie1);
     l1.add(ie2);
