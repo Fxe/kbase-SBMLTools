@@ -160,7 +160,7 @@ public class KBaseModelSeedIntegration {
           String part1 = sname.substring(0, sepIndex);
           String part2 = sname.substring(sepIndex + 1);
           if (!DataUtils.empty(part1)) {
-            spiEntryToName2.put(sname, part1.trim());
+            spiEntryToName2.put(spiEntry, part1.trim());
           }
         }
         
