@@ -155,12 +155,12 @@ public class KBaseModelSeedIntegration {
       if (!DataUtils.empty(sname)) {
         String t = sname.trim().toLowerCase();
 
-        int sepIndex = sname.lastIndexOf('_');
+        int sepIndex = t.lastIndexOf('_');
         if (sepIndex > -1) {
-          String part1 = sname.substring(0, sepIndex);
-          String part2 = sname.substring(sepIndex + 1);
+          String part1 = t.substring(0, sepIndex);
+          String part2 = t.substring(sepIndex + 1);
           if (!DataUtils.empty(part1)) {
-            System.out.println(spiEntry + " " + part1.trim());
+//            System.out.println(spiEntry + " " + part1.trim());
             spiEntryToName2.put(spiEntry, part1.trim());
           }
         }
