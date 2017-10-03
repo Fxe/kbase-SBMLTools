@@ -1,8 +1,6 @@
 {
    "ver": "0.0.1",
-    "authors": [
-        "filipeliu"
-    ],
+    "authors": ["filipeliu"],
   "contact" : "help@kbase.us",
   "visble" : true,
   "categories" : [ "active","metabolic_modeling" ],
