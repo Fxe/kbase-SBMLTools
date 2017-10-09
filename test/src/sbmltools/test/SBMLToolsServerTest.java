@@ -66,7 +66,6 @@ public class SBMLToolsServerTest {
       "https://kbase.us/services/auth/api/legacy/KBase/Sessions/Login";
 //  private static String AUTH_SERVICE_URL = 
 //      "https://kbase.us/services/authorization/Sessions/Login";
-
   private static String AUTH_SERVICE_URL_ALLOW_I = "false";
   private static String KBASE_ENDPOINT = "https://appdev.kbase.us/services";
   private static String WORKSPACE_URL = KBASE_ENDPOINT + "/ws";

@@ -49,6 +49,9 @@ public class FBAModelFactory {
 //  private static final String DEFAULT_COMPOUND_REF = "~/template/compounds/id/cpd00000";
   private static final String MODEL_SEED_COMPOUND_REF_PATTERN = "~/template/compounds/id/%s";
   
+  
+  private String genome;
+  
   private XmlSbmlModel xmodel;
   private String modelId;
   private String modelName;
@@ -64,6 +67,11 @@ public class FBAModelFactory {
   private List<ModelReaction> modelReactions = new ArrayList<> ();
 
   private Map<String, String> cmpMap = new HashMap<> ();
+  
+  public FBAModelFactory withGenomeId(String genomeId) {
+    this.genome = genomeId;
+    return this;
+  }
   
   public FBAModelFactory withModelId(String modelId) {
     this.modelId = modelId;
@@ -305,6 +313,7 @@ public class FBAModelFactory {
     FBAModel model = new FBAModel();
     model.setId(modelId);
     model.setName(modelName); //get from xml if exists
+//    model.set
     model.setGenomeRef(KBaseConfig.REF_EMPTY_GENOME);
     model.setSource("External");
     model.setSourceId(modelId);

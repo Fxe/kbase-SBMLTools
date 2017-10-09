@@ -226,11 +226,14 @@ public class KBaseSbmlImporter {
       logger.info("validate");
       
       List<XmlMessage> vmsg = new ArrayList<> ();
-      //    pt.uminho.sysbio.biosynthframework.sbml.
+      
+      //VALIDATION
       XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel);
       XmlSbmlModelValidator.initializeDefaults(validator);
 
       List<XmlMessage> msgs = validator.validate();
+      
+      //CORRECTION
       XmlSbmlModelAutofix autofix = new XmlSbmlModelAutofix();
       autofix.fix(xmodel, msgs);
 
@@ -238,6 +241,7 @@ public class KBaseSbmlImporter {
       vmsg.addAll(fmsgs);
 //      resultAdapter.fillValidationData(fmsgs);
 
+      //VALIDATION step 2
       XmlSbmlModelValidator validator2 = new XmlSbmlModelValidator(xmodel);
       XmlSbmlModelValidator.initializeDefaults(validator2);
       List<XmlMessage> msgs2 = validator2.validate();
@@ -303,6 +307,7 @@ public class KBaseSbmlImporter {
       }
       //order matters ! fix this ... it is a factory ...
       model = new FBAModelFactory()
+//          .withGenomeId("sfsfsf")
           .withSpecieIntegration(sintegration)
           .withReactionIntegration(rintegration)
           .withBiomassIds(biomassIds)

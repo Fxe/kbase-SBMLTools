@@ -101,6 +101,9 @@ public class SBMLToolsServer extends JsonServerServlet {
   public SbmlImporterResults sbmlImporter(SbmlImporterParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
     SbmlImporterResults returnVal = null;
     //BEGIN sbml_importer
+    
+    System.out.println("Xmx: " + Runtime.getRuntime().maxMemory());
+    System.out.println("Total: " + Runtime.getRuntime().totalMemory());
     final String workspaceName = params.getWorkspaceName();
 
     final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
