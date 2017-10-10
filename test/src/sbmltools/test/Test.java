@@ -120,7 +120,7 @@ public class Test {
                                                    modelId, 
                                                    url, 
                                                    runIntegration, 
-                                                   biomassIds, 
+                                                   biomassIds, null,
                                                    spiIntegrationAll, 
                                                    jsonResult, 
                                                    allowBoundary);
