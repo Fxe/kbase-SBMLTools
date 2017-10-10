@@ -102,18 +102,18 @@ public class SBMLToolsServer extends JsonServerServlet {
     SbmlImporterResults returnVal = null;
     //BEGIN sbml_importer
     
-    System.out.println("Xmx: " + Runtime.getRuntime().maxMemory());
-    System.out.println("Total: " + Runtime.getRuntime().totalMemory());
+//    System.out.println("Xmx: " + Runtime.getRuntime().maxMemory());
+//    System.out.println("Total: " + Runtime.getRuntime().totalMemory());
     final String workspaceName = params.getWorkspaceName();
 
     final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
+    
     // see note above about bad practice
     dfuClient.setIsInsecureHttpConnectionAllowed(true);
     kbrClient.setIsInsecureHttpConnectionAllowed(true);
     wspClient.setIsInsecureHttpConnectionAllowed(true);
-
 
     KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(workspaceName, dfuClient, wspClient);
 
@@ -130,7 +130,6 @@ public class SBMLToolsServer extends JsonServerServlet {
     for (String f : files) {
       datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
     }
-
 
     ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
     System.out.println(result.jsonDataFiles);
@@ -150,7 +149,6 @@ public class SBMLToolsServer extends JsonServerServlet {
     KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
     reporter.addWsObjects(objs);
     reporter.addHtmlFolderShock("importer report", "index.html", reportFiles.baseFolder, dfuClient);
-
 
     final ReportInfo report = reporter.extendedReport();
     //        final ReportInfo report = kbr.create(

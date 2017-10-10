@@ -98,6 +98,7 @@ public class KBaseSbmlImporter {
         KBaseConfig.DATA_EXPORT_PATH, KBaseConfig.CURATION_DATA, biodbContainer);
 
     reactionIntegration = new ReactionIntegration(biodbContainer.biodbService);
+    //SETUP REACTION INTEGRATION DEFAULT EXCLUSIONS
     reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h");
     reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h2o");
     reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00001");
@@ -197,6 +198,7 @@ public class KBaseSbmlImporter {
   public FBAModel importModel(InputStream is, 
       ImportModelResult result, String modelId, String url, 
       boolean runIntegration, Collection<String> biomassIds, 
+      String genomeRef,
       IntegrationByDatabase spiIntegrationAll,
       IntegrationReport jsonResult, boolean allowBoundary) {
     
@@ -307,7 +309,7 @@ public class KBaseSbmlImporter {
       }
       //order matters ! fix this ... it is a factory ...
       model = new FBAModelFactory()
-//          .withGenomeId("sfsfsf")
+          .withGenomeRef(genomeRef)
           .withSpecieIntegration(sintegration)
           .withReactionIntegration(rintegration)
           .withBiomassIds(biomassIds)
@@ -410,7 +412,7 @@ public class KBaseSbmlImporter {
       for (String u : inputStreams.keySet()) {
         InputStream is = inputStreams.get(u);
         try {
-          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, spiIntegrationAll, jsonResult, !removeBoundary);
+          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, null, spiIntegrationAll, jsonResult, !removeBoundary);
 
           if (fbaModel != null) {
             KBaseObject o = new KBaseObject();

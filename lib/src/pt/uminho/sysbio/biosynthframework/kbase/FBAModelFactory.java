@@ -49,8 +49,10 @@ public class FBAModelFactory {
 //  private static final String DEFAULT_COMPOUND_REF = "~/template/compounds/id/cpd00000";
   private static final String MODEL_SEED_COMPOUND_REF_PATTERN = "~/template/compounds/id/%s";
   
-  
-  private String genome;
+  /**
+   * KBase Genome ID<br>null -> empty genome
+   */
+  private String genomeRef = null;
   
   private XmlSbmlModel xmodel;
   private String modelId;
@@ -68,8 +70,8 @@ public class FBAModelFactory {
 
   private Map<String, String> cmpMap = new HashMap<> ();
   
-  public FBAModelFactory withGenomeId(String genomeId) {
-    this.genome = genomeId;
+  public FBAModelFactory withGenomeRef(String genomeRef) {
+    this.genomeRef = genomeRef;
     return this;
   }
   
@@ -313,8 +315,10 @@ public class FBAModelFactory {
     FBAModel model = new FBAModel();
     model.setId(modelId);
     model.setName(modelName); //get from xml if exists
-//    model.set
     model.setGenomeRef(KBaseConfig.REF_EMPTY_GENOME);
+    if (genomeRef != null) {
+      model.setGenomeRef(genomeRef);
+    }
     model.setSource("External");
     model.setSourceId(modelId);
     model.setType("SBML Model");
