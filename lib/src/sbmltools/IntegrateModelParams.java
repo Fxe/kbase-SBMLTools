@@ -35,6 +35,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "create_extracellular",
     "remove_boundary",
     "fill_metadata",
+    "integrate_model",
+    "conflict_resolution",
     "translate_database"
 })
 public class IntegrateModelParams {
@@ -65,6 +67,10 @@ public class IntegrateModelParams {
     private Long removeBoundary;
     @JsonProperty("fill_metadata")
     private Long fillMetadata;
+    @JsonProperty("integrate_model")
+    private Long integrateModel;
+    @JsonProperty("conflict_resolution")
+    private String conflictResolution;
     @JsonProperty("translate_database")
     private String translateDatabase;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -264,6 +270,36 @@ public class IntegrateModelParams {
         return this;
     }
 
+    @JsonProperty("integrate_model")
+    public Long getIntegrateModel() {
+        return integrateModel;
+    }
+
+    @JsonProperty("integrate_model")
+    public void setIntegrateModel(Long integrateModel) {
+        this.integrateModel = integrateModel;
+    }
+
+    public IntegrateModelParams withIntegrateModel(Long integrateModel) {
+        this.integrateModel = integrateModel;
+        return this;
+    }
+
+    @JsonProperty("conflict_resolution")
+    public String getConflictResolution() {
+        return conflictResolution;
+    }
+
+    @JsonProperty("conflict_resolution")
+    public void setConflictResolution(String conflictResolution) {
+        this.conflictResolution = conflictResolution;
+    }
+
+    public IntegrateModelParams withConflictResolution(String conflictResolution) {
+        this.conflictResolution = conflictResolution;
+        return this;
+    }
+
     @JsonProperty("translate_database")
     public String getTranslateDatabase() {
         return translateDatabase;
@@ -291,7 +327,7 @@ public class IntegrateModelParams {
 
     @Override
     public String toString() {
-        return ((((((((((((((((((((((((((((((("IntegrateModelParams"+" [modelName=")+ modelName)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", outputMediaName=")+ outputMediaName)+", templateId=")+ templateId)+", genomeId=")+ genomeId)+", compartmentTranslation=")+ compartmentTranslation)+", biomassReactions=")+ biomassReactions)+", compoundMappings=")+ compoundMappings)+", geneMappings=")+ geneMappings)+", createExtracellular=")+ createExtracellular)+", removeBoundary=")+ removeBoundary)+", fillMetadata=")+ fillMetadata)+", translateDatabase=")+ translateDatabase)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((((((((((((("IntegrateModelParams"+" [modelName=")+ modelName)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", outputMediaName=")+ outputMediaName)+", templateId=")+ templateId)+", genomeId=")+ genomeId)+", compartmentTranslation=")+ compartmentTranslation)+", biomassReactions=")+ biomassReactions)+", compoundMappings=")+ compoundMappings)+", geneMappings=")+ geneMappings)+", createExtracellular=")+ createExtracellular)+", removeBoundary=")+ removeBoundary)+", fillMetadata=")+ fillMetadata)+", integrateModel=")+ integrateModel)+", conflictResolution=")+ conflictResolution)+", translateDatabase=")+ translateDatabase)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

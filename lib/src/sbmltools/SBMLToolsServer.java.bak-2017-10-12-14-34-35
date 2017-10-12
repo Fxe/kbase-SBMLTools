@@ -56,20 +56,20 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter.ImportModelRes
  * </pre>
  */
 public class SBMLToolsServer extends JsonServerServlet {
-    private static final long serialVersionUID = 1L;
-    private static final String version = "0.0.1";
-    private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "70b8692ac482ee04b4c29b02bf90b1d306d35063";
+  private static final long serialVersionUID = 1L;
+  private static final String version = "0.0.1";
+  private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
+  private static final String gitCommitHash = "a8a4df4f477f85164f8b6b23dc0a9fa689d2f139";
 
-    //BEGIN_CLASS_HEADER
+  //BEGIN_CLASS_HEADER
   private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);
   private final URL callbackURL;
   private final Path scratch;
-    //END_CLASS_HEADER
+  //END_CLASS_HEADER
 
-    public SBMLToolsServer() throws Exception {
-        super("SBMLTools");
-        //BEGIN_CONSTRUCTOR
+  public SBMLToolsServer() throws Exception {
+    super("SBMLTools");
+    //BEGIN_CONSTRUCTOR
     final String sdkURL = System.getenv("SDK_CALLBACK_URL");
     try {
       callbackURL = new URL(sdkURL);
@@ -83,20 +83,24 @@ public class SBMLToolsServer extends JsonServerServlet {
     } else {
       scratch = Paths.get(super.config.get("scratch"));
     }
-        //END_CONSTRUCTOR
-    }
+    //END_CONSTRUCTOR
+  }
 
-    /**
-     * <p>Original spec-file function name: sbml_importer</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link sbmltools.SbmlImporterParams SbmlImporterParams}
-     * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
-     */
-    @JsonServerMethod(rpc = "SBMLTools.sbml_importer", async=true)
-    public SbmlImporterResults sbmlImporter(SbmlImporterParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        SbmlImporterResults returnVal = null;
-        //BEGIN sbml_importer
+  /**
+   * <p>Original spec-file function name: sbml_importer</p>
+   * <pre>
+   * The actual function is declared using 'funcdef' to specify the name
+   * and input/return arguments to the function.  For all typical KBase
+   * Apps that run in the Narrative, your function should have the 
+   * 'authentication required' modifier.
+   * </pre>
+   * @param   params   instance of type {@link sbmltools.SbmlImporterParams SbmlImporterParams}
+   * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
+   */
+  @JsonServerMethod(rpc = "SBMLTools.sbml_importer", async=true)
+  public SbmlImporterResults sbmlImporter(SbmlImporterParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    SbmlImporterResults returnVal = null;
+    //BEGIN sbml_importer
     
 //    System.out.println("Xmx: " + Runtime.getRuntime().maxMemory());
 //    System.out.println("Total: " + Runtime.getRuntime().totalMemory());
@@ -164,21 +168,21 @@ public class SBMLToolsServer extends JsonServerServlet {
       //name instead of ref!
       returnVal.withFbamodelId(result.modelName);
     }
-        //END sbml_importer
-        return returnVal;
-    }
+    //END sbml_importer
+    return returnVal;
+  }
 
-    /**
-     * <p>Original spec-file function name: integrate_model</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link sbmltools.IntegrateModelParams IntegrateModelParams}
-     * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
-     */
-    @JsonServerMethod(rpc = "SBMLTools.integrate_model", async=true)
-    public SbmlImporterResults integrateModel(IntegrateModelParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        SbmlImporterResults returnVal = null;
-        //BEGIN integrate_model
+  /**
+   * <p>Original spec-file function name: integrate_model</p>
+   * <pre>
+   * </pre>
+   * @param   params   instance of type {@link sbmltools.IntegrateModelParams IntegrateModelParams}
+   * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
+   */
+  @JsonServerMethod(rpc = "SBMLTools.integrate_model", async=true)
+  public SbmlImporterResults integrateModel(IntegrateModelParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    SbmlImporterResults returnVal = null;
+    //BEGIN integrate_model
 
     System.out.println(params);
 
@@ -204,21 +208,22 @@ public class SBMLToolsServer extends JsonServerServlet {
                                 geneIntegration,
                                 "/data/integration/export",
                                 scratch).kbaseIntegrate(params, workspaceName);
-        //END integrate_model
-        return returnVal;
-    }
 
-    /**
-     * <p>Original spec-file function name: auto_propagate_genome</p>
-     * <pre>
-     * </pre>
-     * @param   params   instance of type {@link sbmltools.AutoPropagateModelParams AutoPropagateModelParams}
-     * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
-     */
-    @JsonServerMethod(rpc = "SBMLTools.auto_propagate_genome", async=true)
-    public SbmlImporterResults autoPropagateGenome(AutoPropagateModelParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
-        SbmlImporterResults returnVal = null;
-        //BEGIN auto_propagate_genome
+    //END integrate_model
+    return returnVal;
+  }
+
+  /**
+   * <p>Original spec-file function name: auto_propagate_genome</p>
+   * <pre>
+   * </pre>
+   * @param   params   instance of type {@link sbmltools.AutoPropagateModelParams AutoPropagateModelParams}
+   * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}
+   */
+  @JsonServerMethod(rpc = "SBMLTools.auto_propagate_genome", async=true)
+  public SbmlImporterResults autoPropagateGenome(AutoPropagateModelParams params, AuthToken authPart, RpcContext jsonRpcContext) throws Exception {
+    SbmlImporterResults returnVal = null;
+    //BEGIN auto_propagate_genome
     
     System.out.println(params);
     
@@ -239,34 +244,34 @@ public class SBMLToolsServer extends JsonServerServlet {
         .withReportName(reportInfo.getName())
         .withReportRef(reportInfo.getRef());
     
-        //END auto_propagate_genome
-        return returnVal;
-    }
-    @JsonServerMethod(rpc = "SBMLTools.status")
-    public Map<String, Object> status() {
-        Map<String, Object> returnVal = null;
-        //BEGIN_STATUS
+    //END auto_propagate_genome
+    return returnVal;
+  }
+  @JsonServerMethod(rpc = "SBMLTools.status")
+  public Map<String, Object> status() {
+    Map<String, Object> returnVal = null;
+    //BEGIN_STATUS
     returnVal = new LinkedHashMap<String, Object>();
     returnVal.put("state", "OK");
     returnVal.put("message", "");
     returnVal.put("version", version);
     returnVal.put("git_url", gitUrl);
     returnVal.put("git_commit_hash", gitCommitHash);
-        //END_STATUS
-        return returnVal;
-    }
+    //END_STATUS
+    return returnVal;
+  }
 
-    public static void main(String[] args) throws Exception {
-        if (args.length == 1) {
-            new SBMLToolsServer().startupServer(Integer.parseInt(args[0]));
-        } else if (args.length == 3) {
-            JsonServerSyslog.setStaticUseSyslog(false);
-            JsonServerSyslog.setStaticMlogFile(args[1] + ".log");
-            new SBMLToolsServer().processRpcCall(new File(args[0]), new File(args[1]), args[2]);
-        } else {
-            System.out.println("Usage: <program> <server_port>");
-            System.out.println("   or: <program> <context_json_file> <output_json_file> <token>");
-            return;
-        }
+  public static void main(String[] args) throws Exception {
+    if (args.length == 1) {
+      new SBMLToolsServer().startupServer(Integer.parseInt(args[0]));
+    } else if (args.length == 3) {
+      JsonServerSyslog.setStaticUseSyslog(false);
+      JsonServerSyslog.setStaticMlogFile(args[1] + ".log");
+      new SBMLToolsServer().processRpcCall(new File(args[0]), new File(args[1]), args[2]);
+    } else {
+      System.out.println("Usage: <program> <server_port>");
+      System.out.println("   or: <program> <context_json_file> <output_json_file> <token>");
+      return;
     }
+  }
 }

@@ -166,10 +166,6 @@ public class SBMLToolsClient {
     /**
      * <p>Original spec-file function name: sbml_importer</p>
      * <pre>
-     * The actual function is declared using 'funcdef' to specify the name
-     * and input/return arguments to the function.  For all typical KBase
-     * Apps that run in the Narrative, your function should have the 
-     * 'authentication required' modifier.
      * </pre>
      * @param   params   instance of type {@link sbmltools.SbmlImporterParams SbmlImporterParams}
      * @return   parameter "output" of type {@link sbmltools.SbmlImporterResults SbmlImporterResults}

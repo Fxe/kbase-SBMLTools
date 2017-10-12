@@ -124,11 +124,15 @@ $params is a SBMLTools.SbmlImporterParams
 $output is a SBMLTools.SbmlImporterResults
 SbmlImporterParams is a reference to a hash where the following keys are defined:
 	sbml_url has a value which is a string
+	sbml_local_path has a value which is a string
+	file_type has a value which is a string
 	workspace_name has a value which is a string
+	genome_ref has a value which is a string
 	biomass has a value which is a reference to a list where each element is a string
 	model_name has a value which is a string
 	automatically_integrate has a value which is an int
 	remove_boundary has a value which is an int
+	conflict_resolution has a value which is a string
 SbmlImporterResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -144,11 +148,15 @@ $params is a SBMLTools.SbmlImporterParams
 $output is a SBMLTools.SbmlImporterResults
 SbmlImporterParams is a reference to a hash where the following keys are defined:
 	sbml_url has a value which is a string
+	sbml_local_path has a value which is a string
+	file_type has a value which is a string
 	workspace_name has a value which is a string
+	genome_ref has a value which is a string
 	biomass has a value which is a reference to a list where each element is a string
 	model_name has a value which is a string
 	automatically_integrate has a value which is an int
 	remove_boundary has a value which is an int
+	conflict_resolution has a value which is a string
 SbmlImporterResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -159,10 +167,7 @@ SbmlImporterResults is a reference to a hash where the following keys are define
 
 =item Description
 
-The actual function is declared using 'funcdef' to specify the name
-and input/return arguments to the function.  For all typical KBase
-Apps that run in the Narrative, your function should have the 
-'authentication required' modifier.
+
 
 =back
 
@@ -243,6 +248,8 @@ IntegrateModelParams is a reference to a hash where the following keys are defin
 	create_extracellular has a value which is an int
 	remove_boundary has a value which is an int
 	fill_metadata has a value which is an int
+	integrate_model has a value which is an int
+	conflict_resolution has a value which is a string
 	translate_database has a value which is a string
 CompartmentMapping is a reference to a hash where the following keys are defined:
 	kbase_compartment_id has a value which is a string
@@ -274,6 +281,8 @@ IntegrateModelParams is a reference to a hash where the following keys are defin
 	create_extracellular has a value which is an int
 	remove_boundary has a value which is an int
 	fill_metadata has a value which is an int
+	integrate_model has a value which is an int
+	conflict_resolution has a value which is a string
 	translate_database has a value which is a string
 CompartmentMapping is a reference to a hash where the following keys are defined:
 	kbase_compartment_id has a value which is a string
@@ -359,6 +368,7 @@ AutoPropagateModelParams is a reference to a hash where the following keys are d
 	genome_id has a value which is a string
 	workspace_name has a value which is a string
 	output_model_name has a value which is a string
+	num_models_propagate has a value which is an int
 SbmlImporterResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -376,6 +386,7 @@ AutoPropagateModelParams is a reference to a hash where the following keys are d
 	genome_id has a value which is a string
 	workspace_name has a value which is a string
 	output_model_name has a value which is a string
+	num_models_propagate has a value which is an int
 SbmlImporterResults is a reference to a hash where the following keys are defined:
 	report_name has a value which is a string
 	report_ref has a value which is a string
@@ -527,61 +538,10 @@ sub _validate_version {
 
 
 
-=head2 assembly_ref
-
-=over 4
-
-
-
-=item Description
-
-A 'typedef' allows you to provide a more specific name for
-a type.  Built-in primitive types include 'string', 'int',
-'float'.  Here we define a type named assembly_ref to indicate
-a string that should be set to a KBase ID reference to an
-Assembly data object.
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a string
-</pre>
-
-=end html
-
-=begin text
-
-a string
-
-=end text
-
-=back
-
-
-
 =head2 FilterContigsParams
 
 =over 4
 
-
-
-=item Description
-
-A 'typedef' can also be used to define compound or container
-objects, like lists, maps, and structures.  The standard KBase
-convention is to use structures, as shown here, to define the
-input and output of your function.  Here the input is a
-reference to the Assembly data object, a workspace to save
-output, and a length threshold for filtering.
-
-To define lists and maps, use a syntax similar to C++ templates
-to indicate the type contained in the list or map.  For example:
-
-    list <string> list_of_strings;
-    mapping <string, int> map_of_ints;
 
 
 =item Definition
@@ -590,7 +550,7 @@ to indicate the type contained in the list or map.  For example:
 
 <pre>
 a reference to a hash where the following keys are defined:
-assembly_input_ref has a value which is a SBMLTools.assembly_ref
+assembly_input_ref has a value which is a string
 workspace_name has a value which is a string
 min_length has a value which is an int
 
@@ -601,7 +561,7 @@ min_length has a value which is an int
 =begin text
 
 a reference to a hash where the following keys are defined:
-assembly_input_ref has a value which is a SBMLTools.assembly_ref
+assembly_input_ref has a value which is a string
 workspace_name has a value which is a string
 min_length has a value which is an int
 
@@ -624,7 +584,7 @@ min_length has a value which is an int
 
 <pre>
 a reference to a hash where the following keys are defined:
-assembly_input_ref has a value which is a SBMLTools.assembly_ref
+assembly_input_ref has a value which is a string
 workspace_name has a value which is a string
 url has a value which is a string
 min_length has a value which is an int
@@ -636,7 +596,7 @@ min_length has a value which is an int
 =begin text
 
 a reference to a hash where the following keys are defined:
-assembly_input_ref has a value which is a SBMLTools.assembly_ref
+assembly_input_ref has a value which is a string
 workspace_name has a value which is a string
 url has a value which is a string
 min_length has a value which is an int
@@ -710,6 +670,8 @@ gene_mappings has a value which is a string
 create_extracellular has a value which is an int
 remove_boundary has a value which is an int
 fill_metadata has a value which is an int
+integrate_model has a value which is an int
+conflict_resolution has a value which is a string
 translate_database has a value which is a string
 
 </pre>
@@ -732,6 +694,8 @@ gene_mappings has a value which is a string
 create_extracellular has a value which is an int
 remove_boundary has a value which is an int
 fill_metadata has a value which is an int
+integrate_model has a value which is an int
+conflict_resolution has a value which is a string
 translate_database has a value which is a string
 
 
@@ -754,11 +718,15 @@ translate_database has a value which is a string
 <pre>
 a reference to a hash where the following keys are defined:
 sbml_url has a value which is a string
+sbml_local_path has a value which is a string
+file_type has a value which is a string
 workspace_name has a value which is a string
+genome_ref has a value which is a string
 biomass has a value which is a reference to a list where each element is a string
 model_name has a value which is a string
 automatically_integrate has a value which is an int
 remove_boundary has a value which is an int
+conflict_resolution has a value which is a string
 
 </pre>
 
@@ -768,11 +736,15 @@ remove_boundary has a value which is an int
 
 a reference to a hash where the following keys are defined:
 sbml_url has a value which is a string
+sbml_local_path has a value which is a string
+file_type has a value which is a string
 workspace_name has a value which is a string
+genome_ref has a value which is a string
 biomass has a value which is a reference to a list where each element is a string
 model_name has a value which is a string
 automatically_integrate has a value which is an int
 remove_boundary has a value which is an int
+conflict_resolution has a value which is a string
 
 
 =end text
@@ -796,6 +768,7 @@ a reference to a hash where the following keys are defined:
 genome_id has a value which is a string
 workspace_name has a value which is a string
 output_model_name has a value which is a string
+num_models_propagate has a value which is an int
 
 </pre>
 
@@ -807,55 +780,7 @@ a reference to a hash where the following keys are defined:
 genome_id has a value which is a string
 workspace_name has a value which is a string
 output_model_name has a value which is a string
-
-
-=end text
-
-=back
-
-
-
-=head2 FilterContigsResults
-
-=over 4
-
-
-
-=item Description
-
-Here is the definition of the output of the function.  The output
-can be used by other SDK modules which call your code, or the output
-visualizations in the Narrative.  'report_name' and 'report_ref' are
-special output fields- if defined, the Narrative can automatically
-render your Report.
-
-
-=item Definition
-
-=begin html
-
-<pre>
-a reference to a hash where the following keys are defined:
-report_name has a value which is a string
-report_ref has a value which is a string
-assembly_output has a value which is a SBMLTools.assembly_ref
-n_initial_contigs has a value which is an int
-n_contigs_removed has a value which is an int
-n_contigs_remaining has a value which is an int
-
-</pre>
-
-=end html
-
-=begin text
-
-a reference to a hash where the following keys are defined:
-report_name has a value which is a string
-report_ref has a value which is a string
-assembly_output has a value which is a SBMLTools.assembly_ref
-n_initial_contigs has a value which is an int
-n_contigs_removed has a value which is an int
-n_contigs_remaining has a value which is an int
+num_models_propagate has a value which is an int
 
 
 =end text

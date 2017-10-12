@@ -21,18 +21,28 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "sbml_url",
+    "sbml_local_path",
+    "file_type",
     "workspace_name",
+    "genome_ref",
     "biomass",
     "model_name",
     "automatically_integrate",
-    "remove_boundary"
+    "remove_boundary",
+    "conflict_resolution"
 })
 public class SbmlImporterParams {
 
     @JsonProperty("sbml_url")
     private java.lang.String sbmlUrl;
+    @JsonProperty("sbml_local_path")
+    private java.lang.String sbmlLocalPath;
+    @JsonProperty("file_type")
+    private java.lang.String fileType;
     @JsonProperty("workspace_name")
     private java.lang.String workspaceName;
+    @JsonProperty("genome_ref")
+    private java.lang.String genomeRef;
     @JsonProperty("biomass")
     private List<String> biomass;
     @JsonProperty("model_name")
@@ -41,6 +51,8 @@ public class SbmlImporterParams {
     private Long automaticallyIntegrate;
     @JsonProperty("remove_boundary")
     private Long removeBoundary;
+    @JsonProperty("conflict_resolution")
+    private java.lang.String conflictResolution;
     private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
 
     @JsonProperty("sbml_url")
@@ -58,6 +70,36 @@ public class SbmlImporterParams {
         return this;
     }
 
+    @JsonProperty("sbml_local_path")
+    public java.lang.String getSbmlLocalPath() {
+        return sbmlLocalPath;
+    }
+
+    @JsonProperty("sbml_local_path")
+    public void setSbmlLocalPath(java.lang.String sbmlLocalPath) {
+        this.sbmlLocalPath = sbmlLocalPath;
+    }
+
+    public SbmlImporterParams withSbmlLocalPath(java.lang.String sbmlLocalPath) {
+        this.sbmlLocalPath = sbmlLocalPath;
+        return this;
+    }
+
+    @JsonProperty("file_type")
+    public java.lang.String getFileType() {
+        return fileType;
+    }
+
+    @JsonProperty("file_type")
+    public void setFileType(java.lang.String fileType) {
+        this.fileType = fileType;
+    }
+
+    public SbmlImporterParams withFileType(java.lang.String fileType) {
+        this.fileType = fileType;
+        return this;
+    }
+
     @JsonProperty("workspace_name")
     public java.lang.String getWorkspaceName() {
         return workspaceName;
@@ -70,6 +112,21 @@ public class SbmlImporterParams {
 
     public SbmlImporterParams withWorkspaceName(java.lang.String workspaceName) {
         this.workspaceName = workspaceName;
+        return this;
+    }
+
+    @JsonProperty("genome_ref")
+    public java.lang.String getGenomeRef() {
+        return genomeRef;
+    }
+
+    @JsonProperty("genome_ref")
+    public void setGenomeRef(java.lang.String genomeRef) {
+        this.genomeRef = genomeRef;
+    }
+
+    public SbmlImporterParams withGenomeRef(java.lang.String genomeRef) {
+        this.genomeRef = genomeRef;
         return this;
     }
 
@@ -133,6 +190,21 @@ public class SbmlImporterParams {
         return this;
     }
 
+    @JsonProperty("conflict_resolution")
+    public java.lang.String getConflictResolution() {
+        return conflictResolution;
+    }
+
+    @JsonProperty("conflict_resolution")
+    public void setConflictResolution(java.lang.String conflictResolution) {
+        this.conflictResolution = conflictResolution;
+    }
+
+    public SbmlImporterParams withConflictResolution(java.lang.String conflictResolution) {
+        this.conflictResolution = conflictResolution;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<java.lang.String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -145,7 +217,7 @@ public class SbmlImporterParams {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((((("SbmlImporterParams"+" [sbmlUrl=")+ sbmlUrl)+", workspaceName=")+ workspaceName)+", biomass=")+ biomass)+", modelName=")+ modelName)+", automaticallyIntegrate=")+ automaticallyIntegrate)+", removeBoundary=")+ removeBoundary)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((("SbmlImporterParams"+" [sbmlUrl=")+ sbmlUrl)+", sbmlLocalPath=")+ sbmlLocalPath)+", fileType=")+ fileType)+", workspaceName=")+ workspaceName)+", genomeRef=")+ genomeRef)+", biomass=")+ biomass)+", modelName=")+ modelName)+", automaticallyIntegrate=")+ automaticallyIntegrate)+", removeBoundary=")+ removeBoundary)+", conflictResolution=")+ conflictResolution)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

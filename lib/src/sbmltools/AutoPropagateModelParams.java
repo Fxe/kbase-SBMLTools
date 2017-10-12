@@ -21,7 +21,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "genome_id",
     "workspace_name",
-    "output_model_name"
+    "output_model_name",
+    "num_models_propagate"
 })
 public class AutoPropagateModelParams {
 
@@ -33,7 +34,6 @@ public class AutoPropagateModelParams {
     private String outputModelName;
     @JsonProperty("num_models_propagate")
     private Long numModelsPropagate;
-    
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("genome_id")
@@ -44,16 +44,6 @@ public class AutoPropagateModelParams {
     @JsonProperty("genome_id")
     public void setGenomeId(String genomeId) {
         this.genomeId = genomeId;
-    }
-    
-    @JsonProperty("num_models_propagate")
-    public Long getNumModelsPropagate() {
-      return numModelsPropagate;
-    }
-
-    @JsonProperty("num_models_propagate")
-    public void setNumModelsPropagate(Long numModelsPropagate) {
-      this.numModelsPropagate = numModelsPropagate;
     }
 
     public AutoPropagateModelParams withGenomeId(String genomeId) {
@@ -91,6 +81,21 @@ public class AutoPropagateModelParams {
         return this;
     }
 
+    @JsonProperty("num_models_propagate")
+    public Long getNumModelsPropagate() {
+        return numModelsPropagate;
+    }
+
+    @JsonProperty("num_models_propagate")
+    public void setNumModelsPropagate(Long numModelsPropagate) {
+        this.numModelsPropagate = numModelsPropagate;
+    }
+
+    public AutoPropagateModelParams withNumModelsPropagate(Long numModelsPropagate) {
+        this.numModelsPropagate = numModelsPropagate;
+        return this;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return this.additionalProperties;
@@ -103,7 +108,7 @@ public class AutoPropagateModelParams {
 
     @Override
     public String toString() {
-        return ((((((((("AutoPropagateModelParams"+" [genomeId=")+ genomeId)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((("AutoPropagateModelParams"+" [genomeId=")+ genomeId)+", workspaceName=")+ workspaceName)+", outputModelName=")+ outputModelName)+", numModelsPropagate=")+ numModelsPropagate)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }

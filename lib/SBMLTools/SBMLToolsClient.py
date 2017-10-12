@@ -35,15 +35,14 @@ class SBMLTools(object):
 
     def sbml_importer(self, params, context=None):
         """
-        The actual function is declared using 'funcdef' to specify the name
-        and input/return arguments to the function.  For all typical KBase
-        Apps that run in the Narrative, your function should have the 
-        'authentication required' modifier.
         :param params: instance of type "SbmlImporterParams" -> structure:
-           parameter "sbml_url" of String, parameter "workspace_name" of
-           String, parameter "biomass" of list of String, parameter
-           "model_name" of String, parameter "automatically_integrate" of
-           Long, parameter "remove_boundary" of Long
+           parameter "sbml_url" of String, parameter "sbml_local_path" of
+           String, parameter "file_type" of String, parameter
+           "workspace_name" of String, parameter "genome_ref" of String,
+           parameter "biomass" of list of String, parameter "model_name" of
+           String, parameter "automatically_integrate" of Long, parameter
+           "remove_boundary" of Long, parameter "conflict_resolution" of
+           String
         :returns: instance of type "SbmlImporterResults" -> structure:
            parameter "report_name" of String, parameter "report_ref" of
            String, parameter "fbamodel_id" of String
@@ -67,7 +66,9 @@ class SBMLTools(object):
            parameter "compound_mappings" of String, parameter "gene_mappings"
            of String, parameter "create_extracellular" of Long, parameter
            "remove_boundary" of Long, parameter "fill_metadata" of Long,
-           parameter "translate_database" of String
+           parameter "integrate_model" of Long, parameter
+           "conflict_resolution" of String, parameter "translate_database" of
+           String
         :returns: instance of type "SbmlImporterResults" -> structure:
            parameter "report_name" of String, parameter "report_ref" of
            String, parameter "fbamodel_id" of String
@@ -80,7 +81,8 @@ class SBMLTools(object):
         """
         :param params: instance of type "AutoPropagateModelParams" ->
            structure: parameter "genome_id" of String, parameter
-           "workspace_name" of String, parameter "output_model_name" of String
+           "workspace_name" of String, parameter "output_model_name" of
+           String, parameter "num_models_propagate" of Long
         :returns: instance of type "SbmlImporterResults" -> structure:
            parameter "report_name" of String, parameter "report_ref" of
            String, parameter "fbamodel_id" of String
