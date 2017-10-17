@@ -157,6 +157,7 @@ public class LocalTest {
       biomass.add("R_R374");
       SbmlImporterParams params = new SbmlImporterParams()
           .withAutomaticallyIntegrate(1L)
+          .withRemoveBoundary(1L)
           .withModelName(null)
           .withSbmlUrl(sbmlPath)
           .withBiomass(biomass);

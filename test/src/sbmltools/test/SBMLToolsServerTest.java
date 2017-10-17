@@ -98,7 +98,7 @@ public class SBMLToolsServerTest {
   public void testImportSbmlOk() throws Exception {
 
     final SbmlImporterResults ret = impl.sbmlImporter(new SbmlImporterParams()
-        .withSbmlUrl("")
+        .withSbmlUrl("http://bigg.ucsd.edu/static/models/iYL1228.xml")
         .withRemoveBoundary(1L)
         .withBiomass(new ArrayList<String> ())
         .withAutomaticallyIntegrate(1L)

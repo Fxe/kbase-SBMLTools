@@ -54,7 +54,10 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAutofix;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelMetabolicNetworkFactory;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
+import pt.uminho.sysbio.biosynthframework.util.AutoFileReader;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
+import pt.uminho.sysbio.biosynthframework.util.FileType;
 import pt.uminho.sysbio.biosynthframework.util.ZipContainer;
 import pt.uminho.sysbio.biosynthframework.util.ZipContainer.ZipRecord;
 import pt.uminho.sysbio.ext.BiGGConflictResolver;
@@ -73,7 +76,6 @@ import us.kbase.workspace.WorkspaceClient;
 public class KBaseSbmlImporter {
 
   private static final Logger logger = LoggerFactory.getLogger(KBaseSbmlImporter.class);
-
 
   public static String LOCAL_CACHE = "./cache";
 
@@ -353,36 +355,47 @@ public class KBaseSbmlImporter {
     ZipContainer container = null;
 
     try {
-
       String urlPath = params.getSbmlUrl();
-      //check url type
-      String localPath = KBaseIOUtils.fetchAndCache(params.getSbmlUrl(), LOCAL_CACHE);
+      String localPath = null;
+      if (DataUtils.empty(params.getSbmlLocalPath())) {
+        localPath = KBaseIOUtils.fetchAndCache(params.getSbmlUrl(), LOCAL_CACHE);
+      } else {
+        localPath = params.getSbmlLocalPath();
+      }
+
       if (localPath == null) {
         throw new IOException("unable to create temp file");
       }
+      
+      FileType fileType = FileType.AUTO;
+      
+      AutoFileReader freader = new AutoFileReader(localPath, fileType);
+      Map<String, InputStream> inputStreams = freader.getStreams().streams;
+      
       boolean runIntegration = params.getAutomaticallyIntegrate() == 1;
       String modelId = params.getModelName();
       List<String> biomass = params.getBiomass();
       if (biomass == null) {
         biomass = new ArrayList<> ();
       }
-
-      Map<String, InputStream> inputStreams = new HashMap<> ();
-      if (urlPath.endsWith(".zip")) {
-        container = new ZipContainer(localPath);
-        List<ZipRecord> streams = container.getInputStreams();
-        for (ZipRecord zr : streams) {
-          InputStream is = zr.is;
-          String u = params.getSbmlUrl() + "/" + zr.name;
-          inputStreams.put(u, is);
-        }
-        //ignore modelId when multiple models
-        if (inputStreams.size() > 1) {
-          modelId = null;
-        }
-      } else {
-        inputStreams.put(params.getSbmlUrl(), new FileInputStream(localPath));
-      }
+      
+//      Map<String, InputStream> inputStreams = new HashMap<> ();
+      
+//      if (urlPath.endsWith(".zip")) {
+//        container = new ZipContainer(localPath);
+//        List<ZipRecord> streams = container.getInputStreams();
+//        for (ZipRecord zr : streams) {
+//          InputStream is = zr.is;
+//          String u = params.getSbmlUrl() + "/" + zr.name;
+//          inputStreams.put(u, is);
+//        }
+//        //ignore modelId when multiple models
+//        if (inputStreams.size() > 1) {
+//          modelId = null;
+//        }
+//      } else {
+//        inputStreams.put(params.getSbmlUrl(), new FileInputStream(localPath));
+//      }
 
       IntegrationReport jsonResult = new IntegrationReport();
 
