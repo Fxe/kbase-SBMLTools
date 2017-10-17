@@ -352,8 +352,8 @@ public class KBaseSbmlImporter {
         params.getBiomass(),
         params.getAutomaticallyIntegrate(),
         params.getModelName());
-    ZipContainer container = null;
-
+//    ZipContainer container = null;
+    AutoFileReader freader = null;
     try {
       String urlPath = params.getSbmlUrl();
       String localPath = null;
@@ -368,9 +368,16 @@ public class KBaseSbmlImporter {
       }
       
       FileType fileType = FileType.AUTO;
+      fileType = AutoFileReader.getFileType(localPath);
       
-      AutoFileReader freader = new AutoFileReader(localPath, fileType);
+      freader = new AutoFileReader(localPath, fileType);
+      
       Map<String, InputStream> inputStreams = freader.getStreams().streams;
+      if (FileType.XML.equals(fileType)) {
+        String prev = inputStreams.keySet().iterator().next();
+        inputStreams.put(urlPath, inputStreams.get(prev));
+        inputStreams.remove(prev);
+      }
       
       boolean runIntegration = params.getAutomaticallyIntegrate() == 1;
       String modelId = params.getModelName();
@@ -495,7 +502,7 @@ public class KBaseSbmlImporter {
       e.printStackTrace();
       logger.error("{}", e.getMessage());
     } finally {
-      IOUtils.closeQuietly(container);
+      IOUtils.closeQuietly(freader);
     }
 
     return result;
