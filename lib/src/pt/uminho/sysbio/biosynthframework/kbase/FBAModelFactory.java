@@ -418,7 +418,7 @@ public class FBAModelFactory {
           .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
           .withProbability(1.0)
           .withPathway("entire model")
-          .withDblinks(new HashMap<String, List<String>>())
+          .withDblinks(dblinks)
           .withStringAttributes(extraAttributes)
           .withModelcompartmentRef(rxnCmpRef);
       

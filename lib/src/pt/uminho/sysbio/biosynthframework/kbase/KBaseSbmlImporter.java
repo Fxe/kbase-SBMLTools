@@ -47,8 +47,10 @@ import pt.uminho.sysbio.biosynthframework.report.IntegrationByDatabase;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReport;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResult;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
+import pt.uminho.sysbio.biosynthframework.sbml.MessageCategory;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlMessageGroup;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAutofix;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelMetabolicNetworkFactory;
@@ -239,6 +241,8 @@ public class KBaseSbmlImporter {
       
       //CORRECTION
       XmlSbmlModelAutofix autofix = new XmlSbmlModelAutofix();
+      autofix.group.put(MessageCategory.STOICH_NO_VALUE, 
+          new XmlMessageGroup(MessageCategory.STOICH_NO_VALUE, MessageType.WARN, "assume value 1"));
       autofix.fix(xmodel, msgs);
 
       List<XmlMessage> fmsgs = autofix.messages;
@@ -306,8 +310,6 @@ public class KBaseSbmlImporter {
         result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
         spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
         result.message += String.format("\ni: %d", spiToModelSeedReference.size());
-
-
       }
       //order matters ! fix this ... it is a factory ...
       model = new FBAModelFactory()
