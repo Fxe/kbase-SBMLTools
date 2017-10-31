@@ -147,6 +147,7 @@ public class LocalTest {
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models_with_invalid_sbml.zip";
 //    sbmlPath = "http://193.137.11.210/models/biomodels/joana/iSH335.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/sbml/Ec_core_flux1.xml";
+    sbmlPath = "http://193.137.11.210/models/biomodels/iOD907_bqbiol.xml";
 //    sbmlPath = "http://127.0.0.1/models/biomodels/sbml/hsa/MODEL1109130000.xml";
 //    sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
     
