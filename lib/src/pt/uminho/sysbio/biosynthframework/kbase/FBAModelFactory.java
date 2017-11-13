@@ -458,11 +458,18 @@ public class FBAModelFactory {
 //      }
     }
     
+//    System.out.println(this.modelCompounds.keySet());
+//    System.out.println(xadapter.xspiType);
     for (String spi : xadapter.xspiType.keySet()) {
+//      System.out.println(spi);
       EntityType etype = xadapter.xspiType.get(spi);
       if (EntityType.GENE.equals(etype)) {
         ModelCompound mc = this.modelCompounds.get(spi);
-        mc.getAdditionalProperties().put("type", "GENE");
+        if (mc != null) {
+          mc.getAdditionalProperties().put("type", "GENE");
+        } else {
+          logger.info("specie [{}] deleted", spi);
+        }
       }
     }
     
