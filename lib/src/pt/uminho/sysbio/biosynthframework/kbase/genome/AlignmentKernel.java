@@ -12,10 +12,13 @@ import java.util.TreeMap;
 
 import org.biojava.nbio.alignment.template.PairwiseSequenceAligner;
 import org.biojava.nbio.core.sequence.DNASequence;
+import org.biojava.nbio.core.sequence.ProteinSequence;
+import org.biojava.nbio.core.sequence.compound.AminoAcidCompound;
 import org.biojava.nbio.core.sequence.compound.NucleotideCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.genome.Aligner;
 
 public class AlignmentKernel {
@@ -24,9 +27,13 @@ public class AlignmentKernel {
   
   public List<AlignmentJob> jobs = new ArrayList<> ();
   
+  public BFunction<PairwiseSequenceAligner<?, ?>, Double> scoringMethod = null;
+  
   private boolean running = false;
   private Iterator<AlignmentJob> jobIt;
   private Map<AlignmentJob, Double> results = new HashMap<> ();
+  public boolean global = false;
+  public boolean protein = false;
   
   private final int t;
   private final Aligner aligner;
@@ -103,9 +110,24 @@ public class AlignmentKernel {
         logger.trace("[{}] worker running job ..", this.workerId);
         String seq1 = p.dna1;
         String seq2 = p.dna2;
-        Object res = ma.aligner.localAlignment(seq1, seq2);
-        @SuppressWarnings("unchecked")
-        PairwiseSequenceAligner<DNASequence, NucleotideCompound> psa = PairwiseSequenceAligner.class.cast(res);
+        Object res = null;
+        if (ma.global) {
+          res = ma.aligner.globalAlignment(seq1, seq2);
+        } else {
+          res = ma.aligner.localAlignment(seq1, seq2);
+        }
+        
+        PairwiseSequenceAligner<?, ?> psa = PairwiseSequenceAligner.class.cast(res);
+        
+//        if (ma.protein) {
+//          
+//        } else {
+//          psa = 
+////          psa = psa_;
+//        }
+
+//        @SuppressWarnings("unchecked")
+//        PairwiseSequenceAligner<ProteinSequence, AminoAcidCompound> psa = PairwiseSequenceAligner.class.cast(res);
         
         List<Object> data = new ArrayList<> ();
         int length = psa.getPair().getLength();
@@ -119,7 +141,13 @@ public class AlignmentKernel {
         data.add(psa.getSimilarity());
         data.add(psa.getDistance());
         logger.trace("[{}] worker done job ..", this.workerId);
-        ma.saveResult(p, (double) psa.getPair().getNumIdenticals() / length);
+        if (ma.scoringMethod == null) {
+          ma.saveResult(p, (double) psa.getPair().getNumIdenticals() / length);
+        } else {
+          double score = ma.scoringMethod.apply(psa);
+          ma.saveResult(p, score);
+        }
+        
       }
       logger.info("[{}] done!", this.workerId);
     }

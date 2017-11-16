@@ -140,8 +140,16 @@ public class KBaseIntegration {
     logger.info("[GPR Override]");
     for (String rxn : gprOverride.keySet()) {
       ModelReaction krxn = adapter.rxnMap.get(rxn);
+      if (krxn == null) {
+        krxn = adapter.rxnMap.get("R_" + rxn);
+        if (krxn != null) {
+          logger.warn("Reaction[{}] not found. Found alternative match for [R_{}]", rxn, rxn);
+        }
+      }
       if (krxn != null && gprOverride.get(rxn) != null) {
         krxn.setImportedGpr(gprOverride.get(rxn));
+      } else {
+        logger.warn("Reaction[{}] not found.", rxn);
       }
     }
     

@@ -313,7 +313,7 @@ public class WorkspaceNinja {
 //    System.out.println(roles.keySet());
 //    System.out.println(rmap.get("chloroplast"));
 //    System.out.println(roles.get("rxn06244"));
-    String LOGIN_TOKEN = "MO2FCAGI3TLEM3PPRZZ4KH4ZKBJEMRGO";
+    String LOGIN_TOKEN = "Q5DLF7PMWWPLZPCO66KN55MJ3KTA5JYI";
     Dataset<String, String, Object> data = new Dataset<>();
     try {
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);

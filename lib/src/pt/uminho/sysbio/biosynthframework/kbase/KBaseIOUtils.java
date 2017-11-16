@@ -283,6 +283,12 @@ public class KBaseIOUtils {
     }
   }
   
+  public static<T> T getObject(String json, Class<T> clazz) throws IOException {
+    ObjectMapper om = new ObjectMapper();
+    T o =  om.readValue(json, clazz);
+    return o;
+  }
+  
   public static KBaseGenome getGenome(String name, String ws, String ref, 
       WorkspaceClient wsClient) throws IOException {
     KBaseGenome out = null;

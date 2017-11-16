@@ -81,10 +81,35 @@ public class KBaseModelIntegrationFacade {
   }
   
   
+  public Map<String, String> geneOverride(String geneMapping) {
+    Map<String, String> geneOverride = new HashMap<> ();
+    if (!DataUtils.empty(geneMapping)) {
+      for (String l : geneMapping.split("\\n")) {
+        if (!DataUtils.empty(l) && l.contains(";")) {
+          String[] p = l.split(";");
+          if (p.length >= 2) {
+            String reaction = p[0].trim();
+            String gprString = p[1].trim();
+            geneOverride.put(reaction, gprString);
+          }
+        }
+      }
+    }
+    return geneOverride;
+  }
   
   public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName) throws Exception {
     //validate params
     System.out.println(params);
+    Map<String, String> gprOverride = new HashMap<> ();
+    try {
+      gprOverride = geneOverride(params.getGeneMappings());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    
+    
     Map<String, String> outputObjects = new HashMap<> ();
     String fbaModelName = params.getModelName();
     String outputName = params.getOutputModelName();
@@ -120,6 +145,7 @@ public class KBaseModelIntegrationFacade {
     integration.fillMetadata = params.getFillMetadata() == 1L;
     integration.mediaName = params.getOutputMediaName();
     integration.biodbContainer = this.biodbContainer;
+    integration.gprOverride = gprOverride;
     
     if (!DataUtils.empty(params.getGenomeId())) {
       Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(params.getGenomeId(), workspaceName, null, wspClient);

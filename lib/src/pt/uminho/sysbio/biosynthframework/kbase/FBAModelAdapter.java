@@ -516,6 +516,24 @@ public class FBAModelAdapter implements ModelAdapter {
     // TODO Auto-generated method stub
     return null;
   }
+  
+  public Set<String> getGeneReactions(String gene) {
+    Set<String> result = new HashSet<> ();
+    for (String r : this.rxnMap.keySet()) {
+      List<ModelReactionProtein> mrps = this.rxnMap.get(r).getModelReactionProteins();
+      for (ModelReactionProtein mrp : mrps) {
+        for (ModelReactionProteinSubunit mrpu : mrp.getModelReactionProteinSubunits()) {
+          for (String f : mrpu.getFeatureRefs()) {
+            String[] p = f.split("/");
+            if (gene.equals(p[p.length - 1])) {
+              result.add(r);
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
 
   @Override
   public int getReactionSize(String mrxnEntry) {
