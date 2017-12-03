@@ -33,6 +33,7 @@ import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import us.kbase.common.service.Tuple11;
 import us.kbase.workspace.GetObjectInfo3Params;
 import us.kbase.workspace.GetObjectInfo3Results;
@@ -111,6 +112,36 @@ public class FBAModelAdapter implements ModelAdapter {
     }
     
 
+  }
+  
+  public void setGpr(String rxnEntry, String gprString) {
+    if (DataUtils.empty(gprString)) {
+      gprString = "";
+    }
+    ModelReaction krxn = this.rxnMap.get(rxnEntry);
+    if (krxn == null) {
+      krxn = this.rxnMap.get("R_" + rxnEntry);
+      if (krxn != null) {
+        logger.warn("Reaction[{}] not found. Found alternative match for [R_{}]", rxnEntry, rxnEntry);
+      }
+    }
+    if (krxn == null) {
+      krxn = this.rxnMap.get("o" + rxnEntry);
+      if (krxn != null) {
+        logger.warn("Reaction[{}] not found. Found alternative match for [o{}]", rxnEntry, rxnEntry);
+      }
+    }
+    if (krxn != null) {
+      krxn.setImportedGpr(gprString);
+    } else {
+      logger.warn("Reaction[{}] not found.", rxnEntry);
+    }
+  }
+  
+  public void setGpr(Map<String, String> rxnToGrpStringMap) {
+    for (String r : rxnToGrpStringMap.keySet()) {
+      setGpr(r, rxnToGrpStringMap.get(r));
+    }
   }
   
   public void setupModelReactionProteinsFromGpr(String mrxnEntry, String gpr, String genomeRef) {
@@ -530,6 +561,17 @@ public class FBAModelAdapter implements ModelAdapter {
             }
           }
         }
+      }
+    }
+    return result;
+  }
+  
+  public Set<String> getGeneReactionsImportedGpr(String gene) {
+    Set<String> result = new HashSet<> ();
+    for (String r : this.rxnMap.keySet()) {
+      String igpr = this.rxnMap.get(r).getImportedGpr();
+      if (igpr.contains(gene)) {
+        result.add(r);
       }
     }
     return result;

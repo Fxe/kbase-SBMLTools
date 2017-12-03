@@ -100,7 +100,7 @@ public class KBaseModelIntegrationFacade {
   
   public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName) throws Exception {
     //validate params
-    System.out.println(params);
+//    System.out.println(params);
     Map<String, String> gprOverride = new HashMap<> ();
     try {
       gprOverride = geneOverride(params.getGeneMappings());

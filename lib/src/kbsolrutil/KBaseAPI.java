@@ -2,13 +2,13 @@ package kbsolrutil;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -16,14 +16,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import datafileutil.DataFileUtilClient;
 import kbasegenomes.Genome;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
 import sbmltools.KBaseType;
 import sbmltools.test.CacheEngine;
+import sbmltools.test.CacheEngine.CacheFieldType;
 import sbmltools.test.MockKBSolrUtilClient;
 import sbmltools.test.WSCLIENT;
-import sbmltools.test.CacheEngine.CacheFieldType;
 import us.kbase.auth.AuthConfig;
 import us.kbase.auth.AuthException;
 import us.kbase.auth.AuthToken;
@@ -31,9 +30,7 @@ import us.kbase.auth.ConfigurableAuthService;
 import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.Tuple11;
 import us.kbase.common.service.UnauthorizedException;
-import us.kbase.workspace.GetObjects2Results;
 import us.kbase.workspace.ListObjectsParams;
-import us.kbase.workspace.ObjectData;
 import us.kbase.workspace.WorkspaceClient;
 import us.kbase.workspace.WorkspaceIdentity;
 
@@ -98,7 +95,7 @@ public class KBaseAPI {
         
         
         CacheEngine cengine = new CacheEngine(cacheIndexMap, config.get("version"));
-        CacheEngine.buildCacheIndex(cengine.cacheIndexFile, cacheIndexMap);
+        CacheEngine.buildCacheIndex(CacheEngine.cacheIndexFile, cacheIndexMap);
         cengine.status();
         wsClient = new WSCLIENT(new URL(config.get("workspace-url")), authToken, cengine);
         solrClient = new MockKBSolrUtilClient(callbackURL, authToken);

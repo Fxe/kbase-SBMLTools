@@ -55,8 +55,8 @@ public class CacheEngine {
 //  public Map<Pair<String, String>, Map<CacheFieldType, String>> cacheIndexMap = null;
 //  public Map<Pair<String, String>, Map<CacheFieldType, String>> cacheIndexMapOthers = null;
   public final Map<String, Map<Pair<String, String>, Map<CacheFieldType, String>>> cacheIndex;
-  public File cacheIndexFile = new File("/var/argonne/kbase_object_cache/index.txt");
-  public String base = "/var/argonne/kcache";
+  public static File cacheIndexFile = new File("/var/argonne/kbase_object_cache/index.txt");
+  public static String base = "/var/argonne/kcache";
   
   public void status() {
     logger.info("{} cache index loaded. records {}, total {}", 

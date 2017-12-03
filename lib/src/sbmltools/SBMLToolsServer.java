@@ -180,7 +180,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         SbmlImporterResults returnVal = null;
         //BEGIN integrate_model
 
-    System.out.println(params);
+//    System.out.println(params);
 
     final String workspaceName = params.getWorkspaceName();
 
