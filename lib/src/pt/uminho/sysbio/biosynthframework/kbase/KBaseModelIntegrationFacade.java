@@ -239,14 +239,10 @@ public class KBaseModelIntegrationFacade {
 //    }
     
     KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
-    List<String> files = new ArrayList<> ();
-    files.add("index.html");
-    List<String> datas = new ArrayList<> ();
-    for (String f : files) {
-      datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-report/" + f));
-    }
     
-    ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
+    Map<String, String> files = new HashMap<>();
+    files.put("index.html", KBaseIOUtils.getResource("integration/index.html"));
+    ReportFiles reportFiles = htmlReport.makeStaticReport(files);
     
     File f = new File("/kb/module/data/data.json");
     if (f.exists()) {

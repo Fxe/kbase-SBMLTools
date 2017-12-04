@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -224,6 +225,30 @@ public class KBaseIOUtils {
       e.printStackTrace();
     }
     return json;
+  }
+  
+  public static String getResource(String path) {
+    String result = null;
+    File file = new File("/kb/module/data/" + path);
+    
+    if (!file.exists()) {
+      logger.error("resource not found: {}", file.getAbsolutePath());
+    } else {
+      logger.info("loading resource: {}", file.getAbsolutePath());
+      InputStream is = null;
+      try {
+        is = new FileInputStream(file);
+        List<String> l = IOUtils.readLines(is);
+        result = StringUtils.join(l, '\n');
+        logger.info("loaded: {} bytes", result.getBytes().length);
+      } catch (IOException e) {
+        logger.error("IOException: {}", e.getMessage());
+      } finally {
+        IOUtils.closeQuietly(is);
+      }
+    }
+    
+    return result;
   }
   
   public static String getDataWeb(String urlStr) {

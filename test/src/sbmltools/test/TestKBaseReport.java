@@ -10,7 +10,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -50,23 +52,26 @@ public class TestKBaseReport {
     String data3 = KBaseIOUtils.getDataWeb(root + "refs.json");
     index = String.format(index, data1, data2, data3);
     
-    List<String> files = new ArrayList<> ();
-    
-    files.add("css/bootstrap.min.css");
-    files.add("js/jquery-2.2.2.min.js");
-    files.add("js/underscore-min.js");
-    files.add("js/plotly-1.28.3.min.js");
+//    List<String> files = new ArrayList<> ();
+//    
+//    files.add("css/bootstrap.min.css");
+//    files.add("js/jquery-2.2.2.min.js");
+//    files.add("js/underscore-min.js");
+//    files.add("js/plotly-1.28.3.min.js");
 
     List<String> datas = new ArrayList<> ();
     
-    for (String f : files) {
-      datas.add(KBaseIOUtils.getDataWeb(root + f));
-    }
+//    for (String f : files) {
+//      datas.add(KBaseIOUtils.getDataWeb(root + f));
+//    }
     
-    files.add("index.html");
+//    files.add("index.html");
     datas.add(index);
     
-    ReportFiles out = htmlReport.makeStaticReport(files, datas);
+    Map<String, String> files = new HashMap<>();
+    files.put("index.html", KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report2//index.html"));
+    
+    ReportFiles out = htmlReport.makeStaticReport(files);
 
     try {
       OutputStream os = new FileOutputStream(out.path + File.separator +

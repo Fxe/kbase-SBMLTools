@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- <link rel="stylesheet" href="../../bootstrap-css-ext.css">-->
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <style>
+    h4 {
+      /*margin-top: 0 !important;*/
+      /*margin-bottom: 0 !important;*/
+    }
+
+    h3 {
+      /*margin-top: 0 !important;*/
+      /*margin-bottom: 0 !important;*/
+    }
+
+    h5 {
+
+    }
+  </style>
+</head>
+<body>
+
+
+<div class="container">
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingOne">
+        <div style="height: 20px">
+          <div class="panel-title pull-left">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              Model
+            </a>
+          </div>
+          <div id="header-model" class="pull-right"></div>
+        </div>
+      </div>
+      <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+          <div class="row">
+            <!--
+            <div class="col-md-12"></div>
+            <div class="col-md-12">
+              <span class="glyphicon glyphicon-link" aria-hidden="true"></span>iMM900.xml
+              ID: iMM90 name: yeast model
+            </div>
+            -->
+            <div class="row">
+              <div class="col-md-4"><div id="model-cmp-data"></div></div>
+              <div class="col-md-4"><div id="model-spi-data"></div></div>
+              <div class="col-md-4"><div id="model-rxn-data"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="ah-genome">
+        <div style="height: 20px">
+          <div class="panel-title pull-left">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#ac-genome" aria-expanded="false" aria-controls="ac-genome">
+              Genome
+            </a>
+          </div>
+          <div id="header-genome" class="pull-right"></div>
+        </div>
+      </div>
+      <div id="ac-genome" class="panel-collapse collapse" role="tabpanel" aria-labelledby="ah-genome">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="genome-best"><h4>Best Match:</h4> </div>
+              <div id="genome-miss-genes"><h4>Features not found:</h4> </div>
+              <div id="genome-matches">
+                <h4>All matches:</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VALIDATION -->
+    <!--
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="headingThree">
+        <h4 class="panel-title">
+          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Validation
+          </a>
+        </h4>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12">
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Errors <span class="badge">4</span>
+              <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Warn <span class="badge">4</span>
+              <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Fixes <span class="badge">4</span>
+              <span class="glyphicon glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info <span class="badge">4</span>
+            </div>
+            <div class="col-md-12">
+              <table id="table-1" class="table"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    -->
+
+    <!-- COMPARTMENTS -->
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="ah-compartments">
+        <div style="height: 20px">
+          <div class="panel-title pull-left">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#ac-compartments" aria-expanded="false" aria-controls="ac-genome">
+              Compartments
+            </a>
+          </div>
+          <div id="header-compartments" class="pull-right"></div>
+        </div>
+      </div>
+      <div id="ac-compartments" class="panel-collapse collapse" role="tabpanel" aria-labelledby="ah-compartments">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="compartment-mapping"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRAINS -->
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="ah-drains">
+        <div style="height: 20px">
+          <div class="panel-title pull-left">
+            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#ac-drains" aria-expanded="false" aria-controls="ac-drains">
+              Drains/Media
+            </a>
+          </div>
+          <div id="header-drains" class="pull-right"></div>
+        </div>
+      </div>
+      <div id="ac-drains" class="panel-collapse collapse" role="tabpanel" aria-labelledby="ah-drains">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12">
+              <h4>Removed Drain Reactions:</h4>
+              <div id="deleted-drains"></div>
+            </div>
+            <div class="col-md-12">
+              <table id="table-media" class="table"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPI-TRANSLATION -->
+    <div class="panel panel-default">
+      <div class="panel-heading" role="tab" id="ah-spi-translation">
+        <h4 class="panel-title">
+          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#ac-spi-translation" aria-expanded="false" aria-controls="ac-spi-translation">
+            Integration (Compound Translation)
+          </a>
+        </h4>
+      </div>
+      <div id="ac-spi-translation" class="panel-collapse collapse" role="tabpanel" aria-labelledby="ah-spi-translation">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-md-12">
+              <table id="table-spi-translation" class="table"></table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script type="text/javascript" src="https://cdn.plot.ly/plotly-1.28.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/scroller/1.4.2/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+  var table_media_config = {
+    scrollY: 400,
+    scroller: true,
+    "dom": '<"top"f>rt<"bottom"i><"clear">',
+    "aaData" : [],
+    "aoColumns" : [
+      {
+        sTitle: 'Compound',
+        mDataProp: 'cpd',
+        bSearchable: true,
+        bVisible: true
+      },
+      {
+        sTitle: '(Max) Uptake',
+        mDataProp: 'lb',
+        bSearchable: true,
+        bVisible: true
+      },
+      {
+        sTitle: '(Max) Product',
+        mDataProp: 'ub',
+        bSearchable: true,
+        bVisible: true
+      }
+    ]
+  };
+
+  var table_translation_config = {
+    scrollY: 400,
+    scroller: true,
+    "dom": '<"top"f>rt<"bottom"i><"clear">',
+    "aaData" : [],
+    "aoColumns" : [
+      {
+        sTitle: 'Old',
+        mDataProp: 'cpd_old',
+        bSearchable: true,
+        bVisible: true
+      },
+      {
+        sTitle: 'New',
+        mDataProp: 'cpd_new',
+        bSearchable: true,
+        bVisible: true
+      }
+    ]
+  };
+
+  var toPercentage = function(v) {
+    return Number(v * 100).toFixed(2) + '%';
+  };
+
+  var loadReport = function(dataFile) {
+    $.getJSON(dataFile, function(data) {
+      console.log('loaded', data);
+      if (data) {
+        $('#header-model').html('<span class="glyphicon glyphicon-link" aria-hidden="true"></span>' + data["model"]);
+
+        if (data.rxn) {
+          plot('model-rxn-data', data.rxn, 'Reaction');
+        }
+        if (data.spi) {
+//          var modelSpiData = {
+//            "bc" : 100,
+//            "spi" : 343,
+//            "mod" : 60,
+//            "zero-degree" : 40
+//          };
+//          var modelCmpData = {
+//            "e" : 100,
+//            "p" : 343,
+//            "c" : 60
+//          };
+          plot('model-spi-data', data.spi, 'Metabolites');
+        }
+        if (data.cmp) {
+          plot('model-cmp-data', data.cmp, 'Compartments');
+        }
+
+        if (data.drainReport && data.drainReport.deletedReactions) {
+          var drHtml = '<p>';
+          _.each(data.drainReport.deletedReactions, function(v, drain) {
+            drHtml += '<span class="label label-danger">' + drain + '</span> ';
+          });
+          drHtml += '</p>';
+          $("#deleted-drains").html(drHtml);
+        }
+
+        if (data.drainReport && data.drainReport.media) {
+          var tableMedia = $("#table-media");
+          tableMedia.dataTable(table_media_config);
+          var shutdown = 0;
+          var uptake = 0;
+          var production = 0;
+          var tableData1 = [];
+          _.each(data.drainReport.media, function(bArray, cpd) {
+            var row = {
+              "cpd" : cpd,
+              "lb" : bArray[0],
+              "ub" : bArray[1]
+            };
+            if (row.lb == 0 && row.ub == 0) {
+              shutdown++;
+            } else {
+              if (row.lb < 0) {
+                uptake++;
+              }
+              if (row.ub > 0) {
+                production++;
+              }
+            }
+            tableData1.push(row);
+          });
+          tableMedia.DataTable().rows.add(tableData1).draw()
+
+          var headerHtml = '<span class="label label-success"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span> Uptake <span class="badge">' + uptake + '</span></span>';
+          headerHtml += '<span class="label label-info"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Production <span class="badge">' + production + '</span></span>';
+          headerHtml += '<span class="label label-warning"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> Shutdown <span class="badge">' + shutdown + '</span></span>';
+
+          $('#header-drains').html(headerHtml);
+        }
+
+        if (data.spiTranslationReport && data.spiTranslationReport.translationMap) {
+          var tableSpiTranslation = $("#table-spi-translation");
+          tableSpiTranslation.dataTable(table_translation_config);
+          var tableData2 = [];
+          _.each(data.spiTranslationReport.translationMap, function(cpd_new, cpd_old) {
+            tableData2.push({
+              "cpd_old" : cpd_old,
+              "cpd_new" : cpd_new
+            });
+          });
+          tableSpiTranslation.DataTable().rows.add(tableData2).draw();
+        }
+
+        if (data.compartmentReport && data.compartmentReport.rename) {
+
+
+//        <span class="badge">e</span>
+//              <span class="badge">c</span>
+//              <span class="badge">p</span>
+
+          var cmpRenameHtml = "";
+          var cmpHeaderHtml = "";
+          _.each(data.compartmentReport.rename, function(actual, prev) {
+            cmpHeaderHtml += '<span class="badge">' + actual + '</span>';
+            cmpRenameHtml += '<div><span class="badge">' + prev + '</span><span class="label label-success">' + data.compartmentReport.cmpName[prev] + '</span>' +
+                ' <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> ' +
+                '<span class="badge">' + actual + '</span><span class="label label-success">' + data.compartmentReport.cmpName[actual] + '</span></div>';
+          });
+          $('#header-compartments').html(cmpHeaderHtml);
+          $('#compartment-mapping').html(cmpRenameHtml);
+        }
+
+        if (data.genomeReport && data.genomeReport.best) {
+//
+//
+          var headerGenomeHtml = "";
+          var status = data.genomeReport.status || "auto_genome_get_fail";
+
+          var b = data.genomeReport.best;
+          var bhits = data.genomeReport.hits[b];
+          var bestOrg = "";
+          var bestMatchHtml = '<h4>Best Match: ';
+          _.each(bhits, function(bhit) {
+            bestOrg = data.genomeReport.scName[bhit];
+            bestMatchHtml += '<span class="label label-success">' + bhit + '</span> ' + bestOrg + ' <span class="badge">' + toPercentage(b) + '</span> ';
+          });
+          bestMatchHtml += '</h4>';
+
+          var otherMatches = '<h4>All matches:</h4>';
+          _.each(data.genomeReport.hits, function(genomes, score) {
+            _.each(genomes, function(genome) {
+              otherMatches += '<div><span class="label label-success">' + genome + '</span> ' + data.genomeReport.scName[genome] +
+                  ' <span class="badge">' + toPercentage(score) + '</span><br></div>';
+            });
+          });
+
+
+          var gmissHtml = '<h4>Features not found: </h4>';
+          if (_.size(data.genomeReport.miss) == 0) {
+            gmissHtml = '<h4>All Features Integrated!</h4>'
+          }
+          _.each(data.genomeReport.miss, function(v) {
+            gmissHtml += '<span class="label label-danger">' + v + '</span> ';
+          });
+          $('#genome-miss-genes').html(gmissHtml);
+
+          if (status == "auto") {
+            headerGenomeHtml = bestOrg + ' <span class="label label-warning">Auto-detected Genome</span>';
+          } else if (status == "user") {
+            headerGenomeHtml = '<span class="label label-success">Manual Genome</span>';
+//            _.each(_.keys(data.genomeReport.scName), function(g) {
+//              bestOrg = data.genomeReport.scName[g];
+//            });
+            otherMatches = '';
+            bestMatchHtml = '<span class="label label-success">Manual Genome</span> ' + bestOrg;
+          } else {
+            headerGenomeHtml = '<span class="label label-danger">Genome Detection Fail</span>';
+          }
+
+          $('#genome-best').html(bestMatchHtml);
+          $('#header-genome').html(headerGenomeHtml);
+          $('#genome-matches').html(otherMatches);
+        }
+      }
+    });
+  };
+
+  var labelMask = {
+    "BIOMASS" : "Biomass",
+    "TRANSLOCATION" : "Translocation",
+    "REACTION" : "Reaction",
+    "DRAIN" : "Drain",
+    "SPECIE" : "Metabolite",
+    "SPECIE_BOUNDARY" : "Boundary"
+  };
+
+  var plot = function(container, data, text) {
+    var pdata = [{
+      values: [],
+      labels: [],
+//      domain: {
+//        x: [0, .48]
+//      },
+      name: 'iMM90',
+//      hoverinfo: 'label+percent+name',
+      hoverinfo: 'label',
+      hole: .4,
+      type: 'pie'
+    }];
+
+    _.each(data, function(value, t) {
+      t = labelMask[t] || t;
+      pdata[0].labels.push(t);
+      pdata[0].values.push(value);
+    });
+
+//    console.log(pdata);
+
+    var layout = {
+      title: text,
+      legend: {
+        x: 0,
+        y: -100
+      },
+
+//      annotations: [
+//        {
+//          font: {
+//            size: 12
+//          },
+//          showarrow: false,
+////          text: text
+////          x: 0.17,
+////          y: 0.5
+//        }
+//      ],
+      height: 350,
+      width: 350
+    };
+
+    Plotly.newPlot(container, pdata, layout);
+  };
+
+  $(function() {
+    var table_msg_config = {
+      scrollY: 400,
+      scroller: true,
+      "dom": '<"top"f>rt<"bottom"i><"clear">',
+      "aaData" : [],
+      "aoColumns" : [
+        {
+          sTitle: 'Model',
+          mDataProp: 'model',
+          bSearchable: true,
+          bVisible: true
+        },
+        {
+          sTitle: 'Lavel',
+          mDataProp: 'level',
+          bSearchable: true,
+          bVisible: true
+        },
+        {
+          sTitle: 'Line',
+          mDataProp: 'line',
+          bSearchable: true,
+          bVisible: true
+        },
+        {
+          sTitle: 'Column',
+          mDataProp: 'column',
+          bSearchable: true,
+          bVisible: true
+        },
+        {
+          sTitle: 'Details',
+          mDataProp: 'text',
+          bSearchable: true,
+          bVisible: true
+        }
+      ]
+    };
+    var table1 = $("#table-1");
+    table1.dataTable(table_msg_config);
+    var tableData = [];
+    for (var i = 0; i < 5000; i++) {
+      tableData.push({
+        "model" : "wut",
+        "level" : "l",
+        "line" : i,
+        "column" : 57,
+        "text" : "here!"
+      });
+    }
+
+    table1.DataTable().rows.add(tableData).draw();
+
+    loadReport('data.json');
+  });
+</script>
+</body>
+</html>

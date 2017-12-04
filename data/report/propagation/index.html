@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>Propagation Report</title>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+        <div id="genome-match"></div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div>
+        <div id="genome-propagation"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script type="text/javascript" src="https://cdn.plot.ly/plotly-1.28.3.min.js"></script>
+<script type="application/javascript">
+
+  var plotGenomeMatch = function(container, pdata) {
+    var data = [
+      {
+        x: [],
+        y: [],
+        type: 'bar'
+      }
+    ];
+
+    _.each(pdata, function(genomes, score) {
+      _.each(genomes, function(g) {
+        data[0].x.push(g);
+        data[0].y.push(score);
+      });
+    });
+
+    var layout = {
+      barmode: 'group',
+      title: 'DNA Polymerase',
+      yaxis: {range: [0, 1]}
+    };
+
+    Plotly.newPlot(container, data, layout);
+  };
+
+  var plotGenePropagation = function(container, pdata) {
+    console.log(pdata);
+
+    var xValues = []; //models
+    var yValues = []; //genes
+    var zValues = []; //[[]] match data
+
+    var size = _.size(pdata.x);
+    _.each(pdata.prop, function(propArray, gene) {
+      yValues.push(gene);
+      zValues.push(propArray);
+    });
+
+    var modelFromIndex = {};
+
+    _.each(pdata.x, function(index, model) {
+      modelFromIndex[index] = model;
+    });
+
+    console.log(modelFromIndex);
+    for (var i = 0; i < size; i++) {
+      xValues[i] = modelFromIndex[i] + "<br>" + "";
+    }
+
+
+    data = [{
+      x: xValues,
+      y: yValues,
+      z: zValues,
+      type: 'heatmap',
+      colorscale: [[0, '#001f3f'], [1, '#3D9970']],
+      showscale: false
+    }];
+
+    Plotly.newPlot(container, data);
+  };
+
+  var loadReport = function(dataFile) {
+    $.getJSON(dataFile, function(data) {
+      console.log(data);
+      plotGenomeMatch('genome-match', data.genomeMatchData);
+      plotGenePropagation('genome-propagation', {prop : data.genePropagation, x : data.modelIndex});
+    });
+  };
+
+  $(function() {
+    loadReport('data.json');
+  });
+</script>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Integration Report</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- <link rel="stylesheet" href="../../bootstrap-css-ext.css">-->
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  <style>
+    .nav-small {
+      font-family: arial, sans-serif;
+      font-size: 11px;
+
+    }
+
+    ul.nav-small a{
+      padding: 6px 6px !important;
+    }
+  </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-12">
+          <ul id="models-tabs" class="nav nav-tabs nav-small" role="tablist">
+            <li role="presentation" class="active"><a href="#isummary" aria-controls="home" role="tab" data-toggle="tab">Summary</a></li>
+          </ul>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="isummary">
+              <div id="final-spi-all"><i class="fa fa-cog fa-spin fa-3x fa-fw"></i> Loading...</div>
+            </div>
+            <div role="tabpanel" class="tab-pane active" id="model-summary">
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="message"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div id="final-spi-heat"></div>
+                </div>
+                <div class="col-md-6">
+                  <div id="final-rxn-heat"></div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="msg-panel" style="margin: 20px">
+                    <div class="panel panel-default">
+                      <div class="panel-heading" role="tab" id="headingThree">
+                        <div style="height: 20px">
+                          <div class="panel-title pull-left">
+                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                              <span class="glyphicon glyphicon-menu-down"></span>Messages
+                            </a>
+                          </div>
+                          <div id="msg-header" class="pull-right">
+                          </div>
+                        </div>
+                      </div>
+                      <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <table id="table-model-validation" class="table"></table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script type="text/javascript" src="https://cdn.plot.ly/plotly-1.28.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/scroller/1.4.2/js/dataTables.scroller.min.js"></script>
+<!--
+<script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../js/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="../js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="../../js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="../../js/dataTables.bootstrap.js"></script>
+-->
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+var plotIntegration = function(container, data) {
+  var pcontainer = document.getElementById(container);
+
+  var layout = {
+    barmode: 'group',
+    title: 'Integration Summary',
+    yaxis: {range: [0, 1]}
+  };
+  $('#' + container).html('');
+  Plotly.newPlot(pcontainer, data, layout);
+};
+
+var rxnDbOrder = ["ModelSeedReaction", "Seed", "BiGG2Reaction", "BiGG", "LigandReaction", "MetaCyc"];
+var dbOrder = ["ModelSeed", "Seed", "BiGG2", "BiGG", "LigandCompound", "LigandGlycan", "LigandDrug", "MetaCyc", "ChEBI", "LipidMAPS"];
+var dbData = {
+  "ModelSeed" : {
+    color : "rgb(0,188,212)"
+  },
+  "Seed" : {
+    color : "rgb(0,158,182)",
+    label : "ModelSeed (old)"
+  },
+  "LigandCompound" : {
+//    color : "rgb(0,255,0)",
+    color : "rgb(224,240,224)",
+    label : "KEGG Compound"
+  },
+  "LigandGlycan" : {
+    color : "rgb(0,102,0)",
+    label : "KEGG Glycan"
+  },
+  "LigandDrug" : {
+    color : "rgb(229,204,255)",
+    label : "KEGG Drug"
+  },
+  "BiGG2" : {
+    color : "rgb(0,153,255)",
+    label : "BiGG"
+  },
+  "BiGG" : {
+    color : "rgb(0,124,206)",
+    label : "BiGG1"
+  },
+  "ChEBI" : {
+    color : "rgb(255,255,0)"
+  },
+  "LipidMAPS" : {
+    color : "rgb(189,183,107)"
+  },
+  "MetaCyc" : {
+    color : "rgb(248,152,56)"
+  }
+};
+
+var makePlotyData = function(data) {
+  var plotData = [];
+  var databases = data.databases;
+//  console.log(databases);
+//  _.each(dbOrder, function(db) {
+//    var dataDbs =
+//  });
+  var x = _.keys(data.modelTotal);
+  _.each(data.modelTotal, function(v, k ) {
+  });
+  _.each(dbOrder, function(db) {
+    if (databases.indexOf(db) >= 0) {
+//      console.log(db);
+      var values = [];
+      _.each(x, function(m) {
+        var v = 0;
+        if (data.dataAbsolute.dataset[m] && data.dataAbsolute.dataset[m][db]) {
+          v = data.dataAbsolute.dataset[m][db];
+        }
+        values.push(v / data.modelTotal[m]);
+      });
+      var trace = {
+        x: x,
+        y: values,
+        name: db,
+        type: 'bar',
+        marker: {}
+      };
+      if (dbData[db]) {
+        if (dbData[db].color) {
+          trace.marker.color = dbData[db].color;
+        }
+        if (dbData[db].label) {
+          trace.name = dbData[db].label;
+        }
+      }
+      plotData.push(trace);
+    } else {
+      console.log('hidden, ', db);
+    }
+  });
+  return plotData;
+};
+
+var methodData = {a : {}, b : {}};
+
+var table1_config = {
+//  scrollY: 400,
+//  scroller: true,
+//  "dom": '<"top"f>rt<"bottom"i><"clear">',
+  "aaData" : [],
+  "aoColumns" : [
+    {
+      sTitle: '',
+      sClass: 'details-control',
+      bSearchable: false,
+      bSortable: false,
+      mRender: function() {
+        return '';
+      }
+    },
+    {
+      sTitle: 'Model Compound',
+      mDataProp: 'spiEntry',
+      bSearchable: true,
+      bVisible: true
+    }
+  ]
+};
+//
+//
+//var table1;
+//var tableMsg;
+
+var menuIndex = {};
+var dbs = {
+  LigandCompound : true,
+  BiGG : true,
+  BiGG2 : true,
+  ChEBI : true,
+  Seed : true,
+  ModelSeed : true
+};
+
+var loadTableData = function(dataFile) {
+  $.getJSON(dataFile, function(data) {
+//    console.log(data);
+    table1.DataTable().clear().draw();
+
+    var tableData = [];
+    _.each(data, function(v , spiEntry) {
+      var rowData = {
+        "spiEntry" : spiEntry
+      };
+      _.each(dbs, function(active, db) {
+        if (active) {
+          rowData[db] = "-";
+        }
+      });
+      _.each(v, function(refs, db) {
+        if (dbs[db]) {
+          rowData[db] = JSON.stringify(refs);
+        }
+      });
+      tableData.push(rowData);
+    });
+    table1.DataTable().rows.add(tableData).draw();
+  });
+};
+
+var loadMessageTable = function(dataFile, table, fnCallback) {
+  $.getJSON(dataFile, function(data) {
+//    console.log('loaded', data);
+    table.DataTable().clear().draw();
+
+    var tableData = [];
+    _.each(data, function(msg) {
+      var rowData = {
+        "level" : msg.type,
+        "column" : msg.columnNumber,
+        "line" : msg.lineNumber,
+        "cat" : msg.category,
+        "text" : msg.message
+      };
+      tableData.push(rowData);
+    });
+    table.DataTable().rows.add(tableData).draw();
+  }).done(fnCallback);
+};
+
+//<span class="label label-default">Default</span>
+//    <span class="label label-primary">Primary</span>
+//    <span class="label label-success">Success</span>
+//    <span class="label label-info">Info</span>
+//    <span class="label label-warning">Warning</span>
+//    <span class="label label-danger">Danger</span>
+
+var msgLevelOrder = {
+  "INFO" : "label-primary",
+  "WARN" : "label-warning",
+  "ERROR" : "label-danger",
+  "CRITICAL" : "label-danger"
+};
+
+var renderMessagesSummary = function (data) {
+  var result = "";
+//  console.log(data);
+  if (!data) {
+    return "no info"
+  }
+  _.each(msgLevelOrder, function(style, level) {
+    var count = data[level];
+    if (!count) {
+      count = 0;
+    }
+    result += '<span class="label ' + style + '">' + count + '</span> ';
+  });
+  return result;
+};
+
+
+var doIntegrationHeatMap = function(container, label, mdata, imap, dbs) {
+  console.log('doIntegrationHeatMap', label);
+  var data = [
+    {
+      z: [],
+      x: [],
+      y: [],
+      colorscale: [[0, '#001f3f'], [1, '#3D9970']],
+      showscale: false,
+      type: 'heatmap'
+    }
+  ];
+
+  var cmpOrder = {"def" : {}, "undef": []};
+  //var dbs = {};
+
+//  console.log(mdata);
+  _.each(mdata, function(spiData, id) {
+    var spiId = spiData.id;
+    if (spiId) {
+      var spiCmp = spiData.cmp;
+      if (spiCmp) {
+        if (!cmpOrder.def[spiCmp]) {
+          cmpOrder.def[spiCmp] = [];
+        }
+        cmpOrder.def[spiCmp].push(spiId);
+      } else {
+        cmpOrder.undef.push(spiId);
+      }
+    }
+  });
+
+//  _.each(imap, function(idata, spiEntry) {
+//    _.each(_.keys(idata), function(db) {
+//      if (dbOrder.indexOf(db) >= 0) {
+//        dbs[db] = true;
+//      }
+//    });
+//  });
+
+  _.each(cmpOrder.def, function(ids, cmp) {
+    _.each(ids, function(id) {
+      data[0].y.push(id);
+    });
+  });
+
+  _.each(cmpOrder.undef, function(id) {
+    data[0].y.push(id);
+  });
+
+
+
+
+  _.each(dbs, function(db) {
+    data[0].x.push(db);
+  });
+
+//  console.log(data[0].x);
+//  console.log(data[0].y);
+//  console.log(cmpOrder);
+//  console.log(data[0].y);
+
+//  console.log(dbs);
+
+  for (i = 0; i < data[0].y.length; i++) {
+    var v = [];
+    for (j = 0; j < data[0].x.length; j++) {
+      var spi = data[0].y[i];
+      var db = data[0].x[j];
+//      console.log(spi, db, imap);
+      if (imap[spi] && imap[spi][db]) {
+//              console.log(spi, db, spiIntegration[spi][db]);
+        v.push(1);
+      } else {
+        v.push(0);
+      }
+    }
+    data[0].z.push(v);
+  }
+
+//  font: {
+//    family: 'Arial',
+//        size: 20,
+//        color: 'rgb(50, 171, 96)'
+//  }
+
+  var layout = {
+    title : label,
+    xaxis : {
+      title : 'Databases'
+
+    }
+  };
+  Plotly.newPlot(container, data, layout);
+};
+
+var updateMsgCount = function(count) {
+  console.log(count);
+  var container = $('#msg-header');
+  var html = "";
+  if (count["CRITICAL"]) {
+    html += '<span class="label label-danger"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Error <span class="badge">' + count["CRITICAL"] + '</span></span>';
+  }
+  if (count["WARN"]) {
+    html += '<span class="label label-warning"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> Warn <span class="badge">' + count["WARN"] + '</span></span>';
+  }
+  if (count["FIX"]) {
+    html += '<span class="label label-info"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Fix <span class="badge">' + count["FIX"] + '</span></span>';
+  }
+  if (count["INFO"]) {
+    html += '<span class="label label-primary"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Info <span class="badge">' + count["INFO"] + '</span></span>';
+  }
+  container.html(html);
+};
+
+var showSelfSummary = function(caller) {
+  var importId = caller.getAttribute('id');
+  var importData = rData[importId];
+  console.log(importData);
+
+  var msgContainer = $('#message');
+  if (importData.error) {
+    msgContainer.html("<h5>Error:</h5><pre><p>" + importData.error + "</p></pre>")
+  } else {
+    msgContainer.html("");
+  }
+
+  //hide / show panel
+  if (!_.isEmpty(importData.validationCount) || importData.validationData) {
+    if (importData.validationCount) {
+      updateMsgCount(importData.validationCount);
+    } else {
+      $('#msg-header').html('');
+    }
+
+    if (importData.validationData) {
+      loadMessageTable(importData.validationData, tableMsg, function () { });
+    } else {
+      tableMsg.DataTable().clear().draw();
+    }
+    msgPanel.show();
+  } else {
+    msgPanel.hide();
+  }
+
+
+
+  if (importData && importData.integrationData && importData.integrationData.species) {
+    doIntegrationHeatMap('final-spi-heat', 'Compound Integration', importData.species, importData.integrationData.species, dbOrder);
+  } else {
+    $('#final-spi-heat').html("");
+  }
+  if (importData && importData.integrationData && importData.integrationData.reactions) {
+    doIntegrationHeatMap('final-rxn-heat', 'Reaction Integration', importData.reactions, importData.integrationData.reactions, rxnDbOrder);
+  } else {
+    $('#final-rxn-heat').html("");
+  }
+};
+
+var rData = {};
+
+var loadReaderData = function(dataFile) {
+  $.getJSON(dataFile, function(data) {
+//    console.log('loaded', data);
+
+    rData = data.models;
+    _.each(data.models, function(importData, importId) {
+//      console.log(importData);
+      var bad1 = "";
+      var bad2 = "";
+      if (importData.error) {
+        bad1 = '<span class="glyphicon glyphicon-warning-sign">';
+        bad2 = '</span>';
+      }
+      if (importData.validationCount && importData.validationCount['FIX']) {
+        bad1 = '<span class="glyphicon glyphicon-wrench">';
+        bad2 = '</span>';
+      }
+      $('#models-tabs').append(
+          '<li role="presentation" class="select-model">' +
+          '<a id="' + importId + '" href="#model-summary" aria-controls="home" role="tab" data-toggle="tab" onclick="showSelfSummary(this)">' + bad1 +
+          importId + bad2 + '</a></li>'
+      );
+    });
+
+    //all data
+    if (data.all.species) {
+      plotIntegration('final-spi-all', makePlotyData(data.all.species));
+    }
+  });
+};
+
+var table_msg_config = {
+  scrollY: 400,
+  scroller: true,
+  "dom": '<"top"f>rt<"bottom"i><"clear">',
+  "aaData" : [],
+  "aoColumns" : [
+    {
+      sTitle: 'Lavel',
+      mDataProp: 'level',
+      bSearchable: true,
+      bVisible: true
+    },
+    {
+      sTitle: 'Line',
+      mDataProp: 'line',
+      bSearchable: true,
+      bVisible: true
+    },
+    {
+      sTitle: 'Column',
+      mDataProp: 'column',
+      bSearchable: true,
+      bVisible: true
+    },
+    {
+      sTitle: 'Type',
+      mDataProp: 'cat',
+      bSearchable: true,
+      bVisible: true
+    },
+    {
+      sTitle: 'Details',
+      mDataProp: 'text',
+      bSearchable: true,
+      bVisible: true
+    }
+  ]
+};
+
+var msgPanel = $('#msg-panel');
+var tableMsg;
+
+$(function () {
+//  wut('data/readerData.json');
+  msgPanel.hide();
+  tableMsg = $("#table-model-validation");
+  tableMsg.dataTable(table_msg_config);
+
+//  var tableData = [];
+//  for (var i = 0; i < 5000; i++) {
+//    tableData.push({
+//      "model" : "wut",
+//      "level" : "l",
+//      "line" : i,
+//      "column" : 57,
+//      "text" : "here!"
+//    });
+//  }
+
+//  table1.DataTable().rows.add(tableData).draw();
+  loadReaderData('readerData.json');
+})
+</script>
+</body>
+</html>

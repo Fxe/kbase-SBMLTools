@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -118,16 +119,16 @@ public class SBMLToolsServer extends JsonServerServlet {
 
     KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
 
-    List<String> files = new ArrayList<> ();
-    files.add("index.html");
+//    List<String> files = new ArrayList<> ();
+//    files.add("index.html");
+//    
+//    List<String> datas = new ArrayList<> ();
+//    datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
+    Map<String, String> files = new HashMap<>();
+    files.put("index.html", KBaseIOUtils.getResource("sbml-import/index.html"));
+//    files.put("index.html", KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
+    ReportFiles reportFiles = htmlReport.makeStaticReport(files);
     
-    List<String> datas = new ArrayList<> ();
-
-    for (String f : files) {
-      datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/" + f));
-    }
-
-    ReportFiles reportFiles = htmlReport.makeStaticReport(files, datas);
     System.out.println(result.jsonDataFiles);
     File f = new File("/kb/module/data/readerData.json");
     if (f.exists()) {

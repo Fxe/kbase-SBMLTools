@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
@@ -109,7 +110,7 @@ public class KBaseHtmlReport {
     public String baseFolder;
   }
   
-  public ReportFiles makeStaticReport(List<String> paths, List<String> datas) {
+  public ReportFiles makeStaticReport(Map<String, String> files) {
     ReportFiles reportFiles = new ReportFiles();
 
     String uuid = UUID.randomUUID().toString();
@@ -123,9 +124,9 @@ public class KBaseHtmlReport {
     //    List<Map<String, Object>> streams = BIOUtils.readZipFiles(f);
     //    for (Map<String, Object> s : streams) {
     //      System.out.println(s);
-    for (int i = 0; i < paths.size(); i++) {
-      String fname = paths.get(i);
-      String data = datas.get(i);
+    for (String fname : files.keySet()) {
+//      String fname = paths.get(i);
+      String data = files.get(fname);
       OutputStream os = null;
       InputStream is = null;
       try {
