@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.biojava.nbio.core.sequence.DNASequence;
 import org.biojava.nbio.core.sequence.io.FastaReaderHelper;
@@ -26,27 +25,22 @@ import com.google.common.collect.Sets;
 
 import datafileutil.DataFileUtilClient;
 import genomeannotationapi.GenomeAnnotationAPIClient;
-import genomeannotationapi.SaveGenomeResultV1;
-import genomeannotationapi.SaveOneGenomeParamsV1;
-import genomeproteomecomparison.GenomeProteomeComparisonClient;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
-import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
-import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.AlignmentKernel.AlignmentJob;
+import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.report.PropagationReport;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
-import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import sbmltools.AutoPropagateModelParams;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonClientException;
@@ -231,7 +225,7 @@ public class AutoPropagateGenomeFacade {
 //          Genome otherGenome = KBaseIOUtils.getObject2(genomeId, workspace, null, wsClient);
         }
         
-        Map<String, String> proteomes = new HashMap<> ();
+//        Map<String, String> proteomes = new HashMap<> ();
         
         for (PropagationTask ptask : genomesToCompare) {
           KBaseId genome2 = new KBaseId(ptask.genomeId, ptask.genomeWs, null);
@@ -361,7 +355,7 @@ public class AutoPropagateGenomeFacade {
 //      }
       
       Map<String, String> files = new HashMap<>();
-      files.put("index.html", KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/report-propagation/index.html"));
+      files.put("index.html", KBaseIOUtils.getResource("report/propagation/index.html"));
       ReportFiles reportFiles = htmlReport.makeStaticReport(files);
       
       File f = new File("/kb/module/data/data.json");
