@@ -241,7 +241,7 @@ public class KBaseModelIntegrationFacade {
     KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
     
     Map<String, String> files = new HashMap<>();
-    files.put("index.html", KBaseIOUtils.getResource("integration/index.html"));
+    files.put("index.html", KBaseIOUtils.getResource("report/integration/index.html"));
     ReportFiles reportFiles = htmlReport.makeStaticReport(files);
     
     File f = new File("/kb/module/data/data.json");

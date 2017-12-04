@@ -125,7 +125,7 @@ public class SBMLToolsServer extends JsonServerServlet {
 //    List<String> datas = new ArrayList<> ();
 //    datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
     Map<String, String> files = new HashMap<>();
-    files.put("index.html", KBaseIOUtils.getResource("sbml-import/index.html"));
+    files.put("index.html", KBaseIOUtils.getResource("report/sbml-import/index.html"));
 //    files.put("index.html", KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
     ReportFiles reportFiles = htmlReport.makeStaticReport(files);
     
