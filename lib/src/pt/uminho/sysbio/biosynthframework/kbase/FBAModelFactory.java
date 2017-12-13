@@ -404,8 +404,9 @@ public class FBAModelFactory {
 
       String rxnCmpRef = String.format("~/modelcompartments/id/%s", cmpMap.values().iterator().next());
       String rxnRef = "rxn00000";
+      
       if (this.rxnToModelSeedReference.containsKey(rxnEntry)) {
-        rxnRef = rxnToModelSeedReference.get(rxnRef);
+        rxnRef = rxnToModelSeedReference.get(rxnEntry);
       }
       
       //XXX: do we need reaction compartments !?

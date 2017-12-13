@@ -315,6 +315,7 @@ public class KBaseSbmlImporter {
         rxnToModelSeedReference = modelSeedIntegration.rxnToModelSeedReference;
         result.message += String.format("\ni: %d", spiToModelSeedReference.size());
       }
+      
       //order matters ! fix this ... it is a factory ...
       model = new FBAModelFactory()
           .withGenomeRef(genomeRef)
