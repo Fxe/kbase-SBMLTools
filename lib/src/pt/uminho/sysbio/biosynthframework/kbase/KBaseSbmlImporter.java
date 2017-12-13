@@ -105,6 +105,8 @@ public class KBaseSbmlImporter {
     //SETUP REACTION INTEGRATION DEFAULT EXCLUSIONS
     reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h");
     reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h2o");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGGReaction, "h");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGGReaction, "h2o");
     reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00001");
     reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00080");
     reactionIntegration.exclude(ReactionMajorLabel.BiGG, "h");

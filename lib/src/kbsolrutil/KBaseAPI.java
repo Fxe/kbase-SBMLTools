@@ -133,8 +133,7 @@ public class KBaseAPI {
   
   public Object getWorkspaceObject(String id, String ws) throws IOException {
     Object o = KBaseIOUtils.getObject(id, ws, null, getWorkspaceClient());
-    System.out.println(o.getClass().getSimpleName());
-    return null;
+    return o;
   }
   
   public<T> T getWorkspaceObject(String id, String ws, Class<T> clazz) throws IOException {

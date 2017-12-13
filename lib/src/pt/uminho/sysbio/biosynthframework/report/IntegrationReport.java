@@ -51,7 +51,7 @@ public class IntegrationReport {
     
     Object o = null;
     if ((o = all.remove(null)) != null) {
-      logger.warn("remove null model data");
+      logger.warn("remove null model data: {}", o);
     }
     
     return true;

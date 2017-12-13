@@ -408,13 +408,14 @@ public class FBAModelFactory {
         rxnRef = rxnToModelSeedReference.get(rxnRef);
       }
       
+      //XXX: do we need reaction compartments !?
       ModelReaction rxn = new ModelReaction().withId(rxnEntry)
           .withAliases(new ArrayList<String> ())
           .withName(rxnName)
           .withImportedGpr(gpr)
           .withDirection("=")
           .withProtons(1.0)
-          .withReactionRef("~/template/reactions/id/rxn00000_c")
+          .withReactionRef("~/template/reactions/id/" + rxnRef + "_c")
           .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
           .withProbability(1.0)
           .withPathway("entire model")
