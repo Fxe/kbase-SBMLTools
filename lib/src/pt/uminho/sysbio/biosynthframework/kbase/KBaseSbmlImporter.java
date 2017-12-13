@@ -312,7 +312,7 @@ public class KBaseSbmlImporter {
         //get stats
         result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
         spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
-        rxnToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
+        rxnToModelSeedReference = modelSeedIntegration.rxnToModelSeedReference;
         result.message += String.format("\ni: %d", spiToModelSeedReference.size());
       }
       //order matters ! fix this ... it is a factory ...
