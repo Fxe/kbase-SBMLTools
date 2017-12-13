@@ -55,6 +55,7 @@ public class KBaseModelSeedIntegration {
   public String biodbDataPath;
   public String curationFilePath;
   public Map<String, String> spiToModelSeedReference = new HashMap<> ();
+  public Map<String, String> rxnToModelSeedReference = new HashMap<> ();
   
 //  public BiodbService biodbService = null;
   public SearchTable<MetaboliteMajorLabel, String> searchTable = null;
@@ -232,6 +233,8 @@ public class KBaseModelSeedIntegration {
       }
     }
     
+    
+    
     reactionIntegration.imap.clear();
     
     reactionIntegration.integrate(ReactionMajorLabel.LigandReaction, xmodel, integration.clean);
@@ -245,6 +248,13 @@ public class KBaseModelSeedIntegration {
     KBaseMappingResult result = new KBaseMappingResult();
     result.species = imap;
     result.reactions = reactionIntegration.imap;
+    
+    for (String id : reactionIntegration.imap.keySet()) {
+      String ref = reactionIntegration.imap.get(id).get(ReactionMajorLabel.ModelSeedReaction);
+      if (ref != null) {
+        rxnToModelSeedReference.put(id, ref);
+      }
+    }
     
     return result;
 

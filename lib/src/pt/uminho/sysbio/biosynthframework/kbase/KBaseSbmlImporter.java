@@ -284,6 +284,7 @@ public class KBaseSbmlImporter {
       }
 
       Map<String, String> spiToModelSeedReference = new HashMap<> ();
+      Map<String, String> rxnToModelSeedReference = new HashMap<> ();
       IntegrationMap<String, String> sintegration = new IntegrationMap<>();
       IntegrationMap<String, String> rintegration = new IntegrationMap<>();
       //check if integrate
@@ -311,6 +312,7 @@ public class KBaseSbmlImporter {
         //get stats
         result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
         spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
+        rxnToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
         result.message += String.format("\ni: %d", spiToModelSeedReference.size());
       }
       //order matters ! fix this ... it is a factory ...
@@ -320,6 +322,7 @@ public class KBaseSbmlImporter {
           .withReactionIntegration(rintegration)
           .withBiomassIds(biomassIds)
           .withMetaboliteModelSeedReference(spiToModelSeedReference)
+          .withReactionModelSeedReference(rxnToModelSeedReference)
           .withModelId(modelId)
           .withModelName(modelId)
           .withXmlSbmlModel(xmodel, allowBoundary)
