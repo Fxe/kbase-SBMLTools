@@ -146,6 +146,7 @@ public class KBaseModelIntegrationFacade {
     integration.mediaName = params.getOutputMediaName();
     integration.biodbContainer = this.biodbContainer;
     integration.gprOverride = gprOverride;
+    integration.fixIdToKBase = true;
     
     if (!DataUtils.empty(params.getGenomeId())) {
       Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(params.getGenomeId(), workspaceName, null, wspClient);

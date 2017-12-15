@@ -191,6 +191,9 @@ public class FBAModelAdapter implements ModelAdapter {
   }
   
   public String buildRxnIdentifier(String id, String cmp) {
+//    if (DataUtils.empty(id) || DataUtils.empty(cmp)) {
+//      return id;
+//    }
     if (REACTION_PRE == null) {
       return String.format("%s_%s", id, cmp);
     }
@@ -202,12 +205,58 @@ public class FBAModelAdapter implements ModelAdapter {
     return tokens[tokens.length - 1];
   }
   
+  public String getModelReactionCompartmentEntry(ModelReaction krxn) {
+    Map<String, Integer> cmpCount = new HashMap<>();
+    
+    int high = 0;
+    
+    for (ModelReactionReagent reagent : krxn.getModelReactionReagents()) {
+      String ref = reagent.getModelcompoundRef();
+      String entry = getEntryFromRef(ref);
+      ModelCompound kspi = kspiMap.get(entry);
+      if (kspi == null) {
+        return null;
+      }
+      
+      String cmp = getModelCompoundCompartmentEntry(kspi);
+      CollectionUtils.increaseCount(cmpCount, cmp, 1);
+      int v = cmpCount.get(cmp);
+      if (high < v) {
+        high = v;
+      }
+    }
+    
+    BHashMap<String, Integer> bmap = new BHashMap<>(cmpCount);
+    Set<String> cmps = bmap.bget(high);
+    
+    //worst possible solution, fix it later works for now
+    if (cmps.contains("c0")) {
+      return "c0";
+    } else if (cmps.contains("e0")){
+      return "e0";
+    } else {
+      return cmps.iterator().next();
+    }
+  }
+  
+  public boolean renameReactionEntry(String from, String to) {
+    ModelReaction krxn = rxnMap.get(from);
+    to = buildRxnIdentifier(to, getModelReactionCompartmentEntry(krxn));
+    
+    if (!krxn.getId().equals(to) && !rxnMap.containsKey(to)) {
+      logger.info("{} -> {}", krxn.getId(), to);
+      rxnMap.put(to, rxnMap.remove(from));
+      
+      return true;
+    }
+    return false;
+  }
+  
   public boolean renameMetaboliteEntry(String from, String to) {
     ModelCompound kcpd = kspiMap.get(from);
     to = buildSpiIdentifier(to, getModelCompoundCompartmentEntry(kcpd));
     
-    
-    if (!kcpd.getId().equals(to)) {
+    if (!kcpd.getId().equals(to) && !kspiMap.containsKey(to)) {
       logger.info("{} -> {}", kcpd.getId(), to);
       kcpd.setId(to);
       for (ModelReaction krxn : fbaModel.getModelreactions()) {
@@ -225,7 +274,6 @@ public class FBAModelAdapter implements ModelAdapter {
           }
         }
       }
-      
       
 //      kspiDegreeMap.put(to, kspiDegreeMap.get(from));
       kspiMap.put(to, kspiMap.remove(from));

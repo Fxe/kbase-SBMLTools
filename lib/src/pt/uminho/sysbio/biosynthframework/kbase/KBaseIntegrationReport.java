@@ -62,6 +62,7 @@ public class KBaseIntegrationReport {
   public String model;
   public String objName;
   public TranslationReport spiTranslationReport = new TranslationReport();
+  public TranslationReport rxnTranslationReport = new TranslationReport();
   public DrainReport drainReport = new DrainReport();
   public GenomeReport genomeReport = new GenomeReport();
   public ModelDataReport modelDataReport = new ModelDataReport();

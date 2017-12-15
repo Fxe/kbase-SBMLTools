@@ -42,6 +42,7 @@ public class KBaseIntegration {
   public String template = null;
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
+  public boolean fixIdToKBase = false;
   public String mediaName = null;
   
   public KBaseGenomeReport greport = null;
@@ -135,6 +136,24 @@ public class KBaseIntegration {
     return report;
   }
   
+  public static String fix(String id) {
+    if (id == null) {
+      return null;
+    }
+    
+    id = id.trim();
+    while (!Character.isLetter(id.charAt(0)) && 
+           !Character.isDigit(id.charAt(0))) {
+      id = id.substring(1);
+    }
+    while (id.contains("__")) {
+      id = id.replace("__", "_");
+    }
+    id = id.replaceAll("_", "-");
+    
+    return id;
+  }
+  
   public void integrate() {
     
     logger.info("[GPR Override]");
@@ -183,38 +202,74 @@ public class KBaseIntegration {
       this.report.compartmentReport.rename.put(cmpOld, indexedCmp);
     }
     
+
+    Set<ModelCompound> renamedSpi = new HashSet<>();
+    Set<ModelReaction> renamedRxn = new HashSet<>();
     //integration
     //BiGG, BiGG2, HMDB, LigandCompound, MetaCyc, ModelSeed, Seed
     if (rename != null && !rename.equals("none")) {
       //needs a better db resolver
+      String cpdDatabase = rename;
+      String rxnDatabase = rename;
       if (rename.equals("modelseed")) {
-        rename = "ModelSeed";
+        cpdDatabase = "ModelSeed";
+        rxnDatabase = "ModelSeedReaction";
       }
       if (rename.equals("BiGG") || rename.equals("bigg")) {
-        rename = "BiGG2";
+        cpdDatabase = "BiGG2";
+        rxnDatabase = "BiGG";
       }
       if (rename.equals("KEGG") || rename.equals("kegg")) {
-        rename = "LigandCompound";
+        cpdDatabase = "LigandCompound";
+        rxnDatabase = "LigandReaction";
       }
       
       logger.info("rename: {}", this.rename);
       
       for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
-        List<String> dbRefs = kcpd.getDblinks().get(rename);
+        List<String> dbRefs = kcpd.getDblinks().get(cpdDatabase);
         if (dbRefs != null && !dbRefs.isEmpty()) {
           String ref = dbRefs.iterator().next();
           String prev = kcpd.getId();
-          if (adapter.renameMetaboliteEntry(prev, dbRefs.iterator().next())) {
+          if (adapter.renameMetaboliteEntry(prev ,ref)) {
+            renamedSpi.add(kcpd);
             report.spiTranslationReport.translationMap.put(prev, kcpd.getId());
           }
         }
       }
       
       for (ModelReaction krxn : fbaModel.getModelreactions()) {
-        List<String> dbRefs = krxn.getDblinks().get(rename);
+        List<String> dbRefs = krxn.getDblinks().get(rxnDatabase);
         if (dbRefs != null && !dbRefs.isEmpty()) {
-          System.out.println(krxn.getId() + " " + dbRefs.iterator().next());
-//          renameReactionEntry(krxn.getId(), dbRefs.iterator().next());
+          String ref = dbRefs.iterator().next();
+          System.out.println(krxn.getId() + " " + ref);
+          String prev = krxn.getId();
+          if (adapter.renameReactionEntry(prev, ref)) {
+            renamedRxn.add(krxn);
+            report.rxnTranslationReport.translationMap.put(prev, krxn.getId());
+          }
+          
+        }
+      }
+    }
+    
+    if (rename != null && !rename.equals("none") && fixIdToKBase) {
+      for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
+        if (!renamedSpi.contains(kcpd)) {
+          String prev = kcpd.getId();
+          String id = fix(kcpd.getId());
+          if (adapter.renameMetaboliteEntry(prev ,id)) {
+            report.spiTranslationReport.translationMap.put(prev, id);
+          }
+        }
+      }
+      for (ModelReaction krxn : fbaModel.getModelreactions()) {
+        if (!renamedRxn.contains(krxn)) {
+          String prev = krxn.getId();
+          String id = fix(krxn.getId());
+          if (adapter.renameReactionEntry(prev ,id)) {
+            report.rxnTranslationReport.translationMap.put(prev, id);
+          }
         }
       }
     }
