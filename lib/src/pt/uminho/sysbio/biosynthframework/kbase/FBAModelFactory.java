@@ -41,6 +41,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
+import sbmltools.FixedAdapter;
 
 public class FBAModelFactory {
 
@@ -311,7 +312,9 @@ public class FBAModelFactory {
 
 
   public FBAModel build() {
-    XmlSbmlModelAdapter xadapter = new XmlSbmlModelAdapter(xmodel);
+    @SuppressWarnings("deprecation")
+    XmlSbmlModelAdapter xadapter = new FixedAdapter(xmodel);
+    
     FBAModel model = new FBAModel();
     model.setId(modelId);
     model.setName(modelName); //get from xml if exists

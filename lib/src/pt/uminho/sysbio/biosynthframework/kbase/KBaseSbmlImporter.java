@@ -429,7 +429,6 @@ public class KBaseSbmlImporter {
       dbs.add(MetaboliteMajorLabel.LipidMAPS);
       dbs.add(MetaboliteMajorLabel.ChEBI);
       dbs.add(MetaboliteMajorLabel.MetaCyc);
-      //      dbs.add(MetaboliteMajorLabel.)~
 
       for (MetaboliteMajorLabel db : dbs) {
         spiIntegrationAll.databases.add(db.toString());
