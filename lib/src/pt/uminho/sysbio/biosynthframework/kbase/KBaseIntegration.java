@@ -135,22 +135,26 @@ public class KBaseIntegration {
     
     return report;
   }
-  
+
   public static String fix(String id) {
     if (id == null) {
       return null;
     }
-    
+
     id = id.trim();
     while (!Character.isLetter(id.charAt(0)) && 
            !Character.isDigit(id.charAt(0))) {
       id = id.substring(1);
     }
+    while (!Character.isLetter(id.charAt(id.length() - 1)) && 
+           !Character.isDigit(id.charAt(id.length() - 1))) {
+      id = id.substring(0, id.length() - 1);
+    }
     while (id.contains("__")) {
       id = id.replace("__", "_");
     }
     id = id.replaceAll("_", "-");
-    
+
     return id;
   }
   
