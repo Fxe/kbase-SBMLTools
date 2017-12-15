@@ -245,6 +245,7 @@ public class FBAModelAdapter implements ModelAdapter {
     
     if (!krxn.getId().equals(to) && !rxnMap.containsKey(to)) {
       logger.info("{} -> {}", krxn.getId(), to);
+      krxn.setId(to);
       rxnMap.put(to, rxnMap.remove(from));
       krxnType.put(to, krxnType.remove(from));
       return true;
