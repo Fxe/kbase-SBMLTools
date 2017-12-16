@@ -357,10 +357,12 @@ public class FBAModelAdapter implements ModelAdapter {
     for (String krxnEntry : rxnMap.keySet()) {
       ModelReaction krxn = rxnMap.get(krxnEntry);
       Set<String> kcmpRefs = new HashSet<> ();
-      for (ModelReactionReagent reagent : krxn.getModelReactionReagents()) {
-        kcmpRefs.add(getReagentCompartmentRef(reagent));
+      if (!krxn.getModelReactionReagents().isEmpty()) {
+        for (ModelReactionReagent reagent : krxn.getModelReactionReagents()) {
+          kcmpRefs.add(getReagentCompartmentRef(reagent));
+        }
+        krxn.setModelcompartmentRef(decideCompartment(kcmpRefs));        
       }
-      krxn.setModelcompartmentRef(decideCompartment(kcmpRefs));
     }
     
     return indexedCmp;
