@@ -246,7 +246,6 @@ public class KBaseIntegration {
         List<String> dbRefs = krxn.getDblinks().get(rxnDatabase);
         if (dbRefs != null && !dbRefs.isEmpty()) {
           String ref = dbRefs.iterator().next();
-          System.out.println(krxn.getId() + " " + ref);
           String prev = krxn.getId();
           if (adapter.renameReactionEntry(prev, ref)) {
             renamedRxn.add(krxn);
@@ -262,7 +261,7 @@ public class KBaseIntegration {
         if (!renamedSpi.contains(kcpd)) {
           String prev = kcpd.getId();
           String id = fix(kcpd.getId());
-          if (adapter.renameMetaboliteEntry(prev ,id)) {
+          if (adapter.renameMetaboliteEntry(prev, id)) {
             report.spiTranslationReport.translationMap.put(prev, id);
           }
         }
@@ -271,7 +270,7 @@ public class KBaseIntegration {
         if (!renamedRxn.contains(krxn)) {
           String prev = krxn.getId();
           String id = fix(krxn.getId());
-          if (adapter.renameReactionEntry(prev ,id)) {
+          if (adapter.renameReactionEntry(prev, id)) {
             report.rxnTranslationReport.translationMap.put(prev, id);
           }
         }

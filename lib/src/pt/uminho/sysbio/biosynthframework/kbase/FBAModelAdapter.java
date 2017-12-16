@@ -229,6 +229,10 @@ public class FBAModelAdapter implements ModelAdapter {
     BHashMap<String, Integer> bmap = new BHashMap<>(cmpCount);
     Set<String> cmps = bmap.bget(high);
     
+    if (cmps == null) {
+      return null;
+    }
+    
     //worst possible solution, fix it later works for now
     if (cmps.contains("c0")) {
       return "c0";
@@ -241,7 +245,14 @@ public class FBAModelAdapter implements ModelAdapter {
   
   public boolean renameReactionEntry(String from, String to) {
     ModelReaction krxn = rxnMap.get(from);
-    to = buildRxnIdentifier(to, getModelReactionCompartmentEntry(krxn));
+    
+    String rxnCmp = getModelReactionCompartmentEntry(krxn);
+    
+    if (DataUtils.empty(rxnCmp)) {
+      return false;
+    }
+    
+    to = buildRxnIdentifier(to, rxnCmp);
     
     if (!krxn.getId().equals(to) && !rxnMap.containsKey(to)) {
       logger.info("{} -> {}", krxn.getId(), to);
