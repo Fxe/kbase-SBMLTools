@@ -223,9 +223,9 @@ public class KBaseModelSeedIntegration {
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
     
     
-    for (String k : imap.keySet()) {
-      System.out.println(k + "\t" + imap.get(k));
-    }
+//    for (String k : imap.keySet()) {
+//      System.out.println(k + "\t" + imap.get(k));
+//    }
     
 //    System.out.println(imap);
     imap = integration.clean;
