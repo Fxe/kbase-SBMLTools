@@ -67,6 +67,7 @@ public class LocalTest {
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
 //    sbmlPath = "/var/biomodels/sbml/Ec_core_flux1.xml";
     sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
+    sbmlPath = "/var/biomodels/sbml/Ec_core_flux1.xml";
     
     String urlPath = sbmlPath;
     InputStream is = null; //file input stream
@@ -150,6 +151,7 @@ public class LocalTest {
     sbmlPath = "http://193.137.11.210/models/biomodels/iOD907_bqbiol.xml";
     sbmlPath = "http://bioseed.mcs.anl.gov/~jplfaria/models/yeast_7.6.xml";
     sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/sbml/Ec_core_flux1.xml";
+    sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/sbml/iJDZ836/iJDZ836.xml";
 //    sbmlPath = "http://127.0.0.1/models/biomodels/sbml/hsa/MODEL1109130000.xml";
 //    sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
     

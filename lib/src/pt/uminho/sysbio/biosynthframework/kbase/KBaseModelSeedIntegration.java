@@ -20,6 +20,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
+import pt.uminho.sysbio.biosynthframework.integration.ReferencePropagation;
 import pt.uminho.sysbio.biosynthframework.integration.model.BiGG2AliasMultiMatchResolver;
 import pt.uminho.sysbio.biosynthframework.integration.model.BoundaryConflictResolver;
 import pt.uminho.sysbio.biosynthframework.integration.model.ConnectedComponents;
@@ -28,6 +29,7 @@ import pt.uminho.sysbio.biosynthframework.integration.model.DictionaryBaseIntegr
 import pt.uminho.sysbio.biosynthframework.integration.model.FirstDegreeReferences;
 import pt.uminho.sysbio.biosynthframework.integration.model.IdBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.integration.model.ModelSeedMultiMatchResolver;
 import pt.uminho.sysbio.biosynthframework.integration.model.NameBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.SearchTable;
@@ -128,7 +130,7 @@ public class KBaseModelSeedIntegration {
     integration.matchResolver.put(MetaboliteMajorLabel.Seed, r2);
     integration.matchResolver.put(MetaboliteMajorLabel.BiGG2, r3);
     integration.specieConflictResolve = r1;
-    
+    Map<String, String> spiToCmp = new HashMap<>();
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
 //      String id = xspi.getAttributes().get("id");
       String sname = xspi.getAttributes().get("name");
@@ -144,6 +146,7 @@ public class KBaseModelSeedIntegration {
         logger.warn("{}", e.getMessage());
       }
       integration.addSpecie(spiEntry, cmpId);
+      spiToCmp.put(spiEntry, cmpId);
 //      integration.patterns.put(, null);
 //      integration.spiToCompartment.put(
 //          xspi.getAttributes().get("id"), 
@@ -218,8 +221,39 @@ public class KBaseModelSeedIntegration {
     
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
+    
+    
+    for (String k : imap.keySet()) {
+      System.out.println(k + "\t" + imap.get(k));
+    }
+    
 //    System.out.println(imap);
     imap = integration.clean;
+    
+    ReferencePropagation propagation = new ReferencePropagation();
+    for (String k : imap.keySet()) {
+      Map<MetaboliteMajorLabel, String> references = imap.get(k);
+      for (MetaboliteMajorLabel db : references.keySet()) {
+        propagation.addReference(k, spiToCmp.get(k), db, references.get(db));
+      }
+    }
+    
+    integration.status2(imap);
+    
+    IntegrationMap<String, MetaboliteMajorLabel> pmap = 
+        propagation.propagate(true, ccs);
+    
+    for (String k : pmap.keySet()) {
+      Map<MetaboliteMajorLabel, Set<String>> references = pmap.get(k);
+      for (MetaboliteMajorLabel database : references.keySet()) {
+        for (String dbEntry : references.get(database)) {
+          imap.get(k).put(database, dbEntry);
+        }
+      }
+    }
+    
+    integration.status2(imap);
+    
 //    System.out.println(imap);
     if (resultAdapter != null) {
 //      System.out.println(modelEntry + " -> " + integration.clean.size());

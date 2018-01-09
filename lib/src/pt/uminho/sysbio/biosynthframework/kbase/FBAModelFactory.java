@@ -120,13 +120,13 @@ public class FBAModelFactory {
     return this;
   }
   
-  public FBAModelFactory withSimpleModelSpecie(SimpleModelSpecie mspi) {
+  public FBAModelFactory withSimpleModelSpecie(SimpleModelSpecie<String> mspi) {
     return withSimpleModelSpecie(mspi, "cpd00000");
   }
   
-  public FBAModelFactory withSimpleModelSpecie(SimpleModelSpecie mspi, String modelSeedRef) {
+  public FBAModelFactory withSimpleModelSpecie(SimpleModelSpecie<String> mspi, String modelSeedRef) {
     String spiEntry = mspi.id;
-    String cmpEntry = mspi.compartment;
+    String cmpEntry = mspi.compartmentId;
     String spiName = mspi.name;
     if (spiName == null || spiName.trim().isEmpty()) {
       spiName = "undefined";

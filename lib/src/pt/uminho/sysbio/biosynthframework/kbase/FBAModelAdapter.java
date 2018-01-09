@@ -30,6 +30,7 @@ import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
+import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -498,43 +499,44 @@ public class FBAModelAdapter implements ModelAdapter {
         if (degree < 2) {
           logger.trace("WARN: discard specie [{}]", spiEntry);
         } else {
-          List<double[]> b = new ArrayList<> ();
+          List<Range> b = new ArrayList<> ();
           for (String drxnEntry : specieToDrain.get(spiEntry)) {
-            double[] bounds = getBounds(drxnEntry);
+            Range bounds = getBounds(drxnEntry);
             Map<String, ?> dstoich = getStoichiometry(drxnEntry);
             
             Double dstoichValue = Double.parseDouble(dstoich.get(spiEntry).toString());
 //            logger.trace("[{}] - {} {}: [{}, {}] {}", spiEntry, getSpecieAttribute(spiEntry, "name"), drxnEntry, bounds[0], bounds[1], dstoich);
-            
+            double lb = bounds.lb;
+            double ub = bounds.ub;
             if (dstoichValue != null) {
               //specie is a product flip bonds
               if (dstoichValue > 0) {
-                double lb_ = bounds[1] * -1;
-                double ub_ = bounds[0] * -1;
-                bounds[0] = lb_;
-                bounds[1] = ub_;
+                double lb_ = ub * -1;
+                double ub_ = lb * -1;
+                lb = lb_;
+                ub = ub_;
                 logger.trace("[{}] FIX: flip bounds => [{}, {}]", spiEntry, lbMap, ubMap);
               }
             } 
 
-            if (bounds[0] < -1000000000) {
+            if (bounds.lb < -1000000000) {
               logger.debug("[{}] lb value to high reducing to default", spiEntry);
-              bounds[0] = defaultLB;
+              lb = defaultLB;
             }
-            if (bounds[1] > 1000000000) {
+            if (bounds.ub > 1000000000) {
               logger.debug("[{}] ub value to high reducing to default", spiEntry);
-              bounds[1] = defaultUB;
+              ub = defaultUB;
             }
             
-            b.add(bounds);
+            b.add(new Range(lb, ub));
           }
           
           double lb = 0;
           double ub = 0;
           
-          for (double[] p : b) {
-            lb += p[0];
-            ub += p[1];
+          for (Range p : b) {
+            lb += p.lb;
+            ub += p.ub;
           }
           
           logger.trace("[{}]: [{}, {}]", spiEntry, lb, ub);
@@ -589,7 +591,7 @@ public class FBAModelAdapter implements ModelAdapter {
   }
   
   @Override
-  public double[] getBounds(String mrxnEntry) {
+  public Range getBounds(String mrxnEntry) {
     ModelReaction mr = this.rxnMap.get(mrxnEntry);
     Double ub = mr.getMaxforflux();
     Double lb = mr.getMaxrevflux();
@@ -601,7 +603,7 @@ public class FBAModelAdapter implements ModelAdapter {
     } else {
       lb = -1 * lb;
     }
-    return new double[]{lb , ub};
+    return new Range(lb, ub);
   }
 
   @Override
