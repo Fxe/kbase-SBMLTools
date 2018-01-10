@@ -458,15 +458,7 @@ public class KBaseSbmlImporter {
             } catch (Exception e) {
               result.message += "\nERROR: " + u + " " + e.getMessage();
             }
-            //            if (model != null) {
-            //              String fbaModelRef = KBaseIOUtils.saveDataSafe(modelId, 
-            //                  KBaseType.FBAModel.value(), model, workspace, dfuClient);
-            //              if (fbaModelRef != null) {
-
-            //              } else {
-            //                logger.warn("unable to save {}", modelId);
-            //              }
-            //            }
+            
           }
           //          KBaseIOUtils.saveData(objects, workspace, dfuClient);
         } catch (Exception e) {

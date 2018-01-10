@@ -20,6 +20,7 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
+import pt.uminho.sysbio.biosynthframework.Dataset;
 import pt.uminho.sysbio.biosynthframework.integration.ReferencePropagation;
 import pt.uminho.sysbio.biosynthframework.integration.model.BiGG2AliasMultiMatchResolver;
 import pt.uminho.sysbio.biosynthframework.integration.model.BoundaryConflictResolver;
@@ -203,7 +204,9 @@ public class KBaseModelSeedIntegration {
     be3split.spiEntryToName = spiEntryToName2;
     be1.patterns = integration.getPatterns();
     integration.baseEngines.put("dict", beX);
-    integration.baseEngines.put("refs", be0);
+    integration.baseEngines.put("refs1", be0);
+    integration.baseEngines.put("refs2", be0);
+    integration.baseEngines.put("refs3", be0);
     integration.baseEngines.put("pattern", be1);
     integration.baseEngines.put("trie", be2);
     integration.baseEngines.put("name", be3);
@@ -219,13 +222,17 @@ public class KBaseModelSeedIntegration {
 //    integration.engines.add(l2);
     integration.run();
     
+//    Dataset<String, String, String> ds = new Dataset<>();
+//    for (IntegrationMap<String, MetaboliteMajorLabel> a : integration.isets) {
+//      for (String k : a.keySet()) {
+//        System.out.println(k + "\t" + a.get(k));
+//      }
+//    }
+
     
     Map<String, Map<MetaboliteMajorLabel, String>> imap = integration.build();
     
     
-//    for (String k : imap.keySet()) {
-//      System.out.println(k + "\t" + imap.get(k));
-//    }
     
 //    System.out.println(imap);
     imap = integration.clean;
@@ -237,6 +244,8 @@ public class KBaseModelSeedIntegration {
         propagation.addReference(k, spiToCmp.get(k), db, references.get(db));
       }
     }
+    
+
     
     integration.status2(imap);
     
@@ -250,6 +259,10 @@ public class KBaseModelSeedIntegration {
           imap.get(k).put(database, dbEntry);
         }
       }
+    }
+    
+    for (String k : imap.keySet()) {
+      System.out.println(k + "\t" + imap.get(k));
     }
     
     integration.status2(imap);

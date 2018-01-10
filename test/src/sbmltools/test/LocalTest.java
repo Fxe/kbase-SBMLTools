@@ -152,6 +152,7 @@ public class LocalTest {
     sbmlPath = "http://bioseed.mcs.anl.gov/~jplfaria/models/yeast_7.6.xml";
     sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/sbml/Ec_core_flux1.xml";
     sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/sbml/iJDZ836/iJDZ836.xml";
+    sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/fungis/iNX804.xml";
 //    sbmlPath = "http://127.0.0.1/models/biomodels/sbml/hsa/MODEL1109130000.xml";
 //    sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
     
