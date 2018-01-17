@@ -66,7 +66,7 @@ public class KBaseModelIntegrationFacade {
   
   public static Map<String, String> getCompartmentMapping(List<CompartmentMapping> compartmentMappings) {
     Map<String, String> result = new HashMap<> ();
-
+    
     for (CompartmentMapping cmap : compartmentMappings) {
       if (cmap != null && cmap.getKbaseCompartmentId() != null && 
           cmap.getModelCompartmentId() != null && 

@@ -262,7 +262,7 @@ public class KBaseModelSeedIntegration {
     }
     
     for (String k : imap.keySet()) {
-      System.out.println(k + "\t" + imap.get(k));
+//      System.out.println(k + "\t" + imap.get(k));
     }
     
     integration.status2(imap);

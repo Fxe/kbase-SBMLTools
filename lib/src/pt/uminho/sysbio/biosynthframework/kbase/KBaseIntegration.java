@@ -309,7 +309,7 @@ public class KBaseIntegration {
 //      biodbService.getNamePropertyById(id)
     }
     
-    mediaName = fbaModel.getId() + ".media";
+//    mediaName = fbaModel.getId() + ".media";
     if (this.mediaName != null) {
       Map<String, Pair<Double, Double>> dfDrains = adapter.getDefaultDrains();
       

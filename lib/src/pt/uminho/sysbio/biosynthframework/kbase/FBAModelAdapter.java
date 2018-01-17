@@ -603,7 +603,16 @@ public class FBAModelAdapter implements ModelAdapter {
     } else {
       lb = -1 * lb;
     }
-    return new Range(lb, ub);
+    
+    Range result = null;
+    try {
+      result = new Range(lb, ub);
+    } catch (IllegalArgumentException e) {
+      logger.warn("Invalid range [{}, {}]", lb, ub);
+      result = new Range(-1000.0, 1000.0);
+    }
+    
+    return result;
   }
 
   @Override
