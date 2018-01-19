@@ -155,7 +155,7 @@ public class KBaseModelIntegrationFacade {
       integration.genome = genome;
     }
     
-
+    boolean allowNumberId = true;
     
     integration.integrate();
     
@@ -164,7 +164,7 @@ public class KBaseModelIntegrationFacade {
       logger.info("auto detect genome...");
       String geneData = "";
       if (geneIntegration != null) {
-        geneData = geneIntegration.searchGenome(fbaModel);
+        geneData = geneIntegration.searchGenome(fbaModel, allowNumberId);
         System.out.println(geneData);
         kir.fillGenomeData(geneIntegration.report);
         if (geneIntegration.report != null && 

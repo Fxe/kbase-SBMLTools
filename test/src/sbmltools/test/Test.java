@@ -180,7 +180,7 @@ public class Test {
       logger.info("auto detect genome...");
       String geneData = "";
       if (geneIntegration != null) {
-        geneData = geneIntegration.searchGenome(fbaModel);
+        geneData = geneIntegration.searchGenome(fbaModel, false);
         System.out.println(geneData);
         kir.fillGenomeData(geneIntegration.report);
         if (geneIntegration.report != null && 

@@ -281,7 +281,7 @@ public class KBaseGeneIntegration {
     return searchGenome(genes);
   }
   
-  public String searchGenome(FBAModel kmodel) {
+  public String searchGenome(FBAModel kmodel, boolean allowNumberLocus) {
     Set<String> genes = new TreeSet<> ();
     
     for (ModelReaction krxn : kmodel.getModelreactions()) {
@@ -290,7 +290,7 @@ public class KBaseGeneIntegration {
       if (grp != null && !grp.isEmpty()) {
         Set<String> validLocus = new HashSet<> ();
         for (String g : grp) {
-          if (!NumberUtils.isNumber(g.trim())) {
+          if (!NumberUtils.isNumber(g.trim()) || allowNumberLocus) {
             if (geneTransformer != null) {
               g = geneTransformer.apply(g);
             }

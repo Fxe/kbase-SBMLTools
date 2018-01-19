@@ -568,7 +568,7 @@ public class IntegrationLocalRun {
     FBAModelAdapter ma = new FBAModelAdapter(kmodel);
     KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(prodAPI.getWorkspaceClient(), prodAPI.dfuClient, prodAPI.getKBSolrUtilClient());
     geneIntegration.geneTransformer = modelGeneTransformers.get(kmodel.getId());
-    geneIntegration.searchGenome(kmodel);
+    geneIntegration.searchGenome(kmodel, false);
     
     KBaseIntegrationReport kir = new KBaseIntegrationReport();
     kir.model = kmodel.getId();

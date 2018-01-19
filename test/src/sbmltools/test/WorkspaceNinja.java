@@ -346,7 +346,7 @@ public class WorkspaceNinja {
         
         if (!kmodel.getId().toLowerCase().contains("neuron") && !exclude.contains(kmodel.getId())) {
           geneIntegration.geneTransformer = modelGeneTransformers.get(kmodel.getId());
-          geneIntegration.searchGenome(kmodel);
+          geneIntegration.searchGenome(kmodel, false);
           
           KBaseGenomeReport report = geneIntegration.report;
           System.out.println(report.bestMatch);
