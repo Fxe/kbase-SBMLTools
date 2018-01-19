@@ -43,6 +43,7 @@ public class KBaseIntegration {
   public boolean autoIntegration = false;
   public boolean fillMetadata = false;
   public boolean fixIdToKBase = false;
+  public boolean allowNumberId = true;
   public String mediaName = null;
   
   public KBaseGenomeReport greport = null;
@@ -88,7 +89,7 @@ public class KBaseIntegration {
     }
   }
   
-  public KBaseGenomeReport integrateGprGenes() {
+  public KBaseGenomeReport integrateGprGenes(boolean allowNumberLocus) {
     KBaseGenomeReport report = null;
     
     if (this.genomeRef != null) {
@@ -106,7 +107,7 @@ public class KBaseIntegration {
           ModelReaction mr = adapter.rxnMap.get(mrxnEntry);
           String gprString = mr.getImportedGpr();
           if (!DataUtils.empty(gprString)) {
-            Set<String> genes = KBaseUtils.getGenes(gprString, null);
+            Set<String> genes = KBaseUtils.getGenes(gprString, null, allowNumberLocus);
             if (genes != null && !genes.isEmpty()) {
               List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, fbaModel.getGenomeRef());
               mr.setModelReactionProteins(mrpList);
@@ -333,6 +334,6 @@ public class KBaseIntegration {
     }
     
     logger.info("[GPR Gene Integration]");
-    greport = integrateGprGenes();
+    greport = integrateGprGenes(allowNumberId);
   }
 }

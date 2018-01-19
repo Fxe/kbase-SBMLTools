@@ -175,6 +175,7 @@ public class KbaseGenomeUtils {
   public static void integrateGenes(
       FBAModel kmodel, 
       Genome genome,
+      boolean allowNumberLocus,
       BFunction<ModelReaction, String> gprTransform,
       BFunction<String, String> geneTransform) {
     for (ModelReaction o : kmodel.getModelreactions()) {
@@ -182,7 +183,7 @@ public class KbaseGenomeUtils {
       if (gprTransform != null) {
         gpr = gprTransform.apply(o);
       }
-      Set<String> genes = KBaseUtils.getGenes(gpr, geneTransform);
+      Set<String> genes = KBaseUtils.getGenes(gpr, geneTransform, allowNumberLocus);
       if (genes != null && !genes.isEmpty()) {
         List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, kmodel.getGenomeRef());
         o.setModelReactionProteins(mrpList);

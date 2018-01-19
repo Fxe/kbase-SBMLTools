@@ -204,7 +204,7 @@ public class Test {
           } catch (Exception e) {
             kir.genomeReport.status = "auto_genome_get_fail";
           }
-          integration.integrateGprGenes();
+          integration.integrateGprGenes(true);
         }
       }
     } else {

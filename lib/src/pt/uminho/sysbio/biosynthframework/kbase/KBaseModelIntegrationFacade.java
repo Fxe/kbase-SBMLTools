@@ -136,6 +136,8 @@ public class KBaseModelIntegrationFacade {
       }
     }
     
+    boolean allowNumberId = true;
+    
     //integrate
     KBaseIntegration integration = new KBaseIntegration(fbaModel);
     integration.report = kir;
@@ -146,6 +148,7 @@ public class KBaseModelIntegrationFacade {
     integration.mediaName = params.getOutputMediaName();
     integration.biodbContainer = this.biodbContainer;
     integration.gprOverride = gprOverride;
+    integration.allowNumberId = allowNumberId;
     integration.fixIdToKBase = true;
     
     if (!DataUtils.empty(params.getGenomeId())) {
@@ -155,7 +158,7 @@ public class KBaseModelIntegrationFacade {
       integration.genome = genome;
     }
     
-    boolean allowNumberId = true;
+    
     
     integration.integrate();
     
@@ -164,7 +167,7 @@ public class KBaseModelIntegrationFacade {
       logger.info("auto detect genome...");
       String geneData = "";
       if (geneIntegration != null) {
-        geneData = geneIntegration.searchGenome(fbaModel, allowNumberId);
+        geneData = geneIntegration.searchGenome(fbaModel, false);
         System.out.println(geneData);
         kir.fillGenomeData(geneIntegration.report);
         if (geneIntegration.report != null && 
@@ -189,7 +192,7 @@ public class KBaseModelIntegrationFacade {
             kir.genomeReport.status = "auto_genome_get_fail";
           }
           logger.info("[GPR Gene Integration]");
-          integration.integrateGprGenes();
+          integration.integrateGprGenes(allowNumberId);
         }
       }
     } else {

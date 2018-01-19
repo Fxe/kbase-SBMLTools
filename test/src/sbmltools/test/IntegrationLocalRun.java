@@ -178,7 +178,7 @@ public class IntegrationLocalRun {
         krxn.setImportedGpr(gprString);
       }
       if (!DataUtils.empty(gprString)) {
-        Set<String> genes = KBaseUtils.getGenes(gprString, geneTransform);
+        Set<String> genes = KBaseUtils.getGenes(gprString, geneTransform, true);
         if (genes != null && !genes.isEmpty()) {
           List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, kmodel.getGenomeRef());
           krxn.setModelReactionProteins(mrpList);

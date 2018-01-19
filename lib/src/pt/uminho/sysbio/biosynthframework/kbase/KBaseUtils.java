@@ -59,14 +59,14 @@ public class KBaseUtils {
     return collect(root);
   }
   
-  public static Set<String> getGenes(String gpr, BFunction<String, String> geneTransform) {
+  public static Set<String> getGenes(String gpr, BFunction<String, String> geneTransform, boolean allowNumberLocus) {
     Set<String> genes = new TreeSet<> ();
     Set<String> grp = KBaseUtils.getGenes(gpr);
     
     if (grp != null && !grp.isEmpty()) {
       Set<String> validLocus = new HashSet<> ();
       for (String g : grp) {
-        if (!NumberUtils.isNumber(g.trim())) {
+        if (!NumberUtils.isNumber(g.trim()) || allowNumberLocus) {
           if (geneTransform != null) {
             g = geneTransform.apply(g);
           }
