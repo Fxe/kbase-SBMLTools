@@ -289,6 +289,7 @@ public class FBAModelAdapter implements ModelAdapter {
       }
       
 //      kspiDegreeMap.put(to, kspiDegreeMap.get(from));
+      kspiCmp.put(to, kspiCmp.remove(from));
       kspiMap.put(to, kspiMap.remove(from));
       
       return true;
@@ -495,6 +496,7 @@ public class FBAModelAdapter implements ModelAdapter {
       
       for (String spiEntry : specieToDrain.keySet()) {
         String kcmp = this.kspiCmp.get(spiEntry);
+        System.out.println(kcmp + " " + spiEntry);
         if (extracell == null || extracell.equals(kcmp)) {
           int degree = getSpecieDegree(spiEntry);
           logger.trace("[{}] degree: {}", spiEntry, degree);

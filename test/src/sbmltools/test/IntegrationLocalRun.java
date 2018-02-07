@@ -59,7 +59,7 @@ public class IntegrationLocalRun {
   
   private static final Logger logger = LoggerFactory.getLogger(IntegrationLocalRun.class);
   
-  public static String LOGIN_TOKEN = "6ZTI37IMCHC4SU26TVYLJ4BC6MPFKWLU";
+  public static String LOGIN_TOKEN = "4YSXVC5IMPB3YSXMSIOOXIEYVMUZ4LDI";
   
   public static String  DEV_JUNK_REPO = "filipeliu:narrative_1505405117321";
   public static String  DEV_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502428739293";
@@ -865,12 +865,12 @@ public class IntegrationLocalRun {
   public static void main(String[] args) {
     try {
       KBaseAPI prodAPI = new KBaseAPI(LOGIN_TOKEN, KBaseAPI.getConfigProd(), true);
-      getFixModel(prodAPI, PROD_PUBLISHED_KMODEL_REPO);
+//      getFixModel(prodAPI, PROD_PUBLISHED_KMODEL_REPO);
 //      pmodel(prodAPI);
 //      BMap<String, String> modelToGenome = KbaseGenomeUtils.getModelGenomeAssignment("/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/sbml_genome_map.tsv");
 //      KbaseGenomeUtils.buildBlastDb("/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/blast_db_latest.faa", modelToGenome, LOGIN_TOKEN, PROD_RAST_GENOME);
 //      propagationKernel(prodAPI);
-//      localIntegraiton();
+      localIntegraiton();
 //      updateModelGpr();
 //      getModel(prodAPI);
     } catch (Exception e) {
