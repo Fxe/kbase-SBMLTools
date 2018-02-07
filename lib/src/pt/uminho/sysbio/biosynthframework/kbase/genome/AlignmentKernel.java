@@ -96,7 +96,7 @@ public class AlignmentKernel {
     private final AlignmentKernel ma;
     
     public AlignWorker(AlignmentKernel ma, int workerId) {
-      logger.info("[{}] worker created.", workerId);
+      logger.debug("[{}] worker created.", workerId);
       this.workerId = workerId;
       this.ma = ma;
     }
@@ -149,7 +149,7 @@ public class AlignmentKernel {
         }
         
       }
-      logger.info("[{}] done!", this.workerId);
+      logger.debug("[{}] done!", this.workerId);
     }
   }
   
@@ -171,7 +171,7 @@ public class AlignmentKernel {
     this.results.clear();
     this.jobIt = jobs.iterator();
     
-    logger.info("running ... jobs: {}", jobs.size());
+    logger.debug("running ... jobs: {}", jobs.size());
     long start = System.currentTimeMillis();
     
     List<Thread> threads = new ArrayList<> ();
@@ -189,7 +189,7 @@ public class AlignmentKernel {
     }
     
     long end = System.currentTimeMillis();
-    logger.info("Time: {}", (end - start) / 1000);
+    logger.debug("Time: {}", (end - start) / 1000);
     this.running = false;
   }
 }

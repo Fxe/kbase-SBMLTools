@@ -479,7 +479,7 @@ public class FBAModelAdapter implements ModelAdapter {
     return drains;
   }
   
-  public Map<String, Pair<Double, Double>> getDefaultDrains() {
+  public Map<String, Pair<Double, Double>> getDefaultDrains(String extracell) {
     Map<String, Pair<Double, Double>> result = new HashMap<> ();
     Set<String> drains = krxnType.bget(EntityType.DRAIN);
     
@@ -494,56 +494,58 @@ public class FBAModelAdapter implements ModelAdapter {
       }
       
       for (String spiEntry : specieToDrain.keySet()) {
-        int degree = getSpecieDegree(spiEntry);
-        logger.trace("[{}] degree: {}", spiEntry, degree);
-        if (degree < 2) {
-          logger.trace("WARN: discard specie [{}]", spiEntry);
-        } else {
-          List<Range> b = new ArrayList<> ();
-          for (String drxnEntry : specieToDrain.get(spiEntry)) {
-            Range bounds = getBounds(drxnEntry);
-            Map<String, ?> dstoich = getStoichiometry(drxnEntry);
-            
-            Double dstoichValue = Double.parseDouble(dstoich.get(spiEntry).toString());
-//            logger.trace("[{}] - {} {}: [{}, {}] {}", spiEntry, getSpecieAttribute(spiEntry, "name"), drxnEntry, bounds[0], bounds[1], dstoich);
-            double lb = bounds.lb;
-            double ub = bounds.ub;
-            if (dstoichValue != null) {
-              //specie is a product flip bonds
-              if (dstoichValue > 0) {
-                double lb_ = ub * -1;
-                double ub_ = lb * -1;
-                lb = lb_;
-                ub = ub_;
-                logger.trace("[{}] FIX: flip bounds => [{}, {}]", spiEntry, lbMap, ubMap);
-              }
-            } 
+        String kcmp = this.kspiCmp.get(spiEntry);
+        if (extracell == null || extracell.equals(kcmp)) {
+          int degree = getSpecieDegree(spiEntry);
+          logger.trace("[{}] degree: {}", spiEntry, degree);
+          if (degree < 2) {
+            logger.trace("WARN: discard specie [{}]", spiEntry);
+          } else {
+            List<Range> b = new ArrayList<> ();
+            for (String drxnEntry : specieToDrain.get(spiEntry)) {
+              Range bounds = getBounds(drxnEntry);
+              Map<String, ?> dstoich = getStoichiometry(drxnEntry);
+              
+              Double dstoichValue = Double.parseDouble(dstoich.get(spiEntry).toString());
+//              logger.trace("[{}] - {} {}: [{}, {}] {}", spiEntry, getSpecieAttribute(spiEntry, "name"), drxnEntry, bounds[0], bounds[1], dstoich);
+              double lb = bounds.lb;
+              double ub = bounds.ub;
+              if (dstoichValue != null) {
+                //specie is a product flip bonds
+                if (dstoichValue > 0) {
+                  double lb_ = ub * -1;
+                  double ub_ = lb * -1;
+                  lb = lb_;
+                  ub = ub_;
+                  logger.trace("[{}] FIX: flip bounds => [{}, {}]", spiEntry, lbMap, ubMap);
+                }
+              } 
 
-            if (bounds.lb < -1000000000) {
-              logger.debug("[{}] lb value to high reducing to default", spiEntry);
-              lb = defaultLB;
-            }
-            if (bounds.ub > 1000000000) {
-              logger.debug("[{}] ub value to high reducing to default", spiEntry);
-              ub = defaultUB;
+              if (bounds.lb < -1000000000) {
+                logger.debug("[{}] lb value to high reducing to default", spiEntry);
+                lb = defaultLB;
+              }
+              if (bounds.ub > 1000000000) {
+                logger.debug("[{}] ub value to high reducing to default", spiEntry);
+                ub = defaultUB;
+              }
+              
+              b.add(new Range(lb, ub));
             }
             
-            b.add(new Range(lb, ub));
+            double lb = 0;
+            double ub = 0;
+            
+            for (Range p : b) {
+              lb += p.lb;
+              ub += p.ub;
+            }
+            
+            logger.trace("[{}]: [{}, {}]", spiEntry, lb, ub);
+            result.put(spiEntry, new ImmutablePair<Double, Double>(lb, ub));
           }
-          
-          double lb = 0;
-          double ub = 0;
-          
-          for (Range p : b) {
-            lb += p.lb;
-            ub += p.ub;
-          }
-          
-          logger.trace("[{}]: [{}, {}]", spiEntry, lb, ub);
-          result.put(spiEntry, new ImmutablePair<Double, Double>(lb, ub));
         }
       }
-      
     }
 
     

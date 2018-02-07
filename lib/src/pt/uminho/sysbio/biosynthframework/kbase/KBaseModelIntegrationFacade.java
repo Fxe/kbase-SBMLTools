@@ -115,7 +115,8 @@ public class KBaseModelIntegrationFacade {
     String outputName = params.getOutputModelName();
 //    Long workspaceId = dfuClient.wsNameToId(workspaceName);
 //    System.out.println(workspaceId);
-    Map<String, String> compartmentMapping = getCompartmentMapping(params.getCompartmentTranslation());
+    Map<String, String> compartmentMapping = getCompartmentMapping(
+        params.getCompartmentTranslation());
     
     //get model
     FBAModel fbaModel = KBaseIOUtils.getObject(fbaModelName, workspaceName, null, FBAModel.class, wspClient);

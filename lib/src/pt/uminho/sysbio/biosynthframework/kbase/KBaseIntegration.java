@@ -58,7 +58,7 @@ public class KBaseIntegration {
   public Map<String, String> geneSwap = new HashMap<> ();
   
   public KBaseBiodbContainer biodbContainer;
-  public Media defaultMedia = null;
+  public Media defaultMedia= null;
   public String genomeRef = null;
   public Genome genome = null;
   
@@ -311,8 +311,14 @@ public class KBaseIntegration {
     }
     
 //    mediaName = fbaModel.getId() + ".media";
+    
     if (this.mediaName != null) {
-      Map<String, Pair<Double, Double>> dfDrains = adapter.getDefaultDrains();
+      String extracell = null;
+      if (compartmentMapping.values().contains("e")) {
+        extracell = "e0";
+      }
+      
+      Map<String, Pair<Double, Double>> dfDrains = adapter.getDefaultDrains(extracell);
       
       if (dfDrains != null && !dfDrains.isEmpty()) {
         Set<String> drains = adapter.removeDrainReactions();
