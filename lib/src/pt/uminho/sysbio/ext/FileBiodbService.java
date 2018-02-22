@@ -637,7 +637,11 @@ public class FileBiodbService implements BiodbService{
   @Override
   public Set<Long> getIdByProperty(String property, String propertyType) {
     switch (propertyType) {
-      case "alias": return new HashSet<> (idToAlias.bget(property));
+      case "alias":
+        if (idToAlias.bget(property) == null) {
+          return new HashSet<>();
+        }
+        return new HashSet<> (idToAlias.bget(property));
       default: logger.warn("unknown property [{}]", propertyType); break;
     }
     return new HashSet<> ();

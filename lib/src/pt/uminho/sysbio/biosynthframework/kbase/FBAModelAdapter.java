@@ -31,6 +31,8 @@ import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.Range;
+import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
+import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -621,8 +623,7 @@ public class FBAModelAdapter implements ModelAdapter {
 
   @Override
   public String getGpr(String arg0) {
-    // TODO Auto-generated method stub
-    return null;
+    return rxnMap.get(arg0).getImportedGpr();
   }
   
   public Set<String> getGeneReactions(String gene) {
@@ -813,5 +814,27 @@ public class FBAModelAdapter implements ModelAdapter {
     } else {
       return false;
     }
+  }
+
+  @Override
+  public SimpleModelReaction<String> getReaction(String mrxnEntry) {
+    throw new RuntimeException("not implemented yet!");
+//    return null;
+  }
+
+  @Override
+  public SimpleModelSpecie<String> getSpecie(String spiEntry) {
+    throw new RuntimeException("not implemented yet!");
+//    return null;
+  }
+
+  @Override
+  public Set<String> getReactions() {
+    return new HashSet<>(this.rxnMap.keySet());
+  }
+
+  @Override
+  public Set<String> getSpecies() {
+    return new HashSet<>(this.kspiMap.keySet());
   }
 }

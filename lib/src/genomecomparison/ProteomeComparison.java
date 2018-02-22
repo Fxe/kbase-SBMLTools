@@ -63,9 +63,11 @@ public class ProteomeComparison {
     @JsonProperty("proteome2map")
     private Map<String, Long> proteome2map;
     @JsonProperty("data1")
-    private List<List<Tuple3 <Long, Long, Long>>> data1;
+//    private List<List<Tuple3 <Long, Long, Long>>> data1;
+    public Object data1;
     @JsonProperty("data2")
-    private List<List<Tuple3 <Long, Long, Long>>> data2;
+    public Object data2;
+//    private List<List<Tuple3 <Long, Long, Long>>> data2;
     private Map<java.lang.String, Object> additionalProperties = new HashMap<java.lang.String, Object>();
 
     @JsonProperty("genome1ws")
@@ -248,30 +250,30 @@ public class ProteomeComparison {
         return this;
     }
 
-    @JsonProperty("data1")
-    public List<List<Tuple3 <Long, Long, Long>>> getData1() {
-        return data1;
-    }
-
-    @JsonProperty("data1")
-    public void setData1(List<List<Tuple3 <Long, Long, Long>>> data1) {
-        this.data1 = data1;
-    }
+//    @JsonProperty("data1")
+//    public List<List<Tuple3 <Long, Long, Long>>> getData1() {
+//        return data1;
+//    }
+//
+//    @JsonProperty("data1")
+//    public void setData1(List<List<Tuple3 <Long, Long, Long>>> data1) {
+//        this.data1 = data1;
+//    }
 
     public ProteomeComparison withData1(List<List<Tuple3 <Long, Long, Long>>> data1) {
         this.data1 = data1;
         return this;
     }
 
-    @JsonProperty("data2")
-    public List<List<Tuple3 <Long, Long, Long>>> getData2() {
-        return data2;
-    }
-
-    @JsonProperty("data2")
-    public void setData2(List<List<Tuple3 <Long, Long, Long>>> data2) {
-        this.data2 = data2;
-    }
+//    @JsonProperty("data2")
+//    public List<List<Tuple3 <Long, Long, Long>>> getData2() {
+//        return data2;
+//    }
+//
+//    @JsonProperty("data2")
+//    public void setData2(List<List<Tuple3 <Long, Long, Long>>> data2) {
+//        this.data2 = data2;
+//    }
 
     public ProteomeComparison withData2(List<List<Tuple3 <Long, Long, Long>>> data2) {
         this.data2 = data2;

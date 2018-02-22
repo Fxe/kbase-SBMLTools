@@ -139,6 +139,7 @@ public class KBaseAPI {
   public<T> T getWorkspaceObject(String id, String ws, Class<T> clazz) throws IOException {
     Object o = KBaseIOUtils.getObject(id, ws, null, getWorkspaceClient());
     ObjectMapper om = new ObjectMapper();
+    
     return om.convertValue(o, clazz);
   }
   
