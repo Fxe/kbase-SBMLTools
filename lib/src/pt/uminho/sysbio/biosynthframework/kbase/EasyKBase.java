@@ -39,8 +39,6 @@ public class EasyKBase {
     this(api.callbackURL, api.authToken);
   }
   
-  
-  
   public FbaToolsClient getFbaClient() throws IOException, UnauthorizedException {
     if (this.fbaClient == null) {
       logger.info("[INIT] building FbaToolsClient ...");

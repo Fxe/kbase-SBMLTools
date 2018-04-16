@@ -55,10 +55,8 @@ public class AutoPropagateGenomeFacade {
   
   private final NAlignTool alignTool;
 //  /kb/module/data/
-  public static String BLAST_DB_PATH = "/kb/module/data/blast_db.faa";
   
-  public static final String REF_GENOME_WORLSPACE = "ReferenceDataManager";
-  public static final String REF_PMODEL_WORLSPACE = "filipeliu:narrative_1504796314698";
+
   
   public String modelToShow = "";
   
@@ -139,7 +137,7 @@ public class AutoPropagateGenomeFacade {
     
     Map<String, String> outputObjects = new HashMap<> ();
     try {
-      List<KBaseId> repomodels = listModels(REF_PMODEL_WORLSPACE);
+      List<KBaseId> repomodels = listModels(KBaseConfig.REF_PMODEL_WORLSPACE);
       Set<String> imodels = new HashSet<> ();
       for (KBaseId kid : repomodels) {
         if (kid.name.startsWith("kb.")) {
@@ -147,7 +145,7 @@ public class AutoPropagateGenomeFacade {
         }
       }
       
-      InputStream is = new FileInputStream(BLAST_DB_PATH);
+      InputStream is = new FileInputStream(KBaseConfig.BLAST_DB_PATH);
       Map<String, DNASequence> seqs = FastaReaderHelper.readFastaDNASequence(is);
       //model + locus
 //      Map<String, Genome> seqsGenome_ = new HashMap<> ();
@@ -202,8 +200,8 @@ public class AutoPropagateGenomeFacade {
             PropagationTask ptask = new PropagationTask();
             ptask.genomeId = job.genome2;
             //Get genome FBAModel
-            ptask.genomeWs = REF_GENOME_WORLSPACE;
-            ptask.modelWs = REF_PMODEL_WORLSPACE;
+            ptask.genomeWs = KBaseConfig.REF_GENOME_WORLSPACE;
+            ptask.modelWs = KBaseConfig.REF_PMODEL_WORLSPACE;
             Set<String> g = genomeToModels.get(job.genome2);
             if (g != null && !g.isEmpty()) {
               ptask.modelId = g.iterator().next();

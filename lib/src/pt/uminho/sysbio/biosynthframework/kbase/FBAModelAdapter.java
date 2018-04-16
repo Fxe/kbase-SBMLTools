@@ -23,18 +23,23 @@ import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
+import kbasegenomes.Genome;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.ParseException;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.EntityType;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.Range;
+import pt.uminho.sysbio.biosynthframework.SimpleCompartment;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import us.kbase.common.service.Tuple11;
@@ -52,8 +57,9 @@ public class FBAModelAdapter implements ModelAdapter {
   public final FBAModel fbaModel;
   
   public Map<String, String> geneIdSwap = new HashMap<> ();
-  public Map<String, ModelCompound> kspiMap = new HashMap<> ();
-  public Map<String, ModelReaction> rxnMap = new HashMap<> ();
+  public Map<String, ModelCompartment> kcmpMap = new HashMap<> ();
+  public Map<String, ModelCompound>    kspiMap = new HashMap<> ();
+  public Map<String, ModelReaction>    rxnMap = new HashMap<> ();
   public BMap<String, EntityType> krxnType = new BHashMap<> ();
   public BMap<String, EntityType> kspiType = new BHashMap<> ();
   public BMap<String, String> kspiCmp = new BHashMap<> ();
@@ -72,6 +78,11 @@ public class FBAModelAdapter implements ModelAdapter {
   
   public FBAModelAdapter(FBAModel fbaModel) {
     this.fbaModel = fbaModel;
+    for (ModelCompartment kcmp : fbaModel.getModelcompartments()) {
+//      System.out.println(kcmp);
+      String id = kcmp.getId();
+      kcmpMap.put(id, kcmp);
+    }
     for (ModelCompound mc : fbaModel.getModelcompounds()) {
       String kspiEntry = mc.getId();
       kspiCmp.put(kspiEntry, getEntryFromRef(mc.getModelcompartmentRef()));
@@ -816,6 +827,24 @@ public class FBAModelAdapter implements ModelAdapter {
     }
   }
 
+  public Set<String> getReactionGenes(String mrxnEntry) {
+    Set<String> result = new HashSet<>();
+    
+    ModelReaction krxn = this.rxnMap.get(mrxnEntry);
+    List<ModelReactionProtein> mrpList = krxn.getModelReactionProteins();
+    for (ModelReactionProtein mrp : mrpList) {
+//      System.out.println(mrp.getModelReactionProteinSubunits());
+      for (ModelReactionProteinSubunit mrps : mrp.getModelReactionProteinSubunits()) {
+        for (String refs : mrps.getFeatureRefs()) {
+          String gene = FBAModelAdapter.getEntryFromRef(refs);
+          result.add(gene);
+        }
+      }
+    }
+    
+    return result;
+  }
+  
   @Override
   public SimpleModelReaction<String> getReaction(String mrxnEntry) {
     throw new RuntimeException("not implemented yet!");
@@ -823,18 +852,97 @@ public class FBAModelAdapter implements ModelAdapter {
   }
 
   @Override
-  public SimpleModelSpecie<String> getSpecie(String spiEntry) {
-    throw new RuntimeException("not implemented yet!");
-//    return null;
+  public SimpleModelSpecie<String> getSpecies(String spiEntry) {
+    ModelCompound kspi = this.kspiMap.get(spiEntry);
+    String id = kspi.getId();
+    String name = kspi.getName();
+    String cmpId = kspi.getModelcompartmentRef();
+    SimpleModelSpecie<String> spi = new SimpleModelSpecie<>(id, name, cmpId);
+    return spi;
+  }
+  
+  @Override
+  public SimpleCompartment<String> getCompartment(String cmpId) {
+    SimpleCompartment<String> cmp = null;
+    ModelCompartment kcmp = this.kcmpMap.get(cmpId);
+    if (kcmp != null) {
+      cmp = new SimpleCompartment<String>(cmpId);
+      cmp.name = kcmp.getLabel();
+    }
+
+    return cmp;
   }
 
   @Override
-  public Set<String> getReactions() {
+  public Set<String> getReactionIds() {
     return new HashSet<>(this.rxnMap.keySet());
   }
 
   @Override
-  public Set<String> getSpecies() {
+  public Set<String> getSpeciesIds() {
     return new HashSet<>(this.kspiMap.keySet());
+  }
+  
+  @Override
+  public Set<String> getCompartmentIds() {
+    return new HashSet<>(this.kcmpMap.keySet());
+  }
+  
+  public<M extends ModelSeedMetaboliteEntity, R extends ModelSeedReactionEntity> void updateMetadata(
+      MetaboliteDao<M> cpdDao, ReactionDao<R> rxnDao) {
+    for (String id : this.kspiMap.keySet()) {
+      ModelCompound kspi = this.kspiMap.get(id);
+      String cpdEntry = getEntryFromRef(kspi.getCompoundRef());
+      ModelSeedMetaboliteEntity cpd = cpdDao.getMetaboliteByEntry(cpdEntry);
+      if (cpd != null) {
+        String name = cpd.getName();
+        String cmpId = getEntryFromRef(kspi.getModelcompartmentRef());
+        String formula = cpd.getFormula();
+        String smiles = null;
+        String inchikey = null; //cpd.get
+        if (name != null) {
+          kspi.setName(name + "_" + cmpId);
+        }
+        if (formula != null) {
+          kspi.setFormula(formula);
+        }
+        if (smiles != null) {
+          kspi.setSmiles(smiles);
+        }
+        if (inchikey != null) {
+          kspi.setInchikey(inchikey);
+        }
+      }
+    }
+    
+    for (String id : this.rxnMap.keySet()) {
+      ModelReaction krxn = this.rxnMap.get(id);
+      String rxnEntry = getEntryFromRef(krxn.getReactionRef());
+      rxnEntry = rxnEntry.substring(0, 8);
+      ModelSeedReactionEntity rxn = rxnDao.getReactionByEntry(rxnEntry);
+      if (rxn != null) {
+        String name = rxn.getName();
+        if (name != null) {
+          String cmpId = getEntryFromRef(krxn.getModelcompartmentRef());
+          krxn.setName(name + "_" + cmpId);
+        }
+      }
+    }
+  }
+
+  public void attachGenome(Genome genome, boolean allowNumberLocus) {
+    for (String mrxnEntry : this.rxnMap.keySet()) {
+      ModelReaction krxn = this.rxnMap.get(mrxnEntry);
+      String gprString = krxn.getImportedGpr();
+      if (!DataUtils.empty(gprString)) {
+        Set<String> genes = KBaseUtils.getGenes(gprString, null, allowNumberLocus);
+        if (genes != null && !genes.isEmpty()) {
+          List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, fbaModel.getGenomeRef());
+          krxn.setModelReactionProteins(mrpList);
+        } else {
+          logger.warn("[{}] invalid gpr: {}", mrxnEntry, gprString);
+        }
+      }
+    }
   }
 }

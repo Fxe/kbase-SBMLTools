@@ -42,12 +42,11 @@ import pt.uminho.sysbio.biosynthframework.kbase.AutoPropagateGenomeFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
+import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
+import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter.ImportModelResult;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter.ImportModelResult;
-//END_HEADER
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>

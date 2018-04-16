@@ -20,7 +20,6 @@ import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
-import pt.uminho.sysbio.biosynthframework.Dataset;
 import pt.uminho.sysbio.biosynthframework.integration.ReferencePropagation;
 import pt.uminho.sysbio.biosynthframework.integration.model.BiGG2AliasMultiMatchResolver;
 import pt.uminho.sysbio.biosynthframework.integration.model.BoundaryConflictResolver;
@@ -31,6 +30,7 @@ import pt.uminho.sysbio.biosynthframework.integration.model.FirstDegreeReference
 import pt.uminho.sysbio.biosynthframework.integration.model.IdBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
+import pt.uminho.sysbio.biosynthframework.integration.model.KBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.ModelSeedMultiMatchResolver;
 import pt.uminho.sysbio.biosynthframework.integration.model.NameBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.SearchTable;
@@ -43,14 +43,16 @@ import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
+import pt.uminho.sysbio.ext.BiGGConflictResolver;
 import pt.uminho.sysbio.ext.MethoBuilder;
+import pt.uminho.sysbio.ext.ModelSeedReactionConflictResolver;
 import pt.uminho.sysbio.ext.ReactionIntegration;
 
 public class KBaseModelSeedIntegration {
   
   public static class KBaseMappingResult {
-    Map<String, Map<MetaboliteMajorLabel, String>> species = new HashMap<> ();
-    Map<String, Map<ReactionMajorLabel, String>> reactions = new HashMap<> ();
+    public Map<String, Map<MetaboliteMajorLabel, String>> species = new HashMap<> ();
+    public Map<String, Map<ReactionMajorLabel, String>> reactions = new HashMap<> ();
   }
   
   private static final Logger logger = LoggerFactory.getLogger(KBaseModelSeedIntegration.class);
@@ -60,10 +62,10 @@ public class KBaseModelSeedIntegration {
   public Map<String, String> spiToModelSeedReference = new HashMap<> ();
   public Map<String, String> rxnToModelSeedReference = new HashMap<> ();
   
-//  public BiodbService biodbService = null;
   public SearchTable<MetaboliteMajorLabel, String> searchTable = null;
-  public ConnectedComponents<String> ccs = null;
-  public MethoBuilder builder;
+  private ConnectedComponents<String> curation = null;
+  private MethoBuilder builder;
+  private final ReactionIntegration reactionIntegration;
   
   private final KBaseBiodbContainer biodbContainer;
   
@@ -73,9 +75,11 @@ public class KBaseModelSeedIntegration {
     this.biodbContainer = biodbContainer;
     // /data/biobase/
     FileImportKb.EXPORT_PATH = biodbDataPath;
+    this.reactionIntegration = new ReactionIntegration(this.biodbContainer.biodbService);
     setup();
   }
   
+  @SuppressWarnings("deprecation")
   public void setup() {
     BiodbService biodbService = biodbContainer.biodbService;
     
@@ -85,9 +89,38 @@ public class KBaseModelSeedIntegration {
         .withDatabase(MetaboliteMajorLabel.ModelSeed)
         .withDatabase(MetaboliteMajorLabel.LigandCompound)
         .build();
-    ccs = KBaseModelSeedIntegration.loadConnectedComponents(curationFilePath);
+    curation = KBaseModelSeedIntegration.loadConnectedComponents(curationFilePath);
     
     builder = new MethoBuilder(biodbService);
+    
+  //SETUP REACTION INTEGRATION DEFAULT EXCLUSIONS
+    reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h2o");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGGReaction, "h");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGGReaction, "h2o");
+    reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00001");
+    reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00080");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGG, "h");
+    reactionIntegration.exclude(ReactionMajorLabel.BiGG, "h2o");
+    reactionIntegration.exclude(ReactionMajorLabel.Seed, "cpd00001");
+    reactionIntegration.exclude(ReactionMajorLabel.Seed, "cpd00067");
+    reactionIntegration.exclude(ReactionMajorLabel.ModelSeedReaction, "cpd00001");
+    reactionIntegration.exclude(ReactionMajorLabel.ModelSeedReaction, "cpd00067");
+    
+    Set<ReactionMajorLabel> rxnDbs = new HashSet<> ();
+    rxnDbs.add(ReactionMajorLabel.BiGG);
+    rxnDbs.add(ReactionMajorLabel.LigandReaction);
+    rxnDbs.add(ReactionMajorLabel.MetaCyc);
+    rxnDbs.add(ReactionMajorLabel.ModelSeedReaction);
+    rxnDbs.add(ReactionMajorLabel.Seed);
+
+    for (ReactionMajorLabel db : rxnDbs) {
+      reactionIntegration.setupStoichDictionary(db);
+    }
+    
+    reactionIntegration.rMap.put(ReactionMajorLabel.BiGG, new BiGGConflictResolver());
+    reactionIntegration.rMap.put(ReactionMajorLabel.ModelSeedReaction, new ModelSeedReactionConflictResolver());
+    reactionIntegration.rMap.put(ReactionMajorLabel.Seed, new ModelSeedReactionConflictResolver());
   }
   
   public static ConnectedComponents<String> loadConnectedComponents(String path) {
@@ -104,7 +137,6 @@ public class KBaseModelSeedIntegration {
     } finally {
       IOUtils.closeQuietly(is);
     }
-
     
     return ccs;
   }
@@ -112,8 +144,7 @@ public class KBaseModelSeedIntegration {
   public KBaseMappingResult generateDatabaseReferences(
       XmlSbmlModel xmodel, 
       String modelEntry, 
-      IntegrationReportResultAdapter resultAdapter, 
-      ReactionIntegration reactionIntegration) {
+      IntegrationReportResultAdapter resultAdapter) {
     BiodbService biodbService = biodbContainer.biodbService;
     
 //    BiodbService service = new File
@@ -194,15 +225,18 @@ public class KBaseModelSeedIntegration {
     NameBaseIntegrationEngine be3 = builder.buildNameBaseIntegrationEngine();
     NameBaseIntegrationEngine be3split = builder.buildNameBaseIntegrationEngine();
     XmlReferencesBaseIntegrationEngine be0 = builder.buildXmlReferencesBaseIntegrationEngine();
+    KBaseIntegrationEngine beK = builder.buildKBaseIntegrationEngine();
+    beK.ids.addAll(spiEntrySet);
     be0.xmlSpecies = new ArrayList<> (xmodel.getSpecies());
     DictionaryBaseIntegrationEngine beX = builder.buildDictionaryBaseIntegrationEngine();
     beX.ids = new HashSet<> (spiEntrySet);
-    IntegrationEngine ie1 = new ConnectedComponentsIntegrationEngine(ccs);
+    IntegrationEngine ie1 = new ConnectedComponentsIntegrationEngine(curation);
     IntegrationEngine ie2 = new FirstDegreeReferences(biodbService);
     
     be3.spiEntryToName = spiEntryToName;
     be3split.spiEntryToName = spiEntryToName2;
     be1.patterns = integration.getPatterns();
+    integration.baseEngines.put("ms", beK);
     integration.baseEngines.put("dict", beX);
     integration.baseEngines.put("refs1", be0);
     integration.baseEngines.put("refs2", be0);
@@ -250,7 +284,7 @@ public class KBaseModelSeedIntegration {
     integration.status2(imap);
     
     IntegrationMap<String, MetaboliteMajorLabel> pmap = 
-        propagation.propagate(true, ccs);
+        propagation.propagate(true, curation);
     
     for (String k : pmap.keySet()) {
       Map<MetaboliteMajorLabel, Set<String>> references = pmap.get(k);
@@ -261,17 +295,23 @@ public class KBaseModelSeedIntegration {
       }
     }
     
+    //force modelseed identifiers pattern
+    IntegrationMap<String, MetaboliteMajorLabel> msCpdMap = beK.integrate();
+    for (String spiId : msCpdMap.keySet()) {
+      if (msCpdMap.get(spiId).containsKey(MetaboliteMajorLabel.ModelSeed)) {
+        Set<String> s = msCpdMap.get(spiId).get(MetaboliteMajorLabel.ModelSeed);
+        if (s != null && s.size() == 1) {
+          imap.get(spiId).put(MetaboliteMajorLabel.ModelSeed, s.iterator().next());
+        }
+      }
+    }
+    
     for (String k : imap.keySet()) {
 //      System.out.println(k + "\t" + imap.get(k));
     }
     
     integration.status2(imap);
     
-//    System.out.println(imap);
-    if (resultAdapter != null) {
-//      System.out.println(modelEntry + " -> " + integration.clean.size());
-      resultAdapter.fillSpeciesIntegrationData(integration);
-    }
     
     for (String id : imap.keySet()) {
       String ref = imap.get(id).get(MetaboliteMajorLabel.ModelSeed);
@@ -290,7 +330,11 @@ public class KBaseModelSeedIntegration {
     reactionIntegration.integrate(ReactionMajorLabel.MetaCyc, xmodel, integration.clean);
     reactionIntegration.integrate(ReactionMajorLabel.ModelSeedReaction, xmodel, integration.clean);
 
-    resultAdapter.fillReactionIntegrationData(reactionIntegration.imap);
+    if (resultAdapter != null) {
+      resultAdapter.fillSpeciesIntegrationData(integration);
+      resultAdapter.fillReactionIntegrationData(reactionIntegration.imap);
+    }
+    
     
     KBaseMappingResult result = new KBaseMappingResult();
     result.species = imap;

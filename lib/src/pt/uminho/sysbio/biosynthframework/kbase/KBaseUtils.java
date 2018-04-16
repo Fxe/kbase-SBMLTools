@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
+import kbasefba.ModelReactionReagent;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxTreeNode;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.DataTypeEnum;
@@ -151,5 +153,27 @@ public class KBaseUtils {
       last = last.substring(0, last.indexOf('.'));
     }
     return last;
+  }
+
+  /**
+   * Get the compartment IDs from the reagents
+   * @param reagents 
+   * @return
+   */
+  public static Set<String> getCompartments(Collection<ModelReactionReagent> reagents) {
+    for (ModelReactionReagent r : reagents) {
+      r.getModelcompoundRef();
+    }
+    return null;
+  }
+  
+  /**
+   * Determine the compartment of the reaction from its reagents.
+   * @param reagents
+   * @return
+   */
+  public static String getCompartment(Collection<ModelReactionReagent> reagents) {
+    
+    return null;
   }
 }

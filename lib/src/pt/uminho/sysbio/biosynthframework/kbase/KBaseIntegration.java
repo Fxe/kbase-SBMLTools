@@ -46,6 +46,11 @@ public class KBaseIntegration {
   public boolean allowNumberId = true;
   public String mediaName = null;
   
+  public KBaseBiodbContainer biodbContainer;
+  public Media defaultMedia= null;
+  public String genomeRef = null;
+  public Genome genome = null;
+  
   public KBaseGenomeReport greport = null;
   /**
    * rxn -> new gpr <br> <h1>Example</h1><br> "rxn1000" : "b1000 and b1002"
@@ -57,10 +62,7 @@ public class KBaseIntegration {
    */
   public Map<String, String> geneSwap = new HashMap<> ();
   
-  public KBaseBiodbContainer biodbContainer;
-  public Media defaultMedia= null;
-  public String genomeRef = null;
-  public Genome genome = null;
+
   
   public KBaseIntegration(final FBAModel fbaModel) {
     this.fbaModel = fbaModel;
@@ -210,6 +212,7 @@ public class KBaseIntegration {
 
     Set<ModelCompound> renamedSpi = new HashSet<>();
     Set<ModelReaction> renamedRxn = new HashSet<>();
+    
     //integration
     //BiGG, BiGG2, HMDB, LigandCompound, MetaCyc, ModelSeed, Seed
     if (rename != null && !rename.equals("none")) {
@@ -278,36 +281,9 @@ public class KBaseIntegration {
       }
     }
     
-    if (fillMetadata && biodbContainer != null && biodbContainer.biodbService != null) {
-      BiodbService biodbService = biodbContainer.biodbService;
-      for (ModelCompound kcpd : fbaModel.getModelcompounds()) {
-        List<String> dbRefs = kcpd.getDblinks().get("ModelSeed");
-        if (dbRefs != null && !dbRefs.isEmpty()) {
-          String cpdEntry = dbRefs.iterator().next();
-          Long cpdId = biodbService.getIdByEntryAndDatabase(cpdEntry, "ModelSeed");
-          if (cpdId != null) {
-            String name = biodbService.getNamePropertyById(cpdId);
-            String formula = biodbService.getEntityProperty(cpdId, "formula");
-            String smiles = biodbService.getEntityProperty(cpdId, "smiles");
-            String inchikey = biodbService.getEntityProperty(cpdId, "inchikey");
-//            System.out.println(name + " " + formula + " " + smiles);
-            if (name != null) {
-              kcpd.setName(name);
-            }
-            if (formula != null) {
-              kcpd.setFormula(formula);
-            }
-            if (smiles != null) {
-              kcpd.setSmiles(smiles);
-            }
-            if (inchikey != null) {
-              kcpd.setInchikey(inchikey);
-            }
-          }
-//          renameMetaboliteEntry(kcpd.getId(), dbRefs.iterator().next());
-        }
-      }
-//      biodbService.getNamePropertyById(id)
+    if (fillMetadata) {
+      adapter.updateMetadata(KBaseConfig.getModelSeedCpdDao(), 
+                             KBaseConfig.getModelSeedRxnDao());
     }
     
 //    mediaName = fbaModel.getId() + ".media";

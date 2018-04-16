@@ -1,10 +1,13 @@
 package sbmltools.test;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -17,13 +20,26 @@ import org.slf4j.LoggerFactory;
 
 import kbasefba.FBAModel;
 import kbasereport.WorkspaceObject;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
+import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentIntegration;
+import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseSbmlImporter.ImportModelResult;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration.KBaseMappingResult;
+import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
+import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter.ImportModelResult;
+import pt.uminho.sysbio.biosynthframework.kbase.report.ReportFBAModel;
+import pt.uminho.sysbio.biosynthframework.sbml.MessageCategory;
+import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlMessage;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlMessageGroup;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAutofix;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
@@ -36,19 +52,108 @@ public class LocalTest {
   public static String a = "/var/biobase/export";
   public static String b = "/var/biobase/integration/cc/cpd_curation.tsv";
   
+  public static List<XmlMessage> validate(XmlSbmlModel xmodel) {
+    XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel);
+    XmlSbmlModelValidator.initializeDefaults(validator);
+    return validator.validate();
+  }
+  
+  public static List<XmlMessage> autoFix(XmlSbmlModel xmodel, List<XmlMessage> msgs) {
+    XmlSbmlModelAutofix autofix = new XmlSbmlModelAutofix();
+    autofix.group.put(MessageCategory.STOICH_NO_VALUE, 
+        new XmlMessageGroup(MessageCategory.STOICH_NO_VALUE, MessageType.WARN, "assume value 1"));
+    autofix.fix(xmodel, msgs);
+    
+    return autofix.messages;
+  }
+  
+  public static void test(String path) throws IOException {
+    FileInputStream fis = new FileInputStream(path);
+    test(fis);
+    fis.close();
+  }
+  
   public static void test(InputStream is) throws IOException {
     XmlStreamSbmlReader reader = new XmlStreamSbmlReader(is);
     XmlSbmlModel xmodel = reader.parse();
     
-//    KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(a, b);
-//    integration.generateDatabaseReferences(xmodel, "teh_model");;
+    CompartmentIntegration cintegration = 
+        new CompartmentIntegration();
+    cintegration.generateCompartmentMapping(xmodel);
+    
+    List<XmlMessage> vmsg = new ArrayList<> ();
+    
+    //VALIDATION 1
+    List<XmlMessage> msgs1 = validate(xmodel);
+    
+    List<XmlMessage> msgsf = autoFix(xmodel, msgs1);
+    vmsg.addAll(msgsf);
+    
+    //VALIDATION 2
+    List<XmlMessage> msgs2 = validate(xmodel);
+    vmsg.addAll(msgs2);
+    
+    System.out.println(vmsg);
+    
+
+    KBaseConfig.DATA_EXPORT_PATH = a;
+    KBaseConfig.CURATION_DATA = b;
+    KBaseBiodbContainer biodbContainer = new KBaseBiodbContainer(KBaseConfig.DATA_EXPORT_PATH);
+    KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(
+        KBaseConfig.DATA_EXPORT_PATH, KBaseConfig.CURATION_DATA, biodbContainer);
+    KBaseMappingResult mapping = integration.generateDatabaseReferences(xmodel, "test", null);
+    IntegrationMap<String, String> sintegration = new IntegrationMap<>();
+    IntegrationMap<String, String> rintegration = new IntegrationMap<>();
+    
+    Map<String, Map<MetaboliteMajorLabel, String>> imap = mapping.species;
+    Map<String, Map<ReactionMajorLabel, String>> rimap = mapping.reactions;
+    for (String spi : imap.keySet()) {
+      for (MetaboliteMajorLabel db : imap.get(spi).keySet()) {
+        sintegration.addIntegration(spi, db.toString(), imap.get(spi).get(db));
+      }
+    }
+
+    for (String mrxn : rimap.keySet()) {
+      for (ReactionMajorLabel db : rimap.get(mrxn).keySet()) {
+        rintegration.addIntegration(mrxn, db.toString(), rimap.get(mrxn).get(db));
+      }
+    }
+
+    String genomeRef = "";
+    String modelId = "test";
+    Collection<String> biomassIds = new HashSet<>();
+    Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
+    Map<String, String> rxnToModelSeedReference = integration.rxnToModelSeedReference;
+    FBAModel model = new FBAModelFactory()
+        .withGenomeRef(genomeRef)
+        .withSpecieIntegration(sintegration)
+        .withReactionIntegration(rintegration)
+        .withBiomassIds(biomassIds)
+        .withMetaboliteModelSeedReference(spiToModelSeedReference)
+        .withReactionModelSeedReference(rxnToModelSeedReference)
+        .withModelId(modelId)
+        .withModelName(modelId)
+        .withXmlSbmlModel(xmodel, true)
+        .build();
+    
+
+    try {
+      ReportFBAModel report = new ReportFBAModel();
+      FileOutputStream fos = new FileOutputStream(
+          "/opt/nginx-1.9.6/html/biosynth-web-biobase/exports/model-report/fbamodel.json");
+      String data = KBaseIOUtils.toJson(report.report(model), false);
+      fos.write(data.getBytes());
+      fos.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 //    Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
     
-    FBAModel fbaModel = new FBAModelFactory()
-//        .withModelSeedReference(spiToModelSeedReference)
-        .withXmlSbmlModel(xmodel, false)
-        .build();
-    System.out.println(fbaModel.getModelcompartments());
+//    FBAModel fbaModel = new FBAModelFactory()
+////        .withModelSeedReference(spiToModelSeedReference)
+//        .withXmlSbmlModel(xmodel, false)
+//        .build();
+//    System.out.println(fbaModel.getModelcompartments());
 
 //    ObjectMapper om = new ObjectMapper();
 //    om.enable(SerializationFeature.INDENT_OUTPUT);
@@ -154,6 +259,7 @@ public class LocalTest {
     sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/sbml/iJDZ836/iJDZ836.xml";
     sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/fungis/iNX804.xml";
     sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/fbc3/yeast_7.xml";
+    sbmlPath = "http://127.0.0.1/core.xml";
 //    sbmlPath = "http://127.0.0.1/models/biomodels/sbml/hsa/MODEL1109130000.xml";
 //    sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
     
@@ -199,7 +305,12 @@ public class LocalTest {
 
   
   public static void main(String[] args) {
-    integrationTest();
+    //integrationTest();
+    try {
+      test("/tmp/argonne/data/fba834db-9ed7-433f-86d3-874c4f28bb68/fba834db-9ed7-433f-86d3-874c4f28bb68_2");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 //    dataTest();
 //    test1();
     

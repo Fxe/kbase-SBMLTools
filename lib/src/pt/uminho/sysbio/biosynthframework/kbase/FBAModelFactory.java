@@ -1,6 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,8 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.Subscribe;
 
 import kbasefba.Biomass;
 import kbasefba.FBAModel;
@@ -28,9 +31,12 @@ import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.P
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
 import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.EntityType;
+import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.MultiNodeTree;
+import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
+import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
@@ -39,6 +45,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
+import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 import sbmltools.FixedAdapter;
@@ -68,7 +75,11 @@ public class FBAModelFactory {
   private Map<String, ModelCompound> modelCompounds = new HashMap<> ();
   private List<ModelCompartment> modelCompartments = new ArrayList<> ();
   private List<ModelReaction> modelReactions = new ArrayList<> ();
-
+  private Map<String, SubcellularCompartment> scmpMap = new HashMap<>();
+  private Map<String, Integer> cmpIndexMap = new HashMap<>();
+  private String removeSpeciesPrefix = null;
+  private String removeReactionPrefix = null;
+  
   private Map<String, String> cmpMap = new HashMap<> ();
   
   public FBAModelFactory withGenomeRef(String genomeRef) {
@@ -86,18 +97,39 @@ public class FBAModelFactory {
     return this;
   }
   
+  public FBAModelFactory withRemovePrefix(String prefix) {
+    this.removeSpeciesPrefix = prefix;
+    return this;
+  }
+  
+  public FBAModelFactory withReactionIdRemovePrefix(String prefix) {
+    this.removeReactionPrefix = prefix;
+    return this;
+  }
+  
   public FBAModelFactory withBiomassIds(Collection<String> ids) {
     this.biomassSet.addAll(ids);
     return this;
   }
   
   public FBAModelFactory withMetaboliteModelSeedReference(Map<String, String> spiToModelSeedReference) {
-    this.spiToModelSeedReference.putAll(spiToModelSeedReference);
+    if (spiToModelSeedReference != null) {
+      this.spiToModelSeedReference.putAll(spiToModelSeedReference);      
+    }
     return this;
   }
   
   public FBAModelFactory withReactionModelSeedReference(Map<String, String> rxnToModelSeedReference) {
-    this.rxnToModelSeedReference.putAll(rxnToModelSeedReference);
+    if (rxnToModelSeedReference != null) {
+      this.rxnToModelSeedReference.putAll(rxnToModelSeedReference);
+    }
+    return this;
+  }
+  
+  public FBAModelFactory withCompartmentMapping(Map<String, SubcellularCompartment> scmpMap) {
+    if (scmpMap != null) {
+      this.scmpMap = new HashMap<>(scmpMap);      
+    }
     return this;
   }
   
@@ -148,25 +180,38 @@ public class FBAModelFactory {
 
   public FBAModelFactory withXmlSbmlModel(XmlSbmlModel xmodel, boolean allowBoundary) {
     this.xmodel = xmodel;
-    long cmpIndex = 0;
+//    long cmpIndex = 0;
+    
     for (XmlSbmlCompartment xcmp : xmodel.getCompartments()) {
       String cmpEntry = xcmp.getAttributes().get("id");
       String cmpName = xcmp.getAttributes().get("name");
+      String cmpId = KBaseCompartment.toSymbol(scmpMap.get(cmpEntry));
+      String cmpIdAndIndex = null;
+      long cmpIndex = 0;
+      if (cmpIndexMap.containsKey(cmpId)) {
+        CollectionUtils.increaseCount(cmpIndexMap, cmpId, 1);
+        cmpIdAndIndex = cmpId + cmpIndexMap.get(cmpId);
+        cmpIndex = cmpIndexMap.get(cmpId);
+      } else {
+        cmpIndexMap.put(cmpId, 0);
+        cmpIndex = 0;
+        cmpIdAndIndex = cmpId + cmpIndexMap.get(cmpId);
+      }
+      logger.debug("{} - {} -> {}[{}] -> {}", cmpEntry, cmpName, cmpId, cmpIndex, cmpIdAndIndex);
+      
       if (cmpName == null || cmpName.trim().isEmpty()) {
         cmpName = cmpEntry;
       }
-      String cmpId = "z";
-      
-      String cmpIdAndIndex = cmpId + cmpIndex;
+//      String cmpId = "z";
+
       ModelCompartment cmp = new ModelCompartment().withId(cmpIdAndIndex)
           .withLabel(cmpName)
-          .withPH(7.3)
-          .withPotential(1.0)
+          .withPH(7.0)
+          .withPotential(0.0)
           .withCompartmentIndex(cmpIndex)
           .withCompartmentRef("~/template/compartments/id/" + cmpId);
       modelCompartments.add(cmp);
       cmpMap.put(cmpEntry, cmpIdAndIndex);
-      cmpIndex++;
     }
     
     for (XmlSbmlSpecie xspi : xmodel.getSpecies()) {
@@ -207,8 +252,12 @@ public class FBAModelFactory {
         }
       }
       
+      String spiId = spiEntry;
+      if (removeSpeciesPrefix != null && spiEntry.startsWith(removeSpeciesPrefix)) {
+        spiId = spiEntry.substring(removeSpeciesPrefix.length());
+      }
       
-      ModelCompound cpd = new ModelCompound().withId(spiEntry)
+      ModelCompound kspi = new ModelCompound().withId(spiId)
           .withCompoundRef(String.format(MODEL_SEED_COMPOUND_REF_PATTERN, ref))
           .withModelcompartmentRef(
               String.format("~/modelcompartments/id/%s", cmpMap.get(cmpEntry)))
@@ -219,7 +268,7 @@ public class FBAModelFactory {
           .withName(spiName);
       
       if (allowBoundary || !boundaryCondition) {
-        modelCompounds.put(cpd.getId(), cpd);
+        modelCompounds.put(spiEntry, kspi);
       }
     }
     
@@ -275,8 +324,9 @@ public class FBAModelFactory {
     for (String g : genes) {
       if (fmap.containsKey(g)) {
         validGenes.add(fmap.get(g).getId());
+        logger.debug("Gene found within feature set: {}", g);
       } else {
-        logger.warn("Gene not found within feature set: {}", g);
+        logger.debug("Gene not found within feature set: {}", g);
       }
     }
     return setupModelReactionProteins(validGenes, genomeRef);
@@ -302,14 +352,156 @@ public class FBAModelFactory {
       ModelReactionProtein mrp = new ModelReactionProtein()
           .withComplexRef("")
           .withModelReactionProteinSubunits(mrpsLists)
-          .withNote("").withSource("SBML");
+          .withNote("Imported GPR").withSource("");
       mrpList.add(mrp);
     }
     
     
     return mrpList;
   }
+  
+  public ModelReactionReagent buildReagent(XmlObject o, double scale) {
+    String species = o.getAttributes().get("species");
+    ModelCompound kspi = modelCompounds.get(species);
+    String stoich = o.getAttributes().get("stoichiometry");
+    if (stoich == null) {
+      stoich = "1";
+    }
+    double stoichiometry = Double.parseDouble(stoich);
+    ModelReactionReagent r = new ModelReactionReagent()
+        .withCoefficient(scale * stoichiometry)
+        .withModelcompoundRef(String.format("~/modelcompounds/id/%s", kspi.getId()));
+    return r;
+  }
 
+  public ModelReaction buildReaction(XmlSbmlReaction xrxn, ModelAdapter xadapter) {
+    Map<String, String> extraAttributes = new HashMap<> ();
+    String rxnEntry = xrxn.getAttributes().get("id");
+    if (rxnEntry == null || rxnEntry.trim().isEmpty()) {
+      rxnEntry = "R_rxn" + counter++;
+    }
+    String rxnName = xrxn.getAttributes().get("name");
+    if (rxnName == null || rxnName.trim().isEmpty()) {
+      rxnName = "undefined";
+    }
+
+    extraAttributes.put("original_id", rxnEntry);
+
+    String gpr = xadapter.getGpr(rxnEntry);
+    Set<String> genes = new HashSet<> ();
+    if (DataUtils.empty(gpr)) {
+      gpr = "";
+    } else {
+      try {
+        GeneReactionRuleCI grrci = new GeneReactionRuleCI(gpr);
+        genes = KBaseUtils.getGenes(grrci);
+      } catch (ParseException | TokenMgrError e) {
+        System.out.println(gpr + ": " + e.getMessage());
+      }
+    }
+    List<ModelReactionReagent> reagents = new ArrayList<> ();
+    Set<String> reagentsCompartments = new HashSet<>();
+    for (XmlObject o : xrxn.getListOfReactants()) {
+      String species = o.getAttributes().get("species");
+      if (modelCompounds.containsKey(species)) {
+        ModelReactionReagent reagent = buildReagent(o, -1);
+        ModelCompound kspi = modelCompounds.get(species);
+        reagentsCompartments.add(
+            FBAModelAdapter.getEntryFromRef(
+                kspi.getModelcompartmentRef()));
+        reagents.add(reagent);
+      } else {
+        logger.info("deleted {}", species);
+      }
+    }
+
+    for (XmlObject o : xrxn.getListOfProducts()) {
+      String species = o.getAttributes().get("species");
+      if (modelCompounds.containsKey(species)) {
+        ModelReactionReagent reagent = buildReagent(o,  1);
+        ModelCompound kspi = modelCompounds.get(species);
+        reagentsCompartments.add(
+            FBAModelAdapter.getEntryFromRef(
+                kspi.getModelcompartmentRef()));
+        reagents.add(reagent);
+      } else {
+        logger.info("deleted {}", species);
+      }
+    }
+
+    Map<String, List<String>> dblinks = new HashMap<> ();
+    if (rimap.containsKey(rxnEntry)) {
+      for (String db : rimap.get(rxnEntry).keySet()) {
+        dblinks.put(db, new ArrayList<> (rimap.get(rxnEntry).get(db)));
+      }
+    }
+
+    //    Set<String> aaa = KBaseUtils.getCompartments(reagents);
+    String rxnCmp = cmpMap.values().iterator().next();
+    String rxnCmpSymbol = "c";
+    String rxnCmpRef = String.format("~/modelcompartments/id/%s", rxnCmp);
+    if (reagentsCompartments.size() > 1) {
+      reagentsCompartments = KBaseCompartment.decideCompartment(reagentsCompartments);
+    }
+    if (reagentsCompartments.size() == 1) {
+      rxnCmp = reagentsCompartments.iterator().next();
+      rxnCmpSymbol = rxnCmp.substring(0, 1);
+      rxnCmpRef = String.format("~/modelcompartments/id/%s", rxnCmp);
+    } else {
+      logger.warn("{} {}", rxnEntry, reagentsCompartments);
+    }
+
+    String rxnRef = "rxn00000";
+
+    if (this.rxnToModelSeedReference.containsKey(rxnEntry)) {
+      rxnRef = rxnToModelSeedReference.get(rxnEntry);
+    }
+
+    String rxnId = rxnEntry;
+    if (this.removeReactionPrefix != null && 
+        rxnEntry.contains(this.removeReactionPrefix)) {
+      rxnId = rxnEntry.substring(this.removeReactionPrefix.length());
+    }
+
+    String[] boundStr = validateReactionContraint(rxnEntry, xmodel, xrxn, xrxn.getListOfParameters());
+
+    String direction = "=";
+    double lb = -1000000;
+    double ub =  1000000;
+    try {
+      lb = Double.parseDouble(boundStr[0]);
+    } catch (Exception e) { }
+    try {
+      ub = Double.parseDouble(boundStr[1]);
+    } catch (Exception e) { }
+
+    if (lb < 0 && ub > 0) {
+
+    } else if (ub > 0 && lb >= 0) {
+      direction = ">";
+    } else if (lb < 0 && ub <= 0) {
+      direction = "<";
+    }
+    //    System.out.println(new Range(lb, ub) + " " + direction);
+    
+    ModelReaction krxn = new ModelReaction().withId(rxnId)
+        .withAliases(new ArrayList<String> ())
+        .withName(rxnName)
+        .withImportedGpr(gpr)
+        .withDirection(direction)
+        .withProtons(0.0)
+        .withReactionRef("~/template/reactions/id/" + rxnRef + "_" + rxnCmpSymbol)
+        .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
+        .withProbability(0.0)
+        .withPathway(null)
+        .withDblinks(dblinks)
+        .withMaxrevflux(Math.abs(lb))
+        .withMaxforflux(Math.abs(ub))
+        .withModelReactionReagents(reagents)
+        .withStringAttributes(extraAttributes)
+        .withModelcompartmentRef(rxnCmpRef);
+    return krxn;
+  }
 
   public FBAModel build() {
     @SuppressWarnings("deprecation")
@@ -336,131 +528,16 @@ public class FBAModelFactory {
     int biomassCounter = 1;
     
     for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
-      Map<String, String> extraAttributes = new HashMap<> ();
       String rxnEntry = xrxn.getAttributes().get("id");
-      if (rxnEntry == null || rxnEntry.trim().isEmpty()) {
-        rxnEntry = "R_rxn" + counter++;
-      }
-      String rxnName = xrxn.getAttributes().get("name");
-      if (rxnName == null || rxnName.trim().isEmpty()) {
-        rxnName = "undefined";
-      }
+      ModelReaction krxn = buildReaction(xrxn, xadapter);
       
-      extraAttributes.put("original_id", rxnEntry);
-      
-      String gpr = xadapter.getGpr(rxnEntry);
-      Set<String> genes = new HashSet<> ();
-      if (DataUtils.empty(gpr)) {
-        gpr = "";
-      } else {
-        try {
-          GeneReactionRuleCI grrci = new GeneReactionRuleCI(gpr);
-          genes = KBaseUtils.getGenes(grrci);
-        } catch (ParseException | TokenMgrError e) {
-          System.out.println(gpr + ": " + e.getMessage());
-        }
-      }
-      List<ModelReactionReagent> reagents = new ArrayList<> ();
-
-      for (XmlObject o : xrxn.getListOfReactants()) {
-        String species = o.getAttributes().get("species");
-        //small cheat to test the ecoli model (should be decided by the integration)
-        if (modelCompounds.containsKey(species)) {
-          String stoich = o.getAttributes().get("stoichiometry");
-          if (stoich == null) {
-            stoich = "1";
-          }
-          double stoichiometry = Double.parseDouble(stoich);
-          ModelReactionReagent r = new ModelReactionReagent()
-              .withCoefficient(-1 * stoichiometry)
-              .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
-          reagents.add(r);
-        } else {
-          logger.trace("deleted {}", species);
-        }
-      }
-
-      for (XmlObject o : xrxn.getListOfProducts()) {
-        String species = o.getAttributes().get("species");
-        //small cheat to test the ecoli model (should be decided by the integration)
-        if (modelCompounds.containsKey(species)) {
-          String stoich = o.getAttributes().get("stoichiometry");
-          if (stoich == null) {
-            stoich = "1";
-          }
-          double stoichiometry = Double.parseDouble(stoich);
-          ModelReactionReagent r = new ModelReactionReagent()
-              .withCoefficient(stoichiometry)
-              .withModelcompoundRef(String.format("~/modelcompounds/id/%s", species));
-          reagents.add(r);
-        } else {
-          logger.info("deleted {}", species);
-        }
-      }
-      
-      Map<String, List<String>> dblinks = new HashMap<> ();
-      if (rimap.containsKey(rxnEntry)) {
-        for (String db : rimap.get(rxnEntry).keySet()) {
-          dblinks.put(db, new ArrayList<> (rimap.get(rxnEntry).get(db)));
-        }
-      }
-
-      String rxnCmpRef = String.format("~/modelcompartments/id/%s", cmpMap.values().iterator().next());
-      String rxnRef = "rxn00000";
-      
-      if (this.rxnToModelSeedReference.containsKey(rxnEntry)) {
-        rxnRef = rxnToModelSeedReference.get(rxnEntry);
-      }
-      
-      //XXX: do we need reaction compartments !?
-      ModelReaction rxn = new ModelReaction().withId(rxnEntry)
-          .withAliases(new ArrayList<String> ())
-          .withName(rxnName)
-          .withImportedGpr(gpr)
-          .withDirection("=")
-          .withProtons(1.0)
-          .withReactionRef("~/template/reactions/id/" + rxnRef + "_c")
-          .withModelReactionProteins(new ArrayList<ModelReactionProtein> ())
-          .withProbability(1.0)
-          .withPathway("entire model")
-          .withDblinks(dblinks)
-          .withStringAttributes(extraAttributes)
-          .withModelcompartmentRef(rxnCmpRef);
-      
-      rxn.setModelReactionReagents(reagents);
-
-      String[] boundStr = validateReactionContraint(rxnEntry, xmodel, xrxn, xrxn.getListOfParameters());
-
-      double lb = -1000;
-      double ub =  1000;
-      try {
-        lb = Math.abs(Double.parseDouble(boundStr[0]));
-      } catch (Exception e) {
-
-      }
-      try {
-        ub = Math.abs(Double.parseDouble(boundStr[1]));
-      } catch (Exception e) {
-
-      }
-      rxn.setMaxrevflux(lb);
-      rxn.setMaxforflux(ub);
-//      System.out.println(rxnEntry + " " + lb + " " + ub);
-      
-      if (biomassSet.contains(rxn.getId())) {
-        Biomass biomass = FBAModelAdapter.modelReactionToBiomass(rxn);
+      if (biomassSet.contains(rxnEntry)) {
+        Biomass biomass = FBAModelAdapter.modelReactionToBiomass(krxn);
         biomass.setId("bio" + biomassCounter++);
         model.getBiomasses().add(biomass);
       } else {
-        model.getModelreactions().add(rxn);
+        model.getModelreactions().add(krxn);
       }
-      
-//      if (rxn.getId().toLowerCase().contains("biomass") || rxn.getId().toLowerCase().contains("growth")) {
-//        logger.info("found biomass {}", rxn.getId());
-//        
-//      } else {
-//        
-//      }
     }
     
 //    System.out.println(this.modelCompounds.keySet());

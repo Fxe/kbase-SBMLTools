@@ -14,6 +14,10 @@ public class NameIntegration {
   
   private static final Logger logger = LoggerFactory.getLogger(NameIntegration.class);
   
+  /**
+   * 
+   * @return Map Compound[Set] -> Name
+   */
   public static Map<Set<String>, String> buildNameDictionary() {
     logger.info("build name dictionary ...");
     Map<Long, String> nameIdToName = new HashMap<> ();

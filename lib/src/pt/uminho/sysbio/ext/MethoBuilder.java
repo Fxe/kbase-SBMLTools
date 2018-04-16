@@ -14,10 +14,13 @@ import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.ExternalReference;
+import pt.uminho.sysbio.biosynthframework.Metabolite;
+import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.integration.model.Dictionary;
 import pt.uminho.sysbio.biosynthframework.integration.model.DictionaryBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.FirstDegreeReferences;
 import pt.uminho.sysbio.biosynthframework.integration.model.IdBaseIntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.integration.model.KBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.NameBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.PrefixNumberSequenceLookupMethod;
 import pt.uminho.sysbio.biosynthframework.integration.model.SearchTable;
@@ -25,6 +28,9 @@ import pt.uminho.sysbio.biosynthframework.integration.model.SearchTableFactory;
 import pt.uminho.sysbio.biosynthframework.integration.model.TokenSwapLookupMethod;
 import pt.uminho.sysbio.biosynthframework.integration.model.TrieIdBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseIntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
+import pt.uminho.sysbio.biosynthframework.io.biodb.GithubModelSeedMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
 //import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseIntegrationEngine;
 //import pt.uminho.sysbio.biosynthframework.sbml.SbmlNotesParser;
@@ -541,6 +547,41 @@ public class MethoBuilder {
       e.dictionaryMap.put(dict, dictionaries.get(dict));
     }
     e.setup();
+    return e;
+  }
+  
+  
+  public static void loadModelSeedCompoundData(
+      Set<String> ids,
+      Map<String, Boolean> obsolete, Map<String, String> remap
+//      Map<String, String> nmap, Map<String, String> fmap
+      ) {
+    GithubModelSeedMetaboliteDaoImpl dao = KBaseConfig.getModelSeedCpdDao();
+
+    for (String cpdEntry : dao.getAllMetaboliteEntries()) {
+      ModelSeedMetaboliteEntity cpd = dao.getMetaboliteByEntry(cpdEntry);
+      ids.add(cpdEntry);
+//      nmap.put(cpdEntry, cpd.getName());
+//      fmap.put(cpdEntry, cpd.getFormula());
+      obsolete.put(cpd.getEntry(), cpd.getObsolete());
+      if (cpd.getLinkedCompound() != null) {
+        remap.put(cpd.getEntry(), cpd.getLinkedCompound());
+      }
+    }
+  }
+  
+  public KBaseIntegrationEngine buildKBaseIntegrationEngine() {
+    KBaseIntegrationEngine e = new KBaseIntegrationEngine();
+    
+    Set<String> ids = new HashSet<>();
+    Map<String, Boolean> obsolete = new HashMap<>();
+    Map<String, String> remap = new HashMap<>();
+    loadModelSeedCompoundData(ids, obsolete, remap);
+    
+    e.modelseedIds.addAll(ids);
+    e.obsolete.putAll(obsolete);
+    e.remap.putAll(remap);
+    
     return e;
   }
   
