@@ -14,9 +14,18 @@ MAINTAINER KBase Developer
 #/usr/bin/java
 
 # download a data files
+RUN cd /opt/ && wget http://193.137.11.210/fliu/kbase/jdk-9.0.4_linux-x64_bin.tar.gz
 RUN mkdir -p /data/integration
 RUN cd /data/integration && wget http://193.137.11.210/fliu/integration_data.zip && unzip integration_data.zip
 RUN cd /data/integration && rm -Rf export && wget http://193.137.11.210/fliu/export.tar.gz && tar -xvf export.tar.gz
+RUN tar -xf /opt/jdk-9.0.4_linux-x64_bin.tar.gz -C /opt/
+RUN rm /usr/bin/java
+RUN rm /usr/bin/javac
+RUN rm /usr/bin/javadoc
+RUN ln -s /opt/jdk-9.0.4/bin/java /usr/bin/java
+RUN ln -s /opt/jdk-9.0.4/bin/javac /usr/bin/javac
+RUN ln -s /opt/jdk-9.0.4/bin/javadoc /usr/bin/javadoc
+ENV JAVA_HOME /opt/jdk-9.0.4
 
 # download deps
 RUN cd /kb/deployment/lib/jars \
