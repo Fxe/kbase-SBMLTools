@@ -76,9 +76,9 @@ public class JsonObjectTest {
       logger.warn("[{}] {}, {}", f, s1, s2);
     } else {
       if (s1.containsAll(s2) && s2.containsAll(s1) && s1.size() == s2.size()) {
-        logger.warn("[{}] {}/{} {}, {}", f, s1.size(), s2.size(), s1, s2);
-      } else {
         logger.info("[{}] {}, {}", f, s1, s2);
+      } else {
+        logger.warn("[{}] {}/{} {}, {}", f, s1.size(), s2.size(), s1, s2);
       }
     }
   }
@@ -424,9 +424,8 @@ public class JsonObjectTest {
       FBAModelAdapter kmodelMineA = new FBAModelAdapter(kmodelMine);
       kmodelMineA.updateMetadata(KBaseConfig.getModelSeedCpdDao(), 
                                  KBaseConfig.getModelSeedRxnDao());
-      Genome genome = KBaseIOUtils.getObject(
-        IOUtils.readFromFile("/var/biomodels/kbase/PlantSEED_Cre.rast.json"), 
-        Genome.class);
+      Genome genome = KBaseIOUtils.loadJsonGenomeFromZip("/var/biomodels/kbase/PlantSEED_Cre.rast.json.zip");
+      
       kmodelMineA.attachGenome(genome, true);
       //      
 //      kmodelMineA.integrateCompartment("z0", "e");

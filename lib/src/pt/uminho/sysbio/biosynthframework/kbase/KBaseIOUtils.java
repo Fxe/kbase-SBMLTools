@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +38,9 @@ import datafileutil.GetObjectsResults;
 import datafileutil.ObjectSaveData;
 import datafileutil.SaveObjectsParams;
 import kbasefba.FBAModel;
+import kbasegenomes.Genome;
+import pt.uminho.sysbio.biosynthframework.util.ZipContainer;
+import pt.uminho.sysbio.biosynthframework.util.ZipContainer.ZipRecord;
 import sbmltools.KBaseType;
 import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.Tuple11;
@@ -506,5 +510,43 @@ public class KBaseIOUtils {
     }
     
     return null;
+  }
+
+  public static Genome loadJsonGenomeFromZip(String path) throws IOException {
+    byte[] bytes = new byte[0];
+    File f = new File(path);
+    if (!f.exists()) {
+      throw new FileNotFoundException(path);
+    }
+    if (!f.isFile() || !f.getName().endsWith(".zip")) {
+      throw new IOException("Bad path (must be a file ending with .zip): " + path);
+    }
+    
+    String lookup = f.getName().substring(0, f.getName().length() - 4);
+    ZipContainer zipContainer = new ZipContainer(path);
+    InputStream is = null;
+    for (ZipRecord zr : zipContainer.getInputStreams()) {
+      if (zr.name.equals(lookup)) {
+        is = zr.is;
+      }
+    }
+    
+    if (is != null) {
+      bytes = IOUtils.toByteArray(is);
+      logger.info("read {} KBs", bytes.length / 1024.0);
+    } else {
+      zipContainer.close();
+      throw new IOException("Bad zip file. Genome data not found. Expected: " + lookup);
+    }
+    
+    zipContainer.close();
+    
+    try {
+      Genome genome = KBaseIOUtils.getObject(new String(bytes), Genome.class);
+      return genome;
+    } catch (Exception e) {
+      throw new IOException(e);
+    }
+    
   }
 }

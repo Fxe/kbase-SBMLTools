@@ -273,6 +273,7 @@ public class KBaseModelSeedIntegration {
 //    System.out.println(imap);
     imap = integration.clean;
     
+    logger.info("propagate curation ... ");
     ReferencePropagation propagation = new ReferencePropagation();
     for (String k : imap.keySet()) {
       Map<MetaboliteMajorLabel, String> references = imap.get(k);
@@ -280,8 +281,7 @@ public class KBaseModelSeedIntegration {
         propagation.addReference(k, spiToCmp.get(k), db, references.get(db));
       }
     }
-    
-
+    logger.info("propagate curation ... done !");
     
     integration.status2(imap);
     
