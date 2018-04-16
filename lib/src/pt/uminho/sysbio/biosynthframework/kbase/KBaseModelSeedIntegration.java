@@ -274,28 +274,28 @@ public class KBaseModelSeedIntegration {
     imap = integration.clean;
     
     logger.info("propagate curation ... ");
-    ReferencePropagation propagation = new ReferencePropagation();
-    for (String k : imap.keySet()) {
-      Map<MetaboliteMajorLabel, String> references = imap.get(k);
-      for (MetaboliteMajorLabel db : references.keySet()) {
-        propagation.addReference(k, spiToCmp.get(k), db, references.get(db));
-      }
-    }
+//    ReferencePropagation propagation = new ReferencePropagation();
+//    for (String k : imap.keySet()) {
+//      Map<MetaboliteMajorLabel, String> references = imap.get(k);
+//      for (MetaboliteMajorLabel db : references.keySet()) {
+//        propagation.addReference(k, spiToCmp.get(k), db, references.get(db));
+//      }
+//    }
     logger.info("propagate curation ... done !");
     
     integration.status2(imap);
     
-    IntegrationMap<String, MetaboliteMajorLabel> pmap = 
-        propagation.propagate(true, curation);
-    
-    for (String k : pmap.keySet()) {
-      Map<MetaboliteMajorLabel, Set<String>> references = pmap.get(k);
-      for (MetaboliteMajorLabel database : references.keySet()) {
-        for (String dbEntry : references.get(database)) {
-          imap.get(k).put(database, dbEntry);
-        }
-      }
-    }
+//    IntegrationMap<String, MetaboliteMajorLabel> pmap = 
+//        propagation.propagate(true, curation);
+//    
+//    for (String k : pmap.keySet()) {
+//      Map<MetaboliteMajorLabel, Set<String>> references = pmap.get(k);
+//      for (MetaboliteMajorLabel database : references.keySet()) {
+//        for (String dbEntry : references.get(database)) {
+//          imap.get(k).put(database, dbEntry);
+//        }
+//      }
+//    }
     
     //force modelseed identifiers pattern
     IntegrationMap<String, MetaboliteMajorLabel> msCpdMap = beK.integrate();
