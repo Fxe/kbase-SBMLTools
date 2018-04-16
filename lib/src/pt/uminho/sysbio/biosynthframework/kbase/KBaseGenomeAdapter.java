@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
+
+import com.google.common.base.Predicate;
 
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
@@ -61,7 +62,7 @@ public class KBaseGenomeAdapter {
       Set<String> aliases = new HashSet<>(f.getAliases());
       aliases.add(f.getId());
       for (String a : aliases) {
-        if (filter.test(a)) {
+        if (filter.apply(a)) {
           id = a;
         }
       }

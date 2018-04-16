@@ -21,8 +21,10 @@ RUN cd /data/integration && rm -Rf export && wget http://193.137.11.210/fliu/exp
 # download deps
 RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/guava-18.0.jar \
-    && wget http://193.137.11.210/fliu/kbase/jfasta-2.2.0-jar-with-dependencies.jar \
     && wget http://193.137.11.210/fliu/kbase/biojava-core-4.2.5.jar \
+    && wget http://193.137.11.210/fliu/kbase/biojava-alignment-4.2.5.jar \
+    && wget http://193.137.11.210/fliu/kbase/commons-lang-2.6.jar \
+    && wget http://193.137.11.210/fliu/kbase/jfasta-2.2.0-jar-with-dependencies.jar \
     && wget http://193.137.11.210/fliu/kbase/jgrapht-core-0.9.2.jar \
     && wget http://193.137.11.210/fliu/kbase/jgrapht-ext-0.9.2.jar \
     && wget http://193.137.11.210/fliu/kbase/neo4j-kernel-2.1.5.jar \
@@ -37,13 +39,11 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/antlr-runtime-3.5.2.jar \
     && wget http://193.137.11.210/fliu/kbase/javaluator-3.0.2.jar \
     && wget http://193.137.11.210/fliu/kbase/jbool_expressions-1.14.jar \
-    && wget http://193.137.11.210/fliu/kbase/commons-lang-2.6.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-core-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-integration-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-aux-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-genome-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-biodb-0.0.1-SNAPSHOT.jar \
-    && wget http://193.137.11.210/fliu/kbase/biojava-alignment-4.2.5.jar \
     && wget http://193.137.11.210/fliu/kbase/ahocorasick-0.4.0.jar
 
     
