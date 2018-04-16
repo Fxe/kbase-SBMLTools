@@ -34,6 +34,10 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/spring-beans-4.0.3.RELEASE.jar \
     && wget http://193.137.11.210/fliu/kbase/spring-context-4.0.3.RELEASE.jar \
     && wget http://193.137.11.210/fliu/kbase/spring-core-4.0.3.RELEASE.jar \
+    && wget http://193.137.11.210/fliu/kbase/antlr-runtime-3.5.2.jar \
+    && wget http://193.137.11.210/fliu/kbase/javaluator-3.0.2.jar \
+    && wget http://193.137.11.210/fliu/kbase/jbool_expressions-1.14.jar \
+    && wget http://193.137.11.210/fliu/kbase/commons-lang-2.6.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-core-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-integration-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-aux-0.0.1-SNAPSHOT.jar \

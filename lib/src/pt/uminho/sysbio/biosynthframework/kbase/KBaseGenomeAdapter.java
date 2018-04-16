@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
@@ -49,6 +50,24 @@ public class KBaseGenomeAdapter {
     }
     
     return f;
+  }
+  
+  public String findUniqueFeature(String alias, Predicate<String> filter) {
+    Feature f = findUniqueFeature(alias);
+    
+    String id = null;
+    
+    if (f != null) {
+      Set<String> aliases = new HashSet<>(f.getAliases());
+      aliases.add(f.getId());
+      for (String a : aliases) {
+        if (filter.test(a)) {
+          id = a;
+        }
+      }
+    }
+    
+    return id;
   }
   
 //  public Feature findFeature(String alias) {

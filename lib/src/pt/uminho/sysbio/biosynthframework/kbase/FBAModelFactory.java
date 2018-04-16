@@ -12,8 +12,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.Subscribe;
-
 import kbasefba.Biomass;
 import kbasefba.FBAModel;
 import kbasefba.ModelCompartment;
@@ -309,6 +307,41 @@ public class FBAModelFactory {
     return null;
   }
   
+  public static List<ModelReactionProtein> setupModelReactionProteins(Set<Set<String>> proteins, Genome genome, boolean translateToId) {
+    Map<String, Feature> fmap = new HashMap<> ();
+    for (Feature f : genome.getFeatures()) {
+      fmap.put(f.getId(), f);
+      if (f.getAliases() != null) {
+        for (String a : f.getAliases()) {
+          fmap.put(a, f);
+        }
+      }
+    }
+    
+    Set<Set<String>> validProteins = new HashSet<> ();
+    for (Set<String> p : proteins) {
+      Set<String> validGenes = new HashSet<>();
+      for (String g : p) {
+        if (fmap.containsKey(g)) {
+          if (translateToId) {
+            validGenes.add(fmap.get(g).getId());
+          } else {
+            validGenes.add(g);
+          }
+          logger.debug("Gene found within feature set: {}", g);
+        } else {
+          logger.debug("Gene not found within feature set: {}", g);
+        }
+      }
+      if (!validGenes.isEmpty()) {
+        validProteins.add(validGenes);
+      } else {
+        logger.warn("protein discarded (no features found within genome): {}", p);
+      }
+    }
+    return setupModelReactionProteins(validProteins);
+  }
+  
   public static List<ModelReactionProtein> setupModelReactionProteins(Set<String> genes, Genome genome, String genomeRef) {
     Map<String, Feature> fmap = new HashMap<> ();
     for (Feature f : genome.getFeatures()) {
@@ -356,6 +389,34 @@ public class FBAModelFactory {
       mrpList.add(mrp);
     }
     
+    
+    return mrpList;
+  }
+  
+  public static List<ModelReactionProtein> setupModelReactionProteins(Set<Set<String>> proteins) {
+    List<ModelReactionProtein> mrpList = new ArrayList<> ();
+    if (proteins != null) {
+      for (Set<String> prot : proteins) {
+        List<ModelReactionProteinSubunit> subunits = new ArrayList<> ();
+        for (String g : prot) {
+          List<String> features = new ArrayList<> ();
+          features.add(String.format("~/genome/features/id/%s", g));
+          ModelReactionProteinSubunit subunit = new ModelReactionProteinSubunit()
+              .withFeatureRefs(features)
+              .withTriggering(0L)
+              .withRole("")
+              .withNote("Imported GPR")
+              .withOptionalSubunit(0L);
+          subunits.add(subunit);
+        }
+        
+        ModelReactionProtein mrp = new ModelReactionProtein()
+            .withComplexRef("")
+            .withModelReactionProteinSubunits(subunits)
+            .withNote("Imported GPR").withSource("");
+        mrpList.add(mrp);
+      }
+    }
     
     return mrpList;
   }

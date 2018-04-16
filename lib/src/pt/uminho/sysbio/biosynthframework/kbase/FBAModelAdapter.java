@@ -42,6 +42,7 @@ import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
+import pt.uminho.sysbio.biosynthframework.util.GprUtils;
 import us.kbase.common.service.Tuple11;
 import us.kbase.workspace.GetObjectInfo3Params;
 import us.kbase.workspace.GetObjectInfo3Results;
@@ -931,16 +932,21 @@ public class FBAModelAdapter implements ModelAdapter {
   }
 
   public void attachGenome(Genome genome, boolean allowNumberLocus) {
-    for (String mrxnEntry : this.rxnMap.keySet()) {
-      ModelReaction krxn = this.rxnMap.get(mrxnEntry);
+    for (String krxnId : this.rxnMap.keySet()) {
+      ModelReaction krxn = this.rxnMap.get(krxnId);
       String gprString = krxn.getImportedGpr();
       if (!DataUtils.empty(gprString)) {
-        Set<String> genes = KBaseUtils.getGenes(gprString, null, allowNumberLocus);
-        if (genes != null && !genes.isEmpty()) {
-          List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, fbaModel.getGenomeRef());
-          krxn.setModelReactionProteins(mrpList);
-        } else {
-          logger.warn("[{}] invalid gpr: {}", mrxnEntry, gprString);
+        try {
+          Set<Set<String>> proteins = GprUtils.getProteins(gprString);
+          //        Set<String> genes = KBaseUtils.getGenes(gprString, null, allowNumberLocus);
+          if (proteins != null && !proteins.isEmpty()) {
+            List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(proteins, genome, true);
+            krxn.setModelReactionProteins(mrpList);
+          } else {
+            logger.warn("[{}] invalid gpr: {}", krxnId, gprString);
+          }
+        } catch (Exception e) {
+          logger.error("[{}]{} - {}", krxnId, gprString, e.getMessage());
         }
       }
     }

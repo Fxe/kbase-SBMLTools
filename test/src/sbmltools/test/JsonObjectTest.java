@@ -227,7 +227,7 @@ public class JsonObjectTest {
 //    Map<String, ModelReactionProtein> m2 = new HashMap<>();
     List<ModelReactionProtein> l1 = new ArrayList<>();
     List<ModelReactionProtein> l2 = new ArrayList<>();
-    
+    //remove empty ModelReactionProtein
     for (ModelReactionProtein r : r1.getModelReactionProteins()) {
       l1.add(r);
     }
@@ -310,7 +310,7 @@ public class JsonObjectTest {
       }
     }
     for (String rxnId : both) {
-//      System.out.println(rxnId);
+      System.out.println(rxnId);
       ModelReaction krxn1 = m1.get(rxnId);
       ModelReaction krxn2 = m2.get(rxnId);
       equals(krxn1.getId(), krxn1.getId(), "id");
@@ -375,15 +375,17 @@ public class JsonObjectTest {
         new CompartmentIntegration();
     cintegration.detectors.add(new CompartmentDetectorKBase());
     try {
-      String json = IOUtils.readFromFile(
-          "/var/biomodels/kbase/PlantSEED_Cre.mdl.json");
-      FBAModel kmodel = KBaseIOUtils.getObject(json, FBAModel.class);
-      FBAModelAdapter fbamodel = new FBAModelAdapter(kmodel);
-      ModelAdapter model = fbamodel;
+//      String json = IOUtils.readFromFile(
+//          "/var/biomodels/kbase/PlantSEED_Cre.mdl.json");
+//      FBAModel kmodel = KBaseIOUtils.getObject(json, FBAModel.class);
+//      FBAModelAdapter fbamodel = new FBAModelAdapter(kmodel);
+//      ModelAdapter model = fbamodel;
       
       
 //      KBaseSbmlImporter importer = new KBaseSbmlImporter(workspace, dfuClient, wsClient);
-      XmlStreamSbmlReader reader = new XmlStreamSbmlReader("/var/biomodels/kbase/PlantSEED_Cre.mdl.xml");
+//      String xmlModel = "/var/biomodels/kbase/PlantSEED_Cre.mdl.xml";
+      String xmlModel = "/var/biomodels/kbase/GCF_000007565.2.mdl.xml";
+      XmlStreamSbmlReader reader = new XmlStreamSbmlReader(xmlModel);
       XmlSbmlModel xmodel = reader.parse();
       Set<String> ids = new HashSet<>();
       Set<String> rxnIds = new HashSet<>();
@@ -424,14 +426,15 @@ public class JsonObjectTest {
       FBAModelAdapter kmodelMineA = new FBAModelAdapter(kmodelMine);
       kmodelMineA.updateMetadata(KBaseConfig.getModelSeedCpdDao(), 
                                  KBaseConfig.getModelSeedRxnDao());
-      Genome genome = KBaseIOUtils.loadJsonGenomeFromZip("/var/biomodels/kbase/PlantSEED_Cre.rast.json.zip");
+//      Genome genome = KBaseIOUtils.loadJsonGenomeFromZip("/var/biomodels/kbase/PlantSEED_Cre.rast.json.zip");
+      Genome genome = KBaseIOUtils.loadJsonGenomeFromZip("/var/biomodels/kbase/GCF_000007565.2.rast.json.zip");
       
       kmodelMineA.attachGenome(genome, true);
       //      
 //      kmodelMineA.integrateCompartment("z0", "e");
       String model1 = "/var/biomodels/kbase/PlantSEED_Cre.mdl.json";
-      String model2 = "/var/biomodels/kbase/PlantSEED_Cre.mdl.imported.json";
-//      String model2 = "/var/biomodels/kbase/GCF_000007565.2.mdl.json";
+//      String model2 = "/var/biomodels/kbase/PlantSEED_Cre.mdl.imported.json";
+      String model2 = "/var/biomodels/kbase/GCF_000007565.2.mdl.imported.json";
 //      FBAModel kmodel2 = KBaseIOUtils.getObject(
 //          IOUtils.readFromFile(model2), 
 //          FBAModel.class);
