@@ -47,7 +47,7 @@ import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter.ImportMode
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
-
+//END_HEADER
 /**
  * <p>Original spec-file module name: SBMLTools</p>
  * <pre>
@@ -118,14 +118,8 @@ public class SBMLToolsServer extends JsonServerServlet {
 
     KBaseHtmlReport htmlReport = new KBaseHtmlReport(scratch);
 
-//    List<String> files = new ArrayList<> ();
-//    files.add("index.html");
-//    
-//    List<String> datas = new ArrayList<> ();
-//    datas.add(KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
     Map<String, String> files = new HashMap<>();
     files.put("index.html", KBaseIOUtils.getResource("report/sbml-import/index.html"));
-//    files.put("index.html", KBaseIOUtils.getDataWeb("http://darwin.di.uminho.pt/fliu/model-integration-report/index.html"));
     ReportFiles reportFiles = htmlReport.makeStaticReport(files);
     
     System.out.println(result.jsonDataFiles);
@@ -238,7 +232,6 @@ public class SBMLToolsServer extends JsonServerServlet {
         .withFbamodelId(facade.kbaseModelOutput)
         .withReportName(reportInfo.getName())
         .withReportRef(reportInfo.getRef());
-    
         //END auto_propagate_genome
         return returnVal;
     }

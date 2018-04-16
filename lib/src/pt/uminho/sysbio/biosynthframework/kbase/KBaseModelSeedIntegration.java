@@ -35,12 +35,14 @@ import pt.uminho.sysbio.biosynthframework.integration.model.ModelSeedMultiMatchR
 import pt.uminho.sysbio.biosynthframework.integration.model.NameBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.SearchTable;
 import pt.uminho.sysbio.biosynthframework.integration.model.SearchTableFactory;
+import pt.uminho.sysbio.biosynthframework.integration.model.SimpleStringMatchEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.SpecieIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.integration.model.TrieIdBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.ext.BiGGConflictResolver;
@@ -298,9 +300,13 @@ public class KBaseModelSeedIntegration {
     //force modelseed identifiers pattern
     IntegrationMap<String, MetaboliteMajorLabel> msCpdMap = beK.integrate();
     for (String spiId : msCpdMap.keySet()) {
+      //XXX: this condition is always true ?
       if (msCpdMap.get(spiId).containsKey(MetaboliteMajorLabel.ModelSeed)) {
         Set<String> s = msCpdMap.get(spiId).get(MetaboliteMajorLabel.ModelSeed);
         if (s != null && s.size() == 1) {
+          if (!imap.containsKey(spiId)) {
+            imap.put(spiId, new HashMap<MetaboliteMajorLabel, String>());
+          }
           imap.get(spiId).put(MetaboliteMajorLabel.ModelSeed, s.iterator().next());
         }
       }
@@ -334,7 +340,23 @@ public class KBaseModelSeedIntegration {
       resultAdapter.fillSpeciesIntegrationData(integration);
       resultAdapter.fillReactionIntegrationData(reactionIntegration.imap);
     }
-    
+
+    Set<String> rxnIds = new HashSet<>();
+    for (XmlSbmlReaction xrxn : xmodel.getReactions()) {
+      rxnIds.add(xrxn.getAttributes().get("id"));
+    }
+    SimpleStringMatchEngine modelseed = new SimpleStringMatchEngine("rxn", "R_");
+    modelseed.ids.addAll(rxnIds);
+    for (String rxnEntry : KBaseConfig.getModelSeedRxnDao().getAllReactionEntries()) {
+      modelseed.validIds.add(rxnEntry);
+    }
+    Map<String, String> rmap = modelseed.match();
+    for (String rxnId : rmap.keySet()) {
+      if (!reactionIntegration.imap.containsKey(rxnId)) {
+        reactionIntegration.imap.put(rxnId, new HashMap<ReactionMajorLabel, String>());
+      }
+      reactionIntegration.imap.get(rxnId).put(ReactionMajorLabel.ModelSeedReaction, rmap.get(rxnId));
+    }
     
     KBaseMappingResult result = new KBaseMappingResult();
     result.species = imap;

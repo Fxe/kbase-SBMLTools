@@ -578,7 +578,7 @@ public class MethoBuilder {
     Map<String, String> remap = new HashMap<>();
     loadModelSeedCompoundData(ids, obsolete, remap);
     
-    e.modelseedIds.addAll(ids);
+    e.validIds.addAll(ids);
     e.obsolete.putAll(obsolete);
     e.remap.putAll(remap);
     

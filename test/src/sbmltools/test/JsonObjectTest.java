@@ -34,6 +34,7 @@ import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentDetectorK
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentIntegration;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.integration.model.KBaseIntegrationEngine;
+import pt.uminho.sysbio.biosynthframework.integration.model.SimpleStringMatchEngine;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 import pt.uminho.sysbio.biosynthframework.io.biodb.GithubModelSeedMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
@@ -368,49 +369,6 @@ public class JsonObjectTest {
     return kmodel;
   }
   
-  public static class Engine {
-    
-    public Set<String> ids = new HashSet<> ();
-    public List<String> prefixes = new ArrayList<> ();
-    public Set<String> validIds = new HashSet<>();
-    public String prefix;
-    
-    public Engine(String prefix, String...strip) {
-      this.prefix = prefix;
-      this.prefixes.addAll(Arrays.asList(strip));
-    }
-    
-    public String stripPrefix(String id) {
-      for (String p : prefixes) {
-        if (id.startsWith(p)) {
-          return id.substring(p.length());
-        }
-      }
-      return id;
-    }
-    
-    public Map<String, String> integrate() {
-      Map<String, String> result = new HashMap<>();
-      
-      for (String str : ids) {
-        String id = str;
-        if (!id.startsWith(prefix)) {
-          id = stripPrefix(id);
-        }
-        
-        if (id.startsWith(prefix) && id.length() >= 8) {
-          id = id.substring(0, 8);
-          if (validIds.contains(id)) {
-            result.put(str, id);
-          }
-        }
-      }
-      
-      return result;
-    }
-
-  }
-  
   public static void main(String[] args) {
     KBaseConfig.production = false;
     CompartmentIntegration cintegration = 
@@ -441,7 +399,7 @@ public class JsonObjectTest {
       
       KBaseIntegrationEngine e = new MethoBuilder(null).buildKBaseIntegrationEngine();
       e.ids.addAll(ids);
-      Engine r = new Engine("rxn", "R_");
+      SimpleStringMatchEngine r = new SimpleStringMatchEngine("rxn", "R_");
       r.ids.addAll(rxnIds);
       for (String rxnEntry : KBaseConfig.getModelSeedRxnDao().getAllReactionEntries()) {
         r.validIds.add(rxnEntry);
@@ -450,7 +408,7 @@ public class JsonObjectTest {
       IntegrationMap<String, MetaboliteMajorLabel> spiMap = e.integrate();
       
       Map<String, String> smap = new HashMap<>();
-      Map<String, String> rmap = r.integrate();
+      Map<String, String> rmap = r.match();
       for (String spiId : spiMap.keySet()) {
         if (spiMap.get(spiId).containsKey(MetaboliteMajorLabel.ModelSeed)) {
           Set<String> s = spiMap.get(spiId).get(MetaboliteMajorLabel.ModelSeed);
