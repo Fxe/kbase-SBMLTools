@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,7 @@ import com.google.common.base.Joiner;
 import datafileutil.DataFileUtilClient;
 import kbasefba.Biomass;
 import kbasefba.FBAModel;
+import kbasegenomes.Genome;
 import kbasereport.WorkspaceObject;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
@@ -32,6 +34,7 @@ import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentDetectorF
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentDetectorKBase;
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentIntegration;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
+import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
@@ -53,6 +56,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAutofix;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import pt.uminho.sysbio.biosynthframework.util.AutoFileReader;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -191,8 +195,10 @@ public class KBaseSbmlImporter {
   }
 
   public FBAModel importModel(InputStream is, 
-      ImportModelResult result, String modelId, String url, 
-      boolean runIntegration, Collection<String> biomassIds, 
+      ImportModelResult result, String modelId, String url,
+      boolean runCompartmentIntegration,
+      boolean runIntegration, 
+      Collection<String> biomassIds, 
       String genomeRef,
       IntegrationByDatabase spiIntegrationAll,
       IntegrationReport jsonResult, boolean allowBoundary) {
@@ -272,23 +278,29 @@ public class KBaseSbmlImporter {
         logger.info("written {} bytes", i);
       }
       
-      CompartmentIntegration cintegration = 
-          new CompartmentIntegration();
-      cintegration.singleCompartmentAsCytosol = true;
-      cintegration.createBoundaryCompartment = false;
-      cintegration.detectors.add(new CompartmentDetectorKBase());
-      cintegration.detectors.add(new CompartmentDetectorFlatString(false));
-      cintegration.detectors.add(new CompartmentDetectorFlatString(true));
-      Map<String, SubcellularCompartment> cmap = cintegration.generateCompartmentMapping(model);
-      
+      Map<String, SubcellularCompartment> cmap = new HashMap<>();
       Map<String, String> spiToModelSeedReference = new HashMap<> ();
       Map<String, String> rxnToModelSeedReference = new HashMap<> ();
       IntegrationMap<String, String> sintegration = new IntegrationMap<>();
       IntegrationMap<String, String> rintegration = new IntegrationMap<>();
+      
+      if (runCompartmentIntegration) {
+        CompartmentIntegration cintegration = 
+            new CompartmentIntegration();
+        cintegration.singleCompartmentAsCytosol = true;
+        cintegration.createBoundaryCompartment = false;
+        cintegration.detectors.add(new CompartmentDetectorKBase());
+        cintegration.detectors.add(new CompartmentDetectorFlatString(false));
+        cintegration.detectors.add(new CompartmentDetectorFlatString(true));
+        cmap = cintegration.generateCompartmentMapping(model);
+      }
+
+      
+
+      
       //check if integrate
       if (runIntegration) {
-        ModelAdapter adapter;
-        modelSeedIntegration.spiToModelSeedReference.clear();
+//        modelSeedIntegration.spiToModelSeedReference.clear();
 
         KBaseMappingResult mapping = modelSeedIntegration.generateDatabaseReferences(xmodel, modelId, resultAdapter);
 
@@ -308,14 +320,13 @@ public class KBaseSbmlImporter {
           }
         }
 
-        //get stats
-        result.message +="\n" + modelId + " " + status2(imap, xmodel.getSpecies().size());
-        spiToModelSeedReference = modelSeedIntegration.spiToModelSeedReference;
-        rxnToModelSeedReference = modelSeedIntegration.rxnToModelSeedReference;
-        result.message += String.format("\ni: %d", spiToModelSeedReference.size());
+        spiToModelSeedReference = 
+            KBaseModelSeedIntegration.filter(imap, MetaboliteMajorLabel.ModelSeed);
+        rxnToModelSeedReference = 
+            KBaseModelSeedIntegration.filter(rimap, ReactionMajorLabel.ModelSeedReaction);
+//        result.message += String.format("\ni: %d", spiToModelSeedReference.size());
       }
 
-//      
       //order matters ! fix this ... it is a factory ...
       kmodel = new FBAModelFactory()
           .withCompartmentMapping(cmap)
@@ -329,14 +340,23 @@ public class KBaseSbmlImporter {
           .withModelName(modelId)
           .withXmlSbmlModel(xmodel, allowBoundary)
           .build();
-
-      if (!kmodel.getBiomasses().isEmpty()) {
-        Set<String> biomass = new HashSet<> ();
-        for (Biomass b : kmodel.getBiomasses()) {
-          biomass.add(b.getId());
-        }
-        result.message +="\n" + modelId + " biomass: " + biomass;
+      
+      if (genomeRef != null && 
+          !genomeRef.trim().isEmpty() && 
+          wsClient != null) {
+        FBAModelAdapter mAdapter = new FBAModelAdapter(kmodel);
+        Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(genomeRef, workspace, null, wsClient);
+        Genome genome = KBaseUtils.convert(kdata.getRight(), Genome.class);
+        mAdapter.attachGenome(genome, true);
       }
+
+//      if (!kmodel.getBiomasses().isEmpty()) {
+//        Set<String> biomass = new HashSet<> ();
+//        for (Biomass b : kmodel.getBiomasses()) {
+//          biomass.add(b.getId());
+//        }
+//        result.message +="\n" + modelId + " biomass: " + biomass;
+//      }
 
       jsonResult.addIntegrationReport(modelId, reportData);
 
@@ -440,7 +460,10 @@ public class KBaseSbmlImporter {
       for (String u : inputStreams.keySet()) {
         InputStream is = inputStreams.get(u);
         try {
-          FBAModel fbaModel = importModel(is, result, modelId, u, runIntegration, biomass, null, spiIntegrationAll, jsonResult, !removeBoundary);
+          FBAModel fbaModel = importModel(
+              is, result, modelId, u, 
+              true, 
+              runIntegration, biomass, null, spiIntegrationAll, jsonResult, !removeBoundary);
 
           if (fbaModel != null) {
             KBaseObject o = new KBaseObject();
@@ -468,19 +491,8 @@ public class KBaseSbmlImporter {
       }
 
       jsonResult.setSpeciesIntegrationSummary(spiIntegrationAll);
-
-      String jsonData = KBaseIOUtils.toJson(jsonResult, true);
-      logger.info("written {}", jsonData.length());
-
-      OutputStream os = null;
-      try {
-        os = new FileOutputStream(KBaseConfig.REPORT_OUTPUT_FILE);
-        IOUtils.write(jsonData, os);
-      } catch (IOException e) {
-        e.printStackTrace();
-      } finally {
-        IOUtils.closeQuietly(os);
-      }
+      
+      IntegrationReport.write(jsonResult, KBaseConfig.REPORT_OUTPUT_FILE);
       
       //[S4_File_fix_msg.json, iRL766_msg.json, iLC915_msg.json, aORYZAE_fix_msg.json, 
       // iCY1106_msg.json, S4_File_msg.json, iSS884 v1_msg.json, iMA871_msg.json, aORYZAE_msg.json, 

@@ -174,10 +174,7 @@ public class SBMLToolsServer extends JsonServerServlet {
         SbmlImporterResults returnVal = null;
         //BEGIN integrate_model
 
-//    System.out.println(params);
-
     final String workspaceName = params.getWorkspaceName();
-
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
     final GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(callbackURL, authPart);
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);

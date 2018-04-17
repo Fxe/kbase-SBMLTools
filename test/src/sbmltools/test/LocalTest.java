@@ -49,9 +49,6 @@ public class LocalTest {
   
   private static final Logger logger = LoggerFactory.getLogger(LocalTest.class);
   
-  public static String a = "/var/biobase/export";
-  public static String b = "/var/biobase/integration/cc/cpd_curation.tsv";
-  
   public static List<XmlMessage> validate(XmlSbmlModel xmodel) {
     XmlSbmlModelValidator validator = new XmlSbmlModelValidator(xmodel);
     XmlSbmlModelValidator.initializeDefaults(validator);
@@ -95,9 +92,6 @@ public class LocalTest {
     
     System.out.println(vmsg);
     
-
-    KBaseConfig.DATA_EXPORT_PATH = a;
-    KBaseConfig.CURATION_DATA = b;
     KBaseBiodbContainer biodbContainer = new KBaseBiodbContainer(KBaseConfig.DATA_EXPORT_PATH);
     KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(
         KBaseConfig.DATA_EXPORT_PATH, KBaseConfig.CURATION_DATA, biodbContainer);
@@ -122,8 +116,8 @@ public class LocalTest {
     String genomeRef = "";
     String modelId = "test";
     Collection<String> biomassIds = new HashSet<>();
-    Map<String, String> spiToModelSeedReference = integration.spiToModelSeedReference;
-    Map<String, String> rxnToModelSeedReference = integration.rxnToModelSeedReference;
+    Map<String, String> spiToModelSeedReference = KBaseModelSeedIntegration.filter(imap, MetaboliteMajorLabel.ModelSeed);
+    Map<String, String> rxnToModelSeedReference = KBaseModelSeedIntegration.filter(rimap, ReactionMajorLabel.ModelSeedReaction);
     FBAModel model = new FBAModelFactory()
         .withGenomeRef(genomeRef)
         .withSpecieIntegration(sintegration)
@@ -245,8 +239,6 @@ public class LocalTest {
   
   
   public static void integrationTest() {
-    KBaseConfig.DATA_EXPORT_PATH = a;
-    KBaseConfig.CURATION_DATA = b;
     KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne/data";
     String sbmlPath = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
@@ -286,9 +278,6 @@ public class LocalTest {
   }
   
   public static void dataTest() {
-    KBaseConfig.DATA_EXPORT_PATH = a;
-    KBaseConfig.CURATION_DATA = b;
-    KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne";
     try {
       KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(null, null, null);
       SbmlImportParams params = new SbmlImportParams()
@@ -305,6 +294,7 @@ public class LocalTest {
 
   
   public static void main(String[] args) {
+    KBaseConfig.wut();
     //integrationTest();
     try {
       test("/tmp/argonne/data/fba834db-9ed7-433f-86d3-874c4f28bb68/fba834db-9ed7-433f-86d3-874c4f28bb68_2");

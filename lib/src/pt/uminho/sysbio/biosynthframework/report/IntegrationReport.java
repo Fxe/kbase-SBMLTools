@@ -1,13 +1,19 @@
 package pt.uminho.sysbio.biosynthframework.report;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pt.uminho.sysbio.biosynthframework.Dataset;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 
 public class IntegrationReport {
   
@@ -55,5 +61,21 @@ public class IntegrationReport {
     }
     
     return true;
+  }
+  
+  public static void write(IntegrationReport sbmlImportData, String path) {
+    String jsonData = KBaseIOUtils.toJson(sbmlImportData, true);
+    logger.info("[EXPORT] size: {}", jsonData.length());
+    OutputStream os = null;
+    try {
+      os = new FileOutputStream(path);
+      IOUtils.write(jsonData, os);
+      
+      logger.info("[EXPORT] file written: {}", path);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      IOUtils.closeQuietly(os);
+    }
   }
 }

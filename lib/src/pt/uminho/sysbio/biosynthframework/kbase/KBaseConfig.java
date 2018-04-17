@@ -2,6 +2,7 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 
 import pt.uminho.sysbio.biosynthframework.io.biodb.GithubModelSeedMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.io.biodb.GithubModelSeedReactionDaoImpl;
+import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
 
 public class KBaseConfig {
   public static final String TEMPLATE_WORKSPACE = "NewKBaseModelTemplates";
@@ -41,6 +42,13 @@ public class KBaseConfig {
   
   public static GithubModelSeedReactionDaoImpl getModelSeedRxnDao() {
     return getModelSeedRxnDao(production);
+  }
+  
+  public static void wut() {
+    KBaseConfig.DATA_EXPORT_PATH = "/var/biobase/export";
+    KBaseConfig.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
+    KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne";
+    production = false;
   }
   
   public static GithubModelSeedMetaboliteDaoImpl getModelSeedCpdDao(boolean production) {

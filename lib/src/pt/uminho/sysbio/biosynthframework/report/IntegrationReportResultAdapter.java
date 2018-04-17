@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.SpecieIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.sbml.MessageType;
@@ -125,9 +126,17 @@ public class IntegrationReportResultAdapter {
       SpecieIntegrationFacade integrationFacade) {
     
     if (integrationFacade.clean != null) {
-      this.report.integrationData.put("species", new HashMap<> (integrationFacade.clean));
+      fillSpeciesIntegrationData(integrationFacade.clean);
     }
     
+    return this;
+  }
+  
+  public IntegrationReportResultAdapter fillSpeciesIntegrationData(
+      Map<String, Map<MetaboliteMajorLabel, String>> imap) {
+    if (imap != null) {
+      this.report.integrationData.put("species", new HashMap<> (imap));
+    }
     return this;
   }
   

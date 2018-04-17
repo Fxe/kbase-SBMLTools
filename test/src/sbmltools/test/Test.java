@@ -119,6 +119,7 @@ public class Test {
                                                    result, 
                                                    modelId, 
                                                    url, 
+                                                   true,
                                                    runIntegration, 
                                                    biomassIds, null,
                                                    spiIntegrationAll, 
