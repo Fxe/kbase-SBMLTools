@@ -158,6 +158,24 @@
             "display": "Vacuole"
           },
           {
+            "id": "f",
+            "value": "f",
+            "ui_name": "Thylakoid Lumen",
+            "display": "Thylakoid Lumen"
+          },
+          {
+            "id": "h",
+            "value": "h",
+            "ui_name": "Chloroplast",
+            "display": "Chloroplast"
+          },
+          {
+            "id": "w",
+            "value": "w",
+            "ui_name": "Cell Wall",
+            "display": "Cell Wall"
+          },
+          {
             "id": "x",
             "value": "x",
             "ui_name": "Peroxisome",
