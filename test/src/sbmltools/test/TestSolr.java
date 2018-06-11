@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import pt.uminho.sysbio.biosynthframework.io.kbase.KBaseService;
+//import pt.uminho.sysbio.biosynthframework.io.kbase.KBaseService;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseSolrDocument;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
@@ -49,27 +49,27 @@ public class TestSolr {
     }
   }
   
-  public static void testEcoreGenes() {
-    KBaseService service = new KBaseService(CI_TOKEN);
-    Map<String, Map<String, String>> result = service.searchReferenceGenomeByMultipleGeneAlias(
-        new HashSet<>(Arrays.asList(ECORE_GENES)));
-    for (String g : ECORE_GENES) {
-      System.out.println(g + " " + result.get(g));
-    }
-  }
-  
-  public static void testGenes(String...genes) {
-    KBaseService service = new KBaseService(CI_TOKEN);
-    service.threads = 40;
-    //10 - 76
-    //20 - 42
-    //40 - 29
-    Map<String, Map<String, String>> result = service.searchReferenceGenomeByMultipleGeneAlias(
-        new HashSet<>(Arrays.asList(genes)));
-    for (String g : genes) {
-      System.out.println(g + " " + result.get(g));
-    }
-  }
+//  public static void testEcoreGenes() {
+//    KBaseService service = new KBaseService(CI_TOKEN);
+//    Map<String, Map<String, String>> result = service.searchReferenceGenomeByMultipleGeneAlias(
+//        new HashSet<>(Arrays.asList(ECORE_GENES)));
+//    for (String g : ECORE_GENES) {
+//      System.out.println(g + " " + result.get(g));
+//    }
+//  }
+//  
+//  public static void testGenes(String...genes) {
+//    KBaseService service = new KBaseService(CI_TOKEN);
+//    service.threads = 40;
+//    //10 - 76
+//    //20 - 42
+//    //40 - 29
+//    Map<String, Map<String, String>> result = service.searchReferenceGenomeByMultipleGeneAlias(
+//        new HashSet<>(Arrays.asList(genes)));
+//    for (String g : genes) {
+//      System.out.println(g + " " + result.get(g));
+//    }
+//  }
   
   public static void main(String[] args) {
 
@@ -86,7 +86,7 @@ public class TestSolr {
         }
       }
       
-      testGenes(g.toArray(new String[0]));
+//      testGenes(g.toArray(new String[0]));
     } catch (IOException e) {
       e.printStackTrace();
     }
