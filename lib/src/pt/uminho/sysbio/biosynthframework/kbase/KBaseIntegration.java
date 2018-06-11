@@ -185,7 +185,7 @@ public class KBaseIntegration {
 //        logger.warn("Reaction[{}] not found.", rxn);
 //      }
 //    }
-    
+//    KBaseSearchApiGenomeIntegration a;
     
     for (String cpdId : cpdOverride.keySet()) {
       String msId = cpdOverride.get(cpdId);
