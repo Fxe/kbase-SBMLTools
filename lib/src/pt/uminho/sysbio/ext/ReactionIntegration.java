@@ -9,11 +9,16 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kbasefba.FBAModel;
+import kbasefba.ModelCompound;
+import kbasefba.ModelReaction;
+import kbasefba.ModelReactionReagent;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.GlobalLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.ConflictResolver;
+import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlObject;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
@@ -92,6 +97,117 @@ public class ReactionIntegration {
       return swapMap.get(db);
     }
     return null;
+  }
+  
+  public void integrate(ReactionMajorLabel db, 
+      FBAModel kmodel, Map<String, Map<MetaboliteMajorLabel, String>> imap) {
+    MetaboliteMajorLabel cpdDb = rxnToCpdDbMatchMap.get(db);
+    if (dictMap.containsKey(db) && cpdDb != null) {
+      ConflictResolver resolver = rMap.get(db);
+      Set<String> exclude = this.exclusion.get(db);
+      if (exclude == null) {
+        exclude = new HashSet<> ();
+      }
+      Map<String, Map<String, Double>> rxnEntries = new HashMap<> ();
+      Map<Map<String, Double>, Set<String>> mstoichDictionary = new HashMap<>();
+      Map<String, Map<String, Double>> reactions = new HashMap<> ();
+      Map<String, Map<String, Double>> treactions = new HashMap<> ();
+//      Map<String, Map<String, Double>> xreactions = new HashMap<> ();
+      Map<String, String> spiToCmpMap = new HashMap<> ();
+      for (ModelCompound spi : kmodel.getModelcompounds()) {
+        String spiEntry = spi.getId();
+        String spiCmp = spi.getModelcompartmentRef();
+        if (spiEntry != null && spiCmp != null) {
+          spiToCmpMap.put(spiEntry, spiCmp);
+        }
+      }
+      for (ModelReaction krxn : kmodel.getModelreactions()) {
+        Set<String> cmpSet = new HashSet<> ();
+        String rxnEntry = krxn.getId();
+        Map<String, Double> stoich = new HashMap<> ();
+        for (ModelReactionReagent o : krxn.getModelReactionReagents()) {
+          String id = FBAModelAdapter.getEntryFromRef(o.getModelcompoundRef());
+          if (spiToCmpMap.containsKey(id)) {
+            cmpSet.add(spiToCmpMap.get(id));
+          }
+          double val = o.getCoefficient();
+          stoich.put(id, val);
+        }
+
+        if (cmpSet.size() == 1) {
+          reactions.put(rxnEntry, stoich);
+        } else {
+          treactions.put(rxnEntry, stoich);
+        }
+      }
+      
+      for (String rxnEntry : reactions.keySet()) {
+        Map<String, Double> stoichOriginal = reactions.get(rxnEntry);
+        Map<String, Double> stoichTranslate = new HashMap<> ();
+        for (String id : stoichOriginal.keySet()) {
+          double val = stoichOriginal.get(id);
+          //do swap
+          String swap = getSwap(cpdDb, id, imap);
+          if (swap != null) {
+            logger.trace("swap {} -> {}", id, swap);
+            id = swap;
+          }
+          if (!exclude.contains(id)) {            
+            stoichTranslate.put(id, val);
+          }
+        }
+        
+        rxnEntries.put(rxnEntry, stoichTranslate);
+        if (!mstoichDictionary.containsKey(stoichTranslate)) {
+          mstoichDictionary.put(stoichTranslate, new HashSet<String>());
+        }
+        mstoichDictionary.get(stoichTranslate).add(rxnEntry);
+      }
+      
+      Map<Map<String, Double>, Set<String>> dbtoichDictionary = dictMap.get(db);
+      for (Map<String, Double> stoich : mstoichDictionary.keySet()) {
+        Set<String> mrxnSet = mstoichDictionary.get(stoich);
+        if (dbtoichDictionary.containsKey(stoich)) {
+          Set<String> dbRxns = dbtoichDictionary.get(stoich);
+//          System.out.println("yes! " + dbtoichDictionary.get(s));
+          for (String mrxnEntry : mrxnSet) {
+//            System.out.println("[F] " + mrxnEntry + " " + dbtoichDictionary.get(stoich));
+//            System.out.println(dbRxns + " " + resolver + " " + mrxnEntry );
+            if (dbRxns != null && dbRxns.size() > 1 && resolver != null) {
+              dbRxns = resolver.resolve(mrxnEntry, dbRxns);
+            }
+            if (dbRxns != null && dbRxns.size() == 1) {
+              this.map(mrxnEntry, db, dbRxns.iterator().next());
+            }
+          }
+          rxnEntries.keySet().removeAll(mrxnSet);
+        } else {
+          Map<String, Double> rstoich = scale(stoich, -1);
+          if (dbtoichDictionary.containsKey(rstoich)) {
+            Set<String> dbRxns = dbtoichDictionary.get(rstoich);
+
+            for (String mrxnEntry : mrxnSet) {
+//              System.out.println("[R] " + mrxnEntry + " " + dbRxns);
+              if (dbRxns != null && dbRxns.size() > 1 && resolver != null) {
+                dbRxns = resolver.resolve(mrxnEntry, dbRxns);
+              }
+              if (dbRxns != null && dbRxns.size() == 1) {
+                this.map(mrxnEntry, db, dbRxns.iterator().next());
+              }
+            }
+            rxnEntries.keySet().removeAll(mrxnSet);
+          }
+        }
+      }
+//      for (String o : rxnEntries.keySet()) {
+//        System.out.println(o + " " +  rxnEntries.get(o) + " ?");
+//      }
+    } else {
+      logger.warn("stoichiometry dictionary for {} not found", db);
+    }
+    
+
+//    System.out.println(mstoichDictionary);
   }
   
   public void integrate(ReactionMajorLabel db, 

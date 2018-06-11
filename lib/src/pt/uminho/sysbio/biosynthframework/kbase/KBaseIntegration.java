@@ -25,6 +25,7 @@ import kbasefba.ModelReactionReagent;
 import kbasegenomes.Genome;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
@@ -185,7 +186,8 @@ public class KBaseIntegration {
 //        logger.warn("Reaction[{}] not found.", rxn);
 //      }
 //    }
-//    KBaseSearchApiGenomeIntegration a;
+
+    logger.info("[Cpd Alias Override]");
     for (String cpdId : cpdOverride.keySet()) {
       String msId = cpdOverride.get(cpdId);
       if (!DataUtils.empty(cpdId) && !DataUtils.empty(msId)) {
@@ -198,6 +200,47 @@ public class KBaseIntegration {
             single.add(msId);
             kspi.getDblinks().put(MetaboliteMajorLabel.ModelSeed.toString(), single);
             kspi.setCompoundRef(String.format("~/template/compounds/id/%s", msId));
+          }
+        }
+      }
+    }
+    
+    Map<String, Map<MetaboliteMajorLabel, String>> cpdIntegration = new HashMap<>();
+    for (ModelCompound kspi : fbaModel.getModelcompounds()) {
+      for (String db : kspi.getDblinks().keySet()) {
+        MetaboliteMajorLabel database = MetaboliteMajorLabel.valueOf(db);
+        for (String cpdEntry : kspi.getDblinks().get(db)) {
+          if (!cpdIntegration.containsKey(kspi.getId())) {
+            cpdIntegration.put(kspi.getId(), new HashMap<MetaboliteMajorLabel, String>());
+          }
+          cpdIntegration.get(kspi.getId()).put(database, cpdEntry);
+        }
+      }
+    }
+    
+    KBaseModelSeedIntegration integration = new KBaseModelSeedIntegration(
+        KBaseConfig.DATA_EXPORT_PATH, KBaseConfig.CURATION_DATA, biodbContainer);
+    
+    Map<String, Map<ReactionMajorLabel, String>> rxnIntegration = integration.integrateReactions(fbaModel, cpdIntegration);
+    Map<String, String> rxnToModelSeedReference = KBaseModelSeedIntegration.filter(rxnIntegration, ReactionMajorLabel.ModelSeedReaction);
+    
+    for (String mrxnId: rxnToModelSeedReference.keySet()) {
+      String msId = rxnToModelSeedReference.get(mrxnId);
+      if (!DataUtils.empty(mrxnId) && !DataUtils.empty(msId)) {
+        for (ModelReaction kmrxn : this.fbaModel.getModelreactions()) {
+          
+          
+          if (kmrxn.getId().equals(mrxnId.trim())) {
+            if (kmrxn.getDblinks().containsKey(ReactionMajorLabel.ModelSeedReaction.toString())) {
+              kmrxn.getDblinks().get(ReactionMajorLabel.ModelSeedReaction.toString()).clear();
+            }
+            String[] p = kmrxn.getModelcompartmentRef().split("_");
+            String rxnCmpSymbol = p[p.length - 1];
+            
+            List<String> single = new ArrayList<>();
+            single.add(msId);
+            kmrxn.getDblinks().put(ReactionMajorLabel.ModelSeedReaction.toString(), single);
+            kmrxn.setReactionRef(String.format("~/template/reactions/id/%s_%s", msId, rxnCmpSymbol));
           }
         }
       }

@@ -15,6 +15,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import kbasefba.FBAModel;
+import kbasefba.ModelReaction;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
@@ -356,6 +358,36 @@ public class KBaseModelSeedIntegration {
     return new HashMap<>(reactionIntegration.imap);
   }
   
+  public Map<String, Map<ReactionMajorLabel, String>> integrateReactions(FBAModel kmodel, Map<String, Map<MetaboliteMajorLabel, String>> cpdIntegration) {
+    reactionIntegration.imap.clear();
+    
+//    reactionIntegration.integrate(ReactionMajorLabel.LigandReaction, xmodel, cpdIntegration);
+//    reactionIntegration.integrate(ReactionMajorLabel.Seed, xmodel, cpdIntegration);
+//    reactionIntegration.integrate(ReactionMajorLabel.BiGG, xmodel, cpdIntegration);
+//    reactionIntegration.integrate(ReactionMajorLabel.MetaCyc, xmodel, cpdIntegration);
+    reactionIntegration.integrate(ReactionMajorLabel.ModelSeedReaction, kmodel, cpdIntegration);
+
+    Set<String> rxnIds = new HashSet<>();
+    for (ModelReaction krxn : kmodel.getModelreactions()) {
+      rxnIds.add(krxn.getId());
+    }
+    
+    SimpleStringMatchEngine modelseed = new SimpleStringMatchEngine("rxn", "R_");
+    modelseed.ids.addAll(rxnIds);
+    for (String rxnEntry : KBaseConfig.getModelSeedRxnDao().getAllReactionEntries()) {
+      modelseed.validIds.add(rxnEntry);
+    }
+    Map<String, String> rmap = modelseed.match();
+    for (String rxnId : rmap.keySet()) {
+      if (!reactionIntegration.imap.containsKey(rxnId)) {
+        reactionIntegration.imap.put(rxnId, new HashMap<ReactionMajorLabel, String>());
+      }
+      reactionIntegration.imap.get(rxnId).put(ReactionMajorLabel.ModelSeedReaction, rmap.get(rxnId));
+    }
+    
+    return new HashMap<>(reactionIntegration.imap);
+  }
+  
   public KBaseMappingResult generateDatabaseReferences(
       XmlSbmlModel xmodel, 
       String modelEntry, 
@@ -364,9 +396,6 @@ public class KBaseModelSeedIntegration {
     BiodbService biodbService = biodbContainer.biodbService;
     
 
-    
-
-    
     Map<String, Map<MetaboliteMajorLabel, String>> cpdDbLinks = 
         integrateCompounds(xmodel, biodbService);
     Map<String, Map<ReactionMajorLabel, String>> rxnDbLinks = 
