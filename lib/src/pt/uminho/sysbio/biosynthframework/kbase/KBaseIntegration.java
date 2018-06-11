@@ -234,8 +234,8 @@ public class KBaseIntegration {
             if (kmrxn.getDblinks().containsKey(ReactionMajorLabel.ModelSeedReaction.toString())) {
               kmrxn.getDblinks().get(ReactionMajorLabel.ModelSeedReaction.toString()).clear();
             }
-            String[] p = kmrxn.getModelcompartmentRef().split("_");
-            String rxnCmpSymbol = p[p.length - 1];
+            String _2cp = FBAModelAdapter.getEntryFromRef(kmrxn.getModelcompartmentRef());
+            String rxnCmpSymbol = _2cp.substring(0, 1);
             
             List<String> single = new ArrayList<>();
             single.add(msId);
