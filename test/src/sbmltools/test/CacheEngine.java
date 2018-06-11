@@ -21,10 +21,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import sbmltools.KBaseType;
-import sbmltools.test.CacheEngine.CacheFieldType;
 import us.kbase.common.service.Tuple11;
 
 public class CacheEngine {
@@ -112,8 +110,20 @@ public class CacheEngine {
   }
   
   public boolean isCached(String id, String ws) {
-    Pair<String, String> p = new ImmutablePair<String, String>(id, ws);
-    return this.cacheIndex.get(version).containsKey(p);
+    String path = String.format("%s/%s/%s/%s.json.zip", base, version, StringUtils.replaceChars(ws, ':', '_'), id);
+    File cacheFile = new File(path);
+    logger.debug("cache lookup: [E:{}, F:{}] {}", cacheFile.exists(), cacheFile.isFile(), path);
+//    Pair<String, String> p = new ImmutablePair<String, String>(id, ws);
+//    return this.cacheIndex.get(version).containsKey(p);
+    if (cacheFile.exists() && cacheFile.isFile()) {
+      logger.debug("found compress file: {}", cacheFile.getAbsolutePath());
+      return true;
+    }
+    
+    path = String.format("%s/%s/%s/%s.json", base, version, StringUtils.replaceChars(ws, ':', '_'), id);
+    cacheFile = new File(path);
+    
+    return cacheFile.exists() && cacheFile.isFile();
   }
   
   public String getObjectType(String id, String ws) {
@@ -137,7 +147,7 @@ public class CacheEngine {
   }
   
   public<T> T getCacheData(String id, String ws, Class<T> clazz) {
-    String jsonStr = this.getCacheData(id, ws);
+    String jsonStr = this.getJson(id, ws);
     ObjectMapper om = new ObjectMapper();
     T object = null;
     
@@ -150,47 +160,79 @@ public class CacheEngine {
     return object;
   }
   
-  public String getCacheData(String id, String ws) {
-    String response = null;
+  public Object getCacheData(String id, String ws) {
+    String jsonStr = this.getJson(id, ws);
+    ObjectMapper om = new ObjectMapper();
+    Object object = null;
     
-    File folder = new File(String.format("%s/%s/%s", base, version, StringUtils.replaceChars(ws, ':', '_')));
-    File jfile = new File(String.format("%s/%s.json", folder.getAbsolutePath(), id));
-    if (jfile.exists()) {
-      logger.info("read {}", jfile.getAbsolutePath());
+    try {
+      object = om.readValue(jsonStr, Object.class);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    return object;
+  }
+  
+  public String getJson(File f) {
+    String json = null;
+    if (f.exists() && f.isFile()) {
+      logger.debug("read {}", f.getAbsolutePath());
       InputStream is = null;
       try {
-        is = new FileInputStream(jfile);
+        is = new FileInputStream(f);
         List<String> data = IOUtils.readLines(is);
-        response = StringUtils.join(data, "");
+        json = StringUtils.join(data, "");
       } catch (IOException e) {
         e.printStackTrace();
       } finally {
         IOUtils.closeQuietly(is);
       }
-    } else {
-      response = null;
-      Pair<String, String> p = new ImmutablePair<String, String>(id, ws);
-      if (cacheIndex.get(version).containsKey(p)) {
-        File f = new File(cacheIndexFile.getParent() + "/" + 
-            cacheIndex.get(version).get(p).get(CacheFieldType.FILENAME));
-        InputStream is = null;
-        try {
-          is = new FileInputStream(f);
-          List<String> data = IOUtils.readLines(is);
-          response = StringUtils.join(data, "");
-        } catch (IOException e) {
-          e.printStackTrace();
-        } finally {
-          IOUtils.closeQuietly(is);
-        }
+    }
+    
+    return json;
+  }
+  
+  public String getJson(String id, String ws) {
+    String response = null;
+    
+    File folder = new File(String.format("%s/%s/%s", base, version, StringUtils.replaceChars(ws, ':', '_')));
+    File jfile = new File(String.format("%s/%s.json", folder.getAbsolutePath(), id));
+    if (jfile.exists()) {
+      logger.debug("read JSON {}", jfile.getAbsolutePath());
+      response = getJson(jfile);
+    } else if (new File(String.format("%s/%s.json.zip", folder.getAbsolutePath(), id)).exists()) {
+      jfile = new File(String.format("%s/%s.json.zip", folder.getAbsolutePath(), id));
+      logger.debug("read ZIP {}", jfile.getAbsolutePath());
+      try {
+        response = new String(KBaseIOUtils.loadJsonFromZip(jfile.getAbsolutePath()));
+      } catch (IOException e) {
+        e.printStackTrace();
       }
+    } else {
+//      response = null;
+//      Pair<String, String> p = new ImmutablePair<String, String>(id, ws);
+//      if (cacheIndex.get(version).containsKey(p)) {
+//        File f = new File(cacheIndexFile.getParent() + "/" + 
+//            cacheIndex.get(version).get(p).get(CacheFieldType.FILENAME));
+//        InputStream is = null;
+//        try {
+//          is = new FileInputStream(f);
+//          List<String> data = IOUtils.readLines(is);
+//          response = StringUtils.join(data, "");
+//        } catch (IOException e) {
+//          e.printStackTrace();
+//        } finally {
+//          IOUtils.closeQuietly(is);
+//        }
+//      }
     }
     
     return response;
   }
   
-  public void save(String id, String ws, String ref, String type, String author, String data) {
-//    logger.info("{} {} {} {} {} {}", id, ws, ref, type, author, version);
+  public synchronized void save(String id, String ws, String ref, String type, String author, String data) {
+    
     File folder = new File(String.format("%s/%s/%s", base, version, StringUtils.replaceChars(ws, ':', '_')));
     if (!folder.exists()) {
       logger.warn("path not found creating ... [{}]", folder.getAbsolutePath());

@@ -41,13 +41,13 @@ public class WSCLIENT extends WorkspaceClient {
     otypeMap.put("KBaseFBA.FBAModel-9.1", FBAModel.class);
     otypeMap.put("KBaseFBA.FBAModel-11.0", FBAModel.class);
     otypeMap.put("KBaseBiochem.Media-4.0", Media.class);
-    
-    
   }
   
   @Override
   public GetObjects2Results getObjects2(GetObjects2Params params, RpcContext... jsonRpcContext)
       throws IOException, JsonClientException {
+    
+    logger.trace("Params: {}", params);
     
     GetObjects2Results results = new GetObjects2Results();
     List<ObjectData> odata = new ArrayList<> ();
@@ -57,24 +57,17 @@ public class WSCLIENT extends WorkspaceClient {
       String ws = ospec.getWorkspace();
       if (id != null && ws != null) {
         if (cacheEngine.isCached(id, ws)) {
-          logger.info("found in cache {}, {}", id, ws);
-          String otype = cacheEngine.getObjectType(id, ws);
-          System.out.println(otype);
-          Class<?> cls = otypeMap.get(otype);
-          Object genome = cacheEngine.getCacheData(id, ws, cls);
-          UObject uo = new UObject(genome);
-          Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>> info = cacheEngine.getInfo(id, ws);
-          
-          odata.add(new ObjectData().withInfo(info).withData(uo));
+          logger.debug("found in cache {}, {}", id, ws);
+          Object data = cacheEngine.getCacheData(id, ws);
+          UObject uo = new UObject(data);
+//          Tuple11<Long,String,String,String,Long,String,Long,String,String,Long,Map<String,String>> info = cacheEngine.getInfo(id, ws);
+          odata.add(new ObjectData().withInfo(null).withData(uo));
         } else {
-//          return results;
           logger.info("fetch live {}, {}", id, ws);
           List<ObjectSpecification> objects = new ArrayList<> ();
           objects.add(new ObjectSpecification().withName(id).withWorkspace(ws));
           GetObjects2Results result = super.getObjects2(new GetObjects2Params().withObjects(objects), jsonRpcContext);
           for (ObjectData o : result.getData()) {
-//            String id = o.getInfo().getE2();
-//            System.out.println(o.getInfo());
             String ref = KBaseIOUtils.getRefFromObjectInfo(o.getInfo());
             cacheEngine.save(o.getInfo().getE2(), //id
                              o.getInfo().getE8(), //ws

@@ -18,8 +18,13 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import genomeannotationapi.SaveOneGenomeParamsV1;
 import kbasefba.FBAModel;
+import kbasegenomes.Contig;
+import kbasegenomes.Feature;
+import kbasegenomes.Genome;
 import kbasereport.WorkspaceObject;
+import kbsolrutil.KBaseAPI;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentIntegration;
@@ -27,6 +32,7 @@ import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenomeAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration.KBaseMappingResult;
@@ -43,6 +49,7 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
+import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.UnauthorizedException;
 
 public class LocalTest {
@@ -294,13 +301,45 @@ public class LocalTest {
 
   
   public static void main(String[] args) {
-    KBaseConfig.wut();
-    //integrationTest();
     try {
-      test("/tmp/argonne/data/fba834db-9ed7-433f-86d3-874c4f28bb68/fba834db-9ed7-433f-86d3-874c4f28bb68_2");
-    } catch (IOException e) {
+      //    fixModel26590126("/var/biomodels/sbml/26590126/tpj13081-sup-0003-TableS3_fix.xml");
+      Genome genome = KBaseIOUtils.loadJsonGenomeFromZip("D:\\var\\biomodels\\sbml\\26590126/Phaeodactylum_tricornutum.ASM15095v2.38.gff3_genome.json.zip");
+      KBaseGenomeAdapter adapter = new KBaseGenomeAdapter(genome);
+      for (Feature f: genome.getFeatures()) {
+        String featureId = f.getId();
+//        List<String> aliases = generateAliases(featureId);
+//        System.out.println(f.getId() + " " + f.getAliases() + " " + f.getFunction() + " " + aliases);
+//        adapter.addUniqueAliases(f.getId(), aliases);
+      }
+      for (Feature f: genome.getFeatures()) {
+//        System.out.println(f.getId() + " " + f.getAliases() + " " + f.getFunction());
+      }
+      KBaseIOUtils.writeStringFile(KBaseIOUtils.toJson(genome), 
+          "/var/biomodels/sbml/26590126/Phaeodactylum_tricornutum_aliases.json");
+      
+
+      KBaseAPI api = new KBaseAPI("FFM4T3AU3XBWAD2UXYE5USIGJIWNYYNW", KBaseAPI.getConfigProd(), false);
+//      api.saveGenome("Phaeodactylum_tricornutum_aliases", "filipeliu:1452618747692", genome);
+////      
+//      RpcContext rpc = null;
+//      
+//      SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1()
+//          .withData(genome)
+//          .withWorkspace("filipeliu:1452618747692")
+//          .withName("Phaeodactylum_tricornutum_aliases");
+//          api.getGenomeClient().saveOneGenomeV1(gparams);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    
+    KBaseConfig.wut();
+    //integrationTest();
+//    try {
+//      test("/tmp/argonne/data/fba834db-9ed7-433f-86d3-874c4f28bb68/fba834db-9ed7-433f-86d3-874c4f28bb68_2");
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
 //    dataTest();
 //    test1();
     

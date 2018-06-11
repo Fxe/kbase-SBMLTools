@@ -27,6 +27,7 @@ import kbasereport.KBaseReportClient;
 import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
+import pt.uminho.sysbio.biosynthframework.integration.GenomeIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import sbmltools.CompartmentMapping;
@@ -45,6 +46,7 @@ public class KBaseModelIntegrationFacade {
   private final GenomeAnnotationAPIClient gaClient;
   private final KBaseBiodbContainer biodbContainer;
   private final KBaseGeneIntegration geneIntegration;
+  private final GenomeIntegration genomeDetector = null;
   private final Path scratch;
   
   public KBaseModelIntegrationFacade(WorkspaceClient    wspClient,
@@ -98,6 +100,23 @@ public class KBaseModelIntegrationFacade {
     return geneOverride;
   }
   
+  public Map<String, String> compoundOverride(String cpdMapping) {
+    Map<String, String> cpdOverride = new HashMap<> ();
+    if (!DataUtils.empty(cpdMapping)) {
+      for (String l : cpdMapping.split("\\n")) {
+        if (!DataUtils.empty(l) && l.contains(";")) {
+          String[] p = l.split(";");
+          if (p.length >= 2) {
+            String cpd = p[0].trim();
+            String ms = p[1].trim();
+            cpdOverride.put(cpd, ms);
+          }
+        }
+      }
+    }
+    return cpdOverride;
+  }
+  
   public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName) throws Exception {
     //validate params
 //    System.out.println(params);
@@ -107,7 +126,12 @@ public class KBaseModelIntegrationFacade {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    
+    Map<String, String> cpdOverride = new HashMap<> ();
+    try {
+      cpdOverride = compoundOverride(params.getCompoundMappings());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     
     
     Map<String, String> outputObjects = new HashMap<> ();
@@ -149,6 +173,7 @@ public class KBaseModelIntegrationFacade {
     integration.mediaName = params.getOutputMediaName();
     integration.biodbContainer = this.biodbContainer;
     integration.gprOverride = gprOverride;
+    integration.cpdOverride = cpdOverride;
     integration.allowNumberId = allowNumberId;
     integration.fixIdToKBase = true;
     

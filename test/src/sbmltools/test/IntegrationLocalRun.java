@@ -59,7 +59,7 @@ public class IntegrationLocalRun {
   
   private static final Logger logger = LoggerFactory.getLogger(IntegrationLocalRun.class);
   
-  public static String LOGIN_TOKEN = "4YSXVC5IMPB3YSXMSIOOXIEYVMUZ4LDI";
+  public static String LOGIN_TOKEN = "MDYG23GDVXXX463IR5NZLDB5TYPMWMDY";
   
   public static String  DEV_JUNK_REPO = "filipeliu:narrative_1505405117321";
   public static String  DEV_PUBLISHED_MODEL_REPO = "filipeliu:narrative_1502428739293";
@@ -74,6 +74,7 @@ public class IntegrationLocalRun {
   public static String DEV_APP_TEST = "filipeliu:narrative_1503501857164";
   public static String DEV_SOME_REPO = "filipeliu:narrative_1502474753893";
   public static String PROD_ECOLI_CORES = "filipeliu:narrative_1504192868437";
+  public static String PROD_MS_2_0 = "jplfaria:narrative_1524466549180";
   
   public static void localIntegraiton() {
     String model = "Ec_core_flux1";

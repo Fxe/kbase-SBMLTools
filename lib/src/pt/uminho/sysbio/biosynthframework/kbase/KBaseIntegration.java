@@ -1,5 +1,6 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -23,6 +24,7 @@ import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionReagent;
 import kbasegenomes.Genome;
 import pt.uminho.sysbio.biosynth.integration.BiodbService;
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.kbase.genome.KbaseGenomeUtils;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
@@ -37,6 +39,7 @@ public class KBaseIntegration {
   public final FBAModel fbaModel;
   public final FBAModelAdapter adapter;
   public Map<String, String> compartmentMapping = new HashMap<> ();
+  public Map<String, String> manualMapping = new HashMap<> ();
   public Set<String> biomassSet = new HashSet<> ();
   public String rename = null;
   public String template = null;
@@ -56,6 +59,9 @@ public class KBaseIntegration {
    * rxn -> new gpr <br> <h1>Example</h1><br> "rxn1000" : "b1000 and b1002"
    */
   public Map<String, String> gprOverride = new HashMap<> ();
+  
+  
+  public Map<String, String> cpdOverride = new HashMap<> ();
   
   /**  
    * gene -> new gene gpr <br> <h1>Example</h1><br> "peg.1" : "Bsu0001"
@@ -179,6 +185,24 @@ public class KBaseIntegration {
 //        logger.warn("Reaction[{}] not found.", rxn);
 //      }
 //    }
+    
+    
+    for (String cpdId : cpdOverride.keySet()) {
+      String msId = cpdOverride.get(cpdId);
+      if (!DataUtils.empty(cpdId) && !DataUtils.empty(msId)) {
+        for (ModelCompound kspi : this.fbaModel.getModelcompounds()) {
+          if (kspi.getId().equals(cpdId.trim())) {
+            if (kspi.getDblinks().containsKey(MetaboliteMajorLabel.ModelSeed.toString())) {
+              kspi.getDblinks().get(MetaboliteMajorLabel.ModelSeed.toString()).clear();
+            }
+            List<String> single = new ArrayList<>();
+            single.add(msId);
+            kspi.getDblinks().put(MetaboliteMajorLabel.ModelSeed.toString(), single);
+            kspi.setCompoundRef(String.format("~/template/compounds/id/%s", msId));
+          }
+        }
+      }
+    }
     
     logger.info("[Biomass Convertion]");
     for (String b : biomassSet) {

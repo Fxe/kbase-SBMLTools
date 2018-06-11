@@ -101,10 +101,18 @@ public class Genome {
     public List<Object> publications;
     @JsonProperty("features")
     private List<Feature> features;
+    @JsonProperty("mrnas")
+    public List<Object> mrnas;
+    @JsonProperty("cdss")
+    public List<Object> cdss;
     @JsonProperty("contigset_ref")
     private java.lang.String contigsetRef;
     @JsonProperty("assembly_ref")
     private java.lang.String assemblyRef;
+    @JsonProperty("gff_handle_ref")
+    public String gffHandleRef;
+    @JsonProperty("taxon_ref")
+    public String taxonRef;
     /**
      * <p>Original spec-file type: Genome_quality_measure</p>
      * <pre>

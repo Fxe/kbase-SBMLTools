@@ -2,8 +2,12 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Predicate;
 
@@ -12,6 +16,8 @@ import kbasegenomes.Genome;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class KBaseGenomeAdapter {
+  
+  private static final Logger logger = LoggerFactory.getLogger(KBaseGenomeAdapter.class);
   
   public final Genome genome;
   public Map<String, Set<Feature>> featureMap = new HashMap<> ();
@@ -28,6 +34,26 @@ public class KBaseGenomeAdapter {
         }
       }
     }
+  }
+  
+  public void addUniqueAliases(String id, List<String> aliases) {
+    Set<Feature> features = featureMap.get(id);
+    if (features.size() == 1) {
+      Feature f = features.iterator().next();
+      for (String a : aliases) {
+        if (!featureMap.containsKey(a)) {
+          addFeature(a, f);
+          f.getAliases().add(a);
+        } else {
+          logger.warn("duplicate alias: {}", a);
+        }
+      }
+    } else {
+      logger.warn("invalid feature ID: {}", id);
+    }
+//    System.out.println(features.size());
+//    System.out.println(featureMap.get(id));
+//    System.out.println(aliases);
   }
   
   private void addFeature(String alias, Feature f) {
@@ -70,8 +96,11 @@ public class KBaseGenomeAdapter {
     
     return id;
   }
+
+
   
 //  public Feature findFeature(String alias) {
 //    
 //  }
 }
+

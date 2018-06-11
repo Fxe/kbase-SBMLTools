@@ -25,7 +25,9 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -209,6 +211,8 @@ public class KBaseIOUtils {
   
   public static String toJson(Object o, boolean allowNullKey) {
     ObjectMapper om = new ObjectMapper();
+    om.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
+    
     if (allowNullKey) {
       om.getSerializerProvider().setNullKeySerializer(new JsonSerializer<Object>() {
 
@@ -392,7 +396,6 @@ public class KBaseIOUtils {
       }
 
       objects.add(ospec);
-
       GetObjects2Params params = new GetObjects2Params().withObjects(objects);
       GetObjects2Results result = wsClient.getObjects2(params);
       List<ObjectData> odatas = result.getData();
@@ -511,8 +514,8 @@ public class KBaseIOUtils {
     
     return null;
   }
-
-  public static Genome loadJsonGenomeFromZip(String path) throws IOException {
+  
+  public static byte[] loadJsonFromZip(String path) throws IOException {
     byte[] bytes = new byte[0];
     File f = new File(path);
     if (!f.exists()) {
@@ -533,13 +536,19 @@ public class KBaseIOUtils {
     
     if (is != null) {
       bytes = IOUtils.toByteArray(is);
-      logger.info("read {} KBs", bytes.length / 1024.0);
+      logger.debug("read {} KBs", bytes.length / 1024.0);
     } else {
       zipContainer.close();
       throw new IOException("Bad zip file. Genome data not found. Expected: " + lookup);
     }
     
     zipContainer.close();
+    
+    return bytes;
+  }
+
+  public static Genome loadJsonGenomeFromZip(String path) throws IOException {
+    byte[] bytes = loadJsonFromZip(path);
     
     try {
       Genome genome = KBaseIOUtils.getObject(new String(bytes), Genome.class);

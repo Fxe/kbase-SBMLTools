@@ -64,6 +64,10 @@ public class Feature {
     private java.lang.String id;
     @JsonProperty("location")
     public List<Object> location;
+    @JsonProperty("mrnas")
+    public List<Object> mrnas;
+    @JsonProperty("cdss")
+    public List<Object> cdss;
     @JsonProperty("type")
     private java.lang.String type;
     @JsonProperty("function")
