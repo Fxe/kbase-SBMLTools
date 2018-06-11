@@ -918,6 +918,7 @@ public class FBAModelAdapter implements ModelAdapter {
     
     for (String id : this.rxnMap.keySet()) {
       ModelReaction krxn = this.rxnMap.get(id);
+      logger.info("{} -> {} {} [{}]", id, krxn.getReactionRef(), krxn.getModelcompartmentRef(), krxn.getDblinks());
       String rxnEntry = getEntryFromRef(krxn.getReactionRef());
       rxnEntry = rxnEntry.substring(0, 8);
       ModelSeedReactionEntity rxn = rxnDao.getReactionByEntry(rxnEntry);
