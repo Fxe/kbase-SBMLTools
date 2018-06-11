@@ -186,7 +186,6 @@ public class KBaseIntegration {
 //      }
 //    }
 //    KBaseSearchApiGenomeIntegration a;
-    
     for (String cpdId : cpdOverride.keySet()) {
       String msId = cpdOverride.get(cpdId);
       if (!DataUtils.empty(cpdId) && !DataUtils.empty(msId)) {

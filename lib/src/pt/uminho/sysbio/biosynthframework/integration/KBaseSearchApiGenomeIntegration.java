@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import pt.uminho.sysbio.biosynthframework.io.kbase.KBaseService;
+
 
 public class KBaseSearchApiGenomeIntegration {
 //implements GenomeIntegration {
