@@ -4,7 +4,6 @@ package kbasegenomes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +39,6 @@ import us.kbase.common.service.Tuple7;
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "id",
     "scientific_name",

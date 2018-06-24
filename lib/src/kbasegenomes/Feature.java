@@ -1,10 +1,10 @@
 
 package kbasegenomes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Generated;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,7 +32,6 @@ import us.kbase.common.service.Tuple7;
  * 
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Generated("com.googlecode.jsonschema2pojo")
 @JsonPropertyOrder({
     "id",
     "location",
@@ -91,7 +90,7 @@ public class Feature {
     @JsonProperty("protein_families")
     private List<ProteinFamily> proteinFamilies;
     @JsonProperty("aliases")
-    private List<String> aliases;
+    private List<Object> aliases;
     @JsonProperty("orthologs")
     private List<Tuple2 <String, Double>> orthologs;
     @JsonProperty("annotations")
@@ -323,15 +322,28 @@ public class Feature {
 
     @JsonProperty("aliases")
     public List<String> getAliases() {
-        return aliases;
+      List<String> result = new ArrayList<String> ();
+      if (aliases != null) {
+        for (Object o : aliases) {
+          if (o instanceof List) {
+            @SuppressWarnings("unchecked")
+            List<String> l = (List<String>) o;
+            result.add(l.get(1));
+          } else {
+            result.add(o.toString());
+          }
+        }  
+      }
+      
+        return result;
     }
 
     @JsonProperty("aliases")
-    public void setAliases(List<String> aliases) {
+    public void setAliases(List<Object> aliases) {
         this.aliases = aliases;
     }
 
-    public Feature withAliases(List<String> aliases) {
+    public Feature withAliases(List<Object> aliases) {
         this.aliases = aliases;
         return this;
     }
