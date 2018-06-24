@@ -24,7 +24,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Sets;
 
 import datafileutil.DataFileUtilClient;
-import genomeannotationapi.GenomeAnnotationAPIClient;
+//import genomeannotationapi.GenomeAnnotationAPIClient;
+import genomefileutil.GenomeFileUtilClient;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbasefba.ModelReactionProtein;
@@ -65,7 +66,8 @@ public class AutoPropagateGenomeFacade {
   private String workspace;
   private final WorkspaceClient wsClient;
   private final DataFileUtilClient dfuClient;
-  private final GenomeAnnotationAPIClient gaClient;
+//  private final GenomeAnnotationAPIClient gaClient;
+  private final GenomeFileUtilClient gaClient;
   private final KBaseReportClient kbrClient;
   private final EasyKBase easyKBase;
   public PropagationReport report;
@@ -82,7 +84,8 @@ public class AutoPropagateGenomeFacade {
     this.wsClient = wsClient;
     this.kbrClient = kbrClient;
     this.dfuClient = new DataFileUtilClient(callbackUrl, token);
-    this.gaClient = new GenomeAnnotationAPIClient(callbackUrl, token);
+//    this.gaClient = new GenomeAnnotationAPIClient(callbackUrl, token);
+    this.gaClient = new GenomeFileUtilClient(callbackUrl, token);
     this.dfuClient.setIsInsecureHttpConnectionAllowed(true);
     this.gaClient.setIsInsecureHttpConnectionAllowed(true);
     easyKBase = new EasyKBase(callbackUrl, token);

@@ -22,7 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import datafileutil.DataFileUtilClient;
-import genomeannotationapi.GenomeAnnotationAPIClient;
+//import genomeannotationapi.GenomeAnnotationAPIClient;
+import genomefileutil.GenomeFileUtilClient;
 import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
 import kbasereport.Report;
@@ -178,7 +179,8 @@ public class SBMLToolsServer extends JsonServerServlet {
 
     final String workspaceName = params.getWorkspaceName();
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
-    final GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(callbackURL, authPart);
+//    final GenomeAnnotationAPIClient gaClient = new GenomeAnnotationAPIClient(callbackURL, authPart);
+    final GenomeFileUtilClient gaClient = new GenomeFileUtilClient(callbackURL, authPart);
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
     final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
     final KBSolrUtilClient  solrClient = new KBSolrUtilClient(callbackURL, authPart);

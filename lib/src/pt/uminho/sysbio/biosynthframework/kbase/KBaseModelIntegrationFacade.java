@@ -16,9 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import datafileutil.DataFileUtilClient;
-import genomeannotationapi.GenomeAnnotationAPIClient;
-import genomeannotationapi.SaveGenomeResultV1;
-import genomeannotationapi.SaveOneGenomeParamsV1;
+//import genomeannotationapi.GenomeAnnotationAPIClient;
+//import genomeannotationapi.SaveGenomeResultV1;
+//import genomeannotationapi.SaveOneGenomeParamsV1;
+import genomefileutil.GenomeFileUtilClient;
+import genomefileutil.SaveGenomeResult;
+import genomefileutil.SaveOneGenomeParams;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
 import kbasegenomes.Genome;
@@ -43,7 +46,8 @@ public class KBaseModelIntegrationFacade {
   private final WorkspaceClient wspClient;
   private final DataFileUtilClient dfuClient;
   private final KBaseReportClient kbrClient;
-  private final GenomeAnnotationAPIClient gaClient;
+//  private final GenomeAnnotationAPIClient gaClient;
+  private final GenomeFileUtilClient gaClient;
   private final KBaseBiodbContainer biodbContainer;
   private final KBaseGeneIntegration geneIntegration;
   private final GenomeIntegration genomeDetector = null;
@@ -51,7 +55,8 @@ public class KBaseModelIntegrationFacade {
   
   public KBaseModelIntegrationFacade(WorkspaceClient    wspClient,
                                      DataFileUtilClient dfuClient, 
-                                     GenomeAnnotationAPIClient gaClient,
+//                                     GenomeAnnotationAPIClient gaClient,
+                                     GenomeFileUtilClient gaClient,
                                      KBaseReportClient  kbrClient,
                                      KBaseGeneIntegration geneIntegration,
                                      String biodbPath,
@@ -204,11 +209,14 @@ public class KBaseModelIntegrationFacade {
           try {
             Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(matchGenome, KBaseConfig.REF_GENOME_WORLSPACE, null, wspClient);
             genome = KBaseUtils.convert(kdata.getRight(), Genome.class);
-            SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1()
-                .withData(genome)
-                .withWorkspace(workspaceName)
-                .withName(matchGenome);
-            SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
+            SaveOneGenomeParams saveOneGenomeParams = new SaveOneGenomeParams()
+                .withData(genome).withName(matchGenome).withWorkspace(workspaceName);
+            SaveGenomeResult gresults = gaClient.saveOneGenome(saveOneGenomeParams);
+//            SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1()
+//                .withData(genome)
+//                .withWorkspace(workspaceName)
+//                .withName(matchGenome);
+//            SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
             String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
             outputObjects.put(ref, "detected genome");
             integration.genome = genome;

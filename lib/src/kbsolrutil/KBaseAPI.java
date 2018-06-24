@@ -15,7 +15,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import datafileutil.DataFileUtilClient;
-import genomeannotationapi.GenomeAnnotationAPIClient;
+//import genomeannotationapi.GenomeAnnotationAPIClient;
+import genomefileutil.GenomeFileUtilClient;
 import kbasegenomes.Genome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
@@ -79,7 +80,8 @@ public class KBaseAPI {
   public WorkspaceClient wsClient;
   public KBSolrUtilClient solrClient;
   public DataFileUtilClient dfuClient;
-  public GenomeAnnotationAPIClient gaClient;
+//  public GenomeAnnotationAPIClient gaClient;
+  public GenomeFileUtilClient gfuClient;
   
   public static Map<String, Map<Pair<String, String>, Map<CacheFieldType, String>>> cacheIndexMap = new HashMap<> ();
   
@@ -106,12 +108,15 @@ public class KBaseAPI {
         wsClient = new WorkspaceClient(new URL(config.get("workspace-url")), authToken);
         solrClient = new KBSolrUtilClient(callbackURL, authToken);
       }
-      gaClient = new GenomeAnnotationAPIClient(callbackURL, authToken);
-      gaClient.setConnectionReadTimeOut(900000000);
-      gaClient.setAsyncJobCheckMaxTimeMs(6000000);
+      gfuClient = new GenomeFileUtilClient(callbackURL, authToken);
+      gfuClient.setIsInsecureHttpConnectionAllowed(false);
+//      gaClient = new GenomeAnnotationAPIClient(callbackURL, authToken);
+//      gaClient.setConnectionReadTimeOut(900000000);
+//      gaClient.setAsyncJobCheckMaxTimeMs(6000000);
+//      gaClient.setIsInsecureHttpConnectionAllowed(false);
       dfuClient = new DataFileUtilClient(callbackURL, authToken);
       dfuClient.setIsInsecureHttpConnectionAllowed(false);
-      gaClient.setIsInsecureHttpConnectionAllowed(false);
+      
       wsClient.setIsInsecureHttpConnectionAllowed(false);
       solrClient.setIsInsecureHttpConnectionAllowed(false);
       solrClient.setServiceVersion("beta");
@@ -129,8 +134,12 @@ public class KBaseAPI {
     return solrClient;
   }
   
-  public GenomeAnnotationAPIClient getGenomeClient() {
-    return gaClient;
+//  public GenomeAnnotationAPIClient getGenomeClient() {
+//    return gaClient;
+//  }
+  
+  public GenomeFileUtilClient getGenomeClient() {
+    return gfuClient;
   }
   
   public Object getWorkspaceInfo(String ws) throws IOException {
