@@ -171,7 +171,7 @@ public class KBaseGeneIntegration {
           for (Feature f : g.getFeatures()) {
             //ontology_terms should not be null
             if (f.getOntologyTerms() == null) {
-              f.setOntologyTerms(new HashMap<String, Map<String, OntologyData>>());
+              f.setOntologyTerms(new HashMap<String, Map<String, Object>>());
             }
           }
 //          String targetWs = "filipeliu:narrative_1502913563238";

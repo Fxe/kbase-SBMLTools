@@ -72,7 +72,7 @@ public class Feature {
     @JsonProperty("function")
     private java.lang.String function;
     @JsonProperty("ontology_terms")
-    private Map<String, Map<String, OntologyData>> ontologyTerms;
+    private Map<String, Map<String, Object>> ontologyTerms;
     @JsonProperty("md5")
     private java.lang.String md5;
     @JsonProperty("protein_translation")
@@ -186,16 +186,16 @@ public class Feature {
     }
 
     @JsonProperty("ontology_terms")
-    public Map<String, Map<String, OntologyData>> getOntologyTerms() {
+    public Map<String, Map<String, Object>> getOntologyTerms() {
         return ontologyTerms;
     }
 
     @JsonProperty("ontology_terms")
-    public void setOntologyTerms(Map<String, Map<String, OntologyData>> ontologyTerms) {
+    public void setOntologyTerms(Map<String, Map<String, Object>> ontologyTerms) {
         this.ontologyTerms = ontologyTerms;
     }
 
-    public Feature withOntologyTerms(Map<String, Map<String, OntologyData>> ontologyTerms) {
+    public Feature withOntologyTerms(Map<String, Map<String, Object>> ontologyTerms) {
         this.ontologyTerms = ontologyTerms;
         return this;
     }
