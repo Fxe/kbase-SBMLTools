@@ -30,6 +30,7 @@ import us.kbase.auth.AuthToken;
 import us.kbase.auth.ConfigurableAuthService;
 import us.kbase.common.service.JsonClientException;
 import us.kbase.common.service.Tuple11;
+import us.kbase.common.service.Tuple4;
 import us.kbase.common.service.UnauthorizedException;
 import us.kbase.workspace.ListObjectsParams;
 import us.kbase.workspace.WorkspaceClient;

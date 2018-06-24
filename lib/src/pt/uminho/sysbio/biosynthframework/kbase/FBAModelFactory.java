@@ -328,7 +328,7 @@ public class FBAModelFactory {
           } else {
             validGenes.add(g);
           }
-          logger.debug("Gene found within feature set: {}", g);
+          logger.trace("Gene found within feature set: {}", g);
         } else {
           logger.debug("Gene not found within feature set: {}", g);
         }

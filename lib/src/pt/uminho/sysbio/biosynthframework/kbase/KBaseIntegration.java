@@ -229,7 +229,6 @@ public class KBaseIntegration {
       if (!DataUtils.empty(mrxnId) && !DataUtils.empty(msId)) {
         for (ModelReaction kmrxn : this.fbaModel.getModelreactions()) {
           
-          
           if (kmrxn.getId().equals(mrxnId.trim())) {
             if (kmrxn.getDblinks().containsKey(ReactionMajorLabel.ModelSeedReaction.toString())) {
               kmrxn.getDblinks().get(ReactionMajorLabel.ModelSeedReaction.toString()).clear();
@@ -257,7 +256,6 @@ public class KBaseIntegration {
     logger.info("[Compartment Mapping]");
     for (String cmpOld : compartmentMapping.keySet()) {
       String cmpSwap = compartmentMapping.get(cmpOld);
-      
       
       
       this.report.compartmentReport.cmpName.put(cmpOld, "");

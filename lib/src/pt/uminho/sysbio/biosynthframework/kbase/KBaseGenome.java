@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Deprecated
 public class KBaseGenome {
 
   public static class Cds {

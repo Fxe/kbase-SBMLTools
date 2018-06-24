@@ -40,6 +40,7 @@ import us.kbase.workspace.ListObjectsParams;
 import us.kbase.workspace.WorkspaceClient;
 import pt.uminho.sysbio.biosynthframework.kbase.AutoPropagateGenomeFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
@@ -139,7 +140,8 @@ public class SBMLToolsServer extends JsonServerServlet {
     KBaseReporter reporter = new KBaseReporter(kbrClient, workspaceName);
     reporter.addWsObjects(objs);
     reporter.addHtmlFolderShock("importer report", "index.html", reportFiles.baseFolder, dfuClient);
-
+    
+//    KBaseIOUtils.getGenome(name, ws, ref, wsClient)
     final ReportInfo report = reporter.extendedReport();
     //        final ReportInfo report = kbr.create(
     //            new CreateParams().withWorkspaceName(workspaceName)

@@ -199,15 +199,15 @@ public class KBaseModelIntegrationFacade {
         if (geneIntegration.report != null && 
             geneIntegration.report.bestGenomeKID != null && 
             geneIntegration.report.bestGenomeKID.size() >= 1) {
-          KBaseId matchGenome = geneIntegration.report.bestGenomeKID.iterator().next();
-          integration.genomeRef = matchGenome.reference;
+          String matchGenome = geneIntegration.report.bestGenomeKID.iterator().next();
+          integration.genomeRef = workspaceName + "/" + matchGenome;
           try {
-            Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(matchGenome.name, matchGenome.workspace, null, wspClient);
+            Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(matchGenome, KBaseConfig.REF_GENOME_WORLSPACE, null, wspClient);
             genome = KBaseUtils.convert(kdata.getRight(), Genome.class);
             SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1()
                 .withData(genome)
                 .withWorkspace(workspaceName)
-                .withName(matchGenome.name);
+                .withName(matchGenome);
             SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
             String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
             outputObjects.put(ref, "detected genome");

@@ -23,10 +23,12 @@ import com.google.common.collect.Sets;
 import datafileutil.DataFileUtilClient;
 import kbasefba.FBAModel;
 import kbasefba.ModelReaction;
+import kbasegenomes.Feature;
+import kbasegenomes.Genome;
+import kbasegenomes.OntologyData;
 import kbsolrutil.KBSolrUtilClient;
 import kbsolrutil.SearchSolrParams;
 import pt.uminho.sysbio.biosynthframework.BFunction;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome.Feature;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import sbmltools.KBaseType;
 import us.kbase.common.service.JsonClientException;
@@ -164,11 +166,11 @@ public class KBaseGeneIntegration {
         
         logger.info("[BEST HIT] Genome: {} @ {}", genome, wsName);
         try {
-          KBaseGenome g = KBaseIOUtils.getGenome(genome, wsName, null, wspClient);
-          for (Feature f : g.features) {
+          Genome g = KBaseIOUtils.getGenome(genome, wsName, null, wspClient);
+          for (Feature f : g.getFeatures()) {
             //ontology_terms should not be null
-            if (f.ontology_terms == null) {
-              f.ontology_terms = new HashMap<> ();
+            if (f.getOntologyTerms() == null) {
+              f.setOntologyTerms(new HashMap<String, Map<String, OntologyData>>());
             }
           }
 //          String targetWs = "filipeliu:narrative_1502913563238";
@@ -187,29 +189,29 @@ public class KBaseGeneIntegration {
 //          }
 //          String gref = KBaseIOUtils.saveDataSafe(genome, KBaseType.Genome, g, targetWs, dfuClient);
 
-          report.bestGenomeKID.add(g.kid);
+          report.bestGenomeKID.add(g.getId());
 //          System.out.println("ID: " + g.id);
 //          System.out.println("ID: " + g.);1
-          report.features = g.features.size();
-          for (Feature f : g.features) {
-            report.geneFunction.put(f.id, f.function);
+          report.features = g.getFeatures().size();
+          for (Feature f : g.getFeatures()) {
+            report.geneFunction.put(f.getId(), f.getFunction());
 //            System.out.println(f);
-            Set<String> faliases = new HashSet<> (f.aliases);
-            faliases.add(f.id);
+            Set<String> faliases = new HashSet<> (f.getAliases());
+            faliases.add(f.getId());
             Set<String> fgene = Sets.intersection(faliases, genes);
             nomatch.removeAll(fgene);
             //should warning if fgenes size > 1
             if (!fgene.isEmpty()) {
-              report.mapGeneToFeature(fgene, f.id);
+              report.mapGeneToFeature(fgene, f.getId());
               report.mgenesMapped.addAll(fgene);
-              mappedFeatures.add(f.id);
+              mappedFeatures.add(f.getId());
 //              System.out.println(fgene + " " + f);
             } else {
-              unmappedFeatures.add(f.id);
+              unmappedFeatures.add(f.getId());
             }
             //ftoreactions update
-            Set<String> frxn = getReactions(f.function);
-            ftoreactions.put(f.id, frxn);
+            Set<String> frxn = getReactions(f.getFunction());
+            ftoreactions.put(f.getId(), frxn);
           }
           
         } catch (IOException e) {

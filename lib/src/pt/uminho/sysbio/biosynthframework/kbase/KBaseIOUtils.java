@@ -322,9 +322,9 @@ public class KBaseIOUtils {
     return o;
   }
   
-  public static KBaseGenome getGenome(String name, String ws, String ref, 
+  public static Genome getGenome(String name, String ws, String ref, 
       WorkspaceClient wsClient) throws IOException {
-    KBaseGenome out = null;
+    Genome out = null;
     try {
       List<ObjectSpecification> objects = new ArrayList<> ();
       ObjectSpecification ospec = new ObjectSpecification();
@@ -345,14 +345,14 @@ public class KBaseIOUtils {
       
       List<ObjectData> odatas = result.getData();
       ObjectData odata = odatas.iterator().next();
-      String oref = KBaseIOUtils.getRefFromObjectInfo(odata.getInfo());
+//      String oref = KBaseIOUtils.getRefFromObjectInfo(odata.getInfo());
       
       UObject uo = odata.getData();
       Object jsonData = uo.asInstance();
       
       ObjectMapper om = new ObjectMapper();
-      out = om.convertValue(jsonData, KBaseGenome.class);
-      out.kid = new KBaseId(name, ws, oref);
+      out = om.convertValue(jsonData, Genome.class);
+//      out.kid = new KBaseId(name, ws, oref);
     } catch (IOException | JsonClientException e) {
       throw new IOException(e);
     }
@@ -399,6 +399,7 @@ public class KBaseIOUtils {
       GetObjects2Params params = new GetObjects2Params().withObjects(objects);
       GetObjects2Results result = wsClient.getObjects2(params);
       List<ObjectData> odatas = result.getData();
+      logger.debug("{}: List<ObjectData> size: {}", name, odatas.size());
       ObjectData odata = odatas.iterator().next();
       ref = KBaseIOUtils.getRefFromObjectInfo(odata.getInfo());
       

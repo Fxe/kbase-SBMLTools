@@ -390,11 +390,11 @@ public class WorkspaceNinja {
             Map<GeneType, Integer> geneCategory = new HashMap<>();
             
             
-            KBaseId genomeKid = report.getGenomeId();
+            String genomeKid = report.getGenomeId();
             String genomeName = "";
-            if (genomeKid!= null && genomeKid.reference != null) {
+            if (genomeKid!= null) {
               try {
-                genomeName = genomeKid.name;
+                genomeName = genomeKid;
                 if (rastGenomes.contains(genomeName)) {
                   logger.warn("RAST GENOME FOUND !");
                   Genome rastG = prodAPI.getGenome(genomeName + ".rast", IntegrationLocalRun.PROD_RAST_GENOME);
@@ -412,7 +412,7 @@ public class WorkspaceNinja {
                 }
 //                Genome genome = prodAPI.getGenome(id, ws)
                 
-                kmodel.setGenomeRef(genomeKid.reference);
+                kmodel.setGenomeRef(genomeKid);
                 KBaseIOUtils.saveData(kmodel.getId(), KBaseType.FBAModel.value(), kmodel, "filipeliu:narrative_1502913538729", prodAPI.wsClient);
               } catch (Exception e) {
                 // TODO Auto-generated catch block

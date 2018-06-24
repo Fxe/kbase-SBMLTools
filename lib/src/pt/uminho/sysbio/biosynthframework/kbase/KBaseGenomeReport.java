@@ -21,7 +21,7 @@ public class KBaseGenomeReport {
   
   public Map<String, Double> matchScores = new HashMap<> ();
   public Map<String, String> matchOrganism = new HashMap<> ();
-  public List<KBaseId> bestGenomeKID = new ArrayList<> ();
+  public List<String> bestGenomeKID = new ArrayList<> ();
   public String bestMatch;
   public double bestScore;
   public int features;
@@ -32,7 +32,7 @@ public class KBaseGenomeReport {
   public BMap<String, String> geneFunction = new BHashMap<>();
   public Map<String, Set<String>> geneReactions = new HashMap<>();
   
-  public KBaseId getGenomeId() {
+  public String getGenomeId() {
     if (bestGenomeKID.size() == 1) {
       return bestGenomeKID.iterator().next();
     } else if (bestGenomeKID.size() > 1) {

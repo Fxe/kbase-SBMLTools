@@ -187,10 +187,10 @@ public class Test {
         if (geneIntegration.report != null && 
             geneIntegration.report.bestGenomeKID != null && 
             geneIntegration.report.bestGenomeKID.size() >= 1) {
-          KBaseId matchGenome = geneIntegration.report.bestGenomeKID.iterator().next();
-          integration.genomeRef = matchGenome.reference;
+          String matchGenome = geneIntegration.report.bestGenomeKID.iterator().next();
+          integration.genomeRef = KBaseConfig.REF_GENOME_WORLSPACE + "/" + matchGenome;
           try {
-            Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(matchGenome.name, matchGenome.workspace, null, api.getWorkspaceClient());
+            Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(matchGenome, KBaseConfig.REF_GENOME_WORLSPACE, null, api.getWorkspaceClient());
             genome = KBaseUtils.convert(kdata.getRight(), Genome.class);
 //            SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1()
 //                .withData(genome)
