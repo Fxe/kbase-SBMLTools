@@ -166,6 +166,7 @@ public class KBaseGeneIntegration {
         
         logger.info("[BEST HIT] Genome: {} @ {}", genome, wsName);
         try {
+          logger.info("loading Genome: {} {}", genome, wsName);
           Genome g = KBaseIOUtils.getGenome(genome, wsName, null, wspClient);
           for (Feature f : g.getFeatures()) {
             //ontology_terms should not be null

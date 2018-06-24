@@ -66,7 +66,7 @@ public class KBaseGenome {
   
   public String assembly_ref;
   public Object gff_handle_ref;
-  public List<Cds> cdss = new ArrayList<> ();
+  public List<Object> cdss = new ArrayList<> ();
   public List<?> close_genomes  = new ArrayList<> ();
   public List<?> mrnas  = new ArrayList<> ();
   public List<Feature> features  = new ArrayList<> ();
