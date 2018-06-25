@@ -37,6 +37,8 @@ import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
 import sbmltools.KBaseType;
 import sbmltools.SbmlImporterResults;
+import us.kbase.workspace.CopyObjectParams;
+import us.kbase.workspace.ObjectIdentity;
 import us.kbase.workspace.WorkspaceClient;
 
 public class KBaseModelIntegrationFacade {
@@ -207,17 +209,24 @@ public class KBaseModelIntegrationFacade {
           String matchGenome = geneIntegration.report.bestGenomeKID.iterator().next();
           integration.genomeRef = workspaceName + "/" + matchGenome;
           try {
-            Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(matchGenome, KBaseConfig.REF_GENOME_WORLSPACE, null, wspClient);
-            genome = KBaseUtils.convert(kdata.getRight(), Genome.class);
-            SaveOneGenomeParams saveOneGenomeParams = new SaveOneGenomeParams()
-                .withData(genome).withName(matchGenome).withWorkspace(workspaceName);
-            SaveGenomeResult gresults = gaClient.saveOneGenome(saveOneGenomeParams);
+//            Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(matchGenome, KBaseConfig.REF_GENOME_WORLSPACE, null, wspClient);
+//            genome = KBaseUtils.convert(kdata.getRight(), Genome.class);
+//            SaveOneGenomeParams saveOneGenomeParams = new SaveOneGenomeParams()
+//                .withData(genome).withName(matchGenome).withWorkspace(workspaceName);
+            ObjectIdentity from = new ObjectIdentity().withName(matchGenome)
+                .withWorkspace(KBaseConfig.REF_GENOME_WORLSPACE);
+            ObjectIdentity to = new ObjectIdentity().withName(matchGenome)
+                .withWorkspace(workspaceName);
+            CopyObjectParams copyObjectParams = new CopyObjectParams().withFrom(from).withTo(to);
+            
+            String ref = KBaseIOUtils.getRefFromObjectInfo(wspClient.copyObject(copyObjectParams));
+//            SaveGenomeResult gresults = gaClient.saveOneGenome(saveOneGenomeParams);
 //            SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1()
 //                .withData(genome)
 //                .withWorkspace(workspaceName)
 //                .withName(matchGenome);
 //            SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
-            String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
+//            String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
             outputObjects.put(ref, "detected genome");
             integration.genome = genome;
             integration.genomeRef = ref;
