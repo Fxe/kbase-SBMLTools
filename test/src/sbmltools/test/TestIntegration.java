@@ -133,7 +133,7 @@ public class TestIntegration {
 //    files.put("index.html", KBaseIOUtils.getResource("report/sbml-import/index.html"));
 //    ReportFiles reportFiles = htmlReport.makeStaticReport(files);
     
-    KBaseConfig.wut();
+    KBaseConfig.setupLocalPaths();
     String path = "/var/biomodels/kbase/PlantSEED_Cre.mdl.xml";
     XmlSbmlModel xmodel = testReadFixModel(path);
 //    testGenerateDatabaseReferences(xmodel, "test");

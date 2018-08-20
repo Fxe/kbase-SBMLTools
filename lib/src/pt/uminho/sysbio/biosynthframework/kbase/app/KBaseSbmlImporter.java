@@ -96,25 +96,6 @@ public class KBaseSbmlImporter {
 
 //    reactionIntegration = new ReactionIntegration(biodbContainer.biodbService);
 //    //SETUP REACTION INTEGRATION DEFAULT EXCLUSIONS
-//    reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h");
-//    reactionIntegration.exclude(ReactionMajorLabel.BiGG2Reaction, "h2o");
-//    reactionIntegration.exclude(ReactionMajorLabel.BiGGReaction, "h");
-//    reactionIntegration.exclude(ReactionMajorLabel.BiGGReaction, "h2o");
-//    reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00001");
-//    reactionIntegration.exclude(ReactionMajorLabel.LigandReaction, "C00080");
-//    reactionIntegration.exclude(ReactionMajorLabel.BiGG, "h");
-//    reactionIntegration.exclude(ReactionMajorLabel.BiGG, "h2o");
-//    reactionIntegration.exclude(ReactionMajorLabel.Seed, "cpd00001");
-//    reactionIntegration.exclude(ReactionMajorLabel.Seed, "cpd00067");
-//    reactionIntegration.exclude(ReactionMajorLabel.ModelSeedReaction, "cpd00001");
-//    reactionIntegration.exclude(ReactionMajorLabel.ModelSeedReaction, "cpd00067");
-//
-//    Set<ReactionMajorLabel> rxnDbs = new HashSet<> ();
-//    rxnDbs.add(ReactionMajorLabel.BiGG);
-//    rxnDbs.add(ReactionMajorLabel.LigandReaction);
-//    rxnDbs.add(ReactionMajorLabel.MetaCyc);
-//    rxnDbs.add(ReactionMajorLabel.ModelSeedReaction);
-//    rxnDbs.add(ReactionMajorLabel.Seed);
 //
 //    for (ReactionMajorLabel db : rxnDbs) {
 //      reactionIntegration.setupStoichDictionary(db);
@@ -475,10 +456,14 @@ public class KBaseSbmlImporter {
             }
 
             try {
-              KBaseId kid = KBaseIOUtils.saveData(fbaModel.getId(), KBaseType.FBAModel, fbaModel, workspace, wsClient);
-              result.objects.add(new WorkspaceObject()
-                  .withDescription(u)
-                  .withRef(kid.toString()));
+              if (KBaseConfig.production) {
+                KBaseId kid = KBaseIOUtils.saveData(fbaModel.getId(), KBaseType.FBAModel, fbaModel, workspace, wsClient);
+                result.objects.add(new WorkspaceObject()
+                    .withDescription(u)
+                    .withRef(kid.toString()));
+              } else {
+                
+              }
             } catch (Exception e) {
               result.message += "\nERROR: " + u + " " + e.getMessage();
             }

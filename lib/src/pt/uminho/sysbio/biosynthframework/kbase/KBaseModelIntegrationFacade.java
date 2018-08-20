@@ -124,9 +124,19 @@ public class KBaseModelIntegrationFacade {
     return cpdOverride;
   }
   
+  public SbmlImporterResults kbaseIntegrate(FBAModel model, 
+                                            Map<String, String> gprOverride,
+                                            Map<String, String> cpdOverride,
+                                            Map<String, String> compartmentMapping, 
+                                            Set<String> biomassReactions,
+                                            String outputModelID,
+                                            Genome genome) throws Exception {
+    return null;
+  }
+  
   public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName) throws Exception {
     //validate params
-//    System.out.println(params);
+    //System.out.println(params);
     Map<String, String> gprOverride = new HashMap<> ();
     try {
       gprOverride = geneOverride(params.getGeneMappings());
@@ -155,7 +165,6 @@ public class KBaseModelIntegrationFacade {
     KBaseIntegrationReport kir = new KBaseIntegrationReport();
     kir.model = fbaModel.getId();
     kir.objName = fbaModel.getName();
-    
     
     Genome genome = null;
     
@@ -213,13 +222,14 @@ public class KBaseModelIntegrationFacade {
 //            genome = KBaseUtils.convert(kdata.getRight(), Genome.class);
 //            SaveOneGenomeParams saveOneGenomeParams = new SaveOneGenomeParams()
 //                .withData(genome).withName(matchGenome).withWorkspace(workspaceName);
+            logger.info("Copy detected genome to workspace: {}", matchGenome);
             ObjectIdentity from = new ObjectIdentity().withName(matchGenome)
                 .withWorkspace(KBaseConfig.REF_GENOME_WORLSPACE);
             ObjectIdentity to = new ObjectIdentity().withName(matchGenome)
                 .withWorkspace(workspaceName);
             CopyObjectParams copyObjectParams = new CopyObjectParams().withFrom(from).withTo(to);
-            
             String ref = KBaseIOUtils.getRefFromObjectInfo(wspClient.copyObject(copyObjectParams));
+            
 //            SaveGenomeResult gresults = gaClient.saveOneGenome(saveOneGenomeParams);
 //            SaveOneGenomeParamsV1 gparams = new SaveOneGenomeParamsV1()
 //                .withData(genome)
@@ -228,7 +238,9 @@ public class KBaseModelIntegrationFacade {
 //            SaveGenomeResultV1 gresults = gaClient.saveOneGenomeV1(gparams);
 //            String ref = KBaseIOUtils.getRefFromObjectInfo(gresults.getInfo());
             outputObjects.put(ref, "detected genome");
-            integration.genome = genome;
+            logger.info("Pulling workspace genome for integration: {}", matchGenome);
+            Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(matchGenome, workspaceName, null, wspClient);
+            integration.genome = KBaseUtils.convert(kdata.getRight(), Genome.class);;
             integration.genomeRef = ref;
             kir.genomeReport.status = "auto";
           } catch (IOException e) {
@@ -250,12 +262,6 @@ public class KBaseModelIntegrationFacade {
     } catch (Exception e) {
       logger.error("Set Template: [{}] - {}", params.getTemplateId(), e.getMessage());
     }
-    
-
-    
-
-    
-    
     
     KBaseId mediaKid = null;
     if (!DataUtils.empty(params.getOutputMediaName())&&

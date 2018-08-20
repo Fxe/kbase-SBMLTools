@@ -18,9 +18,9 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import genomeannotationapi.SaveOneGenomeParamsV1;
+import com.google.common.base.Joiner;
+
 import kbasefba.FBAModel;
-import kbasegenomes.Contig;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import kbasereport.WorkspaceObject;
@@ -32,10 +32,16 @@ import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenomeAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegrationReport;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration.KBaseMappingResult;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter.ImportModelResult;
 import pt.uminho.sysbio.biosynthframework.kbase.report.ReportFBAModel;
@@ -47,9 +53,11 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAutofix;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
+import sbmltools.IntegrateModelParams;
+import sbmltools.KBaseType;
 import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
-import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.UnauthorizedException;
 
 public class LocalTest {
@@ -245,8 +253,63 @@ public class LocalTest {
   }
   
   
+  public static void integrationTest2() {
+    
+    KBaseConfig.setupLocalPaths();
+    try (InputStream modelJson = new FileInputStream("/tmp/argonne/data/885ba65f-0526-47ed-8e9e-896d7044733f/202.json")) {
+      KBaseAPI api =  new KBaseAPI("AIQEX4L6EU4WCWWHX7Q7VNPKJILYCZYO", KBaseAPI.getConfigDev(), true);
+      FBAModel kmodel = KBaseIOUtils.getObject(Joiner.on('\n').join(IOUtils.readLines(modelJson)), FBAModel.class);
+      
+      KBaseIntegrationReport kir = new KBaseIntegrationReport();
+      kir.model = kmodel.getId();
+      kir.objName = kmodel.getName();
+      
+      KBaseBiodbContainer biodbContainer = new KBaseBiodbContainer(KBaseConfig.DATA_EXPORT_PATH);
+      KBaseIntegration integration = new KBaseIntegration(kmodel);
+      integration.report = kir;
+//      integration.biomassSet.addAll(biomassReactions);
+//      integration.compartmentMapping = compartmentMapping;
+      integration.rename = "modelseed";
+      integration.fillMetadata = true;
+      integration.mediaName = "media";
+      integration.biodbContainer = biodbContainer;
+//      integration.gprOverride = gprOverride;
+//      integration.cpdOverride = cpdOverride;
+      integration.allowNumberId = false;
+      integration.fixIdToKBase = true;
+      integration.integrate();
+      
+      KBaseId mediaKid = null;
+      if (integration.defaultMedia != null) {
+        api.saveObject("test_media", "filipeliu:narrative_1505405117321", KBaseType.KBaseBiochemMedia, integration.defaultMedia);
+//        mediaKid = KBaseIOUtils.saveData(params.getOutputMediaName(), KBaseType.KBaseBiochemMedia.value(), integration.defaultMedia, workspaceName, wspClient);
+//        outputObjects.put(mediaKid.reference, "detected media");
+      }
+      
+//      KBaseId integratedModelKid = KBaseIOUtils.saveData(outputName, KBaseType.FBAModel.value(), fbaModel, workspaceName, wspClient);
+//      outputObjects.put(integratedModelKid.reference, "integrated model");
+//      String ref = KBaseIOUtils.saveDataSafe(outputName, KBaseType.FBAModel, fbaModel, workspaceName, dfuClient);
+      
+//      String uuString = UUID.randomUUID().toString();
+      
+      kir.fillModelData(integration.adapter);
+      KBaseIOUtils.writeStringFile(KBaseIOUtils.toJson(kir), "/kb/module/data/data.json");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+//    KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(null, null, null);
+//    KBaseModelIntegrationFacade a = new KBaseModelIntegrationFacade(null, null, null, null, geneIntegration, "", null);
+//    IntegrateModelParams params = new IntegrateModelParams();
+//    try {
+//      a.kbaseIntegrate(params, "");
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
+  }
+  
   public static void integrationTest() {
-    KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne/data";
+    KBaseConfig.setupLocalPaths();
     String sbmlPath = "http://193.137.11.210/models/biomodels/sbml/msb201165-sup-0003.xml";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models.zip";
     sbmlPath = "http://193.137.11.210/models/biomodels/test_models_with_invalid_sbml.zip";
@@ -255,10 +318,10 @@ public class LocalTest {
     sbmlPath = "http://193.137.11.210/models/biomodels/iOD907_bqbiol.xml";
     sbmlPath = "http://bioseed.mcs.anl.gov/~jplfaria/models/yeast_7.6.xml";
     sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/sbml/Ec_core_flux1.xml";
-    sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/sbml/iJDZ836/iJDZ836.xml";
-    sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/fungis/iNX804.xml";
-    sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/fbc3/yeast_7.xml";
-    sbmlPath = "http://127.0.0.1/core.xml";
+//    sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/sbml/iJDZ836/iJDZ836.xml";
+//    sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/fungis/iNX804.xml";
+//    sbmlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/fbc3/yeast_7.xml";
+//    sbmlPath = "http://127.0.0.1/core.xml";
 //    sbmlPath = "http://127.0.0.1/models/biomodels/sbml/hsa/MODEL1109130000.xml";
 //    sbmlPath = "http://darwin.di.uminho.pt/fliu/kbase/kbase_published_models.zip";
     
@@ -274,10 +337,10 @@ public class LocalTest {
           .withSbmlUrl(sbmlPath)
           .withBiomass(biomass);
       ImportModelResult r = sbmlTools.importModel(params);
-      System.out.println(r.message);
-      System.out.println(r.objects);
+      System.out.println("Message: " + r.message);
+      System.out.println("Objects: " + r.objects);
       for (WorkspaceObject wso : r.objects) {
-        System.out.println(wso);
+        System.out.println("Workspace Object: " + wso);
       }
     } catch (UnauthorizedException | IOException e) {
       e.printStackTrace();
@@ -301,6 +364,8 @@ public class LocalTest {
 
   
   public static void main(String[] args) {
+    integrationTest2();
+    System.exit(0);
     try {
       //    fixModel26590126("/var/biomodels/sbml/26590126/tpj13081-sup-0003-TableS3_fix.xml");
       Genome genome = KBaseIOUtils.loadJsonGenomeFromZip("D:\\var\\biomodels\\sbml\\26590126/Phaeodactylum_tricornutum.ASM15095v2.38.gff3_genome.json.zip");
@@ -333,7 +398,7 @@ public class LocalTest {
       e.printStackTrace();
     }
     
-    KBaseConfig.wut();
+    KBaseConfig.setupLocalPaths();
     //integrationTest();
 //    try {
 //      test("/tmp/argonne/data/fba834db-9ed7-433f-86d3-874c4f28bb68/fba834db-9ed7-433f-86d3-874c4f28bb68_2");

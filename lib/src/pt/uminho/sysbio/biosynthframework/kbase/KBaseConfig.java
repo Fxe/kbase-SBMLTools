@@ -44,10 +44,12 @@ public class KBaseConfig {
     return getModelSeedRxnDao(production);
   }
   
-  public static void wut() {
+  public static void setupLocalPaths() {
     KBaseConfig.DATA_EXPORT_PATH = "/var/biobase/export";
     KBaseConfig.CURATION_DATA = "/var/biobase/integration/cc/cpd_curation.tsv";
-    KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne";
+    KBaseConfig.REPORT_OUTPUT_FILE = "/tmp/argonne/report/readerData.json";
+    KBaseConfig.REPORT_OUTPUT_PATH = "/tmp/argonne/report/";
+    KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne/data";
     production = false;
   }
   
