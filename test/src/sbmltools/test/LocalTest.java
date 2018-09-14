@@ -1,5 +1,6 @@
 package sbmltools.test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,16 +33,13 @@ import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenomeAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegrationReport;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelSeedIntegration.KBaseMappingResult;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter.ImportModelResult;
 import pt.uminho.sysbio.biosynthframework.kbase.report.ReportFBAModel;
@@ -53,8 +51,8 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAutofix;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
-import pt.uminho.sysbio.biosynthframework.util.DataUtils;
-import sbmltools.IntegrateModelParams;
+import pt.uminho.sysbio.biosynthframework.util.AutoFileReader;
+import pt.uminho.sysbio.biosynthframework.util.FileType;
 import sbmltools.KBaseType;
 import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
@@ -361,9 +359,18 @@ public class LocalTest {
     }
   }
   
-
-  
   public static void main(String[] args) {
+    File f = new File("D:\\tmp\\lp/12918_2013_1431_MOESM3_ESM.zip");
+    FileType ftype = AutoFileReader.getFileType(f.getAbsolutePath());
+    System.out.println(ftype);
+    AutoFileReader freader = new AutoFileReader(f.getAbsolutePath(), ftype);
+    Map<String, InputStream> inputStreams = freader.getStreams().streams;
+    for (String k : inputStreams.keySet()) {
+      System.out.println(k);
+    }
+  }
+  
+  public static void main2(String[] args) {
     integrationTest2();
     System.exit(0);
     try {

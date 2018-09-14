@@ -276,9 +276,6 @@ public class KBaseSbmlImporter {
         cmap = cintegration.generateCompartmentMapping(model);
       }
 
-      
-
-      
       //check if integrate
       if (runIntegration) {
 //        modelSeedIntegration.spiToModelSeedReference.clear();

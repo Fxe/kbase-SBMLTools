@@ -368,17 +368,15 @@ public class FileImportKb {
       IOUtils.closeQuietly(is);
     }
   }
-
+  
   public static void importNameData(Map<Long, String> idToName, 
-      Map<Long, Set<Long>> nameIdToCpdSet) {
-    InputStream is = null;
-    try {
-      is = new FileInputStream(EXPORT_PATH + "/property/name.tsv");
-      List<String> lines = IOUtils.readLines(is);
+      Map<Long, Set<Long>> nameIdToCpdSet, InputStream is) throws IOException {
+    
+    List<String> lines = IOUtils.readLines(is);
 
-      for (int i = 1; i < lines.size(); i++) {
-        //add ! at end to guarantee split
-        try {
+    for (int i = 1; i < lines.size(); i++) {
+      //add ! at end to guarantee split
+      try {
         String line = lines.get(i).concat(SEP + "!");
         String[] col = line.split(SEP);
         long id = Long.parseLong(col[0]);
@@ -394,10 +392,18 @@ public class FileImportKb {
         }
         idToName.put(id, name);
         nameIdToCpdSet.put(id, cpdSet);
-        } catch (Exception e) {
-          logger.warn("invalid line [{}] - {} : {}", i, lines.get(i), e.getMessage());
-        }
+      } catch (Exception e) {
+        logger.warn("invalid line [{}] - {} : {}", i, lines.get(i), e.getMessage());
       }
+    }
+  }
+
+  public static void importNameData(Map<Long, String> idToName, 
+      Map<Long, Set<Long>> nameIdToCpdSet) {
+    InputStream is = null;
+    try {
+      is = new FileInputStream(EXPORT_PATH + "/property/name.tsv");
+      importNameData(idToName, nameIdToCpdSet, is);
     } catch (IOException e) {
       e.printStackTrace();
     } finally {
