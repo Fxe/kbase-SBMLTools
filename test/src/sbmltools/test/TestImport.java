@@ -56,7 +56,7 @@ public class TestImport {
             biomassIds, 
             null, 
             spiIntegrationAll, 
-            jsonResult, 
+            jsonResult,
             true);
       
       api.save(model, model.getId(), "filipeliu:narrative_1505344826555");

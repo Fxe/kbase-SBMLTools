@@ -404,13 +404,31 @@ public class KBaseModelSeedIntegration {
         integrateReactions(xmodel, cpdDbLinks);
     
     KBaseMappingResult result = new KBaseMappingResult();
-    result.species = cpdDbLinks;
-    result.reactions = rxnDbLinks;
+
     
     
     Map<String, String> modelSeedSpiMapping = new HashMap<>();
+    for (String cpdId : cpdDbLinks.keySet()) {
+      String msid = cpdDbLinks.get(cpdId).get(MetaboliteMajorLabel.ModelSeed);
+      if (msid != null) {
+        modelSeedSpiMapping.put(cpdId, msid);
+      }
+    }
     ReactionIntegrationDriver rxnIntegration = new ReactionIntegrationDriver();
-    rxnIntegration.run(modelSeedSpiMapping, new XmlSbmlModelAdapter(xmodel));
+    Map<String, Map<ReactionMajorLabel, String>> rxnMapping = rxnIntegration.run(modelSeedSpiMapping, new XmlSbmlModelAdapter(xmodel));
+    
+    for (String mrxnId : rxnMapping.keySet()) {
+      if (!rxnDbLinks.containsKey(mrxnId)) {
+        rxnDbLinks.put(mrxnId, new HashMap<ReactionMajorLabel, String>());
+      }
+      
+      for (ReactionMajorLabel db : rxnMapping.get(mrxnId).keySet()) {
+        rxnDbLinks.get(mrxnId).put(db, rxnMapping.get(mrxnId).get(db));
+      }
+    }
+    
+    result.species = cpdDbLinks;
+    result.reactions = rxnDbLinks;
     
     if (resultAdapter != null) {
       resultAdapter.fillSpeciesIntegrationData(cpdDbLinks);

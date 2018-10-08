@@ -3,6 +3,7 @@ package pt.uminho.sysbio.biosynthframework.kbase;
 import pt.uminho.sysbio.biosynthframework.io.biodb.modelseed.GithubModelSeedMetaboliteDaoImpl;
 import pt.uminho.sysbio.biosynthframework.io.biodb.modelseed.GithubModelSeedReactionDaoImpl;
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
+import us.kbase.biosynthframework.ReactionIntegrationDriver;
 
 public class KBaseConfig {
   public static final String TEMPLATE_WORKSPACE = "NewKBaseModelTemplates";
@@ -50,6 +51,7 @@ public class KBaseConfig {
     KBaseConfig.REPORT_OUTPUT_FILE = "/tmp/argonne/report/readerData.json";
     KBaseConfig.REPORT_OUTPUT_PATH = "/tmp/argonne/report/";
     KBaseSbmlImporter.LOCAL_CACHE = "/tmp/argonne/data";
+    ReactionIntegrationDriver.modelseedDbPath = "D:\\home\\fliu\\workspace\\java\\kbase-SBMLTools-auth2\\data\\modelseed\\";
     production = false;
   }
   

@@ -5,8 +5,12 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Function;
 
+import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.CompartmentalizedStoichiometry;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionEntity;
@@ -16,9 +20,15 @@ import pt.uminho.sysbio.biosynthframework.integration.ReactionTMatcher;
 import pt.uminho.sysbio.biosynthframework.integration.model.SimpleMetabolicModelReactionIntegrationImpl;
 import pt.uminho.sysbio.biosynthframework.io.BiosDao;
 import pt.uminho.sysbio.biosynthframework.io.biodb.modelseed.GithubModelSeedReactionDaoImpl;
+import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 
 public class ReactionIntegrationDriver {
-  public void run(final Map<String, String> spiMapping, final ModelAdapter model) {
+  
+  private static final Logger logger = LoggerFactory.getLogger(ReactionIntegrationDriver.class);
+  
+  public static String modelseedDbPath = "/kb/module/data/modelseed";
+  
+  public Map<String, Map<ReactionMajorLabel, String>> run(final Map<String, String> spiMapping, final ModelAdapter model) {
 //    spiMapping.put("M_m1352", "cpd00067");
 //    spiMapping.put("M_m20",   "cpd00067");
 //    spiMapping.put("M_m920",  "cpd00067");
@@ -45,7 +55,7 @@ public class ReactionIntegrationDriver {
 
     BiosDao<ModelSeedReactionEntity> rxnDao = new GithubModelSeedReactionDaoImpl(
         "48c089f4f0128ed3c06ce716750693b4feccb623", 
-        "D:\\home\\fliu\\workspace\\java\\kbase-SBMLTools-auth2\\data\\modelseed\\");
+        modelseedDbPath);
     reactionIntegration.dao = rxnDao;
     reactionIntegration.excludeIds.add("cpd00067");
     reactionIntegration.isBasic = new Function<ModelSeedReactionEntity, Boolean>() {
@@ -78,6 +88,7 @@ public class ReactionIntegrationDriver {
     mmatcher.allowSingle = true;
     mmatcher.testReverse = true;
 
+    logger.info("loading basic reactions");
     for (String rxnEntry : rxnDao.getAllEntries()) {
       ModelSeedReactionEntity rxn = rxnDao.getByEntry(rxnEntry);
       if (!reactionIntegration.isBasic.apply(rxn)) {
@@ -85,6 +96,8 @@ public class ReactionIntegrationDriver {
         tmatcher.addReaction(cstoich, rxnEntry);
       }
     }
+    
+    logger.info("loading translocation reactions");
     for (String rxnEntry : rxnDao.getAllEntries()) {
       ModelSeedReactionEntity rxn = rxnDao.getByEntry(rxnEntry);
       if (reactionIntegration.isBasic.apply(rxn)) {
@@ -104,5 +117,21 @@ public class ReactionIntegrationDriver {
         reactionIntegration.aaa(mrxnId, cstoich, mmatcher, reactionIntegration.excludeIds, reactionIntegration.mreport);        
       }
     }
+    
+    Map<String, Map<ReactionMajorLabel, String>> dblinks = new HashMap<>();
+    
+    for (String mrxnId : reactionIntegration.treport.dataset.keySet()) {
+      Map<String, Object> data = reactionIntegration.treport.dataset.get(mrxnId);
+      if (data != null) {
+        Object msid = data.get("best");
+        if (!DataUtils.empty(msid)) {
+          Map<ReactionMajorLabel, String> single = new HashMap<>();
+          single.put(ReactionMajorLabel.ModelSeedReaction, msid.toString());
+          dblinks.put(mrxnId, single);
+        }
+      }
+    }
+    
+    return dblinks;
   }
 }
