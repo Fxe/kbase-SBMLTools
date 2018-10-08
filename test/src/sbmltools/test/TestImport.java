@@ -20,7 +20,7 @@ public class TestImport {
   public static void main(String[] args) {
     KBaseConfig.setupLocalPaths();
     
-    try (InputStream is = new FileInputStream("/var/biomodels/sbml/iAF1260.xml")) {
+    try (InputStream is = new FileInputStream("/var/biomodels/sbml/Ecoli_K12_MG1655.xml")) {
       KBaseAPI api = new KBaseAPI(TestData.TOKEN, KBaseAPI.getConfigProd(), true);
       KBaseSbmlImporter importer = new KBaseSbmlImporter("", null, api.wsClient);
 //      InputStream is = null;

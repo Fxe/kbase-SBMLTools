@@ -52,12 +52,12 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/ahocorasick-0.4.0.jar
 
 RUN cd /kb/deployment/lib/jars \
+    && wget http://193.137.11.210/fliu/kbase/kbase-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-core-0.9.0-JRE7.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-biodb-0.9.0-JRE7.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-biodb-modelseed-0.9.0-JRE7.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-integration-0.9.0-JRE7.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-genome-0.9.0-JRE7.jar \
-    && wget http://193.137.11.210/fliu/kbase/kbase-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/biosynth-aux-0.0.1-SNAPSHOT.jar
 
     
