@@ -23,12 +23,13 @@ import kbasefba.ModelReactionProtein;
 import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
 import kbasegenomes.Genome;
+import me.fxe.kbase.KBaseFBAModelFactory;
+import me.fxe.kbase.KBaseModelAdapter;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
 import pt.uminho.sysbio.biosynthframework.integration.model.BaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentDetectorKBase;
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentIntegration;
@@ -36,9 +37,6 @@ import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
 import pt.uminho.sysbio.biosynthframework.integration.model.KBaseIntegrationEngine;
 import pt.uminho.sysbio.biosynthframework.integration.model.SimpleStringMatchEngine;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
-import pt.uminho.sysbio.biosynthframework.io.biodb.GithubModelSeedMetaboliteDaoImpl;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
@@ -117,8 +115,8 @@ public class JsonObjectTest {
       m2.put(kcmp.getId(), kcmp);
     }
     
-    FBAModelAdapter model1 = new FBAModelAdapter(kmodel1);
-    FBAModelAdapter model2 = new FBAModelAdapter(kmodel2);
+    KBaseModelAdapter model1 = new KBaseModelAdapter(kmodel1);
+    KBaseModelAdapter model2 = new KBaseModelAdapter(kmodel2);
     if (m1.size() != m2.size()) {
       logger.warn("[COMPARTMENTS] {}, {}", m1.size(), m2.size());
     } else {
@@ -159,8 +157,8 @@ public class JsonObjectTest {
     if (m1.size() != m2.size()) {
       logger.warn("[SPECIES] {}, {}", m1.size(), m2.size());
     } else {
-      FBAModelAdapter model1 = new FBAModelAdapter(kmodel1);
-      FBAModelAdapter model2 = new FBAModelAdapter(kmodel2);
+      KBaseModelAdapter model1 = new KBaseModelAdapter(kmodel1);
+      KBaseModelAdapter model2 = new KBaseModelAdapter(kmodel2);
       Set<String> ids1 = model1.getSpeciesIds();
       Set<String> ids2 = model2.getSpeciesIds();
       Set<String> both = Sets.intersection(ids1, ids2);
@@ -295,8 +293,8 @@ public class JsonObjectTest {
     if (m1.size() != m2.size()) {
       logger.warn("[REACTIONS] {}, {}", m1.size(), m2.size());
     } 
-    FBAModelAdapter model1 = new FBAModelAdapter(kmodel1);
-    FBAModelAdapter model2 = new FBAModelAdapter(kmodel2);
+    KBaseModelAdapter model1 = new KBaseModelAdapter(kmodel1);
+    KBaseModelAdapter model2 = new KBaseModelAdapter(kmodel2);
     Set<String> ids1 = model1.getReactionIds();
     Set<String> ids2 = model2.getReactionIds();
     Set<String> both = Sets.intersection(ids1, ids2);
@@ -351,7 +349,7 @@ public class JsonObjectTest {
       Map<String, String> rxnToModelSeedReference) {
     FBAModel kmodel = null;
     
-    kmodel = new FBAModelFactory()
+    kmodel = new KBaseFBAModelFactory()
          .withCompartmentMapping(scmpMap)
 //        .withGenomeRef(genomeRef)
 //        .withSpecieIntegration(sintegration)
@@ -423,7 +421,7 @@ public class JsonObjectTest {
 //      integrationFacade.kbaseIntegrate(params, workspaceName)
 //          new KBaseModelIntegrationFacade(wspClient, dfuClient, gaClient, kbrClient, geneIntegration, biodbPath, scratch);
       FBAModel kmodelMine = convert(xmodel, cmap, smap, rmap);
-      FBAModelAdapter kmodelMineA = new FBAModelAdapter(kmodelMine);
+      KBaseModelAdapter kmodelMineA = new KBaseModelAdapter(kmodelMine);
       kmodelMineA.updateMetadata(KBaseConfig.getModelSeedCpdDao(), 
                                  KBaseConfig.getModelSeedRxnDao());
 //      Genome genome = KBaseIOUtils.loadJsonGenomeFromZip("/var/biomodels/kbase/PlantSEED_Cre.rast.json.zip");

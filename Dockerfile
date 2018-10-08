@@ -1,5 +1,5 @@
 FROM kbase/kbase:sdkbase.latest
-MAINTAINER KBase Developer
+MAINTAINER fliu@anl.gov
 # -----------------------------------------
 # In this section, you can install any system dependencies required
 # to run your App.  For instance, you could place an apt-get update or
@@ -14,22 +14,23 @@ MAINTAINER KBase Developer
 #/usr/bin/java
 
 # download a data files
-RUN cd /opt/ && wget http://193.137.11.210/fliu/kbase/jdk-9.0.4_linux-x64_bin.tar.gz
+#RUN cd /opt/ && wget http://193.137.11.210/fliu/kbase/jdk-9.0.4_linux-x64_bin.tar.gz
 RUN mkdir -p /data/integration
 RUN cd /data/integration && wget http://193.137.11.210/fliu/integration_data.zip && unzip integration_data.zip
 RUN cd /data/integration && rm -Rf export && wget http://193.137.11.210/fliu/export.tar.gz && tar -xvf export.tar.gz
-RUN tar -xf /opt/jdk-9.0.4_linux-x64_bin.tar.gz -C /opt/
-RUN rm /usr/bin/java
-RUN rm /usr/bin/javac
-RUN rm /usr/bin/javadoc
-RUN ln -s /opt/jdk-9.0.4/bin/java /usr/bin/java
-RUN ln -s /opt/jdk-9.0.4/bin/javac /usr/bin/javac
-RUN ln -s /opt/jdk-9.0.4/bin/javadoc /usr/bin/javadoc
-ENV JAVA_HOME /opt/jdk-9.0.4
+#RUN tar -xf /opt/jdk-9.0.4_linux-x64_bin.tar.gz -C /opt/
+#RUN rm /usr/bin/java
+#RUN rm /usr/bin/javac
+#RUN rm /usr/bin/javadoc
+#RUN ln -s /opt/jdk-9.0.4/bin/java /usr/bin/java
+#RUN ln -s /opt/jdk-9.0.4/bin/javac /usr/bin/javac
+#RUN ln -s /opt/jdk-9.0.4/bin/javadoc /usr/bin/javadoc
+#ENV JAVA_HOME /opt/jdk-9.0.4
 
 # download deps
 RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/guava-18.0.jar \
+	&& wget http://193.137.11.210/fliu/kbase/jsoup-1.11.3.jar \
     && wget http://193.137.11.210/fliu/kbase/neo4j-kernel-2.1.5.jar \
     && wget http://193.137.11.210/fliu/kbase/biojava-core-4.2.5.jar \
     && wget http://193.137.11.210/fliu/kbase/biojava-alignment-4.2.5.jar \
@@ -48,12 +49,16 @@ RUN cd /kb/deployment/lib/jars \
     && wget http://193.137.11.210/fliu/kbase/antlr-runtime-3.5.2.jar \
     && wget http://193.137.11.210/fliu/kbase/javaluator-3.0.2.jar \
     && wget http://193.137.11.210/fliu/kbase/jbool_expressions-1.14.jar \
-    && wget http://193.137.11.210/fliu/kbase/biosynth-core-0.0.1-SNAPSHOT.jar \
-    && wget http://193.137.11.210/fliu/kbase/biosynth-biodb-0.0.1-SNAPSHOT.jar \
-    && wget http://193.137.11.210/fliu/kbase/biosynth-integration-0.0.1-SNAPSHOT.jar \
-    && wget http://193.137.11.210/fliu/kbase/biosynth-aux-0.0.1-SNAPSHOT.jar \
-    && wget http://193.137.11.210/fliu/kbase/biosynth-genome-0.0.1-SNAPSHOT.jar \
     && wget http://193.137.11.210/fliu/kbase/ahocorasick-0.4.0.jar
+
+RUN cd /kb/deployment/lib/jars \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-core-0.9.0-JRE7.jar \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-biodb-0.9.0-JRE7.jar \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-biodb-modelseed-0.9.0-JRE7.jar \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-integration-0.9.0-JRE7.jar \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-genome-0.9.0-JRE7.jar \
+    && wget http://193.137.11.210/fliu/kbase/kbase-0.0.1-SNAPSHOT.jar \
+    && wget http://193.137.11.210/fliu/kbase/biosynth-aux-0.0.1-SNAPSHOT.jar
 
     
 #RUN cd /kb/deployment/lib/jars \

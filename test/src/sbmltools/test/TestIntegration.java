@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import datafileutil.DataFileUtilClient;
+import kbasefba.FBAModel;
+import me.fxe.kbase.KBaseAPI;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
@@ -123,20 +125,30 @@ public class TestIntegration {
     }
   }
   
+  public static void testIntegration() {
+    try {
+      KBaseAPI api = new KBaseAPI(TestData.TOKEN, KBaseAPI.getConfigProd(), true);
+      FBAModel model = api.getModel("GCF_000005845.2.RAST1.Filter_V3.mdl", "filipeliu:narrative_1538599570111");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+  
   public static void main(String[] args) {
-    Path p = new File("/tmp/argonne/report").toPath();
-    KBaseHtmlReport htmlReport = new KBaseHtmlReport(p);
-    Map<String, String> files = new HashMap<>();
-    File aaaaaaa = new File(
-        "/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/report/sbml-import/index.html");
-    System.out.println(aaaaaaa.getAbsolutePath());
-//    files.put("index.html", KBaseIOUtils.getResource("report/sbml-import/index.html"));
-//    ReportFiles reportFiles = htmlReport.makeStaticReport(files);
-    
-    KBaseConfig.setupLocalPaths();
-    String path = "/var/biomodels/kbase/PlantSEED_Cre.mdl.xml";
-    XmlSbmlModel xmodel = testReadFixModel(path);
-//    testGenerateDatabaseReferences(xmodel, "test");
-    testImportModel(path);
+    testIntegration();
+//    Path p = new File("/tmp/argonne/report").toPath();
+//    KBaseHtmlReport htmlReport = new KBaseHtmlReport(p);
+//    Map<String, String> files = new HashMap<>();
+//    File aaaaaaa = new File(
+//        "/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/report/sbml-import/index.html");
+//    System.out.println(aaaaaaa.getAbsolutePath());
+////    files.put("index.html", KBaseIOUtils.getResource("report/sbml-import/index.html"));
+////    ReportFiles reportFiles = htmlReport.makeStaticReport(files);
+//    
+//    KBaseConfig.setupLocalPaths();
+//    String path = "/var/biomodels/kbase/PlantSEED_Cre.mdl.xml";
+//    XmlSbmlModel xmodel = testReadFixModel(path);
+////    testGenerateDatabaseReferences(xmodel, "test");
+//    testImportModel(path);
   }
 }

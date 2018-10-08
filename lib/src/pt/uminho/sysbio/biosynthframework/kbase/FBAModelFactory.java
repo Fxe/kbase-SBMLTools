@@ -24,6 +24,7 @@ import kbasefba.ModelReactionProteinSubunit;
 import kbasefba.ModelReactionReagent;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
+import me.fxe.kbase.KBaseGenomeAdapter;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.ParseException;
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
@@ -48,6 +49,7 @@ import pt.uminho.sysbio.biosynthframework.util.DataUtils;
 import pt.uminho.sysbio.biosynthframework.util.SbmlUtils;
 import sbmltools.FixedAdapter;
 
+@Deprecated
 public class FBAModelFactory {
 
   private static final Logger logger = LoggerFactory.getLogger(FBAModelFactory.class);
@@ -312,8 +314,8 @@ public class FBAModelFactory {
     for (Feature f : genome.getFeatures()) {
       fmap.put(f.getId(), f);
       if (f.getAliases() != null) {
-        for (String a : f.getAliases()) {
-          fmap.put(a, f);
+        for (List<String> a : f.getAliases()) {
+          fmap.put(KBaseGenomeAdapter.getAlias(a), f);
         }
       }
     }
@@ -347,8 +349,8 @@ public class FBAModelFactory {
     for (Feature f : genome.getFeatures()) {
       fmap.put(f.getId(), f);
       if (f.getAliases() != null) {
-        for (String a : f.getAliases()) {
-          fmap.put(a, f);
+        for (List<String> a : f.getAliases()) {
+          fmap.put(KBaseGenomeAdapter.getAlias(a), f);
         }
       }
     }

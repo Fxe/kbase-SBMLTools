@@ -1,7 +1,7 @@
 package pt.uminho.sysbio.biosynthframework.kbase;
 
-import pt.uminho.sysbio.biosynthframework.io.biodb.GithubModelSeedMetaboliteDaoImpl;
-import pt.uminho.sysbio.biosynthframework.io.biodb.GithubModelSeedReactionDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.modelseed.GithubModelSeedMetaboliteDaoImpl;
+import pt.uminho.sysbio.biosynthframework.io.biodb.modelseed.GithubModelSeedReactionDaoImpl;
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
 
 public class KBaseConfig {

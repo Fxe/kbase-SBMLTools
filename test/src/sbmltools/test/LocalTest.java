@@ -26,14 +26,14 @@ import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import kbasereport.WorkspaceObject;
 import kbsolrutil.KBaseAPI;
+import me.fxe.kbase.KBaseFBAModelFactory;
+import me.fxe.kbase.KBaseGenomeAdapter;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentIntegration;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenomeAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIntegration;
@@ -131,7 +131,7 @@ public class LocalTest {
     Collection<String> biomassIds = new HashSet<>();
     Map<String, String> spiToModelSeedReference = KBaseModelSeedIntegration.filter(imap, MetaboliteMajorLabel.ModelSeed);
     Map<String, String> rxnToModelSeedReference = KBaseModelSeedIntegration.filter(rimap, ReactionMajorLabel.ModelSeedReaction);
-    FBAModel model = new FBAModelFactory()
+    FBAModel model = new KBaseFBAModelFactory()
         .withGenomeRef(genomeRef)
         .withSpecieIntegration(sintegration)
         .withReactionIntegration(rintegration)

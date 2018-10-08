@@ -29,6 +29,7 @@ import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.P
 import pt.uminho.ceb.biosystems.mew.utilities.math.language.mathboolean.parser.TokenMgrError;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
+import pt.uminho.sysbio.biosynthframework.CompartmentalizedStoichiometry;
 import pt.uminho.sysbio.biosynthframework.EntityType;
 import pt.uminho.sysbio.biosynthframework.Metabolite;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
@@ -36,8 +37,8 @@ import pt.uminho.sysbio.biosynthframework.Range;
 import pt.uminho.sysbio.biosynthframework.SimpleCompartment;
 import pt.uminho.sysbio.biosynthframework.SimpleModelReaction;
 import pt.uminho.sysbio.biosynthframework.SimpleModelSpecie;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedMetaboliteEntity;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedReactionEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedMetaboliteEntity;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedReactionEntity;
 import pt.uminho.sysbio.biosynthframework.io.MetaboliteDao;
 import pt.uminho.sysbio.biosynthframework.io.ReactionDao;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -49,6 +50,7 @@ import us.kbase.workspace.GetObjectInfo3Results;
 import us.kbase.workspace.ObjectSpecification;
 import us.kbase.workspace.WorkspaceClient;
 
+@Deprecated
 public class FBAModelAdapter implements ModelAdapter {
   
   private static final Logger logger = LoggerFactory.getLogger(FBAModelAdapter.class);
@@ -951,5 +953,17 @@ public class FBAModelAdapter implements ModelAdapter {
         }
       }
     }
+  }
+
+  @Override
+  public CompartmentalizedStoichiometry<String, String> getCompartmentalizedStoichiometry(String arg0) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Set<String> getReactionGeneIds(String arg0) {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

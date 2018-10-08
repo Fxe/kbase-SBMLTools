@@ -26,6 +26,8 @@ import kbasefba.Biomass;
 import kbasefba.FBAModel;
 import kbasegenomes.Genome;
 import kbasereport.WorkspaceObject;
+import me.fxe.kbase.KBaseFBAModelFactory;
+import me.fxe.kbase.KBaseModelAdapter;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
 import pt.uminho.sysbio.biosynthframework.ModelAdapter;
@@ -34,8 +36,6 @@ import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentDetectorF
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentDetectorKBase;
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentIntegration;
 import pt.uminho.sysbio.biosynthframework.integration.model.IntegrationMap;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseBiodbContainer;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
@@ -306,7 +306,7 @@ public class KBaseSbmlImporter {
       }
 
       //order matters ! fix this ... it is a factory ...
-      kmodel = new FBAModelFactory()
+      kmodel = new KBaseFBAModelFactory()
           .withCompartmentMapping(cmap)
           .withGenomeRef(genomeRef)
           .withSpecieIntegration(sintegration)
@@ -322,7 +322,7 @@ public class KBaseSbmlImporter {
       if (genomeRef != null && 
           !genomeRef.trim().isEmpty() && 
           wsClient != null) {
-        FBAModelAdapter mAdapter = new FBAModelAdapter(kmodel);
+        KBaseModelAdapter mAdapter = new KBaseModelAdapter(kmodel);
         Pair<KBaseId, Object> kdata = KBaseIOUtils.getObject2(genomeRef, workspace, null, wsClient);
         Genome genome = KBaseUtils.convert(kdata.getRight(), Genome.class);
         mAdapter.attachGenome(genome, true);
@@ -496,7 +496,12 @@ public class KBaseSbmlImporter {
       e.printStackTrace();
       logger.error("{}", e.getMessage());
     } finally {
-      IOUtils.closeQuietly(freader);
+      try {
+        freader.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+//      IOUtils.closeQuietly(freader);
     }
 
     return result;

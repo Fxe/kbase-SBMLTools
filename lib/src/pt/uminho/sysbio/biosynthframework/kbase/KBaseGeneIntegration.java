@@ -28,6 +28,7 @@ import kbasegenomes.Genome;
 import kbasegenomes.OntologyData;
 import kbsolrutil.KBSolrUtilClient;
 import kbsolrutil.SearchSolrParams;
+import me.fxe.kbase.KBaseGenomeAdapter;
 import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
 import sbmltools.KBaseType;
@@ -171,7 +172,8 @@ public class KBaseGeneIntegration {
           for (Feature f : g.getFeatures()) {
             //ontology_terms should not be null
             if (f.getOntologyTerms() == null) {
-              f.setOntologyTerms(new HashMap<String, Map<String, List<Object>>>());
+              f.setOntologyTerms(new HashMap<String, Map<String, Object>>());
+//              f.setOntologyTerms(new HashMap<String, Map<String, List<Object>>>());
             }
           }
 //          String targetWs = "filipeliu:narrative_1502913563238";
@@ -196,8 +198,13 @@ public class KBaseGeneIntegration {
           report.features = g.getFeatures().size();
           for (Feature f : g.getFeatures()) {
             report.geneFunction.put(f.getId(), f.getFunction());
+            Set<String> faliases = new HashSet<String> ();
+            for (List<String> aliases : f.getAliases()) {
+              faliases.add(KBaseGenomeAdapter.getAlias(aliases));
+//              f.getAliases()
+            }
 //            System.out.println(f);
-            Set<String> faliases = new HashSet<> (f.getAliases());
+            
             faliases.add(f.getId());
             Set<String> fgene = Sets.intersection(faliases, genes);
             nomatch.removeAll(fgene);

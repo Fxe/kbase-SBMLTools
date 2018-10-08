@@ -44,6 +44,7 @@ import pt.uminho.sysbio.biosynthframework.integration.model.XmlReferencesBaseInt
 import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
 import pt.uminho.sysbio.biosynthframework.report.IntegrationReportResultAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
+import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlSpecie;
 import pt.uminho.sysbio.biosynthframework.util.DataUtils;
@@ -51,6 +52,7 @@ import pt.uminho.sysbio.ext.BiGGConflictResolver;
 import pt.uminho.sysbio.ext.MethoBuilder;
 import pt.uminho.sysbio.ext.ModelSeedReactionConflictResolver;
 import pt.uminho.sysbio.ext.ReactionIntegration;
+import us.kbase.biosynthframework.ReactionIntegrationDriver;
 
 public class KBaseModelSeedIntegration {
   
@@ -404,6 +406,11 @@ public class KBaseModelSeedIntegration {
     KBaseMappingResult result = new KBaseMappingResult();
     result.species = cpdDbLinks;
     result.reactions = rxnDbLinks;
+    
+    
+    Map<String, String> modelSeedSpiMapping = new HashMap<>();
+    ReactionIntegrationDriver rxnIntegration = new ReactionIntegrationDriver();
+    rxnIntegration.run(modelSeedSpiMapping, new XmlSbmlModelAdapter(xmodel));
     
     if (resultAdapter != null) {
       resultAdapter.fillSpeciesIntegrationData(cpdDbLinks);

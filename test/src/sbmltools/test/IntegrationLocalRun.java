@@ -26,18 +26,17 @@ import kbasefba.ModelReactionProteinSubunit;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import kbsolrutil.KBaseAPI;
+import me.fxe.kbase.KBaseFBAModelFactory;
 import pt.uminho.ceb.biosystems.mew.biocomponents.container.components.GeneReactionRuleCI;
 import pt.uminho.ceb.biosystems.mew.utilities.grammar.syntaxtree.AbstractSyntaxTree;
 import pt.uminho.sysbio.biosynthframework.BFunction;
-import pt.uminho.sysbio.biosynthframework.BMap;
 import pt.uminho.sysbio.biosynthframework.Dataset;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedRole;
 import pt.uminho.sysbio.biosynthframework.genome.NAlignTool;
 import pt.uminho.sysbio.biosynthframework.io.FileImportKb;
-import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
+import pt.uminho.sysbio.biosynthframework.io.biodb.modelseed.JsonModelSeedRoleDao;
 import pt.uminho.sysbio.biosynthframework.kbase.EasyKBase;
 import pt.uminho.sysbio.biosynthframework.kbase.FBAModelAdapter;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
@@ -181,7 +180,7 @@ public class IntegrationLocalRun {
       if (!DataUtils.empty(gprString)) {
         Set<String> genes = KBaseUtils.getGenes(gprString, geneTransform, true);
         if (genes != null && !genes.isEmpty()) {
-          List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, kmodel.getGenomeRef());
+          List<ModelReactionProtein> mrpList = KBaseFBAModelFactory.setupModelReactionProteins(genes, genome, kmodel.getGenomeRef());
           krxn.setModelReactionProteins(mrpList);
         }
       }
@@ -218,8 +217,8 @@ public class IntegrationLocalRun {
     Map<String, Set<String>> result = new HashMap<> ();
 //    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
     JsonModelSeedRoleDao roleDao = null; //new JsonModelSeedRoleDao(roleJson);
-    for (String k : roleDao.data.keySet()) {
-      ModelSeedRole role = roleDao.data.get(k);
+    for (String k : roleDao.getAllEntries()) {
+      ModelSeedRole role = roleDao.getByEntry(k);
       for (String rxn : role.reactions) {
         rxn = rxn.split(";")[0].trim();
         //    System.out.println(rxn + " " + k); 

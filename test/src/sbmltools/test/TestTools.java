@@ -13,8 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.google.common.base.Predicate;
 
 import kbasegenomes.Genome;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenomeAdapter;
+import me.fxe.kbase.KBaseFBAModelFactory;
+import me.fxe.kbase.KBaseGenomeAdapter;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.util.GprUtils;
 import pt.uminho.sysbio.biosynthframework.util.math.MathUtils;
@@ -56,7 +56,7 @@ public class TestTools {
         }
         prots2.add(pp);
       }
-      List<?> o = FBAModelFactory.setupModelReactionProteins(prots2, genomeo, false);
+      List<?> o = KBaseFBAModelFactory.setupModelReactionProteins(prots2, genomeo, false);
       for (Object oo : o) {
         System.out.println(oo);
       }

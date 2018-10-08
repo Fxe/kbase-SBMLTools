@@ -23,12 +23,12 @@ import kbasefba.ModelReactionProtein;
 import kbasegenomes.Feature;
 import kbasegenomes.Genome;
 import kbsolrutil.KBaseAPI;
+import me.fxe.kbase.KBaseFBAModelFactory;
 import pt.uminho.sysbio.biosynthframework.BFunction;
 import pt.uminho.sysbio.biosynthframework.BHashMap;
 import pt.uminho.sysbio.biosynthframework.BMap;
-import pt.uminho.sysbio.biosynthframework.biodb.seed.ModelSeedRole;
-import pt.uminho.sysbio.biosynthframework.io.biodb.JsonModelSeedRoleDao;
-import pt.uminho.sysbio.biosynthframework.kbase.FBAModelFactory;
+import pt.uminho.sysbio.biosynthframework.biodb.modelseed.ModelSeedRole;
+import pt.uminho.sysbio.biosynthframework.io.biodb.modelseed.JsonModelSeedRoleDao;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseId;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseUtils;
 import sbmltools.KBaseType;
@@ -147,8 +147,8 @@ public class KbaseGenomeUtils {
 //    Resource roleJson = new FileSystemResource("/var/biodb/modelseed/Roles.json");
     JsonModelSeedRoleDao roleDao = null; //new JsonModelSeedRoleDao(roleJson);
     Map<String, Set<String>> aa = new HashMap<> ();
-    for (String k : roleDao.data.keySet()) {
-      ModelSeedRole role = roleDao.data.get(k);
+    for (String k : roleDao.getAllEntries()) {
+      ModelSeedRole role = roleDao.getByEntry(k);
       //  System.out.println(k + " " + role.name);
       if (!aa.containsKey(role.name.trim().toLowerCase())) {
         aa.put(role.name.trim().toLowerCase(), new HashSet<String> ());
@@ -185,7 +185,7 @@ public class KbaseGenomeUtils {
       }
       Set<String> genes = KBaseUtils.getGenes(gpr, geneTransform, allowNumberLocus);
       if (genes != null && !genes.isEmpty()) {
-        List<ModelReactionProtein> mrpList = FBAModelFactory.setupModelReactionProteins(genes, genome, kmodel.getGenomeRef());
+        List<ModelReactionProtein> mrpList = KBaseFBAModelFactory.setupModelReactionProteins(genes, genome, kmodel.getGenomeRef());
         o.setModelReactionProteins(mrpList);
       } else {
         o.setModelReactionProteins(new ArrayList<ModelReactionProtein> ());
