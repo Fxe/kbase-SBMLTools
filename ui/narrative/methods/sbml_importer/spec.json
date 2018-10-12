@@ -1,12 +1,12 @@
 {
-   "ver": "0.0.1",
-    "authors": ["filipeliu"],
-  "contact" : "help@kbase.us",
-  "visble" : true,
-  "categories" : [ "active","metabolic_modeling" ],
-  "widgets" : {
-    "output" : "kbaseTabTable",
-    "input" : null
+  "ver": "0.9.1",
+  "authors": [ "filipeliu"],
+  "contact": "help@kbase.us",
+  "visble": true,
+  "categories": [ "active", "metabolic_modeling"],
+  "widgets": {
+    "output": "kbaseTabTable",
+    "input": null
   },
   "parameters" : [ {
     "id" : "sbml_url",
@@ -86,6 +86,10 @@
           {
               "input_parameter": "sbml_url",
               "target_property": "sbml_url"
+          },
+          {
+              "input_parameter": "input_staging_file_path",
+              "target_property": "input_staging_file_path"
           },
           {
               "input_parameter": "biomass",
