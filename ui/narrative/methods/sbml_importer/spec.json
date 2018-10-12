@@ -10,7 +10,7 @@
   },
   "parameters" : [ {
     "id" : "sbml_url",
-    "optional" : false,
+    "optional" : true,
     "advanced" : false,
     "allow_multiple" : false,
     "default_values" : [ "" ],
@@ -20,7 +20,7 @@
     }
   }, {
     "id" : "input_staging_file_path",
-    "optional" : false,
+    "optional" : true,
     "advanced" : false,
     "allow_multiple" : false,
     "default_values" : [ "" ],

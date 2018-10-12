@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Joiner;
 
 import datafileutil.DataFileUtilClient;
+import datafileutil.DownloadStagingFileParams;
 import kbasefba.Biomass;
 import kbasefba.FBAModel;
 import kbasegenomes.Genome;
@@ -364,14 +365,19 @@ public class KBaseSbmlImporter {
     try {
       String urlPath = params.getSbmlUrl();
       String localPath = null;
-      if (DataUtils.empty(params.getSbmlLocalPath())) {
+      if (!DataUtils.empty(params.getInputStagingFilePath())) {
+        localPath = dfuClient.downloadStagingFile(
+            new DownloadStagingFileParams()
+            .withStagingFileSubdirPath(params.getInputStagingFilePath())).getCopyFilePath();
+        logger.info("#########{}#########", localPath);
+      } else if (DataUtils.empty(params.getSbmlLocalPath())) {
         localPath = KBaseIOUtils.fetchAndCache(params.getSbmlUrl(), LOCAL_CACHE);
       } else {
         localPath = params.getSbmlLocalPath();
       }
 
       if (localPath == null) {
-        throw new IOException("unable to create temp file");
+        throw new IOException("Unable to fetch data. localPath: " + localPath);
       }
       
       FileType fileType = FileType.AUTO;
