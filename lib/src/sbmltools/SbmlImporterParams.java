@@ -35,6 +35,12 @@ public class SbmlImporterParams {
 
     @JsonProperty("sbml_url")
     private java.lang.String sbmlUrl;
+    
+    @JsonProperty("input_staging_file_path")
+    private java.lang.String inputStagingFilePath;
+    
+
+
     @JsonProperty("sbml_local_path")
     private java.lang.String sbmlLocalPath;
     @JsonProperty("file_type")
@@ -69,6 +75,21 @@ public class SbmlImporterParams {
         this.sbmlUrl = sbmlUrl;
         return this;
     }
+    
+    @JsonProperty("input_staging_file_path")
+    public java.lang.String getInputStagingFilePath() {
+      return inputStagingFilePath;
+    }
+
+    @JsonProperty("input_staging_file_path")
+    public void setInputStagingFilePath(java.lang.String inputStagingFilePath) {
+      this.inputStagingFilePath = inputStagingFilePath;
+    }
+    
+    public SbmlImporterParams withInputStagingFilePath(java.lang.String inputStagingFilePath) {
+      this.inputStagingFilePath = inputStagingFilePath;
+      return this;
+  }
 
     @JsonProperty("sbml_local_path")
     public java.lang.String getSbmlLocalPath() {

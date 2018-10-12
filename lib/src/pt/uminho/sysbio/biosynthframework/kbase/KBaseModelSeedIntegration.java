@@ -414,6 +414,9 @@ public class KBaseModelSeedIntegration {
         modelSeedSpiMapping.put(cpdId, msid);
       }
     }
+    
+    logger.info("[{}] running reaction integration", modelEntry);
+    
     ReactionIntegrationDriver rxnIntegration = new ReactionIntegrationDriver();
     Map<String, Map<ReactionMajorLabel, String>> rxnMapping = rxnIntegration.run(modelSeedSpiMapping, new XmlSbmlModelAdapter(xmodel));
     
@@ -426,6 +429,8 @@ public class KBaseModelSeedIntegration {
         rxnDbLinks.get(mrxnId).put(db, rxnMapping.get(mrxnId).get(db));
       }
     }
+    
+    logger.info("[{}] running reaction integration .. done!", modelEntry);
     
     result.species = cpdDbLinks;
     result.reactions = rxnDbLinks;

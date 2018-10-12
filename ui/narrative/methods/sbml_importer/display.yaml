@@ -16,7 +16,12 @@ parameters :
         ui-name : SBML URL
         short-hint : URL with model in SBML format
         long-hint  : URL with model in SBML format
-
+        
+    input_staging_file_path :
+        ui-name : File
+        short-hint : SBML File or Zip containing multiple SBMLS
+        long-hint  : SBML File or Zip containing multiple SBMLS
+        
     model_name :
         ui-name : Name of FBA model
         short-hint : Provide the name for the Flux Balance Analysis Model object that will be created by this upload

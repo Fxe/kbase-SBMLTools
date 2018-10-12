@@ -19,6 +19,14 @@
       "valid_ws_types" : [ ]
     }
   }, {
+    "id" : "input_staging_file_path",
+    "optional" : false,
+    "advanced" : false,
+    "allow_multiple" : false,
+    "default_values" : [ "" ],
+    "field_type" : "dynamic_dropdown",
+    "text_options" : { }
+  }, {
     "id" : "model_name",
     "optional" : true,
     "advanced" : false,
