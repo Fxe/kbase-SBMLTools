@@ -365,12 +365,13 @@ public class KBaseSbmlImporter {
     try {
       String urlPath = params.getSbmlUrl();
       String localPath = null;
-      if (!DataUtils.empty(params.getInputStagingFilePath())) {
-        localPath = dfuClient.downloadStagingFile(
-            new DownloadStagingFileParams()
-            .withStagingFileSubdirPath(params.getInputStagingFilePath())).getCopyFilePath();
-        logger.info("#########{}#########", localPath);
-      } else if (DataUtils.empty(params.getSbmlLocalPath())) {
+//      if (!DataUtils.empty(params.getInputStagingFilePath())) {
+//        localPath = dfuClient.downloadStagingFile(
+//            new DownloadStagingFileParams()
+//            .withStagingFileSubdirPath(params.getInputStagingFilePath())).getCopyFilePath();
+//        logger.info("#########{}#########", localPath);
+//      } else 
+      if (DataUtils.empty(params.getSbmlLocalPath())) {
         localPath = KBaseIOUtils.fetchAndCache(params.getSbmlUrl(), LOCAL_CACHE);
       } else {
         localPath = params.getSbmlLocalPath();

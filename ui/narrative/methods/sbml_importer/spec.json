@@ -19,14 +19,6 @@
       "valid_ws_types" : [ ]
     }
   }, {
-    "id" : "input_staging_file_path",
-    "optional" : true,
-    "advanced" : false,
-    "allow_multiple" : false,
-    "default_values" : [ "" ],
-    "field_type" : "dynamic_dropdown",
-    "text_options" : { }
-  }, {
     "id" : "model_name",
     "optional" : true,
     "advanced" : false,
@@ -86,10 +78,6 @@
           {
               "input_parameter": "sbml_url",
               "target_property": "sbml_url"
-          },
-          {
-              "input_parameter": "input_staging_file_path",
-              "target_property": "input_staging_file_path"
           },
           {
               "input_parameter": "biomass",
