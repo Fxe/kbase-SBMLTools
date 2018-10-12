@@ -48,6 +48,7 @@ module SBMLTools {
     typedef structure {
         string sbml_url;
         string sbml_local_path;
+        string input_staging_file_path;
         string file_type;
         string workspace_name;
         string genome_ref;
