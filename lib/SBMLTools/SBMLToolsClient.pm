@@ -125,6 +125,7 @@ $output is a SBMLTools.SbmlImporterResults
 SbmlImporterParams is a reference to a hash where the following keys are defined:
 	sbml_url has a value which is a string
 	sbml_local_path has a value which is a string
+	input_staging_file_path has a value which is a string
 	file_type has a value which is a string
 	workspace_name has a value which is a string
 	genome_ref has a value which is a string
@@ -149,6 +150,7 @@ $output is a SBMLTools.SbmlImporterResults
 SbmlImporterParams is a reference to a hash where the following keys are defined:
 	sbml_url has a value which is a string
 	sbml_local_path has a value which is a string
+	input_staging_file_path has a value which is a string
 	file_type has a value which is a string
 	workspace_name has a value which is a string
 	genome_ref has a value which is a string
@@ -719,6 +721,7 @@ translate_database has a value which is a string
 a reference to a hash where the following keys are defined:
 sbml_url has a value which is a string
 sbml_local_path has a value which is a string
+input_staging_file_path has a value which is a string
 file_type has a value which is a string
 workspace_name has a value which is a string
 genome_ref has a value which is a string
@@ -737,6 +740,7 @@ conflict_resolution has a value which is a string
 a reference to a hash where the following keys are defined:
 sbml_url has a value which is a string
 sbml_local_path has a value which is a string
+input_staging_file_path has a value which is a string
 file_type has a value which is a string
 workspace_name has a value which is a string
 genome_ref has a value which is a string
