@@ -1,0 +1,2836 @@
+Id	Entry	Name
+1319401	10fthf	10-Formyltetrahydrofolate
+1319414	10fthf5glu	10-formyltetrahydrofolate-[Glu](5)
+1319417	10fthf6glu	10-formyltetrahydrofolate-[Glu](6)
+1319420	10fthf7glu	10-formyltetrahydrofolate-[Glu](7)
+1319423	11-cis-retfa	fatty acid 11-cis-retinol
+1319426	11docrtsl	11-Deoxycortisol
+1319428	11docrtstrn	11-Deoxycorticosterone
+1319429	12HPET	12-Hydroperoxyeicosa-5,8,10,14-tetraenoate
+1319432	12RHPET	12R-Hydroperoxyeicosatetraenoate
+1319434	12dgr120	1,2-Diacyl-sn-glycerol (didodecanoyl, n-C12:0)
+1319437	12dgr140	1,2-Diacyl-sn-glycerol (ditetradecanoyl, n-C14:0)
+1319439	12dgr141	1,2-Diacyl-sn-glycerol (ditetradec-7-enoyl, n-C14:1)
+1319442	12dgr160	1,2-Diacyl-sn-glycerol (dihexadecanoyl, n-C16:0)
+1319444	12dgr161	1,2-Diacyl-sn-glycerol (dihexadec-9-enoyl, n-C16:1)
+1319446	12dgr180	1,2-Diacyl-sn-glycerol (dioctadecanoyl, n-C18:0)
+1319448	12dgr181	1,2-Diacyl-sn-glycerol (dioctadec-11-enoyl, n-C18:1)
+1319450	12dgr_EC	1,2-Diacylglycerol  (E.coli)
+1319453	12dgr_HP	1,2-Diacylglycerol Hp specific
+1319456	12dgr_SA	1,2-Daicylglycerol (Saureus)
+1319459	12dgr_SC	1,2-Diacylglycerol, yeast-specific
+1319462	12harachd	12 hydroxy arachidonic acid
+1319464	12ppd-R	(R)-Propane-1,2-diol
+1319465	12ppd-S	(S)-Propane-1,2-diol
+1319467	13-cis-oretn	13-cis-oxo-retinoic acid
+1319470	13-cis-retn	13-cis-retinoate
+1319472	13-cis-retnglc	13-cis-retinoyl glucuronide
+1319475	13BDglcn	1,3-beta-D-Glucan
+1319476	13dampp	1,3-Diaminopropane
+1319477	13dpg	3-Phospho-D-glyceroyl phosphate
+1319479	14glucan	1,4-alpha-D-glucan
+1319480	14glun	(1,4-alpha-D-Glucosyl)n
+1319481	15HPET	15-Hydroperoxyeicosatetraenoic acid
+1319482	15dap	1,5-Diaminopentane
+1319483	17ahprgnlone	17alpha-Hydroxypregnenolone
+1319484	17ahprgstrn	17alpha-Hydroxyprogesterone
+1319485	18harachd	18 hydroxy arachidonic acid
+1319487	1Dgali	1-alpha-D-Galactosyl-myo-inositol
+1319488	1a2425thvitd2	1-alpha,24R,25-Trihydroxyvitamin D2
+1319490	1a2425thvitd3	1-alpha,24R,25-Trihydroxyvitamin D3
+1319492	1a25dhvitd2	1-alpha,25-Dihydroxyvitamin D2
+1319494	1a25dhvitd3	1-alpha,25-Dihydroxyvitamin D3
+1319496	1ag3p_SC	1-Acyl-sn-glycerol 3-phosphate
+1319499	1agly3p_SC	1-Acyl-glycerone 3-phosphate, yeast-specific
+1319502	1agpe120	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C12:0)
+1319505	1agpe140	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:0)
+1319507	1agpe141	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:1)
+1319510	1agpe160	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:0)
+1319512	1agpe161	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:1)
+1319515	1agpe180	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:0)
+1319517	1agpe181	1-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:1)
+1319519	1agpg120	1-Acyl-sn-glycero-3-phosphoglycerol (n-C12:0)
+1319522	1agpg140	1-Acyl-sn-glycero-3-phosphoglycerol (n-C14:0)
+1319524	1agpg141	1-Acyl-sn-glycero-3-phosphoglycerol (n-C14:1)
+1319527	1agpg160	1-Acyl-sn-glycero-3-phosphoglycerol (n-C16:0)
+1319529	1agpg161	1-Acyl-sn-glycero-3-phosphoglycerol (n-C16:1)
+1319532	1agpg180	1-Acyl-sn-glycero-3-phosphoglycerol (n-C18:0)
+1319534	1agpg181	1-Acyl-sn-glycero-3-phosphoglycerol (n-C18:1)
+1319536	1ddecg3p	1-dodecanoyl-sn-glycerol 3-phosphate
+1319537	1glyc_hs	1 acyl phosphoglycerol
+1319540	1hdec9eg3p	1-hexadec-9-enoyl-sn-glycerol 3-phosphate
+1319543	1hdecg3p	1-hexadecanoyl-sn-glycerol 3-phosphate
+1319545	1mncam	1-Methylnicotinamide
+1319546	1mpyr	1-Methylpyrrolinium
+1319547	1msg3p	1-Acyl-sn-glycerol 3-phosphate (branched C19:0)
+1319550	1odec11eg3p	1-octadec-11-enoyl-sn-glycerol 3-phosphate
+1319552	1odecg3p	1-octadecanoyl-sn-glycerol 3-phosphate
+1319554	1p2cbxl	1-Pyrroline-2-carboxylate
+1319556	1p3h5c	L-1-Pyrroline-3-hydroxy-5-carboxylate
+1319557	1pipdn2c	delta1-Piperideine-2-carboxylate
+1319559	1pyr5c	1-Pyrroline-5-carboxylate
+1319560	1tdec7eg3p	1-tetradec-7-enoyl-sn-glycerol 3-phosphate
+1319563	1tdecg3p	1-tetradecanoyl-sn-glycerol 3-phosphate
+1319565	20ahchsterol	20alpha-hydroxy cholesterol
+1319567	23camp	2',3'-Cyclic AMP
+1319568	23ccmp	2',3'-Cyclic CMP
+1319569	23cgmp	2',3'-Cyclic GMP
+1319570	23cump	2',3'-Cyclic UMP
+1319571	23dappa	2,3-diaminopropionate
+1319573	23ddhb	2,3-Dihydro-2,3-dihydroxybenzoate
+1319574	23dhb	2,3-Dihydroxybenzoate
+1319575	23dhba	(2,3-Dihydroxybenzoyl)adenylate
+1319576	23dhba [deleted 07/14/2004  09:51:42 AM]	(2,3-Dihydroxybenzoyl)adenylate
+1319578	23dhbzs	2,3-dihydroxybenzoylserine
+1319580	23dhdp	2,3-Dihydrodipicolinate
+1319581	23dhmb	(R)-2,3-Dihydroxy-3-methylbutanoate
+1319582	23dhmp	(R)-2,3-Dihydroxy-3-methylpentanoate
+1319583	23doguln	2,3-Dioxo-L-gulonate
+1320961	cmpacna	CMP-N-acetylneuraminate
+1320962	cmpkdo	CMP-3-deoxy-D-manno-octulosonate
+1320963	cmpntm2amep	CMP-N-trimethyl-2-aminoethylphosphonate
+1320965	cmusa	2-Amino-3-carboxymuconate semialdehyde
+1320966	co	Carbon monoxide
+1320967	co1dam	Cob(I)yrinate a,c diamide
+1320968	co2	CO2
+1320969	co2dam	Cob(II)yrinate a,c diamide
+1320970	coa	Coenzyme A
+1320971	cob	coenzyme b
+1320972	cobalt2	Co2+
+1320973	cobya	Cobyrinate
+1320974	codhpre6	cobalt-dihydro-precorrin 6
+1320975	coke	cocaine
+1320976	colipa	core oligosaccharide lipid A
+1320979	com	coenzyme m
+1320980	confrl	Coniferol
+1320981	conialdh	Coniferyl aldehyde
+1320982	copre2	cobalt-precorrin 2
+1320983	copre3	cobalt-precorrin 3
+1320984	copre4	cobalt-precorrin 4
+1320985	copre5	cobalt-precorrin 5
+1320986	copre6	cobalt-precorrin 6
+1320987	copre8	cobalt-precorrin 8
+1320988	core2	Core 2
+1320991	core3	Core 3
+1320994	core4	Core 4
+1320997	core5	Core 5
+1320999	core6	Core 6
+1321001	core7	Core 7
+1321003	core8	Core 8
+1321005	core_lps_hp	core_lps_hp
+1321008	cortsn	Cortisone
+1321009	coucoa	p-coumaroyl-CoA
+1321011	coumarin	coumarin
+1321012	cpe160	cyclopropane phosphatidylethanolamine (dihexadec-9,10-cyclo-anoyl, n-C16:0 cyclo)
+1321014	cpe180	cyclopropane phosphatidylethanolamine (dioctadec-11,12-cyclo-anoyl, n-C18:0 cyclo)
+1321016	cpg160	cyclopropane phosphatidylglycerol (dihexadec-9,10-cyclo-anoyl, n-C16:0 cyclo)
+1321018	cpg180	cyclopropane phosphatidylglycerol (dioctadec-11,12-cyclo-anoyl, n-C18:0 cyclo)
+1321021	cpgn	coprogen
+1321023	cpgn-un	coprogen unloaded (no Fe(III))
+1321026	cpppg1	Coproporphyrinogen I
+1321027	cpppg3	Coproporphyrinogen III
+1321028	creat	Creatine
+1321029	crm_hs	ceramide (homo sapiens)
+1321032	crmp_hs	Ceramide 1-phosphate
+1321034	crn	L-Carnitine
+1321035	crn-D	D-Carnitine
+1321036	crnDcoa	D-carnitinyl-CoA
+1321038	crncoa	L-Carnitinyl-CoA
+1321040	crtn	Creatinine
+1321041	crtsl	Cortisol
+1321042	crtstrn	Corticosterone
+1321043	crvnc	cervonic acid, C22:6 n-3
+1321046	cs,hs_linkage	chondroitin sulfate/heparan sulfate linkage region (GlcA-(Gal)2-Xyl-L-Ser (protein))
+1321049	cs_a	chondroitin sulfate A (GalNAc4S-GlcA), free chain
+1321052	cs_a,b,e_pre1	chondroitin sulfate A (GalNAc4S-GlcA), B (IdoA2S-GalNAc4S), and E (GalNAc4,6diS-GlcA), precursor 1
+1321055	cs_a,b_pre2	chondroitin sulfate A (GalNAc4S-GlcA) and B (IdoA2S-GalNAc4S), precursor 2
+1321058	cs_a,b_pre3	chondroitin sulfate A (GalNAc4S-GlcA) and B (IdoA2S-GalNAc4S), precursor 3
+1321061	cs_a_deg1	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 1
+1321064	cs_a_deg2	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 2
+1321067	cs_a_deg3	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 3
+1321070	cs_a_deg4	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 4
+1321073	cs_a_deg5	chondroitin sulfate A (GalNAc4S-GlcA), degradation product 5
+1321076	cs_b	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S), free chain
+1321079	cs_b_deg1	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S), degradation product 1
+1321081	cs_b_deg2	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S), degradation product 2
+1321084	cs_b_deg3	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S), degradation product 3
+1321086	cs_b_pre4	chondroitin sulfate B (IdoA2S-GalNAc4S), precursor 4
+1321088	cs_b_pre5	chondroitin sulfate B (IdoA2S-GalNAc4s), precursor 5
+1321091	cs_c	chondroitin sulfate C (GalNAc6S-GlcA), free chain
+1321093	cs_c,d,e_pre1	chondroitin sulfate C (GalNAc6S-GlcA) and D (GlcNAc6S-GlcA2S), precursor 1
+1321095	cs_c_deg1	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 1
+1321097	cs_c_deg2	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 2
+1321099	cs_c_deg3	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 3
+1321101	cs_c_deg4	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 4
+1321103	cs_c_deg5	chondroitin sulfate C (GalNAc6S-GlcA), degradation product 5
+1321105	cs_c_pre2	chondroitin sulfate C (GalNAc6S-GlcA), precursor 2
+1321107	cs_c_pre3	chondroitin sulfate C (GalNAc6S-GlcA), precursor 3
+1321109	cs_d	chondroitin sulfate D (GlcNAc6S-GlcA2S), free chain
+1321112	cs_d_deg1	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 1
+1321114	cs_d_deg2	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 2
+1321117	cs_d_deg3	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 3
+1321119	cs_d_deg4	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 4
+1321122	cs_d_deg5	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 5
+1321124	cs_d_deg6	chondroitin sulfate D (GlcNAc6S-GlcA2S), degradation product 6
+1321127	cs_d_pre2	chondroitin sulfate D (GlcNAc6S-GlcA2S) precursor 2
+1321130	cs_d_pre3	chondroitin sulfate D (GlcNAc6S-GlcA2S), precursor 3
+1321133	cs_d_pre4	chondroitin sulfate D (GlcNAc6S-GlcA2S), precursor 4
+1321135	cs_d_pre5	chondroitin sulfate D (GlcNAc6S-GlcA2S), precursor 5
+1321138	cs_e	chondroitin sulfate E (GalNAc4,6diS-GlcA), free chain
+1321141	cs_e_deg1	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 1
+1321143	cs_e_deg2	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 2
+1321145	cs_e_deg3	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 3
+1321147	cs_e_deg4	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 4
+1321150	cs_e_deg5	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 5
+1320576	amet	S-Adenosyl-L-methionine
+1320577	ametam	S-Adenosylmethioninamine
+1320578	amob	S-Adenosyl-4-methylthio-2-oxobutanoate
+1320579	amp	AMP
+1320580	amuco	2-Aminomuconate
+1320581	andrstandn	androstanedione
+1320582	andrstndn	Androstenedione
+1320583	andrstrn	Androsterone
+1320584	andrstrnglc	androsterone glucuronide
+1320585	anhgm	N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramic acid
+1320588	anhgm3p	N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramyl-tripeptide
+1320591	anhgm4p	N-Acetyl-D-glucosamine(anhydrous)N-Acetylmuramyl-tetrapeptide
+1320594	anhm	1,6-anhydrous-N-Acetylmuramate
+1320596	anhm3p	1,6-anhydrous-N-Acetylmuramyl-tripeptide
+1320599	anhm4p	1,6-anhydrous-N-Acetylmuramyl-tetrapeptide
+1320602	anth	Anthranilate
+1320603	antipyrene	antipyrene
+1320605	ap4a	P1,P4-Bis(5'-adenosyl) tetraphosphate
+1320606	ap4g	P1-(5'-adenosyl),P4-(5'-guanosyl) tetraphosphate
+1320609	ap5a	P1,P5-Bis(5'-adenosyl) pentaphosphate
+1320610	apep	Nalpha-Acetylpeptide
+1320612	apg120	acyl phosphatidylglycerol (n-C12:0)
+1320615	apg140	acyl phosphatidylglycerol (n-C14:0)
+1320618	apg141	acyl phosphatidylglycerol (n-C14:1)
+1320621	apg160	acyl phosphatidylglycerol (n-C16:0)
+1320624	apg161	acyl phosphatidylglycerol (n-C16:1)
+1320627	apg180	acyl phosphatidylglycerol (n-C18:0)
+1320630	apg181	acyl phosphatidylglycerol (n-C18:1)
+1320633	apg_EC	acyl phosphatidylglycerol (E.coli)
+1320636	apnnox	alpha-Pinene-oxide
+1320637	apoACP	apoprotein [acyl carrier protein]
+1320640	apoC	Apocarboxlase (no lys residue)
+1320642	apoC-Lys	Apocarboxylase (Lys residue)
+1320645	apoC-Lys_btn	Holocarboxylase (biotin covalent bound to Lys residue of apoC)
+1320648	appl	1-Aminopropan-2-ol
+1320649	applp	D-1-Aminopropan-2-ol O-phosphate
+1320650	appnn	(+)-alpha-Pinene
+1320651	aprgstrn	20alpha-Hydroxyprogesterone
+1320652	aproa	3-Aminopropanal
+1320653	aprop	alpha-Aminopropiononitrile
+1320655	aprut	N-Acetylputrescine
+1320656	aps	Adenosine 5'-phosphosulfate
+1320657	aqcobal	Aquacob(III)alamin
+1320659	ara5p	D-Arabinose 5-phosphate
+1320660	arab-D	D-Arabinose
+1320661	arab-L	L-Arabinose
+1320662	arabinan	arabinan complex (Mtb)
+1320665	arabinanagalfragund	arabinan-arabinofuranose-galactofuranosyl(30)-rhamanosyl-N-acetylglucosamyl-undecaprenyl diphosphate (M tb)
+1320668	arach	Arachidic acid
+1320669	arachACP	eicosanoyl-ACP (n-C20:0)
+1320672	arachcoa	arachidyl coenzyme A
+1320674	arachcrn	arachidyl carnitine
+1320676	arachd	arachidonic acid
+1320677	arachdcoa	C20:4-CoA
+1320678	arachdcrn	C20:4 carnitine
+1320680	aragund	O-acetyl-rhamanosyl-N-acetylglucosamyl-undecaprenyl diphosphate
+1320683	arbt6p	Arbutin 6-phosphate
+1320684	arbtn	aerobactin minus Fe3
+1320686	arbtn-fe3	Aerobactin
+1320688	arg-D	D-Arginine
+1320689	arg-L	L-Arginine
+1320690	argsuc	N(omega)-(L-Arginino)succinate
+1320691	argtrna	L-Arginyl-tRNA(Arg)
+1320693	arpp	5-phosphoarabinose pyrophosphate
+1320695	ascb-L	L-Ascorbate
+1320696	ascb6p	L-ascorbate-6-phosphate
+1320699	asn-L	L-Asparagine
+1320700	asntrna	L-Asparaginyl-tRNA(Asn)
+1320702	aso3	arsenite
+1320703	aso4	arsenate
+1320704	asp-D	D-Aspartate
+1320706	asp-L	L-Aspartate
+1320707	aspsa	L-Aspartate 4-semialdehyde
+1320708	asptrna	L-Aspartyl-tRNA(Asp)
+1320709	athr-L	L-Allo-threonine
+1320710	atp	ATP
+1320711	atrz	Atrazine
+1320713	avite1	alpha-Tocopherol
+1320714	avite2	alpha-Tocotrienol
+1320715	b124tc	But-1-ene-1,2,4-tricarboxylate
+1320716	b2coa	Crotonoyl-CoA
+1320718	bamppald	beta-Aminopropion aldehyde
+1320719	bbtcoa	gamma-butyrobetainyl-CoA
+1320720	bdg2hc	cis-beta-D-Glucosyl-2-hydroxycinnamate
+1320722	betald	Betaine aldehyde
+1320723	bgly	N-Benzoylglycine
+1320724	bglycogen	branching glycogen
+1320726	bhb	(R)-3-Hydroxybutanoate
+1320727	bildglcur	Bilirubin beta-diglucuronide
+1320729	bilglcur	Bilirubin monoglucuronide
+1320730	bilirub	Bilirubin
+1320731	biliverd	Biliverdin
+1320732	biocyt	Biocytin
+1320733	bmn	bimane
+1320734	bmnmsh	bimane conjugated mycothiol (mtb)
+1320737	btal	Butanal
+1320738	btamp	Biotinyl-5'-AMP
+1320739	btcoa	Butanoyl-CoA
+1320740	btn	Biotin
+1320741	btnso	d-biotin d-sulfoxide
+1320743	but	Butyrate (n-C4:0)
+1320745	but2eACP	But-2-enoyl-[acyl-carrier protein]
+1320748	butACP	Butyryl-ACP (n-C4:0ACP)
+1320751	butso3	butanesulfonate
+1320753	bvite	beta-tocopherol
+1320754	bz	Benzoate
+1320755	bz12diol	cis-1,2-Dihydroxycyclohexa-3,5-diene-1-carboxylate
+1320756	bzal	Benzaldehyde
+1320757	bzalc	Benzyl alcohol
+1320758	c190cACP	19 carbon cyclopropane-ACP
+1320761	c226coa	cervonyl coenzyme A
+1320763	c226crn	cervonyl carnitine
+1320766	c2m26dcoa	cis-2-Methyl-5-isopropylhexa-2,5-dienoyl-CoA
+1320767	ca2	Calcium
+1320224	Lfmkynr	L-Formylkynurenine
+1320225	Lkynr	L-Kynurenine
+1320226	Lpipecol	L-Pipecolate
+1320227	N1aspmd	N1-Acetylspermidine
+1320229	N1sprm	N1-Acetylspermine
+1320231	NPmehis	N(pai)-Methyl-L-histidine
+1320232	Nacasp	N-Acetyl-L-aspartate
+1320233	Nacsertn	N-Acetylserotonin
+1320234	Ndmelys	Protein N6,N6-dimethyl-L-lysine
+1320236	Nforglu	N-Formyl-L-glutamate
+1320237	Nmelys	Histone N6-methyl-L-lysine
+1320241	Nmtrp	N-Methyltryptophan
+1320243	Ntmelys	Protein N6,N6,N6-trimethyl-L-lysine
+1320245	PIM1	phosphatidylinositol mannoside (tuberculosis)
+1320248	PIM2	phosphatidylinositol mannoside di-mannose (tuberculosis)
+1320251	PIM3	phosphatidylinositol mannoside tri-mannose (tuberculosis)
+1320254	PIM4	phosphatidylinositol mannoside tetra-mannose (tuberculosis)
+1320257	PIM5	phosphatidylinositol mannoside penta-mannose (tuberculosis)
+1320260	PIM6	phosphatidylinositol mannoside hexa-mannose (tuberculosis)
+1320263	R-3hcddec5ecoa	(R)-Hydroxydodecanoyl-5-en-CoA
+1320265	R-3hcmrs7ecoa	(R)-3-hydroxy-cis-myristol-7-eoyl-CoA
+1320267	R-3hdcoa	(R)-Hydroxydecanoyl-CoA
+1320269	R-3hddcoa	(R)-3-Hydroxydodecanoyl-CoA
+1320271	R-3hhcoa	(R)-Hydroxyhexanoyl-CoA
+1320273	R-3hmrscoa	(R)-3-hydroxytetradecanoyl-coa
+1320274	R-3hocoa	(R)-Hydroxyoctanoyl-CoA
+1320276	R1coa_hs	R group 1 Coenzyme A homo sapiens
+1320279	R2coa_hs	R group 2 Coenzyme A homo sapiens
+1320281	R3coa_hs	R group 3 Coenzyme A homo sapiens
+1320283	R4coa_hs	R group 4 Coenzyme A homo sapiens
+1320285	R5coa_hs	R group 5 Coenzyme A homo sapiens
+1320287	R6coa_hs	R group 6 Coenzyme A homo sapiens
+1320289	Rh2cit	(R)-(homo)2citrate
+1320291	Rh3cit	(R)-(homo)3citrate
+1320293	Rtotal	R total
+1320296	Rtotal2	R total 2 position
+1320299	Rtotal2coa	R total 2 coenzyme A
+1320302	Rtotal2crn	R total 2 carnitine
+1320305	Rtotal3	R total 3 position
+1320308	Rtotal3coa	R total 3 Coenzyme A
+1320311	Rtotal3crn	R total 3 carnitine
+1320314	Rtotalcoa	R total Coenzyme A
+1320317	Rtotalcrn	R total carnitine
+1320320	S-gtrdhdlp	S-Glutaryldihydrolipoamide
+1320322	S2hglut	(S)-2-Hydroxyglutarate
+1320323	SA_FREE_FA	SA Free Fatty Acids
+1320326	Ser-Gly/Ala-X-Gly	protein-linked serine residue (glycosaminoglycan attachment site)
+1320328	Ser/Thr	protein-linked serine or threonine residue (O-glycosylation site)
+1320330	Sfglutth	S-Formylglutathione
+1320331	Shcit	S-homocitrate
+1320333	Sptmyn	Spectinomycin
+1320334	Ssq23epx	(S)-Squalene-2,3-epoxide
+1320335	Stmyn	Streptomycin
+1320337	T4hcinnm	trans-4-Hydroxycinnamate
+1320340	T_antigen	T antigen (core 1)
+1320343	Tn_antigen	Tn antigen
+1320346	Tyr-ggn	Tyr-194 of apo-glycogenin protein (primer for glycogen synthesis)
+1320349	aa	acrylamide
+1320350	aacald	Aminoacetaldehyde
+1320351	aacoa	Acetoacetyl-CoA
+1320352	aact	Aminoacetone
+1320353	abt	L-Arabinitol
+1320354	ac	Acetate
+1320355	acACP	Acetyl-ACP
+1320358	acac	Acetoacetate
+1320359	acald	Acetaldehyde
+1320360	acanth	N-Acetylanthranilate
+1320361	accoa	Acetyl-CoA
+1320362	acetol	Acetol
+1320363	acetone	Acetone
+1320364	acg5p	N-Acetyl-L-glutamyl 5-phosphate
+1320365	acg5sa	N-Acetyl-L-glutamate 5-semialdehyde
+1320366	acgagbside_hs	alpha GalNAc globoside (homo sapiens)
+1320369	acgal	N-Acetyl-D-galactosamine
+1320370	acgal1p	N-Acetyl-D-galactosamine 1-phosphate
+1320371	acgalfuc12gal14acglcgalgluside_hs	(Gal)2 (GalNAc)1 (Glc)1 (GlcNAc)1 (LFuc)1 (Cer)1
+1320373	acgalfucgalacgalfuc12gal14acglcgalgluside_hs	Type IIIA glycolipid
+1320375	acgalfucgalacgalfucgalacglcgal14acglcgalgluside_hs	Type IIIAb
+1320378	acgalfucgalacglcgal14acglcgalgluside_hs	(Gal)3 (GalNAc)1 (Glc)1 (GlcNAc)2 (LFuc)1 (Cer)1
+1320380	acgalfucgalacglcgalgluside_hs	Type IA glycolipid
+1320381	acgam	N-Acetyl-D-glucosamine
+1320382	acgam1p	N-Acetyl-D-glucosamine 1-phosphate
+1320383	acgam6p	N-Acetyl-D-glucosamine 6-phosphate
+1320385	acgbgbside_hs	beta GalNAc globoside (homo sapiens)
+1320387	acglc-D	6-Acetyl-D-glucose
+1320388	acglc13galacglcgal14acglcgalgluside_hs	nLc7Cer
+1320391	acglcgal14acglcgalgluside_hs	nLc5Cer
+1320392	acglcgalacglcgal14acglcgalgluside_hs	(Gal)3 (Glc)1 (GlcNAc)3 (Cer)1
+1320393	acglcgalgbside_hs	GlcNAc-Gal globoside (homo sapiens)
+1320396	acglcgalgluside_hs	(Gal)1 (Glc)1 (GlcNAc)1 (Cer)1
+1320399	acglu	N-Acetyl-L-glutamate
+1320400	acgpail_hs	N-Acetyl-D-glucosaminylphosphatidylinositol
+1320402	ach	Acetylcholine
+1320403	achms	O-Acetyl-L-homoserine
+1320404	acmalt	Acetyl-maltose
+1320405	acmam	N-Acetyl-D-muramoate
+1320407	acmama	N-Acetyl-D-muramoyl-L-alanine
+1320408	acmana	N-Acetyl-D-mannosamine
+1320409	acmanap	N-Acetyl-D-mannosamine 6-phosphate
+1320410	acmum	N-Acetylmuramate
+1320411	acmum6p	N-acetylmuramate 6-phosphate
+1320412	acn13acngalgbside_hs	sialyl (1,3) sialyl (2,6) galactosylgloboside (homo sapiens)
+1320415	acn23acngalgbside_hs	sialyl (2,3) sialyl (2,6) galactosylgloboside (homo sapiens)
+1320768	caffcoa	Caffeoyl-CoA
+1320769	cala	N-Carbamoyl-beta-alanine
+1320770	camp	cAMP
+1320771	caphis	2-(3-Carboxy-3-aminopropyl)-L-histidine
+1320772	carn	L-Carnosine
+1320774	caro	beta-Carotene
+1320775	carveol	(E)-carveol
+1320777	catechol	Catechol
+1320778	cbasp	N-Carbamoyl-L-aspartate
+1320779	cbi	Cobinamide
+1320780	cbl1	Cob(I)alamin
+1320781	cbl1hbi	Cob(I)alamin-HBI
+1320783	cbl2	Cob(II)alamin
+1320785	cbp	Carbamoyl phosphate
+1320786	cca_d3	Calcitroic acid (D3)
+1320789	cchoxod	2-Hydroxy-6-keto-2,4-heptadienoate
+1320790	ccmuac	cis,cis-Muconate
+1320791	cd2	Cadmium
+1320792	cddec5eACP	cis-dodec-5-enoyl-[acyl-carrier protein] (n-C12:1)
+1320795	cdec3eACP	cis-dec-3-enoyl-[acyl-carrier protein] (n-C10:1)
+1320798	cdgggp	CDP-2,3-digeranylgeranyl-sn-glycerol
+1320800	cdp	CDP
+1320801	cdpc16c19g	cdp diacylglycerol (C16:0, C19:0)
+1320804	cdpc19c19g	cdp diacylglycerol (C19:0, C19:0)
+1320807	cdpchol	CDPcholine
+1320809	cdpdag_EC	CDPdiacylglycerol (E coli)
+1320813	cdpdag_HP	CDP-Diacylglycerol Hp specific
+1320816	cdpdag_SA	CDPdiacylglycerol (Saureus)
+1320819	cdpdag_SC	CDPdiacylglycerol, yeast-specific
+1320822	cdpdag_hs	CDP diacylglycerol (homo sapiens)
+1320825	cdpdddecg	CDP-1,2-didodecanoylglycerol
+1320828	cdpdhdec9eg	CDP-1,2-dihexadec-9-enoylglycerol
+1320831	cdpdhdecg	CDP-1,2-dihexadecanoylglycerol
+1320833	cdpdodec11eg	CDP-1,2-dioctadec-11-enoylglycerol
+1320836	cdpdodecg	CDP-1,2-dioctadecanoylglycerol
+1320839	cdpdtdec7eg	CDP-1,2-ditetradec-7-enoylglycerol
+1320842	cdpdtdecg	CDP-1,2-ditetradecanoylglycerol
+1320845	cdpea	CDPethanolamine
+1320847	cdpg	Cyclic 2,3-bisphospho-D-glycerate
+1320848	cdpglyc	CDPglycerol
+1320850	cechddd	cis-3-(3-carboxyethyl)-3,5-cyclohexadiene-1,2-diol
+1320851	cenchddd	cis-3-(3-carboxyethenyl)-3,5-cyclohexadiene-1,2-diol
+1320853	cer1_24	Ceramide-1 (Sphinganine:n-C24:0)
+1320855	cer1_26	Ceramide-1 (Sphinganine:n-C26:0)
+1320857	cer2'_24	Ceramide-2' (Sphinganine:n-C24:0OH)
+1320859	cer2'_26	Ceramide-2' (Sphinganine:n-C26:0OH)
+1320861	cer2_24	Ceramide-2 (Phytosphingosine:n-C24:0)
+1320863	cer2_26	Ceramide-2 (Phytosphingosine:n-C26:0)
+1320865	cer3_24	Ceramide-3 (Phytosphingosine:n-C24:0OH)
+1320867	cer3_26	Ceramide-3 (Phytosphingosine:n-C26:0OH)
+1320869	cgly	Cys-Gly
+1320870	ch4	methane
+1320871	ch4s	Methanethiol
+1320872	chexccoa	carboxy hexacosanoyl-CoA
+1320875	chitin	Chitin (monomer)
+1320877	chito2pdol_L	N,N'-Diacetylchitobiosyldiphosphodolichol, human liver homolog
+1320881	chito2pdol_U	N,N'-Diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1320884	chitos	Chitosan
+1320885	chlstol	Cholesta-7,24-dien-3beta-ol
+1320887	chol	Choline
+1320889	cholate	Cholate
+1320890	cholcoa	Choloyl-CoA
+1320891	cholcoads	3alpha,7alpha,12alpha-Trihydroxy-5beta-cholest-24-enoyl-CoA
+1320892	cholcoaone	3alpha,7alpha,12alpha-Trihydroxy-5beta-24-oxocholestanoyl-CoA
+1320893	cholcoar	3alpha,7alpha,12alpha-Trihydroxy-5beta-cholestanoyl-CoA
+1320894	cholcoas	3alpha,7alpha,12alpha-Trihydroxy-5beta-cholestanoyl-CoA(S)
+1320896	cholp	Choline phosphate
+1320897	chols	Choline sulfate
+1320898	chor	chorismate
+1320900	chpd	2-Hydroxy-2,4-pentadienoate
+1320901	chsterol	Cholesterol
+1320902	chsterols	cholesterol sulfate
+1320904	chtn	chitin
+1320905	cigam	cys-1D-myo-inositol 2-deoxy-D-glucopyranoside
+1320907	cinnm	trans-Cinnamate
+1320908	cit	Citrate
+1320909	citmcoa-L	L-Citramalyl-CoA
+1320910	citr-L	L-Citrulline
+1320911	ckdo	CMP-3-deoxy-D-manno-octulosonate
+1320912	cl	Chloride
+1320913	clpn120	cardiolipin (tetradodecanoyl, n-C12:0)
+1320916	clpn140	cardiolipin (tetratetradecanoyl, n-C14:0)
+1320919	clpn141	cardiolipin (tetratetradec-7-enoyl, n-C14:1)
+1320922	clpn160	cardiolipin (tetrahexadecanoyl, n-C16:0)
+1320925	clpn160190	cardiolipin (dihexadecanoyl, dimethylstearoyl)
+1320928	clpn161	cardiolipin (tetrahexadec-9-enoyl, n-C16:1)
+1320930	clpn180	cardiolipin (tetraoctadecanoyl, n-C18:0)
+1320933	clpn181	cardiolipin (tetraoctadec-11-enoyl, n-C18:1)
+1320935	clpn_EC	Cardiolipin (Ecoli)
+1320938	clpn_HP	Cardiolipin (Hpylori)
+1320940	clpn_SA	Cardiolipin (Saureus)
+1320943	clpn_SC	Cardiolipin, yeast-specific
+1320946	clpn_hs	cardiolipin (homo sapiens)
+1320949	clpnd	clupanodonic acid
+1320950	clpndcoa	clupanodonyl CoA
+1320952	clpndcrn	clupanodonyl carnitine
+1320954	cmaphis	2-[3-Carboxy-3-(methylammonio)propyl]-L-histidine
+1320955	cmcbtt	carboxymycobactin T (R=8 carbon, final carbon is carboxyl group)
+1320958	cmp	CMP
+1320959	cmp2amep	CMP-2-aminoethylphosphonate
+1319744	2p4c2me	2-phospho-4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol
+1319745	2pg	D-Glycerate 2-phosphate
+1319746	2pglyc	2-Phosphoglycolate
+1319747	2plac-L	2-phospho-L-lactate
+1319748	2ppoh	2-Propanol
+1319749	2saa	2-sulfoacetaldehyde
+1319750	2shchc	2-Succinyl-6-hydroxy-2,4-cyclohexadiene-1-carboxylate
+1319752	2tcc	2-(sulfomethyl)thiazolidine-4-carboxylic acid
+1319754	2tdec7eg3p	2-tetradec-7-enoyl-sn-glycerol 3-phosphate
+1319757	2tdecg3p	2-tetradecanoyl-sn-glycerol 3-phosphate
+1319760	2tpr3dpcoa	2'-(5''-triphosphoribosyl)-3'-dephospho-CoA
+1319761	34dhbald	3,4-dihydroxybenzaldehyde
+1319762	34dhbz	3,4-Dihydroxybenzoate
+1319763	34dhcinm	3,4-Dihydroxy-trans-cinnamate
+1319764	34dhmald	3,4-Dihydroxymandelaldehyde
+1319765	34dhoxmand	3,4-Dihydroxymandelate
+1319766	34dhoxpeg	3,4-Dihydroxyphenylethyleneglycol
+1319767	34dhpac	3,4-Dihydroxyphenylacetaldehyde
+1319768	34dhpha	3,4-Dihydroxyphenylacetate
+1319769	34dhphe	3,4-Dihydroxy-L-phenylalanine
+1319770	34hpl	3-(4-Hydroxyphenyl)lactate
+1319771	34hpp	3-(4-Hydroxyphenyl)pyruvate
+1319772	35ccmp	3',5'-Cyclic CMP
+1319773	35cdamp	3',5'-Cyclic dAMP
+1319775	35cgmp	3',5'-Cyclic GMP
+1319777	35cimp	3',5'-Cyclic IMP
+1319778	35diotyr	3,5-Diiodo-L-tyrosine
+1319780	36dahx	(3S)-3,6-Diaminohexanoate
+1319781	3AStmyn	3"-Adenylylstreptomycin
+1319784	3AStrmyn	3''-Adenylylspectinomycin
+1319787	3aib	L-3-Amino-isobutanoate
+1319788	3aib-D	D-3-Amino-isobutanoate
+1319790	3amp	3'-AMP
+1319791	3c2hmp	3-Carboxy-2-hydroxy-4-methylpentanoate
+1319792	3c3hmp	3-Carboxy-3-hydroxy-4-methylpentanoate
+1319793	3c4mop	3-Carboxy-4-methyl-2-oxopentanoate
+1319794	3cmp	3'-cmp
+1319795	3ddgc	3-Dehydro-2-deoxy-D-gluconate
+1319796	3dhguln	3-Dehydro-L-gulonate
+1319797	3dhgulnp	3-keto-L-gulonate-6-phosphate
+1319799	3dhq	3-Dehydroquinate
+1319800	3dhsk	3-Dehydroshikimate
+1319801	3dpdhb	3-Decaprenyl-4,5-dihdydroxybenzoate
+1319803	3dpdhb_me	3-Decaprenyl-4-hydroxy-5-methoxybenzoate
+1319804	3dphb	3-Decaprenyl-4-hydroxybenzoate
+1319806	3dsphgn	3-Dehydrosphinganine
+1319807	3g12dgr_SA2	3-D-Glucosyl-1,2-diacylglycerol
+1319810	3gmp	3'-GMP
+1319811	3h26dm5coa	3-Hydroxy-2,6-dimethyl-5-methylene-heptanoyl-CoA
+1319812	3haACP	(3R)-3-Hydroxyacyl-[acyl-carrier protein]
+1319815	3hacoa	(S)-3-Hydroxyacyl-CoA
+1319817	3hadpcoa	(3S)-3-Hydroxyadipyl-CoA
+1319818	3hanthrn	3-Hydroxyanthranilate
+1319819	3hbcoa	(S)-3-Hydroxybutanoyl-CoA
+1319820	3hbcoa-R	(R)-3-Hydroxybutanoyl-CoA
+1319821	3hcddec5eACP	(R)-3-hydroxy-cis-dodec-5-enoyl-[acyl-carrier protein]
+1319824	3hcdgggp	CDP-2-O-(3'-hydroxy)geranyl-3-O-geranyl-sn-glycerol
+1319827	3hcinnm	3-hydroxycinnamic acid
+1319828	3hcmrs7eACP	(R)-3-hydroxy-cis-myristol-7-eoyl-[acyl-carrier protein]
+1319831	3hcpalm9eACP	(R)-3-hydroxy-cis-palm-9-eoyl-[acyl-carrier protein]
+1319834	3hcvac11eACP	(R)-3-hydroxy-cis-vacc-11-enoyl-[acyl-carrier protein]
+1319837	3hdcoa	(S)-3-Hydroxydecanoyl-CoA
+1319838	3hddcoa	(S)-3-Hydroxydodecanoyl-CoA
+1319839	3hddecACP	(R)-3-Hydroxydodecanoyl-[acyl-carrier protein]
+1319841	3hdecACP	(R)-3-Hydroxydecanoyl-[acyl-carrier protein]
+1319845	3hdgggp	2-O-(3'-hydroxy)geranyl-3-O-geranyl-sn-glycerol
+1319848	3hdgggps	2-O-(3'-hydroxy)geranyl-3-O-geranyl-sn-glyceroserine
+1319850	3hdggpg	2-O-(3'-hydroxy)geranyl-3-O-geranyl-sn-glycerol-1-phospho-3'-sn-glycerol
+1319853	3hdggpgp	2-O-(3'-hydroxy)geranyl-3-O-geranyl-sn-glycerol-1-phospho-3'-sn-glycerol phosphate
+1319856	3hdggpi	2-O-(3'hydroxy)geranyl-3-O-geranyl-sn-glycero-1-phospho-myo-inositol
+1319859	3hdpgpe	2-O-(3'-hydroxy)phytanyl-3-O-phytanyl-sn-glycero-l-phosphoethanolamine
+1319862	3hdpgpg	2-O-(3'-hydroxy)phytanyl-3-O-phytanyl-sn-glycerol-1-phospho-3'-sn-glycerol
+1319865	3hdpgpi	2-O-(3'-hydroxyl)phytanyl-3-O-phytanyl-sn-glycero-1-phospho-myo-inositol
+1319868	3hdpgps	2-O-(3'-hydroxy)phytanyl-3-O-phytanyl-sn-glycero-l-phosphoserine
+1319871	3hfrdp	3-hydroxy-farnesyl diphosphate
+1319874	3hggdp	3-hydroxy-geranylgeranyl diphosphate
+1319876	3hgrdp	3-hydroxy-geranyl diphsophate
+1319879	3hhcoa	(S)-3-Hydroxyhexanoyl-CoA
+1319880	3hhdcoa	(S)-3-Hydroxyhexadecanoyl-CoA
+1319881	3hhexACP	(R)-3-Hydroxyhexanoyl-[acyl-carrier protein]
+1319883	3hibutcoa	(S)-3-Hydroxyisobutyryl-CoA
+1319884	3hmbcoa	(S)-3-Hydroxy-2-methylbutyryl-CoA
+1319885	3hmp	3-Hydroxy-2-methylpropanoate
+1319886	3hmrsACP	(R)-3-Hydroxytetradecanoyl-[acyl-carrier protein]
+1319889	3hocoa	(S)-3-Hydroxyoctanoyl-CoA
+1319890	3hoctACP	(R)-3-Hydroxyoctanoyl-[acyl-carrier protein]
+1319894	3hoctaACP	(R)-3-Hydroxyoctadecanoyl-[acyl-carrier protein]
+1319897	3hodcoa	(S)-3-Hydroxyoctadecanoyl-CoA
+1319898	3hpalmACP	R-3-hydroxypalmitoyl-[acyl-carrier protein]
+1319902	3hpcoa	3-Hydroxypropionyl-CoA
+1319903	3hpp	3-Hydroxypropanoate
+1320032	4mlacac	4-Maleylacetoacetate
+1320033	4mop	4-Methyl-2-oxopentanoate
+1320034	4mpetz	4-Methyl-5-(2-phosphoethyl)-thiazole
+1320035	4mptnl	4-Methylpentanal
+1320036	4mtolbutamide	4 hydroxy tolbutamide
+1320038	4mzym	4-methylzymosterol
+1320039	4mzym_int1	4-Methylzymosterol intermediate 1
+1320041	4mzym_int2	4-Methylzymosterol intermediate 2
+1320043	4nph	4-Nitrophenol
+1320044	4nphsf	4-Nitrophenyl sulfate
+1320046	4pasp	4-Phospho-L-aspartate
+1320047	4per	4-Phospho-D-erythronate
+1320048	4ppan	D-4'-Phosphopantothenate
+1320049	4ppcys	N-((R)-4-Phosphopantothenoyl)-L-cysteine
+1320051	4pyrdx	4-Pyridoxate
+1320052	4r5au	4-(1-D-Ribitylamino)-5-aminouracil
+1320054	4tmeabut	4-Trimethylammoniobutanal
+1320055	4tmeabutn	4-Trimethylammoniobutanoate
+1320056	56dihindlcrbxlt	5,6-Dihydroxyindole-2-carboxylate
+1320057	56dthm	5,6-Dihydrothymine
+1320058	56dura	5,6-dihydrouracil
+1320059	5HPET	5-Hydroperoxy-6-trans-8,11,14-cis-eicosatetraenoate
+1320060	5a2opntn	5-Amino-2-oxopentanoate
+1320061	5adtststerone	5alpha-Dihydrotestosterone
+1320062	5adtststeroneglc	5alpha-Dihydrotestosterone glucuronide
+1320064	5adtststerones	5alpha-Dihydrotestosterone sulfate
+1320067	5aizc	5-amino-1-(5-phospho-D-ribosyl)imidazole-4-carboxylate
+1320068	5aop	5-Amino-4-oxopentanoate
+1320069	5apentam	5-Aminopentanamide
+1320070	5aprbu	5-Amino-6-(5'-phosphoribitylamino)uracil
+1320071	5apru	5-Amino-6-(5'-phosphoribosylamino)uracil
+1320072	5aptn	5-Aminopentanoate
+1320073	5caiz	5-phosphoribosyl-5-carboxyaminoimidazole
+1320075	5dglcn	5-Dehydro-D-gluconate
+1320076	5dh4dglc	5-Dehydro-4-deoxy-D-glucarate
+1320077	5dhf	pentaglutamyl folate (DHF)
+1320080	5dpmev	(R)-5-Diphosphomevalonate
+1320081	5drib	5'-deoxyribose
+1320082	5forthf	5-Formiminotetrahydrofolate
+1320083	5fthf	5-Formyltetrahydrofolate
+1320084	5g2oxpt	5-Guanidino-2-oxopentanoate
+1320085	5hbzid	5-hydroxybenzimidazole
+1320088	5homeprazole	5 hydroxy omeprazole
+1320090	5hoxindact	5-Hydroxyindoleacetaldehyde
+1320091	5hoxindoa	5-Hydroxyindoleacetate
+1320093	5hoxnfkyn	5-Hydroxy-N-formylkynurenine
+1320094	5htrp	5-Hydroxy-L-tryptophan
+1320095	5hxkyn	5-Hydroxykynurenine
+1320096	5hxkynam	5-Hydroxykynurenamine
+1320097	5mdr1p	5-Methylthio-5-deoxy-D-ribose 1-phosphate
+1320099	5mdru1p	5-Methylthio-5-deoxy-D-ribulose 1-phosphate
+1320101	5moxact	5-Methoxyindoleacetate
+1320102	5mta	5-Methylthioadenosine
+1320103	5mthf	5-Methyltetrahydrofolate
+1320105	5mthglu	5-Methyltetrahydropteroyltri-L-glutamate
+1320107	5mtr	5-Methylthio-D-ribose
+1320108	5odhf2a	5-Oxo-4,5-dihydrofuran-2-acetate
+1320109	5oxpro	5-Oxoproline
+1320110	5pmev	(R)-5-Phosphomevalonate
+1320111	5pr5hbz	N1-(5-Phospho-alpha-D-ribosyl)-5-hydroxybenzimidazole
+1320114	5prdmbz	N1-(5-Phospho-alpha-D-ribosyl)-5,6-dimethylbenzimidazole
+1320115	5thf	pentaglutamyl folate (THF)
+1320118	6a2ohxnt	6-Amino-2-oxohexanoate
+1320119	6ax	6-Aminohexanoate
+1320120	6ax6ax	N-(6-Aminohexanoyl)-6-aminohexanoate
+1320121	6dg	D-Gal-alpha-1->6D-Glucose
+1320124	6dhf	haxglutamyl folate (DHF)
+1320127	6hmhpt	6-hydroxymethyl dihydropterin
+1320129	6hmhptpp	6-hydroxymethyl-dihydropterin pyrophosphate
+1320131	6hnac	6-Hydroxynicotinate
+1320132	6hoxmelatn	6-Hydroxymelatonin
+1320133	6htststerone	6 beta hydroxy testosterone
+1320135	6p2dhglcn	6-Phospho-2-dehydro-D-gluconate
+1320136	6pgc	6-Phospho-D-gluconate
+1320137	6pgl	6-phospho-D-glucono-1,5-lactone
+1320138	6pthp	6-Pyruvoyl-5,6,7,8-tetrahydropterin
+1320139	6thf	hexaglutamyl folate  (THF)
+1320142	7dhchsterol	7-Dehydrocholesterol
+1320143	7dhf	heptaglutamyl folate (DHF)
+1320146	7mhp	7-mercaptoheptanoic acid
+1320148	7mht	7-mercaptoheptanoylthreonine
+1320150	7ohp	7-oxoheptanoic acid
+1320151	7thf	heptaglutamyl folate (THF)
+1320154	8aonn	8-Amino-7-oxononanoate
+1320155	9-cis-retfa	fatty acid 9-cis-retinol
+1320157	ACP	acyl carrier protein
+1320160	Ac1PIM1	acyl phosphatidylinositol mannoside (tuberculosis)
+1320163	Ac1PIM2	acyl phosphatidylinositol mannoside di-mannose (tuberculosis)
+1320166	Ac1PIM3	acyl phosphatidylinositol mannoside tri-mannose (tuberculosis)
+1320169	Ac1PIM4	acyl phosphatidylinositol mannoside tetra-mannose (tuberculosis)
+1320172	Ac2PIM2	di-acyl phosphatidylinositol mannoside di-mannose (tuberculosis)
+1320175	Asn-X-Ser/Thr	protein-linked asparagine residue (N-glycosylation site)
+1320178	Brfap	4-(B-D-ribofuranosyl)aminobenzene 5'-phosphate
+1320180	C04051	C04051
+1320182	C100mclPHA	C10:0-Medium-chain length Polyhydroxyalkanoate.
+1320185	C120mclPHA	C12:0-Medium-chain length Polyhydroxyalkanoate.
+1320188	C121mclPHA	C12:1-Medium-chain length Polyhydroxyalkanoate.
+1320191	C140mclPHA	C14:0-Medium-chain length Polyhydroxyalkanoate.
+1320194	C141mclPHA	C14:1-Medium-chain length Polyhydroxyalkanoate.
+1320197	C60mclPHA	C6:0-Medium-chain length Polyhydroxyalkanoate
+1320200	C80mclPHA	C8:0-Medium-chain length Polyhydroxyalkanoate.
+1320203	CCbuttc	cis,cis-Butadiene-1,2,4-tricarboxylate
+1320204	Cit-Mg	Citrate-Mg
+1320207	DGDG_SA	Diglucosyl Diglyceride (SA)
+1320210	Dara14lac	D-Arabinono-1,4-lactone
+1320211	L-dpchrm	L-Dopachrome
+1320212	L2aadp	L-2-Aminoadipate
+1320213	L2aadp6sa	L-2-Aminoadipate 6-semialdehyde
+1320214	LalaDglu	L-alanine-D-glutamate
+1320216	LalaDgluMdap	L-alanine-D-glutamate-meso-2,6-diaminoheptanedioate
+1320218	LalaDgluMdapDala	L-alanine-D-glutamate-meso-2,6-diaminoheptanedioate-D-alanine
+1320220	LalaLglu	L-alanine-L-glutamate
+1320222	Lcyst	L-Cysteate
+1320223	Lcystin	L-Cystine
+1320417	acnacngal14acglcgalgluside_hs	3',8'-LD1
+1320420	acnacngalgbside_hs	disialyl galactosylgloboside (homo sapiens)
+1320422	acnam	N-Acetylneuraminate
+1320423	acnamp	N-Acetylneuraminate 9-phosphate
+1320425	acngal14acglcgalgluside_hs	Sialyl-3-paragloboside
+1320427	acngalacglcgal14acglcgalgluside_hs	VI3NeuAc-nLc6Cer
+1320429	acngalacglcgalgluside_hs	(Gal)3 (Glc)1 (GlcNAc)1 (Cer)1
+1320430	acngalgbside_hs	sialyl galactosylgloboside (homo sapiens)
+1320433	acoa	Acyl-CoA
+1320435	acolipa	4-Amino-4-deoxy-L-arabinose modified core oligosaccharide lipid A
+1320439	acon-C	cis-Aconitate
+1320440	acon-T	trans-Aconitate
+1320442	aconm	E-3-carboxy-2-pentenedioate 6-methyl ester
+1320444	acorn	N2-Acetyl-L-ornithine
+1320445	acrn	O-Acetylcarnitine
+1320446	acryl	Acrylate
+1320447	acser	O-Acetyl-L-serine
+1320449	actACP	Acetoacetyl-ACP
+1320452	actn-R	(R)-Acetoin
+1320453	actp	Acetyl phosphate
+1320454	acybut	gamma-Amino-gamma-cyanobutanoate
+1320455	acysbmn	acetyl-cystine-bimane
+1320458	ad	acetamide
+1320459	adcobdam	Adenosyl cobyrinate diamide
+1320460	adcobhex	adenosyl-cobyric acid
+1320462	ade	Adenine
+1320463	adfdOX	Oxidized adrenal ferredoxin
+1320465	adfdRD	Reduced adrenal ferredoxin
+1320467	adhap_hs	acyl-dihydroxyacetone phosphate
+1320470	adhlam	S-Acetyldihydrolipoamide
+1320471	adn	Adenosine
+1320472	adocbi	Adenosyl cobinamide
+1320473	adocbip	Adenosyl cobinamide phosphate
+1320474	adocbl	Adenosylcobalamin
+1320475	adocblhbi	Adenosylcobalamin-HBI
+1320478	adp	ADP
+1320480	adpglc	ADPglucose
+1320481	adphep-DD	ADP-D-glycero-D-manno-heptose
+1320482	adphep-LD	ADP-L-glycero-D-manno-heptose
+1320483	adphep7p-LD	ADP-L-glycero-D-manno-heptose-7-phosphate
+1320486	adpman	ADPmannose
+1320487	adprbp	ADPribose 2'-phosphate
+1320488	adprib	ADPribose
+1320489	adrn	adrenic acid
+1320490	adrncoa	adrenyl coenzyme A
+1320492	adrncrn	Adrenyl carnitine
+1320494	adrnl	Adrenaline
+1320495	adsel	Adenylylselenate
+1320497	aflatoxin	aflatoxin B1
+1320498	ag	silver
+1320499	agalfragund	arabinofuranose-galactofuranosyl(30)-rhamanosyl-N-acetylglucosamyl-undecaprenyl diphosphate (M tb)
+1320502	agdpcbi	Adenosine-GDP-cobinamide
+1320503	agdpgpi	N-Acetyl-D-glucosaminyl archaetidylinositol
+1320506	agm	Agmatine
+1320507	agpc_EC	acyl-glycerophosphocholine
+1320510	agpe_EC	acyl-glycerophosphoethanolamine  (E.coli)
+1320513	agpg_EC	acyl-glycerophosphoglycerol  (E.coli)
+1320517	ahandrostan	3alpha-Hydroxy-5beta-androstan-17-one
+1320518	ahandrostanglc	Etiocholan-3alpha-ol-17-one 3-glucuronide
+1320519	ahcys	S-Adenosyl-L-homocysteine
+1320520	ahdt	2-Amino-4-hydroxy-6-(erythro-1,2,3-trihydroxypropyl)dihydropteridine triphosphate
+1320521	aicar	5-Amino-1-(5-Phospho-D-ribosyl)imidazole-4-carboxamide
+1320522	air	5-amino-1-(5-phospho-D-ribosyl)imidazole
+1320524	ak2g_hs	1-alkyl 2-acylglycerol
+1320527	ak2gchol_hs	1-alkyl 2-acylglycerol 3-phosphocholine
+1320530	ak2gp_hs	1-alkyl 2-acylglycerol 3-phosphate
+1320533	ak2gpe_hs	1-alkyl 2-acylglycerol 3-phosphoethanolamine
+1320536	ak2lgchol_hs	1-alkyl 2-lysoglycerol 3-phosphocholine
+1320539	akdhap_hs	1-alkyldihydroxyacetone phosphate
+1320542	akg	2-Oxoglutarate
+1320543	akgp_hs	1-alkylglycerol 3-phosphate (homo sapiens)
+1320546	ala-B	beta-Alanine
+1320547	ala-D	D-Alanine
+1320548	ala-L	L-Alanine
+1320549	alaala	D-Alanyl-D-alanine
+1320550	alac-S	(S)-2-Acetolactate
+1320551	alatrna	L-Alanyl-tRNA(Ala)
+1320553	aldstrn	Aldosterone
+1320554	alkylR1oh	hydroxy alkyl chain
+1320557	all-D	D-Allose
+1320558	all6p	D-Allose 6-phosphate
+1320559	allphn	Allophanate
+1320560	alltn	Allantoin
+1320561	alltt	Allantoate
+1320562	allul6p	Allulose 6-phosphate
+1320564	alpa_hs	lysophosphatidic acid (homo sapiens)
+1320567	alpam	S-aminomethyldihydrolipoamide
+1320570	alpp	applipoprotein
+1320572	alpro	S-Aminomethyldihydrolipoylprotein
+1320574	altrn	D-Altronate
+1320575	am6sa	2-Aminomuconate 6-semialdehyde
+1319584	23dpg	2,3-Disphospho-D-glycerate
+1319585	2425dhvitd2	24R,25-Dihyoxyvitamin D2
+1319587	2425dhvitd3	24R,25-Dihydroxyvitamin D3
+1319589	24dab	L-2,4-Diaminobutanoate
+1319590	24nph	2,4 dihydroxy nitrophenol
+1319592	25aics	(S)-2-[5-Amino-1-(5-phospho-D-ribosyl)imidazole-4-carboxamido]succinate
+1319593	25dhpp	2,5-Diamino-6-hydroxy-4-(5'-phosphoribosylamino)-pyrimidine
+1319594	25dkglcn	2,5-diketo-D-gluconate
+1319596	25drapp	2,5-Diamino-6-(ribosylamino)-4-(3H)-pyrimidinone 5'-phosphate
+1319598	25dthpp	2,5-diamino-6-ribitylamino-4(3H)-pyrimidinone 5'-phosphate
+1319600	25hvitd2	25-Hydroxyvitamin D2
+1319602	25hvitd3	25-Hydroxyvitamin D3
+1319603	26dap-LL	LL-2,6-Diaminoheptanedioate
+1319604	26dap-M	meso-2,6-Diaminoheptanedioate
+1319605	2a3pp	2-Amino-3-phosphonopropanoate
+1319606	2agpe120	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C12:0)
+1319608	2agpe140	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:0)
+1319610	2agpe141	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C14:1)
+1319612	2agpe160	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:0)
+1319614	2agpe161	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C16:1)
+1319616	2agpe180	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:0)
+1319618	2agpe181	2-Acyl-sn-glycero-3-phosphoethanolamine (n-C18:1)
+1319620	2agpg120	2-Acyl-sn-glycero-3-phosphoglycerol (n-C12:0)
+1319622	2agpg140	2-Acyl-sn-glycero-3-phosphoglycerol (n-C14:0)
+1319624	2agpg141	2-Acyl-sn-glycero-3-phosphoglycerol (n-C14:1)
+1319626	2agpg160	2-Acyl-sn-glycero-3-phosphoglycerol (n-C16:0)
+1319628	2agpg161	2-Acyl-sn-glycero-3-phosphoglycerol (n-C16:1)
+1319630	2agpg180	2-Acyl-sn-glycero-3-phosphoglycerol (n-C18:0)
+1319632	2agpg181	2-Acyl-sn-glycero-3-phosphoglycerol (n-C18:1)
+1319634	2ahbut	(S)-2-Aceto-2-hydroxybutanoate
+1319635	2ahhmd	2-Amino-4-hydroxy-6-hydroxymethyl-7,8-dihydropteridine diphosphate
+1319636	2ahhmp	2-Amino-4-hydroxy-6-hydroxymethyl-7,8-dihydropteridine
+1319637	2amac	2-Aminoacrylate
+1319638	2ameph	(2-Aminoethyl)phosphonate
+1319640	2amsa	2-Aminomalonate semialdehyde
+1319641	2aobut	L-2-Amino-3-oxobutanoate
+1319642	2c23dh56dhoxin	2-Carboxy-2,3-dihydro-5,6-dihydroxyindole
+1319644	2c25dho	2-Carboxy-2,5-dihydro-5-oxofuran-2-acetate
+1319645	2coum	cis-2-Hydroxy cinnamate
+1319646	2cpr5p	1-(2-Carboxyphenylamino)-1-deoxy-D-ribulose 5-phosphate
+1319647	2dda7p	2-Dehydro-3-deoxy-D-arabino-heptonate 7-phosphate
+1319648	2ddecg3p	2-dodecanoyl-sn-glycerol 3-phosphate
+1319651	2ddg6p	2-Dehydro-3-deoxy-D-gluconate 6-phosphate
+1319652	2ddglcn	2-Dehydro-3-deoxy-D-gluconate
+1319653	2dglcn	2-Deoxy-D-gluconate
+1319654	2dh3dgal	2-Dehydro-3-deoxy-D-galactonate
+1319655	2dh3dgal6p	2-Dehydro-3-deoxy-D-galactonate 6-phosphate
+1319656	2dhglcn	2-Dehydro-D-gluconate
+1319658	2dhguln	2-Dehydro-L-gulonate
+1319660	2dhp	2-Dehydropantoate
+1319661	2dhphaccoa	1,2-Dihydroxy-1,2-dihydrophenylacetyl-CoA
+1319663	2dmmq6	2-Demethylmenaquinone 6
+1319665	2dmmq8	2-Demethylmenaquinone 8
+1319667	2dmmql8	2-Demethylmenaquinol 8
+1319669	2dp6mep	2-Decaprenyl-6-methoxyphenol
+1319670	2dp6mobq	2-Decaprenyl-6-methoxy-1,4-benzoquinone
+1319671	2dp6mobq_me	2-Decaprenyl-3-methyl-6-methoxy-1,4-benzoquinone
+1319673	2dpmhobq	2-Decaprenyl-3-methyl-5-hydroxy-6-methoxy-1,4-benzoquinone
+1319675	2dr1p	2-Deoxy-D-ribose 1-phosphate
+1319676	2dr5p	2-Deoxy-D-ribose 5-phosphate
+1319678	2h3oppan	2-Hydroxy-3-oxopropanoate
+1319679	2hb	2-Hydroxybutyrate
+1319680	2hchd	2-Hydroxy-cis-hex-2,4-dienoate
+1319681	2hdec9eg3p	2-hexadec-9-enoyl-sn-glycerol 3-phosphate
+1319684	2hdecg3p	2-hexadecanoyl-sn-glycerol 3-phosphate
+1319687	2hhxdal	2-Hydroxy-hexadecanal
+1319689	2hmc	2-Hydroxymuconate
+1319691	2hmcnsad	2-Hydroxymuconate semialdehyde
+1319692	2hymeph	2-(Hydroxymethyl)phenol
+1319694	2hyoxplac	2-Hydroxyphenylacetate
+1319695	2ins	2-Inosose
+1319696	2ippm	2-Isopropylmaleate
+1319697	2kmb	2-keto-4-methylthiobutyrate
+1319699	2maacoa	2-Methyl-3-acetoacetyl-CoA
+1319700	2mahmp	2-Methyl-4-amino-5-hydroxymethylpyrimidine diphosphate
+1319701	2mb2coa	trans-2-Methylbut-2-enoyl-CoA
+1319702	2mbcoa	2-Methylbutanoyl-CoA
+1319703	2mbdhl	S-(2-Methylbutanoyl)-dihydrolipoamide
+1319704	2mcacn	cis-2-Methylaconitate
+1319705	2mcit	2-Methylcitrate
+1319706	2me4p	2-C-methyl-D-erythritol 4-phosphate
+1319707	2mecdp	2-C-methyl-D-erythritol 2,4-cyclodiphosphate
+1319708	2mop	2-Methyl-3-oxopropanoate
+1319709	2mp2coa	2-Methylprop-2-enoyl-CoA
+1319710	2mpdhl	S-(2-Methylpropanoyl)-dihydrolipoamide
+1319711	2obut	2-Oxobutanoate
+1319712	2odec11eg3p	2-octadec-11-enoyl-sn-glycerol 3-phosphate
+1319715	2odecg3p	2-octadecanoyl-sn-glycerol 3-phosphate
+1319718	2ohph	2-Octaprenyl-6-hydroxyphenol
+1319719	2ohph_5	2-Octaprenyl-6-hydroxyphenol (5 repeating units)
+1319721	2ombz	2-Octaprenyl-6-methoxy-1,4-benzoquinone
+1319722	2ombzl	2-Octaprenyl-6-methoxy-1,4-benzoquinol
+1319723	2ombzl_5	2-Octaprenyl-6-methoxy-1,4-benzoquinol (5 repeating units)
+1319725	2omcm	2-oxo-5-methyl-cis-muconate
+1319726	2omhmbl	2-Octaprenyl-3-methyl-5-hydroxy-6-methoxy-1,4-benzoquinol
+1319727	2omhmbl_5	2-Octaprenyl-3-methyl-5-hydroxy-6-methoxy-1,4-benzoquinol (5 repeating units)
+1319729	2ommb	2-Octaprenyl-3-methyl-6-methoxy-1,4-benzoquinone
+1319730	2ommbl	2-Octaprenyl-3-methyl-6-methoxy- 1,4-benzoquinol
+1319732	2ommbl_5	2-Octaprenyl3-methyl-6-methoxy-1,4-benzoquinol (5 repeating units)
+1319734	2omph	2-Octaprenyl-6-methoxyphenol
+1319735	2omph_5	2-Octaprenyl-6-methoxyphenol (5 repeating units)
+1319737	2ood	2-oxooctanedioic acid
+1319740	2oph	2-Octaprenylphenol
+1319741	2oph_5	2-Octaprenylphenol (5 repeating units)
+1319743	2oxoadp	2-Oxoadipate
+1319904	3hpppn	3-(3-hydroxy-phenyl)propionate
+1319906	3htdcoa	(S)-3-Hydroxytetradecanoyl-CoA
+1319907	3htmelys	3-Hydroxy-N6,N6,N6-trimethyl-L-lysine
+1319909	3hxccoa	(S)-3-Hydroxyhexacosyl-CoA
+1319911	3hxkynam	3-Hydroxykynurenamine
+1319912	3ig3p	C'-(3-Indolyl)-glycerol 3-phosphate
+1319914	3ityr-L	3-Iodo-L-tyrosine
+1319915	3m4hpga	3-Methoxy-4-hydroxyphenylglycolaldehyde
+1319916	3mb2coa	3-Methylbut-2-enoyl-CoA
+1319917	3mbdhl	S-(3-Methylbutanoyl)-dihydrolipoamide
+1319918	3mbzalc	3-methylbenzyl alcohol
+1319919	3mbzald	3-Methylbenzaldehyde
+1319920	3mcat	3-Methylcatechol
+1319921	3mgcoa	3-Methylglutaconyl-CoA
+1319922	3mlda	3-Methylimidazoleacetic acid
+1319924	3mldz	3-Methylimidazole acetaldehyde
+1319926	3mob	3-Methyl-2-oxobutanoate
+1319927	3mop	(S)-3-Methyl-2-oxopentanoate
+1319928	3mox4hoxm	3-Methoxy-4-hydroxymandelate
+1319929	3mox4hpac	3-Methoxy-4-hydroxyphenylacetaldehyde
+1319930	3moxtyr	3-Methoxytyramine
+1319931	3oacoa	3-Oxoacyl-CoA
+1319933	3ocddec5eACP	3-oxo-cis-dodec-5-enoyl-[acyl-carrier protein]
+1319936	3ocmrs7eACP	3-oxo-cis-myristol-7-eoyl-[acyl-carrier protein]
+1319939	3ocpalm9eACP	3-oxo-cis-palm-9-eoyl-[acyl-carrier protein]
+1319942	3ocvac11eACP	3-oxo-cis-vacc-11-enoyl-[acyl-carrier protein]
+1319945	3odcoa	3-Oxodecanoyl-CoA
+1319946	3oddcoa	3-Oxododecanoyl-CoA
+1319947	3oddecACP	3-Oxododecanoyl-[acyl-carrier protein]
+1319948	3odecACP	3-Oxodecanoyl-[acyl-carrier protein]
+1319950	3ohcoa	3-Oxohexanoyl-CoA
+1319951	3ohdcoa	3-Oxohexadecanoyl-CoA
+1319952	3ohexACP	3-Oxohexanoyl-[acyl-carrier protein]
+1319954	3ohodcoa	3-Oxooctadecanoyl-CoA
+1319955	3ohxccoa	3-Oxohexacosyl-CoA
+1319957	3omrsACP	3-Oxotetradecanoyl-[acyl-carrier protein]
+1319958	3oocoa	3-Oxooctanoyl-CoA
+1319959	3ooctACP	3-Oxooctanoyl-[acyl-carrier protein]
+1319961	3ooctdACP	3-Oxooctadecanoyl-[acyl-carrier protein]
+1319963	3oodcoa	3-Oxooctadecanoyl-CoA
+1319964	3opalmACP	3-Oxohexadecanoyl-[acyl-carrier protein]
+1319965	3ophb	3-Octaprenyl-4-hydroxybenzoate
+1319966	3ophb_5	3-Hexaprenyl-4-hydroxybenzoate
+1319968	3otdcoa	3-Oxotetradecanoyl-CoA
+1319969	3oxoadp	3-Oxoadipate
+1319970	3padsel	3'-Phosphoadenylylselenate
+1319972	3pg	3-Phospho-D-glycerate
+1319973	3php	3-Phosphohydroxypyruvate
+1319974	3pop	3-Phosphonopyruvate
+1319975	3psme	5-O-(1-Carboxyvinyl)-3-phosphoshikimate
+1319976	3sala	3-Sulfino-L-alanine
+1319977	3snpyr	3-Sulfinopyruvate
+1319979	3spyr	3-Sulfopyruvate
+1319981	3uib	3-Ureidoisobutyrate
+1319982	3ump	3'-UMP
+1319984	42A3HP24DB	4-(2-Amino-3-hydroxyphenyl)-2,4-dioxobutanoate
+1319985	44mctr	4,4-dimethylcholesta-8,14,24-trienol
+1319986	44mzym	4,4-dimethylzymosterol
+1319987	46dhoxquin	4,6-Dihydroxyquinoline
+1319988	48dhoxquin	4,8-Dihydroxyquinoline
+1319989	4aabutn	4-Acetamidobutanoate
+1319990	4abut	4-Aminobutanoate
+1319991	4abutn	4-Aminobutanal
+1319992	4abz	4-Aminobenzoate
+1319993	4adcho	4-amino-4-deoxychorismate
+1319994	4ahmmp	4-Amino-5-hydroxymethyl-2-methylpyrimidine
+1319995	4ampm	4-Amino-2-methyl-5-phosphomethylpyrimidine
+1319996	4aphdob	4-(2-Aminophenyl)-2,4-dioxobutanoate
+1319997	4c2me	4-(cytidine 5'-diphospho)-2-C-methyl-D-erythritol
+1319998	4cmcoa	4-Coumaroyl-CoA
+1319999	4cml	4-Carboxymuconolactone
+1320000	4fumacac	4-Fumarylacetoacetate
+1320001	4gudbd	4-Guanidinobutanamide
+1320002	4gudbutn	4-Guanidinobutanoate
+1320003	4h2oglt	4-Hydroxy-2-oxoglutarate
+1320004	4h2opntn	4-Hydroxy-2-oxopentanoate
+1320005	4h2oxov	4-Hydroxy-2-oxovalerate
+1320006	4hba	4-Hydroxy-benzyl alcohol
+1320008	4hbald	4-Hydroxybenzaldehyde
+1320009	4hbz	4-Hydroxybenzoate
+1320010	4hbzACP	4-hydroxybenzoyl ACP
+1320013	4hbzcoa	4-hydroxybenoyl-CoA
+1320015	4hdebrisoquine	4 hydroxy debrisoquine
+1320018	4hglusa	L-4-Hydroxyglutamate semialdehyde
+1320019	4hoxoh	4-Hydroxy-2-oxohexanoic acid
+1320020	4hoxpacd	4-Hydroxyphenylacetaldehyde
+1320021	4hphac	4-Hydroxyphenylacetate
+1320022	4hpro-LT	trans-4-Hydroxy-L-proline
+1320023	4hthr	4-Hydroxy-L-threonine
+1320024	4izp	4-Imidazolone-5-propanoate
+1320025	4kfbp	4-ketofructose 1,6-bisphosphate
+1320028	4mbzalc	4-methylbenzyl alcohol
+1320029	4mbzald	p-methylbenzaldehyde
+1320030	4mcat	4-Methylcatechol
+1320031	4mhetz	4-Methyl-5-(2-hydroxyethyl)-thiazole
+1322432	im4ac	Imidazole-4-acetate
+1322433	im4act	Imidazole-4-acetaldehyde
+1322434	imacp	3-(Imidazol-4-yl)-2-oxopropyl phosphate
+1322435	imp	IMP
+1322436	ind3ac	Indole-3-acetate
+1322437	ind3acnl	Indole-3-acetonitrile
+1322438	indaccoa	S-2-(indol-3-yl)acetyl-CoA
+1322439	indole	Indole
+1322440	indpyr	Indolepyruvate
+1322443	inost	myo-Inositol
+1322444	ins	Inosine
+1322445	iodine	Iodine
+1322446	ipc124_SC	Inositol phosphorylceramide, ceramide-1 (24C), yeast-specific
+1322449	ipc126_SC	Inositol phosphorylceramide, ceramide-1 (26C), yeast-specific
+1322452	ipc224_SC	Inositol phosphorylceramide, ceramide-2 (24C), yeast-specific
+1322455	ipc226_SC	Inositol phosphorylceramide, ceramide-2 (26C), yeast-specific
+1322458	ipc324_SC	Inositol phosphorylceramide, ceramide-3 (24C), yeast-specific
+1322461	ipc326_SC	Inositol phosphorylceramide, ceramide-3 (26C), yeast-specific
+1322464	ipdp	Isopentenyl diphosphate
+1322465	isetac	Isethionic acid
+1322466	itaccoa	Itaconyl-CoA
+1322467	itacon	Itaconate
+1322468	itp	ITP
+1322469	ivcoa	Isovaleryl-CoA
+1322470	k	potassium
+1322471	kdn	2-keto-3-deoxy-D-glycero-D-galactononic acid
+1322473	kdnp	2-keto-3-deoxy-D-glycero-D-galactononic acid 9-phosphate
+1322475	kdo	3-Deoxy-D-manno-2-octulosonate
+1322476	kdo2lipid4	KDO(2)-lipid IV(A)
+1322478	kdo2lipid4L	KDO(2)-lipid IV(A) with laurate
+1322480	kdo2lipid4p	KDO(2)-lipid IV(A) with palmitoleoyl
+1322482	kdo8p	3-Deoxy-D-manno-octulosonate 8-phosphate
+1322483	kdolipid4	KDO-lipid IV(A)
+1322484	kdolipid4_HP	KDO-lipid IV(A)_HP
+1322487	kmeroacidACP	keto meroacid ACP
+1322490	kmeroacidcyc1ACP	cyclopropanated keto-meroacid ACP (1 cyclopropane ring)
+1322493	kmeroacidcyc2ACP	cyclopropanated keto-meroacid ACP (2 cyclopropane rings)
+1322496	kmeroacidcyc2AMP	cyclopropanated keto-meroacid AMP (2 cyclopropane rings)
+1322499	kmycolate	keto mycolate (2 cyclopropanated rings)
+1322502	kphphhlipa	kdo-phospho-heptosyl-phospho-heptosyl-heptosyl-kdo2-lipidA
+1322505	ksi	keratan sulfate I
+1322508	ksi_deg1	keratan sulfate I, degradation product 1
+1322511	ksi_deg10	keratan sulfate I, degradation product 10
+1322514	ksi_deg11	keratan sulfate I, degradation product 11
+1322517	ksi_deg12	keratan sulfate I, degradation product 12
+1322520	ksi_deg13	keratan sulfate I, degradation product 13
+1322523	ksi_deg14	keratan sulfate I, degradation product 14
+1322526	ksi_deg15	keratan sulfate I, degradation product 15
+1322529	ksi_deg16	keratan sulfate I, degradation product 16
+1322532	ksi_deg17	keratan sulfate I, degradation product 17
+1322535	ksi_deg18	keratan sulfate I, degradation product 18
+1322538	ksi_deg19	keratan sulfate I, degradation product 19
+1322541	ksi_deg2	keratan sulfate I, degradation product 2
+1322544	ksi_deg20	keratan sulfate I, degradation product 20
+1322547	ksi_deg21	keratan sulfate I, degradation product 21
+1322550	ksi_deg22	keratan sulfate I, degradation product 22
+1322553	ksi_deg23	keratan sulfate I, degradation product 23
+1322556	ksi_deg24	keratan sulfate I, degradation product 24
+1322559	ksi_deg25	keratan sulfate I, degradation product 25
+1322562	ksi_deg26	keratan sulfate I, degradation product 26
+1322565	ksi_deg27	keratan sulfate I, degradation product 27
+1322568	ksi_deg28	keratan sulfate I, degradation product 28
+1322571	ksi_deg29	keratan sulfate I, degradation product 29
+1322574	ksi_deg3	keratan sulfate I, degradation product 3
+1322577	ksi_deg30	keratan sulfate I, degradation product 30
+1322580	ksi_deg31	keratan sulfate I, degradation product 31
+1322583	ksi_deg32	keratan sulfate I, degradation product 32
+1322586	ksi_deg33	keratan sulfate I, degradation product 33
+1322589	ksi_deg34	keratan sulfate I, degradation product 34
+1322592	ksi_deg35	keratan sulfate I, degradation product 35
+1322595	ksi_deg36	keratan sulfate I, degradation product 36
+1322598	ksi_deg37	keratan sulfate I, degradation product 37
+1322600	ksi_deg38	keratan sulfate I, degradation product 38
+1322603	ksi_deg39	keratan sulfate I, degradation product 39
+1322605	ksi_deg4	keratan sulfate I, degradation product 4
+1322608	ksi_deg40	keratan sulfate I, degradation product 40
+1322610	ksi_deg41	keratan sulfate I, degradation product 41
+1322612	ksi_deg5	keratan sulfate I, degradation product 5
+1322615	ksi_deg6	keratan sulfate I, degradation product 6
+1322618	ksi_deg7	keratan sulfate I, degradation product 7
+1322621	ksi_deg8	keratan sulfate I, degradation product 8
+1322624	ksi_deg9	keratan sulfate I, degradation product 9
+1322627	ksi_pre1	keratan sulfate I biosynthesis, precursor 1
+1322630	ksi_pre10	keratan sulfate I biosynthesis, precursor 10
+1322633	ksi_pre11	keratan sulfate I biosynthesis, precursor 11
+1322636	ksi_pre12	keratan sulfate I biosynthesis, precursor 12
+1322639	ksi_pre13	keratan sulfate I biosynthesis, precursor 13
+1322642	ksi_pre14	keratan sulfate I biosynthesis, precursor 14
+1322645	ksi_pre15	keratan sulfate I biosynthesis, precursor 15
+1322648	ksi_pre16	keratan sulfate I biosynthesis, precursor 16
+1322651	ksi_pre17	keratan sulfate I biosynthesis, precursor 17
+1322654	ksi_pre18	keratan sulfate I biosynthesis, precursor 18
+1322657	ksi_pre19	keratan sulfate I biosynthesis, precursor 19
+1322660	ksi_pre2	keratan sulfate I biosynthesis, precursor 2
+1322663	ksi_pre20	keratan sulfate I biosynthesis, precursor 20
+1322666	ksi_pre21	keratan sulfate I biosynthesis, precursor 21
+1322669	ksi_pre22	keratan sulfate I biosynthesis, precursor 22
+1322672	ksi_pre23	keratan sulfate I biosynthesis, precursor 23
+1322675	ksi_pre24	keratan sulfate I biosynthesis, precursor 24
+1322678	ksi_pre25	keratan sulfate I biosynthesis, precursor 25
+1322681	ksi_pre26	keratan sulfate I biosynthesis, precursor 26
+1322684	ksi_pre27	keratan sulfate I biosynthesis, precursor 27
+1322687	ksi_pre28	keratan sulfate I biosynthesis, precursor 28
+1322690	ksi_pre29	keratan sulfate I biosynthesis, precursor 29
+1322693	ksi_pre3	keratan sulfate I biosynthesis, precursor 3
+1322696	ksi_pre30	keratan sulfate I biosynthesis, precursor 30
+1322699	ksi_pre31	keratan sulfate I biosynthesis, precursor 31
+1322702	ksi_pre32	keratan sulfate I biosynthesis, precursor 32
+1322705	ksi_pre33	keratan sulfate I biosynthesis, precursor 33
+1322708	ksi_pre34	keratan sulfate I biosynthesis, precursor 34
+1322711	ksi_pre35	keratan sulfate I biosynthesis, precursor 35
+1322714	ksi_pre36	keratan sulfate I biosynthesis, precursor 36
+1322717	ksi_pre4	keratan sulfate I biosynthesis, precursor 4
+1322720	ksi_pre5	keratan sulfate I biosynthesis, precursor 5
+1322723	ksi_pre6	keratan sulfate I biosynthesis, precursor 6
+1322726	ksi_pre7	keratan sulfate I biosynthesis, precursor 7
+1322729	ksi_pre8	keratan sulfate I biosynthesis, precursor 8
+1322732	ksi_pre9	keratan sulfate I biosynthesis, precursor 9
+1322735	ksii_core2	keratan sulfate II (core 2-linked)
+1322738	ksii_core2_deg1	keratan sulfate II (core 2-linked), degradation product 1
+1322741	ksii_core2_deg2	keratan sulfate II (core 2-linked), degradation product 2
+1322744	ksii_core2_deg3	keratan sulfate II (core 2-linked), degradation product 3
+1322747	ksii_core2_deg4	keratan sulfate II (core 2-linked), degradation product 4
+1322750	ksii_core2_deg5	keratan sulfate II (core 2-linked), degradation product 5
+1322753	ksii_core2_deg6	keratan sulfate II (core 2-linked), degradation product 6
+1322756	ksii_core2_deg7	keratan sulfate II (core 2-linked), degradation product 7
+1322759	ksii_core2_deg8	keratan sulfate II (core 2-linked), degradation product 8
+1322762	ksii_core2_deg9	keratan sulfate II (core 2-linked), degradation product 9
+1322764	ksii_core2_pre1	keratan sulfate II biosynthesis, precursor 1
+1322767	ksii_core2_pre10	keratan sulfate II biosynthesis, precursor 10
+1322770	ksii_core2_pre2	keratan sulfate II biosynthesis, precursor 2
+1322773	ksii_core2_pre3	keratan sulfate II biosynthesis, precursor 3
+1322776	ksii_core2_pre4	keratan sulfate II biosynthesis, precursor 4
+1322779	ksii_core2_pre5	keratan sulfate II biosynthesis, precursor 5
+1322782	ksii_core2_pre6	keratan sulfate II biosynthesis, precursor 6
+1322785	ksii_core2_pre7	keratan sulfate II biosynthesis, precursor 7
+1322788	ksii_core2_pre8	keratan sulfate II biosynthesis, precursor 8
+1322791	ksii_core2_pre9	keratan sulfate II biosynthesis, precursor 9
+1322794	ksii_core4	keratan sulfate II (core 4-linked)
+1322797	ksii_core4_deg1	keratan sulfate II (core 4-linked), degradation product 1
+1322800	ksii_core4_deg2	keratan sulfate II (core 4-linked), degradation product 2
+1322803	ksii_core4_deg3	keratan sulfate II (core 4-linked), degradation product 3
+1322806	ksii_core4_deg4	keratan sulfate II (core 4-linked), degradation product 4
+1322809	ksii_core4_pre1	keratan sulfate II biosynthesis, precursor 1
+1322810	ksii_core4_pre10	keratan sulfate II biosynthesis, precursor 10
+1322812	ksii_core4_pre2	keratan sulfate II boisynthesis, precursor 2
+1322814	ksii_core4_pre3	keratan sulfate II biosynthesis, precursor 3
+1322816	ksii_core4_pre4	keratan sulfate II biosynthesis, precursor 4
+1322817	ksii_core4_pre5	keratan sulfate II biosynthesis, precursor 5
+1322819	ksii_core4_pre6	keratan sulfate II biosynthesis, precursor 6
+1322821	ksii_core4_pre7	keratan sulfate II biosynthesis, precursor 7
+1322822	ksii_core4_pre8	keratan sulfate II biosynthesis, precursor 8
+1322824	ksii_core4_pre9	keratan sulfate II biosynthesis, precursor 9
+1322826	kynate	4-Hydroxy-2-quinolinecarboxylic acid
+1322827	l2fn2m2masn	{[galactosyl-(1,4)-N-Acetyl-glucosaminyl-(1,2)-mannosyl-(1,3)-],[N-acetyl-glucosaminyl-(1,2)-mannosyl-(1,6)-]mannosyl-(1,4)-N-acetyl-glucosaminyl-(1,4)-[fucosyl-(1,6)]-N-acetyl-glucosaminyl}asparagine
+1322830	l2n2m2mn	de-Fuc, reducing GlcNAc removed, de-Sia form of PA6 (w/o peptide linkage)
+1322832	l2xser	(Gal)2-Xyl-L-Ser (protein)
+1322835	lac-D	D-Lactate
+1322837	lac-L	L-Lactate
+1322839	lac6p	Lactose-6-phosphate
+1322841	lald-D	D-Lactaldehyde
+1322842	lald-L	L-Lactaldehyde
+1322843	lanost	Lanosterol
+1322844	lcts	Lactose
+1322845	leu-L	L-Leucine
+1322846	leuktrA4	Leukotriene A4
+1322847	leuktrB4	Leukotriene B4
+1322848	leuktrB4wcooh	w-carboxy leukotriene B4
+1322850	leuktrB4woh	w-hydroxyl leukotriene B4
+1322852	leuktrC4	Leukotriene C4
+1322853	leuktrD4	Leukotriene D4
+1322854	leuktrE4	leukotriene E4
+1322855	leuktrF4	leukotriene F4
+1322857	leutrna	L-Leucyl-tRNA(Leu)
+1322858	lgnc	lignoceric acid
+1322859	lgnccoa	lignocericyl coenzyme A
+1322861	lgnccrn	lignoceryl carnitine
+1322864	lgt-S	(R)-S-Lactoylglutathione
+1322865	limnen	Limonene
+1322866	lipa	KDO(2)-lipid (A)
+1322868	lipa_cold	cold adapted KDO(2)-lipid (A)
+1322870	lipidA	2,3,2'3'-Tetrakis(beta-hydroxymyristoyl)-D-glucosaminyl-1,6-beta-D-glucosamine 1,4'-bisphosphate
+1322871	lipidA_HP	lipidA_HP
+1322874	lipidAds	Lipid A Disaccharide
+1322875	lipidX	2,3-Bis(3-hydroxytetradecanoyl)-beta-D-glucosaminyl 1-phosphate
+1322877	lipidX_HP	lipidX_HP
+1322880	lipoate	Lipoate
+1322881	lneldc	linoelaidic acid (all trans C18:2)
+1322883	lneldcACP	linoelaidic acid ACP (all trans)
+1322886	lneldccoa	linoelaidyl coenzyme A
+1322888	lneldccrn	Linoelaidyl carnitine
+1322890	lnlc	linoleic acid (all cis C18:2) n-6
+1322892	lnlcACP	linoleic acid ACP (all cis)
+1322894	lnlccoa	linoleic coenzyme A
+1322896	lnlccrn	Linoleyl carnitine
+1322898	lnlnca	alpha-Linolenic acid, C18:3, n-3
+1322900	lnlncacoa	alpha-Linolenoyl-CoA
+1322901	lnlncacrn	alpha-linolenyl carnitine
+1322904	lnlncg	gamma-linolenic acid
+1322905	lnlncgcoa	gamma-linolenoyl-CoA
+1322906	lnlncgcrn	gamma-linolenyl carnitine
+1322908	lpam	Lipoamide
+1322909	lpchol_hs	lysophosphatidylcholine (homo sapiens)
+1322208	hexccoa	Hexacosanoyl-CoA (n-C26:0CoA)
+1322210	hexccrn	hexacosanoyl carnitine
+1322212	hexdp	all-trans-Hexaprenyl diphosphate
+1322213	hg2	Hg2+
+1322214	hgbam	Hydrogenobyrinate a,c diamide
+1322216	hgbyr	Hydrogenobyrinate
+1322217	hgentis	Homogentisate
+1322218	hhlipa	heptosyl-heptosyl-kdo2-lipidA
+1322219	hicit	Homoisocitrate
+1322220	his-L	L-Histidine
+1322221	hisp	L-Histidinol phosphate
+1322222	hista	Histamine
+1322223	histd	L-Histidinol
+1322224	histrna	L-Histidyl-tRNA(His)
+1322226	hkndd	2-Hydroxy-6-oxonona-2,4-diene-1,9-dioate
+1322227	hkntd	2-hydroxy-6-ketononatrienedioate
+1322228	hlipa	heptosyl-kdo2-lipidA
+1322230	hmbil	Hydroxymethylbilane
+1322231	hmccm	2-Hydroxy-5-methyl-cis,cis-muconate
+1322232	hmccms	2-Hydroxy-5-methyl-cis,cis-muconic semialdehyde
+1322233	hmfurn	4-hydroxy-5-methyl-3(2H)-furanone
+1322235	hmgcoa	Hydroxymethylglutaryl-CoA
+1322236	hmgth	hydroxymethylglutathione
+1322238	hmocta	hexa-methyl octacosanoate
+1322240	hmtria	hexa-methyl triacontanoic acid (C30:0, plus 6 methyl branches)
+1322243	hnifedipine	hydroxy nifedipine
+1322246	hom-L	L-Homoserine
+1322247	homoval	Homovanillate
+1322249	homtta	10 hydroxy octa-methyl tetracontatricosanoic acid (C34:0, 8 methyl-branched carbons, 1 hydroxylated carbon)
+1322252	hpdca	heptadecanoate
+1322253	hpdcacoa	heptadecanoyl coa
+1322255	hpdcacrn	heptadecanoyl carnitine
+1322257	hpglu	Tetrahydropteroyltri-L-glutamate
+1322259	hphaccoa	4-Hydroxyphenylacetyl-CoA
+1322260	hphhlipa	heptosyl-phospho-heptosyl-heptosyl-kdo2-lipidA
+1322263	hpmdtria	hepta-methyl dotriacontanoic acid (7 methyl branches)
+1322266	hpmtria	hepta-methyl triacontanoic acid (C30:0, plus 7 methyl branches)
+1322269	hpyr	Hydroxypyruvate
+1322271	hqn	Hydroquinone
+1322272	hretn	4 hydroxy retinoic acid
+1322274	hs	heparan sulfate, free chain
+1322277	hs_deg1	heparan sulfate, degradation product 1
+1322280	hs_deg10	heparan sulfate, degradation product 10
+1322283	hs_deg11	heparan sulfate, degradation product 11
+1322286	hs_deg12	heparan sulfate, degradation product 12
+1322289	hs_deg13	heparan sulfate, degradation product 13
+1322292	hs_deg14	heparan sulfate, degradation product 14
+1322295	hs_deg15	heparan sulfate, degradation product 15
+1322298	hs_deg16	heparan sulfate, degradation product 16
+1322301	hs_deg17	heparan sulfate, degradation product 17
+1322304	hs_deg18	heparan sulfate, degradation product 18
+1322307	hs_deg19	heparan sulfate, degradation product 19
+1322310	hs_deg2	heparan sulfate, degradation product 2
+1322313	hs_deg20	heparan sulfate, degradation product 20
+1322315	hs_deg21	heparan sulfate, degradation product 21
+1322317	hs_deg22	heparan sulfate, degradation product 22
+1322320	hs_deg23	heparan sulfate, degradation product 23
+1322322	hs_deg24	heparan sulfate, degradation product 24
+1322325	hs_deg25	heparan sulfate, degradation product 25
+1322328	hs_deg3	heparan sulfate, degradation product 3
+1322331	hs_deg4	heparan sulfate, degradation product 4
+1322334	hs_deg5	heparan sulfate, degradation product 5
+1322337	hs_deg6	heparan sulfate, degradation product 6
+1322340	hs_deg7	heparan sulfate, degradation product 7
+1322343	hs_deg8	heparan sulfate, degradation product 8
+1322346	hs_deg9	heparan sulfate, degradation product 9
+1322349	hs_pre1	heparan sulfate, precursor 1
+1322351	hs_pre10	heparan sulfate, precursor 10
+1322354	hs_pre11	heparan sulfate, precursor 11
+1322356	hs_pre12	heparan sulfate, precursor 12
+1322359	hs_pre13	heparan sulfate, precursor 13
+1322362	hs_pre14	heparan sulfate, precursor 14
+1322365	hs_pre15	heparan sulfate, precursor 15
+1322368	hs_pre2	heparan sulfate, precursor 2
+1322371	hs_pre3	heparan sulfate, precursor 3
+1322374	hs_pre4	heparan sulfate, precursor 4
+1322377	hs_pre5	heparan sulfate, precursor 5
+1322380	hs_pre6	heparan sulfate, precursor 6
+1322383	hs_pre7	heparan sulfate, precursor 7
+1322386	hs_pre8	heparan sulfate, precursor 8
+1322389	hs_pre9	heparan sulfate, precursor 9
+1322392	hsfd	heterodisulfide
+1322394	hspg	heparan sulfate proteoglycan
+1322396	hspmd	sym-Homospermidine
+1322397	htaxol	hydroxylated taxol
+1322400	hx2coa	trans-Hex-2-enoyl-CoA
+1322401	hxa	Hexanoate (n-C6:0)
+1322403	hxan	Hypoxanthine
+1322404	hxc2coa	trans-Hexacos-2-enoyl-CoA
+1322406	hxcoa	Hexanoyl-CoA (n-C6:0CoA)
+1322408	hxdcal	Hexadecanal
+1322409	hyptaur	Hypotaurine
+1322410	i	Iodide
+1322411	iacgam	1D-myo-inositol 2-Acetamido-2-deoxy-D-glucopyranoside
+1322413	iad	Indole-3-acetamide
+1322414	iasp	Iminoaspartate
+1322415	ibcoa	Isobutyryl-CoA
+1322416	ichor	Isochorismate
+1322417	icit	Isocitrate
+1322418	icolipa	inner core oligosaccharide lipid A (E coli)
+1322421	id3acald	Indole-3-acetaldehyde
+1322422	idon-L	L-Idonate
+1322423	idour	L-Iduronate
+1322424	idp	IDP
+1322425	igam	1D-myo-inositol 2-deoxy-D-glucopyranoside
+1322427	ihcit-T	threo-isohomocitrate
+1322429	ile-L	L-Isoleucine
+1322430	iletrna	L-Isoleucyl-tRNA(Ile)
+1321152	cs_e_deg6	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 6
+1321154	cs_e_deg7	chondroitin sulfate E (GalNAc4,6diS-GlcA), degradation product 7
+1321156	cs_e_pre2	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 2
+1321159	cs_e_pre3	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 3
+1321162	cs_e_pre4	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 4
+1321164	cs_e_pre5a	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 5a
+1321167	cs_e_pre5b	chondroitin sulfate E (GalNAc4,6diS-GlcA), precursor 5b
+1321169	cs_pre	chondroitin sulfate precursor (GalNAc-GlcA-(Gal)2-Xyl-L-Ser (protein))
+1321172	csn	Cytosine
+1321173	cspg_a	chondroitin sulfate A (GalNAc4S-GlcA) proteoglycan
+1321175	cspg_b	chondroitin sulfate B / dermatan sulfate (IdoA2S-GalNAc4S) proteoglycan
+1321177	cspg_c	chondroitin sulfate C (GalNAc6S-GlcA) proteoglycan
+1321179	cspg_d	chondroitin sulfate D (GlcNAc6S-GlcA2S) proteoglycan
+1321181	cspg_e	chondroitin sulfate E (GalNAc4,6diS-GlcA) proteoglycan
+1321184	ctbt	crotonobetaine
+1321185	ctbtcoa	crotonobetainyl-CoA
+1321186	ctp	CTP
+1321187	cu	Cu+
+1321190	cu2	Cu2+
+1321191	cyan	Hydrogen cyanide
+1321192	cynt	Cyanate
+1321193	cys-D	D-Cysteine
+1321194	cys-L	L-Cysteine
+1321195	cysam	Cysteamine
+1321196	cyst-L	L-Cystathionine
+1321197	cystrna	L-Cysteinyl-tRNA(Cys)
+1321199	cytcc	Cytochrome c
+1321201	cytd	Cytidine
+1321202	dad-2	Deoxyadenosine
+1321203	dad-5	5'-Deoxyadenosine
+1321204	dadp	dADP
+1321205	dag_hs	diacylglycerol (homo sapiens)
+1321208	dagpy_SC	diacylglycerol pyrophosphate, yeast-specific
+1321212	dak2gpe_hs	1-alkenyl 2-acylglycerol 3-phosphoethanolamine plasmalogen (homo sapiens)
+1321215	damp	dAMP
+1321216	dann	7,8-Diaminononanoate
+1321217	datp	dATP
+1321218	db4p	3,4-dihydroxy-2-butanone 4-phosphate
+1321219	dc2coa	trans-Dec-2-enoyl-CoA
+1321220	dca	Decanoate (n-C10:0)
+1321222	dcaACP	Decanoyl-ACP (n-C10:0ACP)
+1321225	dcacoa	Decanoyl-CoA (n-C10:0CoA)
+1321227	dcamp	N6-(1,2-Dicarboxyethyl)-AMP
+1321228	dcdp	dCDP
+1321229	dcholcoa	chenodeoxycholoyl coenzyme a
+1321231	dcmp	dCMP
+1321232	dcsptn1	docosa-4,7,10,13,16-pentaenoic acid (n-6)
+1321234	dcsptn1coa	docosa-4,7,10,13,16-pentaenoyl coenzyme A
+1321235	dcsptn1crn	docosa-4,7,10,13,16-pentaenoyl carnitine
+1321237	dctp	dCTP
+1321238	dcyt	Deoxycytidine
+1321239	dd2coa	trans-Dodec-2-enoyl-CoA
+1321240	dd3coa	3-dodecenoyl CoA
+1321242	ddca	Dodecanoate (n-C12:0)
+1321244	ddcaACP	Dodecanoyl-ACP (n-C12:0ACP)
+1321248	ddcacoa	Dodecanoyl-CoA (n-C12:0CoA)
+1321250	ddhrb	7,8-didemethyl-8-hydroxy-5-deazariboflavin
+1321251	ddsmsterol	7-Dehydrodesmosterol
+1321252	debrisoquine	debrisoquine
+1321254	decd_tb	(E,E,E,E,E,E,E,Z,Z) decaprenyl phosphate
+1321256	decda_tb	decaprenylphosphoryl-beta-D-arabinofuranose
+1321258	decdman1p_tb	(E,E,E,E,E,E,E,Z,Z) decaprenyl mannose phosphate
+1321261	decdp	all trans Decaprenyl diphosphate
+1321263	decdp_tb	(E,E,E,E,E,E,E,Z,Z) Decaprenyl diphosphate
+1321265	decdpa_tb	decaprenylphosphoryl-beta-D-5-phosphoarabinofuranose
+1321268	decdpr_tb	decaprenylphosphoryl-beta-D-5-phosphoribose
+1321270	decdr_tb	decaprenylphosphoryl-beta-D-5-ribose
+1321272	dedol_L	Dehydrodolichol, human liver homolog
+1321275	dedol_U	Dehydrodolichol, human uterine homolog
+1321278	dedoldp_L	Dehydrodolichol diphosphate, human liver homolog
+1321282	dedoldp_U	Dehydrodolichol diphosphate, human uterine homolog
+1321285	dedolp_L	Dehydrodolichol phosphate, human liver homolog
+1321288	dedolp_U	Dehydrodolichol phosphate, human uterine homolog
+1321291	dem2emgacpail_prot_hs	deacylated-(phosphoethanolaminyl-dimannosyl),(phosphoethanolaminyl)-mannosyl-glucosaminyl-acylphosphatidylinositol
+1321294	dgal6p	D-Galactose 6-phosphate
+1321295	dgchol	Chenodeoxyglycocholate
+1321297	dgcholcoa	Chenodeoxyglycocholoyl-CoA
+1321300	dgdcg_SA	Diglucosyl-diacylglycerol (SA)
+1321304	dgdcg_SA2	Diglucosyl-diacylglycerol (SA) 2
+1321307	dgdp	dGDP
+1321308	dgggp	digeranylgeranylglyceryl phosphate
+1321310	dgggps	2,3-di-O-geranylgeranyl-sn-glyceroserine
+1321312	dggpg	2,3-di-O-geranyl-sn-glycerol-1-phospho-3'-sn-glycerol
+1321315	dggpgp	2,3-di-O-geranyl-sn-glycerol-1-phospho-3'-sn-glycerol phosphate
+1321318	dggpi	2,3-di-O-geranyl-sn-glycero-1-phospho-myo-inositol
+1321321	dgmp	dGMP
+1321322	dgpi_prot_hs	deacylated-glycophosphatidylinositol (GPI)-anchored protein
+1321325	dgsn	Deoxyguanosine
+1321326	dgtp	dGTP
+1321327	dh3mchc	1,2-Dihydroxy-3-methylcyclohexa-3,5-dienecarboxylate
+1321328	dh4mchc	cis-1,2-Dihydroxy-4-methylcyclohexa-3,5-diene-1-carboxylate
+1321329	dha	Dihydroxyacetone
+1321330	dhadr	7,8-dihydropterin-6-ylmethyl-1-(4-aminophenyl)-1-deoxy-D-ribitol
+1321333	dhadrdpr	7,8-dihydropterin-6-ylmethyl-1-(4-aminophenyl)-1-deoxy-5-[1-A-D-ribofuranosyl 5'-diphosphate]-D-ribitol
+1321336	dhadrp	7,8-dihydropterin-6-ylmethyl-1-(4-aminophenyl)-1-deoxy-D-ribitol 5'-phosphate
+1321338	dhadrpr	7,8-dihydropterin-6-ylmethyl-1-(4-aminophenyl)-1-deoxy-5-[1-A-D-ribofuranosyl 5'-phosphate]-D-ribitol
+1321341	dhadrtpr	7,8-dihydropterin-6-ylmethyl-1-(4-aminophenyl)-1-deoxy-5-[1-A-D-ribofuranosyl 5'-triphosphate]-D-ribitol
+1321696	fe3	Fe3+
+1321697	fe3dcit	Fe(III)dicitrate
+1321699	fe3dhbzs	ferric 2,3-dihydroxybenzoylserine
+1321702	fe3hox	Fe(III)hydroxamate
+1321704	fe3hox-un	Fe(III)hydoxamate, unloaded
+1321707	fecost	fecosterol
+1321708	fecrm	Ferrichrome
+1321709	fecrm-un	Ferrichrome minus Fe(III)
+1321712	feenter	Fe-enterobactin
+1321714	feoxam	ferroxamine
+1321716	feoxam-un	ferroxamine minus Fe(3)
+1321719	fer	Ferulate
+1321720	ferulcoa	Feruloyl-CoA
+1321721	fgam	N2-Formyl-N1-(5-phospho-D-ribosyl)glycinamide
+1321722	ficytC	Ferricytochrome c
+1321725	ficytc	Ferricytochrome c
+1321726	ficytcc553	Ferricytochrome c-553
+1321727	fldox	flavodoxin (oxidized) - obsolete
+1321730	fldrd	flavodoxin (reduced) - obsolete
+1321733	fmcbtt	Iron(II) mycobactin T
+1321736	fmettrna	N-Formylmethionyl-tRNA
+1321738	fmn	FMN
+1321740	fmnh2	Reduced FMN
+1321741	fn2m2masn	N4-{N-Acetyl-beta-D-glucosaminyl-(1,2)-alpha-D-mannosyl-(1,3)-[N-acetyl-beta-D-glucosaminyl-(1,2)-alpha-D-mannosyl-(1,6)]-beta-D-mannosyl-(1,4)-N-acetyl-beta-D-glucosaminyl-(1,4)-[alpha-L-fucosyl-(1,6)]-N-acetyl-beta-D-glucosaminyl}asparagine
+1321744	fna5moxam	Formyl-N-acetyl-5-methoxykynurenamine
+1321745	focytC	Ferrocytochrome C
+1321747	focytc	Ferrocytochrome c
+1321749	focytcc553	Ferrocytochrome c-553
+1321750	fol	Folate
+1321751	for	Formate
+1321752	forcoa	Formyl-CoA
+1321753	forglu	N-Formimidoyl-L-glutamate
+1321754	formcoa	Formyl-CoA
+1321755	formh4spt	formyltetrahydrosarcinapterin
+1321758	formmfr(b)	formylmethanofuran b
+1321761	fpram	2-(Formamido)-N1-(5-phospho-D-ribosyl)acetamidine
+1321762	fprica	5-Formamido-1-(5-phospho-D-ribosyl)imidazole-4-carboxamide
+1321763	frdp	Farnesyl diphosphate
+1321764	frmd	Formamide
+1321765	frrppdima	fucose rhamnose rhamnose phenol phthiocerol dimycocerosate (Mtb)
+1321768	fru	D-Fructose
+1321769	frulys	fructoselysine
+1321770	frulysp	fructoselysine Phosphate
+1321772	fruur	D-Fructuronate
+1321773	fuc-L	L-Fucose
+1321774	fuc12gal14acglcgalgluside_hs	Type IIH glycolipid
+1321776	fuc132galacglcgal14acglcgalgluside_hs	V3Fuc-nLc6Cer
+1321779	fuc13galacglcgal14acglcgalgluside_hs	III3Fuc-nLc6Cer
+1321781	fuc14galacglcgalgluside_hs	Lea glycolipid
+1321782	fuc1p-L	L-Fucose 1-phosphate
+1321783	fucacgalfucgalacglcgalgluside_hs	(Gal)2 (GalNAc)1 (Glc)1 (GlcNAc)1 (LFuc)2 (Cer)1
+1321785	fucacngal14acglcgalgluside_hs	IV3-a-NeuAc,III3-a-Fuc-nLc4Cer
+1321787	fucacngalacglcgalgluside_hs	IV3-a-Neu5Ac,III4-a-Fuc-Lc4Cer
+1321789	fucfuc12gal14acglcgalgluside_hs	Ley glycolipid
+1321791	fucfuc132galacglcgal14acglcgalgluside_hs	V3Fuc,III3Fuc-nLc6Cer
+1321794	fucfucfucgalacglc13galacglcgal14acglcgalgluside_hs	(Gal)4 (Glc)1 (GlcNAc)3 (LFuc)3 (Cer)1
+1321797	fucfucfucgalacglcgal14acglcgalgluside_hs	(Gal)3 (Glc)1 (GlcNAc)2 (LFuc)3 (Cer)1
+1321800	fucfucgalacglc13galacglcgal14acglcgalgluside_hs	(Gal)4 (Glc)1 (GlcNAc)3 (LFuc)2 (Cer)1
+1321802	fucfucgalacglcgal14acglcgalgluside_hs	(Gal)3 (Glc)1 (GlcNAc)2 (LFuc)2 (Cer)1
+1321804	fucfucgalacglcgalacglcgal14acglcgalgluside_hs	(Gal)4 (Glc)1 (GlcNAc)3 (LFuc)2 (Cer)1
+1321805	fucfucgalacglcgalgluside_hs	Leb glycolipid
+1321806	fucgal14acglcgalgluside_hs	Lacto-N-fucopentaosyl III ceramide
+1321808	fucgalacgalfuc12gal14acglcgalgluside_hs	Type IIIH glycolipid
+1321809	fucgalacgalfucgalacglcgal14acglcgalgluside_hs	(Gal)4 (GalNAc)1 (Glc)1 (GlcNAc)2 (LFuc)2 (Cer)1
+1321811	fucgalacglc13galacglcgal14acglcgalgluside_hs	(Gal)4 (Glc)1 (GlcNAc)3 (LFuc)1 (Cer)1
+1321813	fucgalacglcgal14acglcgalgluside_hs	VI2Fuc-nLc6
+1321814	fucgalacglcgalgluside_hs	Type IH glycolipid
+1321815	fucgalfucgalacglcgalgluside_hs	(Gal)3 (Glc)1 (GlcNAc)1 (LFuc)2 (Cer)1
+1321817	fucgalgbside_hs	fucosyl galactosylgloboside (homo sapiens)
+1321820	fum	Fumarate
+1321821	g1m6masnB1	glucosyl-(alpha-D-mannosyl)6-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1321824	g1m7masnB	glucosyl-(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform B (protein)
+1321827	g1m7masnC	glucosyl-(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform C (protein)
+1321829	g1m8masn	(alpha-D-Glucosyl)-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1321832	g1m8mpdol_L	alpha-D-Glucosyl-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1321835	g1m8mpdol_U	alpha-D-Glucosyl-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1321838	g1p	D-Glucose 1-phosphate
+1321839	g2m8masn	(alpha-D-Glucosyl)2-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1321842	g2m8mpdol_L	(alpha-D-Glucosyl)2-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1321845	g2m8mpdol_U	(alpha-D-Glucosyl)2-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1321848	g3m8masn	(alpha-D-Glucosyl)3-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1321851	g3m8mpdol_L	(alpha-D-Glucosyl)3-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1321854	g3m8mpdol_U	(alpha-D-Glucosyl)3-(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1321857	g3p	Glyceraldehyde 3-phosphate
+1321858	g3pc	sn-Glycero-3-phosphocholine
+1321859	g3pe	sn-Glycero-3-phosphoethanolamine
+1321860	g3pg	Glycerophosphoglycerol
+1321861	g3pi	sn-Glycero-3-phospho-1-inositol
+1321862	g3ps	Glycerophosphoserine
+1321863	g6p	D-Glucose 6-phosphate
+1321864	g6p-B	beta-D-glucose 6-phosphate
+1321865	ga	Gallic acid
+1321866	ga1_hs	GA1 (homo sapiens)
+1321869	ga2_hs	GA2 (homo sapiens)
+1321871	gacpail_hs	glucosaminyl-acylphosphatidylinositol
+1321874	gagicolipa	galactosyl-glucosyl-inner core oligosaccharide lipid A
+1321877	gal	D-Galactose
+1321878	gal-bD	beta D-Galactose
+1321880	gal14acglcgalgluside_hs	Lactoneotetraosylceramide
+1321881	gal1p	alpha-D-Galactose 1-phosphate
+1321882	galacgalfuc12gal14acglcgalgluside_hs	(Gal)3 (GalNAc)1 (Glc)1 (GlcNAc)1 (LFuc)1 (Cer)1
+1321883	galacgalfucgalacglcgal14acglcgalgluside_hs	(Gal)4 (GalNAc)1 (Glc)1 (GlcNAc)2 (LFuc)1 (Cer)1
+1321885	galacglc13galacglcgal14acglcgalgluside_hs	nLc8Cer
+1321887	galacglcgal14acglcgalgluside_hs	i-antigen
+1321505	dsbgrd	periplasmic disulfide isomerase/thiol-disulphide oxidase (reduced)
+1321507	dscl	dihydrosirohydrochlorin
+1321508	dsmsterol	Desmosterol
+1321509	dtbt	Dethiobiotin
+1321510	dtdp	dTDP
+1321511	dtdp4aaddg	dTDP-4-acetamido-4,6-dideoxy-D-galactose
+1321512	dtdp4addg	dTDP-4-amino-4,6-dideoxy-D-galactose
+1321513	dtdp4d6dg	dTDP-4-dehydro-6-deoxy-D-glucose
+1321514	dtdp4d6dm	dTDP-4-dehydro-6-deoxy-L-mannose
+1321515	dtdpglu	dTDPglucose
+1321516	dtdprmn	dTDP-L-rhamnose
+1321517	dtmp	dTMP
+1321518	dtt	Dithiothreitol
+1321519	dttOX	Oxidized dithiothreitol
+1321520	dttp	dTTP
+1321521	dudp	dUDP
+1321522	dump	dUMP
+1321523	duri	Deoxyuridine
+1321524	dutp	dUTP
+1321525	dxtrn	phosphorylase-limit dextrin (glycogenin-1,6{4[1,4-Glc], 4[1,4-Glc]})
+1321528	dxyl	1-deoxy-D-xylulose
+1321529	dxyl5p	1-deoxy-D-xylulose 5-phosphate
+1321530	e4hglu	L-erythro-4-Hydroxyglutamate
+1321531	e4p	D-Erythrose 4-phosphate
+1321532	eaflatoxin	8,9 epxoy aflatoxin B1
+1321534	eandrstrn	epiandrosterone
+1321535	ebastine	ebastine
+1321536	ebastineoh	hydroxylated ebastine
+1321539	eca2und	(enterobacterial common antigen)x2 undecaprenyl-diphosphate
+1321542	eca3und	(enterobacterial common antigen)x3 undecaprenyl-diphosphate
+1321545	eca4colipa	(enterobacterial common antigen)x4 core oligosaccharide lipid A
+1321549	eca4und	(enterobacterial common antigen)x4 undecaprenyl-diphosphate
+1321552	eca_EC	Enterobacterial common antigen polysaccharide (Ecoli)
+1321555	ecgon	ecgonine
+1321556	egme	ecgonine methyl ester
+1321557	eicostet	eicosatetranoic acid
+1321559	eicostetcoa	eicosatetranoyl coenzyme A
+1321561	eicostetcrn	Eicosatetranoyl carnitine
+1321563	eig3p	D-erythro-1-(Imidazol-4-yl)glycerol 3-phosphate
+1321564	elaid	elaidic acid
+1321565	elaidcrn	Elaidic carnitine
+1321567	em2emgacpail_hs	(phosphoethanolaminyl-dimannosyl),(phosphoethanolaminyl)-mannosyl-glucosaminyl-acylphosphatidylinositol (H7)
+1321570	em2emgacpail_prot_hs	(phosphoethanolaminyl-dimannosyl),(phosphoethanolaminyl)-mannosyl-glucosaminyl-acylphosphatidylinositol
+1321573	em3gacpail_hs	phosphoethanolaminyl-trimannosyl-glucosaminyl-acylphosphatidylinositol (H6')
+1321576	emem2gacpail_hs	(phosphoethanolaminyl-mannosyl),(phosphoethanolaminyl)-dimannosyl-glucosaminyl-acylphosphatidylinositol (H7')
+1321578	emgacpail_hs	phosphoethanolaminyl-mannosyl-glucosylaminyl-acylphosphatidylinositol (H5)
+1321581	enlipa	phosphoethanolamine KDO(2)-lipid (A)
+1321583	enter	Enterochelin
+1321584	epist	episterol
+1321585	epm	Epimelibiose
+1321586	ergst	Ergosterol
+1321587	ergtetrol	Ergosta-5,7,22,24,(28)-tetraen-3beta-ol
+1321589	ergtrol	ergosta-5,7,24(28)-trienol
+1321591	eryth	L-Erythrulose
+1321592	estradiol	Estradiol
+1321593	estradiolglc	estradiol glucuronide
+1321595	estriol	estriol
+1321596	estriolglc	16-Glucuronide-estriol
+1321597	estrone	Estrone
+1321598	estroneglc	estrone glucuronide
+1321599	estrones	Estrone 3-sulfate
+1321600	etfox	Electron transfer flavoprotein oxidized
+1321602	etfrd	Electron transfer flavoprotein reduced
+1321604	etha	Ethanolamine
+1321605	ethamp	Ethanolamine phosphate
+1321606	ethso3	ethanesulfonate
+1321607	etoh	Ethanol
+1321608	f1a	F1alpha
+1321610	f1p	D-Fructose 1-phosphate
+1321611	f26bp	D-Fructose 2,6-bisphosphate
+1321612	f390a	coenzyme F390 (adenosine)
+1321615	f390g	coenzyme F390 (guanosine)
+1321618	f420-0	coenzyme ferredoxin 420-0
+1321620	f420-1	coenzyme ferredoxin 420-1
+1321622	f420-2	coenzyme ferredoxin 420-2 (oxidized)
+1321624	f420-2h2	coenzyme ferredoxin 420-2 (reduced)
+1321626	f420-3	coenzyme ferredoxin 420-3
+1321628	f420-4	coenzyme ferredoxin 420-4
+1321631	f420-5	coenzyme ferredoxin 420-5
+1321634	f420-6	coenzyme ferredoxin 420-6
+1321637	f420-7	coenzyme ferredoxin 420-7
+1321640	f430	coenzyme F430
+1321641	f430p1	coenzyme F390 precursor 1
+1321644	f430p2	coenzyme F430 precursor 2
+1321647	f430p3	coenzyme f430 precursor 3
+1321650	f5hoxkyn	Formyl-5-hydroxykynurenamine
+1321652	f6p	D-Fructose 6-phosphate
+1321653	f6p-B	beta-D-Fructose 6-phosphate
+1321654	fa1	Fatty acid (Iso-C14:0)
+1321656	fa10	Fatty acid (Anteiso-C17:1)
+1321658	fa11	Fatty acid (Iso-C17:0)
+1321660	fa12	Fatty acid (Anteiso-C17:0)
+1321662	fa19a	Fatty Acid (Anteiso-C19:0)
+1321664	fa20n	Fatty Acid (C20:0)
+1321666	fa3	Fatty acid (Iso-C15:0)
+1321668	fa4	Fatty acid (Anteiso-C15:0)
+1321670	fa5	Fatty acid (Iso-C16:1)
+1321672	fa6	Fatty acid (iso-C16:0)
+1321674	fa9	Fatty acid (Iso-C17:1)
+1321676	fad	Flavin adenine dinucleotide oxidized
+1321679	fadh2	Flavin adenine dinucleotide reduced
+1321681	fald	Formaldehyde
+1321682	fc1p	L-Fuculose 1-phosphate
+1321683	fcl-L	L-fuculose
+1321684	fcmcbtt	iron(III) chelated carboxymycobactin T (R=8 carbon, final carbon is carboxyl group)
+1321687	fdox	ferredoxin (oxidized) 2[4Fe-4S]
+1321690	fdp	D-Fructose 1,6-bisphosphate
+1321691	fdred	ferredoxin (reduced) 2[4Fe-4S]
+1321693	fdxox	Oxidized ferredoxin
+1321694	fdxrd	Reduced ferredoxin
+1321695	fe2	Fe2+
+1321888	galacglcgalacglcgal14acglcgalgluside_hs	I-antigen
+1321889	galacglcgalgbside_hs	Gal-GlcNAc-Gal globoside (homo sapiens)
+1321892	galacglcgalgluside_hs	Lc4Cer
+1321893	galct-D	D-Galactarate
+1321895	galctn-D	D-Galactonate
+1321896	galctn-L	L-Galactonate
+1321898	galfragund	galactofuranosyl(30)-rhamanosyl-N-acetylglucosamyl-undecaprenyl diphosphate (M tb)
+1321901	galfuc12gal14acglcgalgluside_hs	(Gal)3 (Glc)1 (GlcNAc)1 (LFuc)1 (Cer)1
+1321902	galfucgalacglcgal14acglcgalgluside_hs	(Gal)4 (Glc)1 (GlcNAc)2 (LFuc)1 (Cer)1
+1321905	galfucgalacglcgalgluside_hs	Type IB glycolipid
+1321906	galgalfucfucgalacglcgalacglcgal14acglcgalgluside_hs	(Gal)6 (Glc)1 (GlcNAc)3 (LFuc)2 (Cer)1
+1321908	galgalgalthcrm_hs	Gal-Gal-Gal-Gal-Gal-Glc-Cer (homo sapiens)
+1321911	galgalthcrm_hs	Gal-Gal-Gal-Gal-Glc-Cer (homo sapiens)
+1321914	galgbside_hs	galactosylgloboside (homo sapiens)
+1321917	galgluside_hs	galactosyl glucosyl ceramide
+1321919	galside_hs	galactocerebroside (homo sapiens)
+1321922	galt	Galactitol
+1321923	galt1p	Galactitol 1-phosphate
+1321924	galthcrm_hs	Gal-Gal-Gal-Glc-Cer (homo sapiens)
+1321927	galur	D-Galacturonate
+1321928	gam	D-Glucosamine
+1321929	gam1p	D-Glucosamine 1-phosphate
+1321930	gam6p	D-Glucosamine 6-phosphate
+1321931	gar	N1-(5-Phospho-D-ribosyl)glycinamide
+1321932	garagund	glucosyl-O-acetyl-rhamanosyl-N-acetylglucosamyl-undecaprenyl diphosphate
+1321935	gbbtn	gamma-butyrobetaine
+1321937	gbside_hs	globoside (homo sapiens)
+1321939	gcald	Glycolaldehyde
+1321940	gchola	glycocholate
+1321941	gd1a_hs	GD1a (homo sapiens)
+1321943	gd1alpha_hs	GD1a (homo sapiens)
+1321944	gd1b2_hs	GD1beta (homo sapiens)
+1321946	gd1b_hs	GD1b (homo sapiens)
+1321948	gd1c_hs	GD1c (homo sapiens)
+1321950	gd2_hs	GD2 (homo sapiens)
+1321953	gd3_hs	GD3 (homo sapiens)
+1321956	gdbtal	4-Guanidinobutanal
+1321957	gdchola	glycochenodeoxycholate
+1321958	gdp	GDP
+1321959	gdpddman	GDP-4-dehydro-6-deoxy-D-mannose
+1321960	gdpfuc	GDP-L-fucose
+1321961	gdpgpi	glucosaminyl archaetidyl-myo-inositol
+1321964	gdpmann	GDP-D-mannose
+1321965	gdpofuc	GDP-4-oxo-L-fucose
+1321966	gdptp	Guanosine 3'-diphosphate 5'-triphosphate
+1321967	gfgaragund	galactofuranosyl-glucosyl-O-acetyl-rhamanosyl-N-acetylglucosamyl-undecaprenyl diphosphate
+1321970	gg4abut	gamma-glutamyl-gamma aminobutyric acid
+1321972	ggagicolipa	glucosyl-galactosyl-glucosyl-inner core oligosaccharide lipid A
+1321975	ggbutal	gamma-glutamyl-gamma-butyraldehyde
+1321977	ggdp	Geranylgeranyl diphosphate
+1321978	gggagicolipa	glucosyl-glucosyl-galactosyl-glucosyl-inner core oligosaccharide lipid A
+1321981	gggp	(S)-3-O-geranylgeranylglyceryl phosphate
+1321983	ggl	Galactosylglycerol
+1321984	ggn	primed glycogenin (glycogenin-8[1,4-Glc])
+1321986	ggptrc	gamma-glutamyl-putrescine
+1321988	gicolipa	glucosyl-inner core oligosaccharide lipid A
+1321991	glac	D-glucurono-6,3-lactone
+1321992	glc-D	D-Glucose
+1321993	glc1man	glucose-1,3-mannose oligosaccharide
+1321995	glc2man	(2)[glucose-1,3]-mannose oligosaccharide
+1321997	glc3man	glucose-1,2-(2)[glucose-1,3]-mannose oligosaccharide
+1321999	glcn	D-Gluconate
+1322000	glcp_SA	Glucosyl Phosphoglycerol (SA)
+1322003	glcr	D-Glucarate
+1322004	glcur	D-Glucuronate
+1322005	glcur1p	D-Glucuronate 1-phosphate
+1322006	gln-L	L-Glutamine
+1322007	glntrna	L-Glutaminyl-tRNA(Gln)
+1322009	glp	Glycylpeptide
+1322010	glu-D	D-Glutamate
+1322012	glu-L	L-Glutamate
+1322013	glu1sa	L-Glutamate 1-semialdehyde
+1322014	glu5p	L-Glutamate 5-phosphate
+1322015	glu5sa	L-Glutamate 5-semialdehyde
+1322016	gluala	5-L-Glutamyl-L-alanine
+1322019	glucys	gamma-L-Glutamyl-L-cysteine
+1322021	gluside_hs	glucocerebroside (homo sapiens)
+1322023	glutar	Glutarate
+1322024	glutcoa	Glutaryl-CoA
+1322026	glutrna	L-Glutamyl-tRNA(Glu)
+1322028	glutrna(gln)	L-Glutamyl-tRNA(Gln)
+1322029	glx	Glyoxylate
+1322030	gly	Glycine
+1322031	glyald	D-Glyceraldehyde
+1322032	glyb	Glycine betaine
+1322033	glyc	Glycerol
+1322034	glyc-R	(R)-Glycerate
+1322036	glyc-S	(S)-Glycerate
+1322038	glyc1p	Glycerol 1-phosphate
+1322039	glyc2p	Glycerol 2-phosphate
+1322040	glyc3p	Glycerol 3-phosphate
+1322042	glyclt	Glycolate
+1322043	glycogen	glycogen
+1322044	glygn1	glycogen, structure 1 (glycogenin-11[1,4-Glc])
+1322047	glygn2	glycogen, structure 2 (glycogenin-1,6-{7[1,4-Glc], 4[1,4-Glc]})
+1322049	glygn3	glycogen, structure 3 (glycogenin-7[1,4-Glc])
+1322052	glygn4	glycogen, structure 4 (glycogenin-1,6-{2[1,4-Glc], [1,4-Glc]})
+1322055	glygn5	glycogen, structure 5 (glycogenin-2[1,4-Glc])
+1322058	glytrna	Glycyl-tRNA(Gly)
+1322059	gm1_hs	ganglioside GM1 (homo sapiens)
+1322061	gm1a_hs	GM1alpha (homo sapiens)
+1322063	gm1b_hs	GM1b (homo sapiens)
+1322065	gm2_hs	ganglioside GM2 (homo sapiens)
+1322068	gm2a_hs	GM2alpha (homo sapiens)
+1322070	gm3_hs	ganglioside GM3 (homo sapiens)
+1322073	gmhep17bp	D-Glycero-D-manno-heptose 1,7-bisphosphate
+1322074	gmhep1p	D-Glycero-D-manno-heptose 1-phosphate
+1322075	gmhep7p	D-Glycero-D-manno-heptose 7-phosphate
+1322076	gmp	GMP
+1322077	gncore1	GlcNAc-alpha-1,4-Core 1
+1322079	gncore2	GlcNAc-alpha-1,4-Core 2
+1322082	gp1c_hs	GP1c (homo sapiens)
+1322085	gp1calpha_hs	GP1c alpha  (homo sapiens)
+1322087	gp4g	P1,P4-Bis(5'-guanosyl) tetraphosphate
+1322088	gpail_hs	D-glucosaminylphosphatidylinositol
+1322090	gpi_hs	glycophosphatidylinositol (GPI) anchor precursor (3-(phosphoethanolaminyl-mannosyl)-glucosaminyl-acylphosphatidylinositol) (H8)
+1322093	gpi_prot_hs	glycophosphatidylinositol (GPI)-anchored protein
+1322096	gpi_sig	glycophosphatidylinositol (GPI) signal sequence (C-terminal peptide)
+1322098	gq1b_hs	GQ1b (homo sapiens)
+1322101	gq1balpha_hs	GQ1balpha (homo sapiens)
+1322103	gq1c_hs	GQ1c (homo sapiens)
+1322105	grdp	Geranyl diphosphate
+1322106	grxox	glutaredoxin (oxidized)
+1322108	grxrd	glutaredoxin (reduced)
+1322110	gsn	Guanosine
+1322111	gt1a_hs	GT1a (homo sapiens)
+1322114	gt1alpha_hs	GT1aalpha (homo sapiens)
+1322116	gt1b_hs	GT1b (homo sapiens)
+1322118	gt1c_hs	GT1c (homo sapiens)
+1322120	gt2_hs	GT2 (homo sapiens)
+1322123	gt3_hs	GT3 (homo sapiens)
+1322126	gtca1	glycerol teichoic acid (n=25), unlinked, unsubstituted
+1322130	gtca2	glycerol teichoic acid (n=25), unlinked, D-ala substituted
+1322133	gtca3	glycerol teichoic acid (n=25), unlinked, glucose substituted
+1322136	gthox	Oxidized glutathione
+1322137	gthrd	Reduced glutathione
+1322138	gtp	GTP
+1322139	gtspmd	Glutathionylspermidine
+1322140	gua	Guanine
+1322141	gudac	Guanidinoacetate
+1322142	gullac	L-Gulono-1,4-lactone
+1322143	guln	L-Gulonate
+1322144	h	H+
+1322145	h2	H2
+1322146	h2acon-C	cis-(homo)2aconitate
+1322148	h2co3	carbonic acid
+1322149	h2mb4p	1-hydroxy-2-methyl-2-(E)-butenyl 4-diphosphate
+1322151	h2mpt	7,8-dihydromethanopterin
+1322152	h2o	H2O
+1322153	h2o2	Hydrogen peroxide
+1322154	h2s	Hydrogen sulfide
+1322155	h3acon-C	cis-(homo)3aconitate
+1322157	h4mpt	5,6,7,8-tetrahydromethanopterin
+1322158	h4spt	tetrahydrosarcinapterin
+1322159	hLkynr	3-Hydroxy-L-kynurenine
+1322160	ha	hyaluronan
+1322162	ha_deg1	hyaluronan degradation product 1
+1322165	ha_pre1	hyaluronan biosynthesis, precursor 1
+1322167	hacolipa	hepta-acylated core oligosaccharide lipid A (E. coli)
+1322170	hacon-C	cis-homoaconitate
+1322171	hacon-T	trans-homoaconitate
+1322172	halipa	hepta-acylated KDO(2)-lipid (A)
+1322175	harab-D	hexa arabinofuranoside
+1322177	hatrz	Hydroxyatrazine
+1322179	hcit	2-Hydroxybutane-1,2,4-tricarboxylate
+1322180	hco3	Bicarbonate
+1322181	hcoumarin	hydroxy coumarin
+1322183	hcys-L	L-Homocysteine
+1322184	hdca	Hexadecanoate (n-C16:0)
+1322186	hdcea	Hexadecenoate (n-C16:1)
+1322188	hdcecrn	Hexadecenoyl carnitine
+1322189	hdcoa	Hexadecenoyl-CoA (n-C16:1CoA)
+1322191	hdd2coa	trans-Hexadec-2-enoyl-CoA
+1322192	hdd2crn	trans-Hexadec-2-enoyl carnitine
+1322194	hdeACP	cis-hexadec-9-enoyl-[acyl-carrier protein] (n-C16:1)
+1322198	hemeA_#1	Heme A
+1322199	hemeO	Heme O
+1322200	hepdp	all-trans-Heptaprenyl diphosphate
+1322201	hestratriol	4,17 dihydroxy estradiol
+1322203	hexACP	Hexanoyl-ACP (n-C6:0ACP)
+1322206	hexc	hexacosanoate (n-C26:0)
+1321344	dhap	Dihydroxyacetone phosphate
+1321345	dhbpt	6,7-Dihydrobiopterin
+1321346	dhcholestanate	3alpha,7alpha-Dihydroxy-5beta-cholestanate
+1321347	dhcholestancoa	3alpha,7alpha-Dihydroxy-5beta-cholestanoyl-CoA
+1321348	dhcholoylcoa	3alpha,7alpha-Dihydroxy-5beta-cholest-24-enoyl-CoA
+1321350	dhcinnm	2,3-dihydroxicinnamic acid
+1321352	dhcrm_hs	dihydroceramide (homo sapiens)
+1321355	dhdascb	Dehydroascorbate
+1321356	dhea	Dehydroepiandrosterone
+1321357	dheas	Dehydroepiandrosterone sulfate
+1321358	dhf	7,8-Dihydrofolate
+1321359	dhlam	Dihydrolipoamide
+1321360	dhlpro	Dihydrolipolprotein
+1321363	dhmptp	dihydromonapterin-triphosphate
+1321365	dhna	1,4-Dihydroxy-2-naphthoate
+1321366	dhnpt	Dihydroneopterin
+1321367	dhocholoylcoa	3alpha,7alpha,12alpha,26-Tetrahydroxy-5beta-cholestane
+1321368	dhor-S	(S)-Dihydroorotate
+1321369	dhp23cp	7,8-dihydronepterin 2' :3'-cyclicphosphate
+1321371	dhpmp	Dihydroneopterin monophosphate
+1321373	dhpppn	3-(2,3-Dihydroxyphenyl)propanoate
+1321374	dhpt	Dihydropteroate
+1321375	dhptd	4,5-dihydroxy-2,3-pentanedione
+1321376	dhpyr	2,5-Dihydroxypyridine
+1321377	dhrfap	7,8-dihydropterin-6-ylmethyl-4-(B-D-ribofuranosyl) aminobenzene 5'-phosphate
+1321379	didp	dIDP
+1321380	digalsgalside_hs	Digalactosylceramidesulfate
+1321383	digalside_hs	Digalactosylceramide
+1321385	dimp	dIMP
+1321386	din	Deoxyinosine
+1321387	ditp	dITP
+1321388	dkdofp	4,5-diketo-6-deoxyfructose 1-phosphate
+1321391	dkfp	6-deoxy-5-ketofructose 1-phosphate
+1321392	dkmp	6-deoxy-5-ketomannitol 1-phosphate
+1321394	dkmpp	2,3-diketo-5-methylthio-1-phosphopentane
+1321395	dlnlcg	dihomo-gamma-linolenic acid (n-6)
+1321397	dlnlcgcoa	dihomo-gamma-linolenyl coenzyme A
+1321399	dlnlcgcrn	dihomo-gamma-linolenyl carnitine
+1321402	dma	dimethylamine
+1321403	dmantipyrine	demethylated antipyrine
+1321405	dmarach	di-methyl arachic acid
+1321407	dmbhn	di-methyl behenic acid
+1321409	dmbzid	5,6-Dimethylbenzimidazole
+1321410	dmgly	N,N-Dimethylglycine
+1321411	dmh2mpt	didemethylated 7,8-dihydromethanopterin
+1321414	dmhptcoa	2,6 dimethylheptanoyl-CoA
+1321416	dmhptcrn	2,6 dimethylheptanoyl carnitine
+1321419	dmlgnc	dimethyl lignoceric acid
+1321421	dmlz	6,7-Dimethyl-8-(1-D-ribityl)lumazine
+1321422	dmnoncoa	4,8 dimethylnonanoyl-CoA
+1321424	dmnoncrn	4,8 dimethylnonanoyl carnitine
+1321427	dmpp	Dimethylallyl diphosphate
+1321428	dms	Dimethyl sulfide
+1321429	dmso	Dimethyl sulfoxide
+1321430	dna	DNA
+1321432	dna5mtc	DNA 5-methylcytosine
+1321434	dnad	Deamino-NAD+
+1321435	dohau	3,7-dideoxy-D-threo-hepto-2-amino-6-ulosonate
+1321437	dohdu	3,7-dideoxy-D-threo-hepto-2,6-diulosonate
+1321439	doldp_L	Dolichol diphosphate, human liver homolog
+1321442	doldp_U	Dolichol diphosphate, human uterine homolog
+1321445	dolglcp_L	Dolichyl beta-D-glucosyl phosphate, human liver homolog
+1321448	dolglcp_U	Dolichyl beta-D-glucosyl phosphate, human uterine homolog
+1321451	dolichol	Dolichol
+1321452	dolichol_L	Dolichol, human liver homolog
+1321455	dolichol_U	Dolichol, human uterine homolog
+1321458	dolmanp	Dolichyl phosphate D-mannose
+1321460	dolmanp_L	Dolichyl phosphate D-mannose, human liver homolog
+1321462	dolmanp_U	Dolichyl phosphate D-mannose, human uterine homolog
+1321464	dolp	Dolichol phosphate
+1321466	dolp_L	Dolichol phosphate, human liver homolog
+1321469	dolp_U	Dolichol phosphate, human uterine homolog
+1321472	dopa	Dopamine
+1321473	dopaqn	Dopaquinone
+1321474	dopasf	Dopamine 3-O-sulfate
+1321475	dpcoa	Dephospho-CoA
+1321476	dpgpe	2,3-O-phytanyl-sn-glycero-1-phosphoethanolamine
+1321479	dpgpg	2,3-di-O-phytanyl-sn-glycerol-1-phospho-3'-sn-glycerol
+1321482	dpgpi	2,3-O-phytanyl-sn-glycero-1-phospho-myo-inositol
+1321484	dpgps	2,3-O-phytanyl-sn-glycero-1-phosphoserine
+1321486	drib	Deoxyribose
+1321487	dsT_antigen	disialyl-T antigen
+1321490	dsbaox	periplasmic protein disulfide isomerase I (oxidized)
+1321492	dsbard	periplasmic protein disulfide isomerase I (reduced)
+1321495	dsbcox	protein disulfide isomerase II (oxidized)
+1321497	dsbcrd	protein disulfide isomerase II (reduced)
+1321499	dsbdox	fused thiol:disulfide interchange protein (oxidized)
+1321501	dsbdrd	fused thiol:disulfide interchange protein (reduced)
+1321503	dsbgox	periplasmic disulfide isomerase/thiol-disulphide oxidase (oxidized)
+1323520	orn	Ornithine
+1323521	orn-D	D-Ornithine
+1323522	orot	Orotate
+1323523	orot5p	Orotidine 5'-phosphate
+1323524	oxa	Oxalate
+1323525	oxadpcoa	3-Oxoadipyl-CoA
+1323526	oxag	Oxaloglutarate
+1323528	oxalc	4-oxalocrotonate
+1323530	oxalcoa	Oxalyl-CoA
+1323531	oxam	Oxamate
+1323532	oxoarg-L	2-Oxoarginine
+1323534	oxptn	5-Oxopentanoate
+1323535	oxur	Oxalureate
+1323536	p-tol	p-toluate
+1323537	p-xyl	p-methyltoluene
+1323538	pa120	1,2-didodecanoyl-sn-glycerol 3-phosphate
+1323541	pa140	1,2-ditetradecanoyl-sn-glycerol 3-phosphate
+1323543	pa141	1,2-ditetradec-7-enoyl-sn-glycerol 3-phosphate
+1323546	pa160	1,2-dihexadecanoyl-sn-glycerol 3-phosphate
+1323548	pa160190	1,2-sn-glycerol 3-phosphate
+1323550	pa161	1,2-dihexadec-9-enoyl-sn-glycerol 3-phosphate
+1323552	pa180	1,2-dioctadecanoyl-sn-glycerol 3-phosphate
+1323554	pa181	1,2-dioctadec-11-enoyl-sn-glycerol 3-phosphate
+1323556	pa190190	1,2-sn-glycerol 3-phosphate
+1323557	pa_EC	phosphatidate  (E.coli)
+1323560	pa_Hp	Phosphatidic acid Hp specific
+1323562	pa_SA	phosphatidate (Saureus)
+1323565	pa_SC	Phosphatidate, yeast-specific
+1323568	pa_hs	phosphatidic acid (homo sapiens)
+1323571	pac	Phenylacetic acid
+1323572	pacald	Phenylacetaldehyde
+1323573	pad	2-Phenylacetamide
+1323575	paf_hs	1-alkyl 2-acteylglycerol 3-phosphocholine (homo sapiens)
+1323578	pail345p_hs	phosphatidylinositol-3,4,5-trisphosphate (Homo sapiens)
+1323581	pail34p_hs	phosphatidylinositol-3,4-bisphosphate (Homo sapiens)
+1323584	pail35p_hs	phosphatidylinositol-3,5-bisphosphate (Homo sapiens)
+1323586	pail3p_hs	1-Phosphatidyl-1D-myo-inositol 3-phosphate (Homo sapiens)
+1323589	pail45p_hs	phosphatidylinositol 4,5-bisphosphate (Homo sapiens)
+1323591	pail4p_hs	1-Phosphatidyl-1D-myo-inositol 4-phosphate (Homo sapiens)
+1323593	pail5p_hs	1-Phosphatidyl-1D-myo-inositol 5-phosphate (Homo sapiens)
+1323595	pail_hs	phosphatidylinositol (homo sapiens)
+1323598	pala_SA	Phosphatidylananine_SA
+1323601	pala_SA2	Phosphatidylalanine_SA2
+1323604	palmACP	Palmitoyl-ACP (n-C16:0ACP)
+1323607	pan4p	Pantetheine 4'-phosphate
+1323608	pant-R	(R)-Pantoate
+1323609	pap	Adenosine 3',5'-bisphosphate
+1323610	paps	3'-Phosphoadenylyl sulfate
+1323611	pat	penta-acyl trehalose
+1323614	pc_EC	Phosphatidylcholine (E.coli)
+1323617	pc_SC	Phosphatidylcholine, yeast-specific
+1323620	pchol_hs	Phosphatidylcholine (homo sapiens)
+1323623	pcollg5hlys	Procollagen 5-hydroxy-L-lysine
+1323624	pcollglys	Procollagen L-lysine
+1323626	pcreat	Phosphocreatine
+1323628	pcrn	propionyl-carnitine
+1323630	pd3	Previtamin D3
+1323632	pdima	phthiocerol dimycocerosate A (Mtb)
+1323635	pdx5p	Pyridoxine 5'-phosphate
+1323636	pe120	phosphatidylethanolamine (didodecanoyl, n-C12:0)
+1323638	pe140	phosphatidylethanolamine (ditetradecanoyl, n-C14:0)
+1323640	pe141	phosphatidylethanolamine (ditetradec-7-enoyl, n-C14:1)
+1323642	pe160	phosphatidylethanolamine (dihexadecanoyl, n-C16:0)
+1323644	pe161	phosphatidylethanolamine (dihexadec-9enoyl, n-C16:1)
+1323646	pe180	phosphatidylethanolamine (dioctadecanoyl, n-C18:0)
+1323648	pe181	phosphatidylethanolamine (dioctadec-11-enoyl, n-C18:1)
+1323650	pe_EC	Phosphatidylethanolamine (ecoli)
+1323653	pe_HP	Phosphatidylethanolamine Hp specific
+1323655	pe_SA	Phosphatidylethanolamine (Saureus)
+1323658	pe_SC	phosphatidylethanolamine, yeast-specific
+1323661	pe_hs	phosphatidylethanolamine (homo sapiens)
+1323664	peamn	Phenethylamine
+1323665	pecgon	pseudoecgonine
+1323666	pecgoncoa	Pseudoecgonyl-CoA
+1323668	pentso3	pentanesulfonate
+1323671	pep	Phosphoenolpyruvate
+1323672	pepd	peptide
+1323674	peplys	Peptidyl-L-lysine
+1323675	pepslys	peptide sans lysine
+1323677	peptido_EC	Peptidoglycan subunit of Escherichia coli
+1323680	peptido_TB1	peptidoglycan subunit (for Mycobacterium tuberculosis)
+1323683	peptido_TB2	peptidoglycan subunit (for Mycobacterium tuberculosis)
+1323684	peptido_kt	Peptidoglycan subunit of P.putida KT2440
+1323686	peracd	Perillic acid
+1323687	perillyl	Perillyl alcohol
+1323688	pg120	Phosphatidylglycerol (didodecanoyl, n-C12:0)
+1323691	pg140	Phosphatidylglycerol (ditetradecanoyl, n-C14:0)
+1323693	pg141	Phosphatidylglycerol (ditetradec-7-enoyl, n-C14:1)
+1323696	pg160	Phosphatidylglycerol (dihexadecanoyl, n-C16:0)
+1323698	pg160190	Phosphatidylglycerol (hexadecanoyl, methylstearoyl)
+1323701	pg161	Phosphatidylglycerol (dihexadec-9-enoyl, n-C16:1)
+1323704	pg180	Phosphatidylglycerol (dioctadecanoyl, n-C18:0)
+1323707	pg181	Phosphatidylglycerol (dioctadec-11-enoyl, n-C18:1)
+1323709	pg190	Phosphatidylglycerol (dimethylstearoyl, C19:0)
+1323712	pg_EC	Phosphatidylglycerol (Ecoli)
+1323715	pg_HP	Phosphatidylglycerol Hp specific
+1323718	pg_SA	Phosphatidylglycerol (Saureus)
+1323721	pg_SC	Phosphatidylglycerol, yeast-specific
+1323724	pgly_SA	Phosphatidylglycine_SA
+1323727	pgly_SA2	Phosphatidylglycine_SA2
+1323730	pglyc_hs	phosphatidylglycerol (homo sapiens)
+1323733	pgp120	Phosphatidylglycerophosphate (didodecanoyl, n-C12:0)
+1323736	pgp140	Phosphatidylglycerophosphate (ditetradecanoyl, n-C14:0)
+1323739	pgp141	Phosphatidylglycerophosphate (ditetradec-7-enoyl, n-C14:1)
+1323742	pgp160	Phosphatidylglycerophosphate (dihexadecanoyl, n-C16:0)
+1324416	trp-L	L-Tryptophan
+1324417	trptrna	L-Tryptophanyl-tRNA(Trp)
+1324419	trypta	Tryptamine
+1324420	ts3	Tachysterol 3
+1324422	tststerone	Testosterone
+1324423	tststeroneglc	testosterone glucuronide
+1324424	tststerones	testosterone sulfate
+1324425	tsul	Thiosulfate
+1324426	ttc	tetracosanoate (n-C24:0)
+1324428	ttc-ggdp	trans,trans,cis-Geranylgeranyl diphosphate
+1324429	ttccoa	tetracosanoyl-CoA  (n-C24:0CoA)
+1324431	ttdca	tetradecanoate (n-C14:0)
+1324433	ttdcea	tetradecenoate (n-C14:1)
+1324436	ttdcrn	tetradecanoyl carnitine
+1324438	tungs	tungstate
+1324439	txa2	Thromboxane A2
+1324440	tym	Tyramine
+1324441	tymsf	Tyramine O-sulfate
+1324445	tyr-L	L-Tyrosine
+1324446	tyrp	Phosphotyrosine
+1324447	tyrtrna	L-Tyrosyl-tRNA(Tyr)
+1324449	u23ga	UDP-2,3-bis(3-hydroxytetradecanoyl)glucosamine
+1324450	u23ga_HP	UDP-2(3-hydroxyoctadecanoyl)-3(3-hydroxypalmetoyl)glucosamine
+1324453	u2ga_HP	u2ga_HP
+1324456	u2hga_HP	UDP-2-hydroxyoctadecanoyl-D-glucosamine
+1324459	u3aga	UDP-3-O-(3-hydroxytetradecanoyl)-N-acetylglucosamine
+1324460	u3aga_HP	UDP-3-O-(3-hydroxypalmetoyl)-N-acetylglucosamine
+1324463	u3hga	UDP-3-O-(3-hydroxytetradecanoyl)-D-glucosamine
+1324464	u3hga_HP	UDP-3-O(3-hydroxypalmetoyl)-D-glucosamine
+1324467	uAgl	UDP-N-acetylmuramoyl-L-alanyl-D-glutamyl-L-lysine
+1324468	uAgla	UDP-N-acetylmuramoyl-L-alanyl-D-glutamyl-L-lysyl-D-alanyl-D-alanine
+1324470	uGgl	UDP-N-acetylmuramoyl-L-alanyl-gamma-D-glutamyl-L-lysine
+1324471	uGgla	UDP-N-acetylmuramoyl-L-alanyl-gamma-D-glutamyl-L-lysyl-D-alanyl-D-alanine
+1324472	uLa4fn	undecaprenyl phosphate-4-amino-4-formyl-L-arabinose
+1324474	uLa4n	undecaprenyl phosphate-4-amino-4-deoxy-L-arabinose
+1324476	uaAgla	Undecaprenyl-diphospho-N-acetylmuramoyl-L-alanyl-D-glutamyl-L-lysyl-D-alanyl-D-alanine
+1324477	uaGgla	Undecaprenyl-diphospho-N-acetylmuramoyl-L-alanyl-gamma-D-glutamyl-L-lysyl-D-alanyl-D-alanine
+1324478	uaaAgla	Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-glutamyl-L-lysyl-D-alanyl-D-alanine
+1324479	uaaAgtla	Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-glutaminyl-L-lysyl-D-alanyl-D-alanine
+1324480	uaaGgla	Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-gamma-D-glutamyl-L-lysyl-D-alanyl-D-alanine
+1324481	uaaGgtla	Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-isoglutaminyl-L-lysyl-D-alanyl-D-alanine
+1324482	uaagmda	Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-ala-D-glu-meso-2,6-diaminopimeloyl-D-ala-D-ala
+1324484	uaagtmda	Undecaprenyl-diphospho-N-acetylmuramoyl-(N-acetylglucosamine)-L-alanyl-D-glutaminyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine
+1324486	uaccg	UDP-N-acetyl-3-O-(1-carboxyvinyl)-D-glucosamine
+1324487	uacgam	UDP-N-acetyl-D-glucosamine
+1324488	uacmam	UDP-N-acetyl-D-mannosamine
+1324489	uacmamu	UDP-N-acetyl-D-mannosaminouronate
+1324491	uagmda	Undecaprenyl-diphospho-N-acetylmuramoyl-L-alanyl-D-glutamyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine
+1324492	uama	UDP-N-acetylmuramoyl-L-alanine
+1324493	uamag	UDP-N-acetylmuramoyl-L-alanyl-D-glutamate
+1324494	uamr	UDP-N-acetylmuramate
+1324496	udcp	Undecaprenol
+1324497	udcpdp	Undecaprenyl diphosphate
+1324498	udcpp	Undecaprenyl phosphate
+1324499	udp	UDP
+1324500	udpLa4fn	uridine 5''-diphospho-{beta}-4-deoxy-4-formamido-L-arabinose
+1324502	udpLa4n	uridine 5''-diphospho-{beta}-4-deoxy-4-amino-L-arabinose
+1324504	udpLa4o	UDP-4-keto-pyranose
+1324506	udpacgal	UDP-N-acetyl-D-galactosamine
+1324507	udpg	UDPglucose
+1324508	udpgal	UDPgalactose
+1324509	udpgalfur	UDP-D-galacto-1,4-furanose
+1324510	udpglcur	UDP-D-glucuronate
+1324511	udpxyl	UDP-D-xylose
+1324512	ugagmda	Undecaprenyl-diphospho-N-glycolylmuramoyl-(N-acetylglucosamine)-L-ala-D-glu-meso-2,6-diaminopimeloyl-D-ala-D-ala
+1324515	ugam	UDP-glucosamine
+1324517	ugggmda	Undecaprenyl-diphospho-N-glycolylmuramoyl-L-alanyl-D-glutamyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine
+1324520	uggmd	UDP-N-glycolylmuramoyl-L-alanyl-D-gamma-glutamyl-meso-2,6-diaminopimelate
+1324523	uggmda	UDP-N-glycolylmuramoyl-L-alanyl-D-glutamyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine
+1324526	ugma	UDP-N-glycolylmuramoyl-L-alanine
+1324529	ugmag	UDP-N-glycolylmuramoyl-L-alanyl-D-glutamate
+1324532	ugmd	UDP-N-acetylmuramoyl-L-alanyl-D-gamma-glutamyl-meso-2,6-diaminopimelate
+1324533	ugmda	UDP-N-acetylmuramoyl-L-alanyl-D-glutamyl-meso-2,6-diaminopimeloyl-D-alanyl-D-alanine
+1324534	ugmr	UDP-N-glycolylmuramate
+1324537	um4p	UDP-N-acetylmuramoyl-L-alanyl-D-gamma-glutamyl-meso-2,6-diaminopimelate-D-alanine
+1324539	ump	UMP
+1324540	unaga	Undecaprenyl diphospho N-acetyl-glucosamine
+1324542	unagamu	Undecaprenyl-diphospho-N-acetylglucosamine-N-acetylmannosaminuronate
+1324544	unagamuf	Undecaprenyl-diphospho N-acetylglucosamine-N-acetylmannosaminuronate-N-acetamido-4,6-dideoxy-D-galactose
+1324545	unknown_cbl1deg	unknown degradation product of cbl1 for adocbl-HBI synthesis
+1324548	unknown_rbfdeg	unknown riboflavin degradation product
+1324550	uppg1	Uroporphyrinogen I
+1324551	uppg3	Uroporphyrinogen III
+1324552	ura	Uracil
+1324553	urate	Urate
+1324554	urcan	Urocanate
+1324555	urdglyc	(-)-Ureidoglycolate
+1324556	urea	Urea
+1324557	uri	Uridine
+1324558	utp	UTP
+1324559	vacc	vaccenic acid
+1324560	vacccoa	vaccenyl coenzyme A
+1324562	vacccrn	Vaccenyl carnitine
+1324564	val-L	L-Valine
+1324565	valtrna	L-Valyl-tRNA(Val)
+1324567	vanln	Vanillin
+1324568	vanlt	Vanillate
+1324569	vitd2	Vitamin D2
+1324570	vitd3	Vitamin D3
+1324571	wharachd	w-hydroxyl arachidonic acid
+1324573	whddca	omega hydroxy dodecanoate (n-C12:0)
+1324575	whhdca	omega hydroxy hexadecanoate (n-C16:0)
+1322912	lpp	lipoprotein
+1322914	lppg	lactyl-(2)-diphospho-(5')-guanosine
+1322916	lpro	Lipoylprotein
+1322918	lps_EC	lipopolysaccharide (Ecoli)
+1322921	lps_HP	Lipopolysacharide Hp specific
+1322925	lthstrl	5alpha-Cholest-7-en-3beta-ol
+1322926	lum3	Lumisterol 3
+1322928	lxser	Gal-Xyl-L-Ser (protein)
+1322931	lys-D	D-Lysine
+1322932	lys-L	L-Lysine
+1322933	lystrna	L-Lysine-tRNA (Lys)
+1322936	lyx-L	L-Lyxose
+1322937	lyxnt	L-lyxonate
+1322938	m(em)3gacpail_hs	mannosyl-3-(phosphoethanolaminyl-mannosyl)-glucosaminyl-acylphosphatidylinositol (M4A)
+1322941	m(em)3gacpail_prot_hs	mannosyl-3-(phosphoethanolaminyl-mannosyl)-glucosaminyl-acylphosphatidylinositol-Protein (M4A)
+1322944	m-tol	m-toluate
+1322945	m-xyl	m-Xylene
+1322946	m1macchitppdol	alpha-D-mannosyl-beta-D-mannosyl-diacylchitobiosyldiphosphodolichol
+1322949	m1mpdol_L	alpha-D-mannosyl-beta-D-mannosyl-diacylchitobiosyldiphosphodolichol, human liver homolog
+1322952	m1mpdol_U	alpha-D-mannosyl-beta-D-mannosyl-diacylchitobiosyldiphosphodolichol, human uterine homolog
+1322955	m1ocdca	methyl octadecanoate
+1322957	m2emgacpail_hs	(dimannosyl),(phosphoethanolaminyl)-mannosyl-glucosylaminyl-acylphosphatidylinositol (H6)
+1322959	m2gacpail_hs	dimannosyl-glucosaminyl-acylphosphatidylinositol (H3)
+1322962	m2macchitppdol	(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol
+1322964	m2mn	(alpha-D-mannosyl)2-beta-D-mannosyl-N-acetylglucosamine
+1322966	m2mpdol_L	(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1322969	m2mpdol_U	(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1322972	m3emgacpail_hs	(trimannosyl),(phosphoethanolaminyl)-mannosyl-glucosaminyl-acylphosphatidylinositol (M4C)
+1322975	m3gacpail_hs	trimannosyl-glucosaminyl-acylphosphatidylinositol (H4)
+1322978	m3hdp	methyl-3-hydroxyl diphosphate
+1322981	m3macchitppdol	(alpha-D-mannosyl)3-beta-D-mannosyl-diacetylchitodiphosphodolichol
+1322984	m3mpdol_L	(alpha-D-mannosyl)3-beta-D-mannosyl-diacetylchitodiphosphodolichol, human liver homolog
+1322987	m3mpdol_U	(alpha-D-mannosyl)3-beta-D-mannosyl-diacetylchitodiphosphodolichol, human uterine homolog
+1322990	m4macchitppdol	(alpha-D-Mannosyl)4-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol
+1322992	m4masn	(alpha-D-mannosyl)4-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1322995	m4mpdol_L	(alpha-D-Mannosyl)4-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1322998	m4mpdol_U	(alpha-D-Mannosyl)4-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1323001	m5masnB1	(alpha-D-mannosyl)5-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1323004	m5masnB2	(alpha-D-mannosyl)5-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1323005	m5masnC	(alpha-D-mannosyl)5-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1323006	m5mpdol_L	(alpha-D-Mannosyl)5-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1323009	m5mpdol_U	(alpha-D-Mannosyl)5-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1323012	m6masnA	(alpha-D-mannosyl)6-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1323015	m6masnB1	(alpha-D-mannosyl)6-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1323016	m6masnB2	(alpha-D-mannosyl)6-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1323017	m6masnC	(alpha-D-mannosyl)6-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1323018	m6mpdol_L	(alpha-D-Mannosyl)6-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1323021	m6mpdol_U	(alpha-D-Mannosyl)6-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1323024	m7masnA	(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform A (protein)
+1323026	m7masnB	(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform B (protein)
+1323028	m7masnC	(alpha-D-mannosyl)7-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine, isoform C (protein)
+1323030	m7mpdol_L	(alpha-D-Mannosyl)7-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1323033	m7mpdol_U	(alpha-D-Mannosyl)7-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1323036	m8masn	(alpha-D-mannosyl)8-beta-D-mannosyl-diacetylchitobiosyl-L-asparagine (protein)
+1323038	m8mpdol_L	(alpha-D-Mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human liver homolog
+1323041	m8mpdol_U	(alpha-D-Mannosyl)8-beta-D-mannosyl-diacetylchitobiosyldiphosphodolichol, human uterine homolog
+1323044	macchitppdol	beta-D-Mannosyldiacetylchitobiosyldiphosphodolichol
+1323046	mag_hs	monoacylglycerol 2 (homo sapiens)
+1323049	mal-D	D-Malate
+1323051	mal-L	L-Malate
+1323053	malACP	Malonyl-[acyl-carrier protein]
+1323055	malcoa	Malonyl-CoA
+1323056	male	Maleate
+1323057	malm	Maleamate
+1323058	malt	Maltose
+1323059	malt6p	Maltose 6'-phosphate
+1323060	malthp	Maltoheptaose
+1323061	malthx	Maltohexaose
+1323062	maltpt	Maltopentaose
+1323063	malttr	Maltotriose
+1323064	maltttr	Maltotetraose
+1323065	man	D-Mannose
+1323066	man1p	D-Mannose 1-phosphate
+1323067	man6p	D-Mannose 6-phosphate
+1323068	man6pglyc	2(alpha-D-Mannosyl-6-phosphate)-D-glycerate
+1323070	mana	D-Mannonate
+1323071	manglyc	2(alpha-D-Mannosyl)-D-glycerate
+1323072	mannan	Mannan
+1323073	marach	methyl arachidic acid
+1323075	mbhn	methyl behenic acid
+1323077	mcbts	mycobactin S
+1323079	mcbtt	mycobactin T
+1323082	mclPHA	Medium-chain length Polyhydroxyalkanoate (Total)
+1323085	mclPHAg	Medium-chain length Polyhydroxyalkanoate growing.
+1323087	mcom	methylcoenzyme m
+1323088	melanin	Melanin
+1323089	melatn	Melatonin
+1323090	melib	Melibiose
+1323091	melt	melibiitol
+1323092	mem2emgacpail_hs	({[(mannosyl),(phosphoethanolaminyl)]-dimannosyl},{phosphoethanolaminyl})-mannosyl-glucosaminyl-acylphosphatidylinositol (M4B)
+1323095	mem2emgacpail_prot_hs	({[(mannosyl),(phosphoethanolaminyl)]-dimannosyl},{phosphoethanolaminyl})-mannosyl-glucosaminyl-acylphosphatidylinositol-Protein (M4B)
+1323098	memgacpail_hs	(mannosyl),(phosphoethanolaminyl)-mannosyl-glucosylaminyl-acylphosphatidylinositol (B)
+1323101	menylh4spt	methenyl-tetrahydrosarcinapterin
+1323104	meoh	Methanol
+1323105	mepi	Metanephrine
+1323107	mercplac	3-Mercaptolactate
+1323108	mercplaccys	3-mercaptolactate-cysteine disulfide
+1323111	mercppyr	Mercaptopyruvate
+1323112	meroacidACP	alpha meroacid ACP
+1323115	meroacidcyc1ACP	cyclopropanated alpha meroacid ACP (1 cyclopropane ring)
+1323118	meroacidcyc2ACP	cyclopropanated alpha meroacid ACP (2 cyclopropane rings)
+1323121	meroacidcyc2AMP	cyclopropanated alpha meroacid AMP (2 cyclopropane rings)
+1323124	mescoa	Mesaconyl-CoA
+1323125	mescon	Mesaconate
+1323126	met-D	D-Methionine
+1323127	met-L	L-Methionine
+1323128	methf	5,10-Methenyltetrahydrofolate
+1323129	metsox-R-L	L-methionine-R-sulfoxide
+1323131	metsox-S-L	L-Methionine Sulfoxide
+1323133	mettrna	L-Methionyl-tRNA (Met)
+1323904	prgnlone	Pregnenolone
+1323905	prgnlones	pregnenolone sulfate
+1323907	prgstrn	Progesterone
+1323908	prist	pristanic acid
+1323909	pristanal	pristanal
+1323910	pristcoa	pristanoyl coa
+1323912	prlp	5-[(5-phospho-1-deoxyribulos-1-ylamino)methylideneamino]-1-(5-phosphoribosyl)imidazole-4-carboxamide
+1323913	pro-D	D-Proline
+1323914	pro-L	L-Proline
+1323915	progly	L-Prolinylglycine
+1323916	prostg1	(13E)-11alpha-Hydroxy-9,15-dioxoprost-13-enoate
+1323917	prostgd2	Prostaglandin D2
+1323918	prostge1	Prostaglandin E1
+1323919	prostge2	Prostaglandin E2
+1323920	prostgf2	Prostaglandin F2alpha
+1323921	prostgh2	Prostaglandin H2
+1323922	prostgi2	Prostaglandin I2
+1323923	protrna	L-Prolyl-tRNA(Pro)
+1323925	prpncoa	Propenoyl-CoA
+1323926	prpp	5-Phospho-alpha-D-ribose 1-diphosphate
+1323927	ps120	phosphatidylserine (didodecanoyl, n-C12:0)
+1323929	ps140	phosphatidylserine (ditetradecanoyl, n-C14:0)
+1323931	ps141	phosphatidylserine (ditetradec-7-enoyl, n-C14:1)
+1323933	ps160	phosphatidylserine (dihexadecanoyl, n-C16:0)
+1323935	ps161	phosphatidylserine (dihexadec-9-enoyl, n-C16:1)
+1323937	ps180	phosphatidylserine (dioctadecanoyl, n-C18:0)
+1323939	ps181	phosphatidylserine (dioctadec-11-enoyl, n-C18:1)
+1323941	ps_EC	phosphatidylserine (Ecoli)
+1323944	ps_HP	Phosphatidylserine Hp specific
+1323947	ps_SA	phosphatidylserine (Saureus)
+1323950	ps_SC	phosphatidylserine, yeast-specific
+1323953	ps_hs	phosphatidylserine (homo sapiens)
+1323956	psclys	psicoselysine
+1323957	psd5p	Pseudouridine 5'-phosphate
+1323958	pser-D	D-O-Phosphoserine
+1323959	pser-L	O-Phospho-L-serine
+1323960	psph1p	Phytosphingosine 1-phosphate
+1323961	psphings	Phytosphingosine
+1323962	ptal	pentanal
+1323964	ptcys	N-Pantothenoylcysteine
+1323966	ptd134bp_SC	phosphatidyl-1D-myo-inositol 3,4-bisphosphate, yeast-specific
+1323970	ptd145bp_SC	1-Phosphatidyl-D-myo-inositol 4,5-bisphosphate, yeast-specific
+1323972	ptd1ino160	phosphatidyl 1D myo inositol
+1323974	ptd1ino160190	phosphatidyl 1D myo inositol (C16:0, C19:0)
+1323977	ptd1ino_SC	phosphatidyl-1D-myo-inositol, yeast-specific
+1323980	ptd2meeta_SC	Phosphatidyl-N-dimethylethanolamine
+1323982	ptd3ino_SC	phosphatidyl-1D-myo-3-inositol, yeast-specific
+1323985	ptd4ino_SC	phosphatidyl-1D-myo-4-inositol, yeast specific
+1323987	ptdca	pentadecanoate
+1323988	ptdcacoa	pentadecanoyl Coenzyme A
+1323990	ptdcacrn	pendtadenoyl carnitine
+1323993	ptdmeeta_SC	Phosphatidyl-N-methylethanolamine, yeast-specific
+1323996	ptp	triaminopyrimidine triphosphate
+1323999	ptrc	Putrescine
+1324000	ptth	Pantetheine
+1324001	pyam5p	Pyridoxamine 5'-phosphate
+1324002	pydam	Pyridoxamine
+1324003	pydx	Pyridoxal
+1324004	pydx5p	Pyridoxal 5'-phosphate
+1324005	pydxn	Pyridoxine
+1324006	pylald	Perillyl aldehyde
+1324007	pyr	Pyruvate
+1324008	q	Ubiquinone
+1324010	q10	Ubiquinone-10
+1324011	q10h2	Ubiquinol-10
+1324012	q6	Ubiquinone-6
+1324013	q6h2	Ubiquinol-6
+1324014	q8	Ubiquinone-8
+1324015	q8h2	Ubiquinol-8
+1324016	qh2	Ubiquinol
+1324017	quin-kt	Quinate
+1324018	quln	Quinolinate
+1324019	r15bp	D-Ribose 1,5-bisphosphate
+1324020	r1p	alpha-D-Ribose 1-phosphate
+1324023	r5hbzi	N1-(alpha-D-ribosyl)-5-hydroxybenzimidazole
+1324025	r5p	alpha-D-Ribose 5-phosphate
+1324026	raffin	Raffinose
+1324027	ragund	rhamanosyl-N-acetylglucosamyl-undecaprenyl diphosphate
+1324029	rb15bp	D-Ribulose 1,5-bisphosphate
+1324030	rbflvrd	Reduced riboflavin
+1324031	rbl-D	D-Ribulose
+1324032	rbl-L	L-Ribulose
+1324033	rbrdxOX	Oxidized rubredoxin
+1324035	rbrdxRD	Reduced rubredoxin
+1324037	rbt	Ribitol
+1324038	rdmbzi	N1-(alpha-D-ribosyl)-5,6-dimethylbenzimidazole
+1324039	retfa	fatty acid retinol
+1324041	retinal	Retinal
+1324042	retinal-11-cis	cis-11-retinal
+1324044	retinal-cis-13	cis-13-retinal
+1324046	retinal-cis-9	cis-9-retinal
+1324048	retinol	Retinol
+1324049	retinol-9-cis	9-cis-retinol
+1324050	retinol-cis-11	cis-11-retinol
+1324052	retinol-cis-13	cis-13-retinol
+1324054	retn	Retinoate
+1324055	retncoa	retinoyl CoA
+1324058	retnglc	retinoyl glucuronide
+1324059	retpalm [deleted 10/09/2005  06:18:49 PM]	Retinyl palminate
+1324061	rhcys	S-Ribosyl-L-homocysteine
+1324063	rib-D	D-Ribose
+1324064	ribflv	Riboflavin
+1324065	rml	L-Rhamnulose
+1324066	rml1p	L-Rhamnulose 1-phosphate
+1324067	rmn	L-Rhamnose
+1324068	rmyc	mycolate compounds (all)
+1324071	rnam	N-Ribosylnicotinamide
+1324072	rppdima	rhamnose phenol phthiocerol dimycocerosate (Mtb)
+1324075	rrppdima	rhamnose rhamnose phenol phthiocerol dimycocerosate (Mtb)
+1324078	ru5p-D	D-Ribulose 5-phosphate
+1324079	ru5p-L	L-Ribulose 5-phosphate
+1324080	s	Sulfur
+1324081	s17bp	Sedoheptulose 1,7-bisphosphate
+1324082	s2l2fn2m2masn	PA6
+1324085	s2l2n2m2m	de-Fuc form of PA6 (w/o peptide linkage)
+1324088	s2l2n2m2masn	de-Fuc form of PA6
+1324091	s2l2n2m2mn	de-Fuc, reducing GlcNAc removed form of PA6 (w/o peptide linkage)
+1324094	s7p	Sedoheptulose 7-phosphate
+1324095	sT_antigen	sialyl-T antigen
+1323328	murein5p4p	two linked disacharide pentapeptide and tetrapeptide murein units (uncrosslinked, middle of chain)
+1323331	murein5p5p	two linked disacharide pentapeptide murein units (uncrosslinked, middle of chain)
+1323334	murein5p5p5p	three linked disacharide pentapeptide murein units (uncrosslinked, middle of chain)
+1323337	murein5px3p	two disacharide linked murein units, pentapeptide corsslinked tripeptide (A2pm->A2pm) (middle of chain)
+1323339	murein5px4p	two disacharide linked murein units, pentapeptide crosslinked tetrapeptide (A2pm->D-ala) (middle of chain)
+1323342	murein5px4px4p	three disacharide linked murein units (pentapeptide crosslinked tetrapeptide (A2pm->D-ala) tetrapeptide corsslinked tetrapeptide (A2pm->D-ala)) (middle of chain)
+1323345	mycolate	mycolate  (2 cyclopropanated rings)
+1323348	myrsACP	Myristoyl-ACP (n-C14:0ACP)
+1323351	n2	nitrogen
+1323352	n2m2masn	((N-acetyl-D-glucosaminyl)2-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)
+1323355	n2m2mn	de-Fuc, reducing GlcNAc removed, de-Sia, de-Gal form of PA6 (w/o peptide linkage)
+1323357	n2m2nm	n2m2nmasn (w/o peptide linkage)
+1323360	n2m2nmasn	N-Acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,3-(N-acetyl-beta-D-glucosaminyl-1,2-alpha-D-mannosyl-1,6)-(N-acetyl-beta-D-glucosaminyl-1,4)-beta-D-mannosyl-1,4-N-acetyl-beta-D-glucosaminyl-R
+1323364	n2m2nmn	reducing GlcNAc removed form of n2m2nmasn (w/o peptide)
+1323366	n2o	Nitrous oxide
+1323367	n3m2masn	((N-acetyl-D-glucosaminyl)3-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)
+1323369	n4abutn	N4-Acetylaminobutanal
+1323370	n4m2masn	((N-acetyl-D-glucosaminyl)4-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)
+1323373	n5m2masn	((N-acetyl-D-glucosaminyl)5-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)
+1323376	n6all26d	N6-Acetyl-LL-2,6-diaminoheptanedioate
+1323377	n8aspmd	N8-Acetylspermidine
+1323379	na1	Sodium
+1323380	nabl	N-epsilon-acetyl-beta-lysine
+1323382	nac	Nicotinate
+1323383	nad	Nicotinamide adenine dinucleotide
+1323384	nadh	Nicotinamide adenine dinucleotide - reduced
+1323386	nadp	Nicotinamide adenine dinucleotide phosphate
+1323387	nadph	Nicotinamide adenine dinucleotide phosphate - reduced
+1323390	naglc2p_L	N-Acetyl-D-glucosaminyldiphosphodolichol, human liver homolog
+1323393	naglc2p_U	N-Acetyl-D-glucosaminyldiphosphodolichol, human uterine homolog
+1323396	nal2a6o	N-Acetyl-L-2-amino-6-oxopimelate
+1323397	ncam	Nicotinamide
+1323398	nfmalm	N-Formyl maleamic acid
+1323400	nformanth	N-Formylanthranilate
+1323401	nh3	Ammonia
+1323402	nh4	Ammonium
+1323403	nh4oh	Ammonium hydroxide
+1323404	ni2	nickel
+1323405	nicrns	Nicotinate D-ribonucleoside
+1323406	nicrnt	Nicotinate D-ribonucleotide
+1323407	nifedipine	nifedipine
+1323408	nm2masn	(N-acetyl-D-glucosaminyl-(alpha-D-mannosyl)2-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)
+1323412	nm4masn	(N-acetyl-D-glucosaminyl-(alpha-D-mannosyl)4-beta-D-mannosyl-diacetylchitobiosyl)-L-asparagine (protein)
+1323416	nmn	NMN
+1323417	nmptrc	N-Methylputrescine
+1323418	nmthsrtn	N-Methylserotonin
+1323420	no	Nitric oxide
+1323421	no2	Nitrite
+1323422	no3	Nitrate
+1323423	nop	D-Nopaline
+1323424	normete-L	L-Normetanephrine
+1323425	npthl	Naphthalene
+1323426	nrpphr	Norepinephrine
+1323427	nrpphrsf	Sulfate derivative of norepinephrine
+1323430	nrvnc	nervonic acid
+1323431	nrvnccoa	nervonyl coenzyme A
+1323433	nrvnccrn	Nervonyl carnitine
+1323436	ntm2amep	N-Trimethyl-2-aminoethylphosphonate
+1323438	nwharg	N-(omega)-Hydroxyarginine
+1323440	o16a2und	(O16 antigen)x2 undecaprenyl diphosphate
+1323443	o16a3und	(O16 antigen)x3 undecaprenyl diphosphate
+1323446	o16a4colipa	(O16 antigen)x4 core oligosaccharide lipid A
+1323449	o16a4und	(O16 antigen)x4 undecaprenyl diphosphate
+1323452	o16aund	O16 antigen undecaprenyl diphosphate
+1323455	o2	O2
+1323456	o2s	Superoxide anion
+1323457	oaa	Oxaloacetate
+1323458	oagd3_hs	9-O-Acetylated GD3 (homo sapiens)
+1323461	oagt3_hs	9-O-Acetylated GT3 (homo sapiens)
+1323464	oc2coa	trans-Oct-2-enoyl-CoA
+1323465	ocACP	Octanoyl-ACP (n-C8:0ACP)
+1323468	oca	4-oxalcitromalate
+1323470	occoa	Octanoyl-CoA (n-C8:0CoA)
+1323472	ocdca	octadecanoate (n-C18:0)
+1323474	ocdcaACP	Octadecanoyl-ACP (n-C18:0ACP)
+1323478	ocdcea	octadecenoate (n-C18:1)
+1323480	ocdcya	octadecadienoate (n-C18:2)
+1323482	ocdcyaACP	Octadecynoyl-ACP (n-C18:2ACP)
+1323484	ocdycacoa	Octadecynoyl-CoA (n-C18:2CoA)
+1323486	octa	octanoate (n-C8:0)
+1323488	octdp	all-trans-Octaprenyl diphosphate
+1323489	octdp_5	all-trans-Octaprenyl diphosphate (5 repeating units)
+1323491	octeACP	cis-octadec-11-enoyl-[acyl-carrier protein] (n-C18:1)
+1323494	octp	Octopine
+1323495	od2coa	trans-Octadec-2-enoyl-CoA
+1323496	odecoa	Octadecenoyl-CoA (n-C18:1CoA)
+1323498	odecrn	octadecenoyl carnitine
+1323500	oh1	hydroxide ion
+1323501	ohepa	2-oxoheptanedioic acid
+1323503	ohexa	2-oxohexanedioic acid
+1323504	ohpb	2-Oxo-3-hydroxy-4-phosphobutanoate
+1323505	omaenol	4-Carboxy-2-hydroxyhexa-2,4-dienedioate
+1323506	omaketo	4-oxalomesaconate (keto form)
+1323508	omdtria	octa-methyl dotriacontanoic acid (C32:0 with 7 methyl branches)
+1323511	omeprazole	omeprazole
+1323512	omtta	octa-methyl tetracontatricosanoic acid (C34:0, 8 methyl-branched carbons)
+1323515	onpthl	naphthalene epoxide
+1323517	op4en	2-Oxopent-4-enoate
+1323518	oretn	4-oxo-retonoic acid
+1323136	mev-R	(R)-Mevalonate
+1323137	mfr(b)	methanofuran b
+1323140	mfrrppdima	phenolic glycolipid (Mtb)
+1323143	mg2	magnesium
+1323144	mgacpail_hs	mannosyl-glucosaminyl-acylphosphatidylinositiol (H2)
+1323147	mh4spt	N5-methyl-tetrahydrosarcinapterin
+1323149	mharab-D	mannose capped hexa arabinofuranoside
+1323151	mhista	N-Methylhistamine
+1323152	mhpglu	5-Methyltetrahydropteroyltri-L-glutamate
+1323154	mi13456p	1D-myo-Inositol 1,3,4,5,6-pentakisphosphate
+1323155	mi1345p	1D-myo-Inositol 1,3,4,5-tetrakisphosphate
+1323156	mi1346p	1D-myo-Inositol 1,3,4,6-tetrakisphosphate
+1323157	mi134p	1D-myo-Inositol 1,3,4-trisphosphate
+1323158	mi13p	1D-myo-Inositol 1,3-bisphosphate
+1323159	mi1456p	1D-myo-Inositol 1,4,5,6-tetrakisphosphate
+1323160	mi145p	1D-myo-Inositol 1,4,5-trisphosphate
+1323162	mi14p	1D-myo-Inositol 1,4-bisphosphate
+1323163	mi1p-D	1D-myo-Inositol 1-phosphate
+1323164	mi3456p	1D-myo-Inositol 3,4,5,6-tetrakisphosphate
+1323165	mi34p	1D-myo-Inositol 3,4-bisphosphate
+1323166	mi3p-D	1D-myo-Inositol 3-phosphate
+1323167	mi4p-D	1D-myo-Inositol 4-phosphate
+1323168	micit	methylisocitrate
+1323169	minohp	myo-Inositol hexakisphosphate
+1323170	mip2c124_SC	mannose-(inositol-P)2-ceramide, ceramide-1 (24C), yeast-specific
+1323173	mip2c126_SC	mannose-(inositol-P)2-ceramide, ceramide-1 (26C), yeast-specific
+1323176	mip2c224_SC	mannose-(inositol-P)2-ceramide, ceramide-2 (24C), yeast-specific
+1323179	mip2c226_SC	mannose-(inositol-P)2-ceramide, ceramide-2 (26C), yeast-specific
+1323182	mip2c324_SC	mannose-(inositol-P)2-ceramide, ceramide-3 (24C), yeast-specific
+1323185	mip2c326_SC	mannose-(inositol-P)2-ceramide, ceramide-3 (26C), yeast-specific
+1323188	mipc124_SC	mannose-inositol phosphorylceramide, ceramide-1 (24C), yeast-specific
+1323191	mipc126_SC	mannose-inositol phosphorylceramide, ceramide-1 (26C), yeast-specific
+1323194	mipc224_SC	mannose-inositol phosphorylceramide, ceramide-2 (24C), yeast-specific
+1323197	mipc226_SC	mannose-inositol phosphorylceramide, ceramide-2 (26C), yeast-specific
+1323200	mipc324_SC	mannose-inositol phosphorylceramide, ceramide-3 (24C), yeast-specific
+1323203	mipc326_SC	mannose-inositol phosphorylceramide, ceramide-3 (26C)
+1323206	mkmeroacidACP	methyl hydroxy keto meroacid ACP (1 cyclopropane ring)
+1323209	mkmeroacidcyc1ACP	cyclopropanated methyl hydroxy keto meroacid ACP (1 cyclopropane ring)
+1323212	mkmeroacidcyc1AMP	cyclopropanated methyl hydroxy keto meroacid AMP (1 cyclopropane ring)
+1323215	mkmycolate	keto mycolate (1 cyclopropanated rings)
+1323218	mleneh4spt	N5,N10-methylene-5,6,7,8-tetrahydromethanopterin
+1323221	mlthf	5,10-Methylenetetrahydrofolate
+1323222	mma	Methylamine
+1323223	mmcoa-R	(R)-Methylmalonyl-CoA
+1323224	mmcoa-S	(S)-Methylmalonyl-CoA
+1323225	mmeroacidACP	methoxy meroacid ACP
+1323228	mmeroacidcyc1ACP	cyclopropanated methoxy-meroacid ACP (1 cyclopropane ring)
+1323231	mmeroacidcyc2ACP	cyclopropanated methoxy-meroacid ACP (2 cyclopropane rings)
+1323233	mmeroacidcyc2AMP	cyclopropanated methoxy-meroacid AMP (2 cyclopropane rings)
+1323236	mmet	S-Methyl-L-methionine
+1323237	mmh2mpt	monomethylated 7,8-dihydromethanoterin
+1323240	mmmeroacidACP	methyl hydroxy methoxy meroacid ACP
+1323243	mmmeroacidcyc1ACP	cyclopropanated methyl hydroxy methoxy meroacid ACP (1 cyclopropane ring)
+1323246	mmmeroacidcyc1AMP	cyclopropanated methyl hydroxy methoxy meroacid AMP (1 cyclopropane ring)
+1323249	mmmycolate	methoxy mycolate (1 cyclopropanated ring)
+1323251	mmtsa	(S)-Methylmalonate semialdehyde
+1323252	mmycolate	methoxy mycolate (2 cyclopropanated rings)
+1323255	mn	beta-1,4-mannose-N-acetylglucosamine
+1323257	mn2	Mn2+
+1323258	mndn	menadione
+1323259	mnl	D-Mannitol
+1323260	mnl1p	D-Mannitol 1-phosphate
+1323261	mobd	Molybdate
+1323262	mocdca	10-methylstearic acid
+1323263	motre	maltooligosyltrehalose
+1323265	mpdol_L	beta-D-Mannosyldiacetylchitobiosyldiphosphodolichol, human liver homolog
+1323268	mpdol_U	beta-D-Mannosyldiacetylchitobiosyldiphosphodolichol, human uterine homolog
+1323271	mphen	methanophenazine (oxidized)
+1323273	mphenh2	methanophenazine (reduced)
+1323275	mppp9	Magnesium protoporphyrin
+1323276	mql6	Menaquinol 6
+1323278	mql8	Menaquinol 8
+1323280	mqn6	Menaquinone 6
+1323283	mqn8	Menaquinone 8
+1323285	msa	Malonate semialdehyde
+1323287	msh	mycothiol (reduced)
+1323289	mshfald	mycothiol conjugated methanol
+1323291	mshfaldox	mycothiol conjugated aldehyde
+1323293	mso3	methanesulfonate
+1323294	mssg	mycothiol (oxidized - dimer)
+1323296	mstrACP	10methyl stearyoyl-ACP
+1323299	mthgxl	Methylglyoxal
+1323300	mucl	mucolactone
+1323302	murein3p3p	two linked disacharide tripeptide murein units (uncrosslinked, middle of chain)
+1323305	murein3px3p	two disacharide linked murein units, tripeptide crosslinked tripeptide (A2pm->A2pm) (middle of chain)
+1323308	murein3px4p	two disacharide linked murein units, tripeptide crosslinked tetrapeptide (A2pm->D-ala) (middle of chain)
+1323311	murein4p3p	two linked disacharide tetrapeptide and tripeptide murein units (uncrosslinked, middle of chain)
+1323314	murein4p4p	two linked disacharide tetrapeptide murein units (uncrosslinked, middle of chain)
+1323317	murein4px4p	two disacharide linked murein units, tetrapeptide corsslinked tetrapeptide (A2pm->D-ala) (middle of chain)
+1323320	murein4px4p4p	three disacharide linked murein units (tetrapeptide crosslinked tetrapeptide (A2pm->D-ala), one uncrosslinked tetrapaptide) (middle of chain)
+1323323	murein4px4px4p	three disacharide linked murein units (tetrapeptide crosslinked tetrapeptide (A2pm->D-ala) & tetrapeptide corsslinked tetrapeptide (A2pm->D-ala)) (middle of chain)
+1323326	murein5p3p	two linked disacharide pentapeptide and tripeptide murein units (uncrosslinked, middle of chain)
+1324256	tdec2eACP	trans-Dec-2-enoyl-[acyl-carrier protein]
+1324257	tdecoa	Tetradecenoyl-CoA (n-C14:1CoA)
+1324260	tdm1	trehalose dimycolate (alpha mycolate + methoxymycolate)
+1324263	tdm2	trehalose dimycolate (alpha mycolate + methoxymycolate)
+1324265	tdm3	trehalose dimycolate (alpha mycolate + ketomycolate)
+1324268	tdm4	trehalose dimycolate (alpha mycolate + methoxymycolate)
+1324270	tethex3	tetracosahexaenoic acid, n-3
+1324272	tethex3coa	tetracosahexaenoyl coenzyme A
+1324274	tetpent3	tetracosapentaenoic acid, n-3
+1324276	tetpent3coa	tetracosapentaenoyl coenzyme A, n-3
+1324278	tetpent3crn	tetracosapentaenoyl carnitine
+1324281	tetpent6	tetracosapentaenoic acid, n-6
+1324283	tetpent6coa	tetracosapentaenoyl coenzyme A, n-6
+1324285	tetpent6crn	tetracosapentaenoyl carnitine
+1324286	tettet6	tetracosatetraenoic acid n-6
+1324288	tettet6coa	tetracosatetraenoyl coenzyme A
+1324290	tettet6crn	Tetracosatetraenoyl carnitine
+1324293	tglp	N-Tetradecanoylglycylpeptide
+1324295	thbpt	Tetrahydrobiopterin
+1324296	thbpt4acam	Tetrahydrobiopterin-4a-carbinolamine
+1324298	thcholoylcoa	3alpha,7alpha,24-Trihydroxy-5beta-cholestanoyl-CoA
+1324299	thcholst	3alpha,7alpha,12alpha-Trihydroxy-5beta-cholestan-26-al
+1324300	thcholstoic	3alpha,7alpha,12alpha-Trihydroxy-5beta-cholestanoate
+1324301	thcrm_hs	trihexosyl ceramide (homo sapiens)
+1324304	thcys	Thiocysteine
+1324305	thdp	2,3,4,5-Tetrahydrodipicolinate
+1324306	thex2eACP	trans-Hex-2-enoyl-[acyl-carrier protein]
+1324308	thf	5,6,7,8-Tetrahydrofolate
+1324309	thfglu	Tetrahydrofolyl-[Glu](2)
+1324311	thglu	Tetrahydropteroyltri-L-glutamate
+1324313	thm	Thiamin
+1324314	thmmp	Thiamin monophosphate
+1324315	thmpp	Thiamine diphosphate
+1324316	thmtp	Thiamin triphosphate
+1324318	thp2c	2,3,4,5-Tetrahydropyridine-2-carboxylate
+1324319	thr-L	L-Threonine
+1324320	thrnt	L-Threonate
+1324322	thrp	L-Threonine O-3-phosphate
+1324323	thrtrna	L-Threonyl-tRNA(Thr)
+1324325	thym	Thymine
+1324326	thymd	Thymidine
+1324327	thyox-L	L-Thyroxine
+1324328	tih2cit	(-)threo-iso(homo)2citrate
+1324330	tih3cit	(-)threo-iso(homo)3citrate
+1324332	tma	trimethylamine
+1324333	tmao	Trimethylamine N-oxide
+1324334	tmbhn	tri-methyl behenic acid
+1324337	tmha1	tetramycolyl hexaarabinoside (tdm1 + tdm2 +tre) (Mtb)
+1324340	tmha2	tetramycolyl hexaarabinoside (tdm1 + tdm3 + tre) (Mtb)
+1324343	tmha3	tetramycolyl hexaarabinoside (tdm1 + tdm4 + tre) (Mtb)
+1324346	tmha4	tetramycolyl hexaarabinoside (tdm2 + tdm3 + tre) (Mtb)
+1324349	tmha5	tetramycolyl hexaarabinoside (tdm2 + tdm4 + tre) (Mtb)
+1324351	tmha6	tetramycolyl hexaarabinoside (tdm3 + tdm4 + tre) (Mtb)
+1324354	tmhexc	tri-methyl hexacosanoate
+1324357	tmlgnc	tri-methyl lignoceric acid
+1324358	tmlys	N6,N6,N6-Trimethyl-L-lysine
+1324360	tmndnc	timnodonic acid C20:5, n-3
+1324362	tmndnccoa	timnodonyl coenzyme A
+1324364	tmndnccrn	Timnodonyl carnitine
+1324367	tmrs2eACP	trans-Tetradec-2-enoyl-[acyl-carrier protein]
+1324368	toct2eACP	trans-Oct-2-enoyl-[acyl-carrier protein]
+1324372	toctd2eACP	trans-octadec-2-enoyl-[acyl-carrier protein]
+1324374	tol	Toluene
+1324375	tolbutamide	tolbutamide
+1324376	tpalm2eACP	trans-Hexadec-2-enoyl-[acyl-carrier protein]
+1324377	trdox	Oxidized thioredoxin
+1324378	trdrd	Reduced thioredoxin
+1324379	tre	Trehalose
+1324380	tre6p	alpha,alpha'-Trehalose 6-phosphate
+1324381	tres	trehalose 2 sulfate
+1324383	triat	tri-acyl trehalose
+1324386	triglyc_SC	triglyceride, yeast-specific
+1324389	triodthy	Triiodothyronine
+1324390	triodthysuf	Triiodothyronine sulfate
+1324392	trnaala	tRNA(Ala)
+1324393	trnaarg	tRNA(Arg)
+1324394	trnaasn	tRNA(Asn)
+1324396	trnaasp	tRNA(Asp)
+1324397	trnacys	tRNA(Cys)
+1324398	trnagln	tRNA(Gln)
+1324399	trnaglu	tRNA (Glu)
+1324401	trnagly	tRNA(Gly)
+1324402	trnahis	tRNA(His)
+1324403	trnaile	tRNA(Ile)
+1324404	trnaleu	tRNA(Leu)
+1324405	trnalys	tRNA(Lys)
+1324406	trnamet	tRNA(Met)
+1324407	trnaphe	tRNA(Phe)
+1324408	trnapro	tRNA(Pro)
+1324409	trnasecys	tRNA(SeCys)
+1324411	trnaser	tRNA(Ser)
+1324412	trnathr	tRNA(Thr)
+1324413	trnatrp	tRNA(Trp)
+1324414	trnatyr	tRNA(Tyr)
+1324415	trnaval	tRNA(Val)
+1324098	sTn_antigen	sialyl-Tn antigen
+1324101	saccrp-L	L-Saccharopine
+1324102	salc	Salicylate
+1324103	salc6p	Salicin 6-phosphate
+1324104	salcn	Salicin
+1324105	sarcs	Sarcosine
+1324106	sbt-D	D-Sorbitol
+1324107	sbt-L	L-Sorbitol
+1324108	sbt6p	D-Sorbitol 6-phosphate
+1324110	sbzcoa	O-Succinylbenzoyl-CoA
+1324111	scl	sirohydrochlorin
+1324113	scl2	sirohydrochlorin 2
+1324115	scys-L	S-Sulfo-L-cysteine
+1324116	sdhlam	S-Succinyldihydrolipoamide
+1324117	seahcys	Se-Adenosylselenohomocysteine
+1324118	seasmet	Se-Adenosylselenomethionine
+1324119	sec	sulfoethylcysteine
+1324122	sectrna	L-Selenocysteinyl-tRNA(Sec)
+1324125	sel	Selenate
+1324126	selcys	Selenocysteine
+1324127	selcyst	Selenocystathionine
+1324128	selhcys	Selenohomocysteine
+1324129	selmeth	Selenomethionine
+1324130	seln	Selenide
+1324131	selnp	Selenophosphate
+1324133	ser-D	D-Serine
+1324134	ser-L	L-Serine
+1324135	seramp	L-seryl-AMP
+1324136	sertrna	L-Seryl-tRNA(Ser)
+1324137	sertrna(sec)	L-Seryl-tRNA(Sec)
+1324138	sf430a	15,17-seco-F430-17-acid
+1324140	sgalside_hs	sulfatide galactocerebroside (homo sapiens)
+1324143	sheme	Siroheme
+1324144	skm	Shikimate
+1324145	skm5p	Shikimate 5-phosphate
+1324146	sl-L	L-sulfolactate
+1324148	sl1	sulfonated tetra-acyl trehalose
+1324151	sl26da	N-Succinyl-LL-2,6-diaminoheptanedioate
+1324152	sl2a6o	N-Succinyl-2-L-amino-6-oxoheptanedioate
+1324154	slp-L	L-sulfolactyl phosphate
+1324156	so2	sulfur dioxide
+1324157	so3	Sulfite
+1324158	so4	Sulfate
+1324159	spc_hs	sphingosylphosphorylcholine (homo sapiens)
+1324161	sph1p	Sphinganine 1-phosphate
+1324162	sphgn	Sphinganine
+1324164	sphings	Sphingosine
+1324165	sphmyln_hs	sphingomyelin (homo sapiens)
+1324168	sphs1p	Sphingosine 1-phosphate
+1324169	spmd	Spermidine
+1324170	sprm	Spermine
+1324171	sql	Squalene
+1324172	srb-L	L-Sorbose
+1324173	srtn	Serotonin
+1324174	ssaltpp	Succinate semialdehyde-thiamin diphosphate anion
+1324177	stcoa	Stearoyl-CoA (n-C18:0CoA)
+1324179	stcrn	stearoylcarnitine
+1324180	strch1	starch, structure 1 (1,6-{7[1,4-Glc], 4[1,4-Glc]})
+1324183	strch2	starch, structure 2 (1,6-{2[1,4-Glc], [1,4-Glc]})
+1324185	strdnc	stearidonic acid C18:4, n-3
+1324187	strdnccoa	stearidonyl coenzyme A
+1324189	strdnccrn	stearidonyl carnitine
+1324191	suc6p	Sucrose 6-phosphate
+1324192	sucarg	N2-Succinyl-L-arginine
+1324193	sucbz	o-Succinylbenzoate
+1324194	succ	Succinate
+1324195	succoa	Succinyl-CoA
+1324196	sucglu	N2-Succinyl-L-glutamate
+1324197	sucgsa	N2-Succinyl-L-glutamate 5-semialdehyde
+1324199	suchms	O-Succinyl-L-homoserine
+1324200	sucorn	N2-Succinyl-L-ornithine
+1324202	sucr	Sucrose
+1324203	sucsal	Succinic semialdehyde
+1324204	sulfac	sulfoacetate
+1324205	t2m26dcoa	trans-2-Methyl-5-isopropylhexa-2,5-dienoyl-CoA
+1324206	t3c11vaceACP	trans-3-cis-11-vacceoyl-[acyl-carrier protein]
+1324208	t3c5ddeceACP	trans-3-cis-5-dodecenoyl-[acyl-carrier protein]
+1324211	t3c7mrseACP	trans-3-cis-7-myristoleoyl-[acyl-carrier protein]
+1324214	t3c9palmeACP	trans-3-cis-9-palmitoleoyl-[acyl-carrier protein]
+1324217	tag1p-D	D-Tagatose 1-phosphate
+1324219	tag6p-D	D-Tagatose 6-phosphate
+1324220	tag_hs	triacylglycerol (homo sapiens)
+1324223	tagat-D	D-Tagatose
+1324224	tagdp-D	D-Tagatose 1,6-biphosphate
+1324226	tagur	D-Tagaturonate
+1324227	tamhexc	tetra-methyl hexacosanoate
+1324229	tamlgnc	tri-methyl lignoceric acid
+1324231	tamocta	tetra-methyl octacosanoate
+1324233	tarab-D	tetra-arabinofuranoside
+1324235	tartr-L	L-tartrate
+1324237	tat	tetra-acyl trehalose
+1324240	taur	Taurine
+1324241	taxol	paclitaxel
+1324243	tcam	minor teichoic acid (acetylgalactosamine glucose phosphate, n=30)
+1324246	tchola	taurocholic acid
+1324247	tcynt	Thiocyanate
+1324248	td2coa	trans-Tetradec-2-enoyl-CoA
+1324249	tdchola	taurochenodeoxycholate
+1324250	tdcoa	Tetradecanoyl-CoA (n-C14:0CoA)
+1324252	tddec2eACP	trans-Dodec-2-enoyl-[acyl-carrier protein]
+1324253	tdeACP	cis-tetradec-7-enoyl-[acyl-carrier protein] (n-C14:1)
+1323745	pgp160190	Phosphatidylglycerophosphate (hexadecanoyl, tuberculostearoyl, C16:0, C19:0)
+1323748	pgp161	Phosphatidylglycerophosphate (dihexadec-9-enoyl, n-C16:1)
+1323751	pgp180	Phosphatidylglycerophosphate (dioctadecanoyl, n-C18:0)
+1323754	pgp181	Phosphatidylglycerophosphate (dioctadec-11-enoyl, n-C18:1)
+1323756	pgp190	Phosphatidylglycerophosphate (dituberculostearoyl, C19:0)
+1323759	pgp_EC	Phosphatidylglycerophosphate (Ecoli)
+1323763	pgp_HP	Phosphatidylglycerol phosphate Hp specific
+1323766	pgp_SA	Phosphatidylglycerophosphate (Saureus)
+1323769	pgp_SC	Phosphatidylglycerophosphate, yeast-specific
+1323772	pgp_hs	phosphatidyl glycerol phosphate (homo sapiens)
+1323775	phaccoa	Phenylacetyl-CoA
+1323776	phdca	phenol palmitic acid
+1323779	phdcaACP	phenol palmitic acid ACP
+1323782	phdcacoa	phenol palmitic coenzyme A
+1323785	phe-L	L-Phenylalanine
+1323786	pheacgln	alpha-N-Phenylacetyl-L-glutamine
+1323787	pheme	Protoheme
+1323788	phetrna	L-Phenylalanyl-tRNA(Phe)
+1323790	phhlipa	phospho-heptosyl-heptosyl-kdo2-lipidA
+1323793	phom	O-Phospho-L-homoserine
+1323794	phphhlipa	phospho-heptosyl-phospho-heptosyl-heptosyl-kdo2-lipidA
+1323797	phpyr	Phenylpyruvate
+1323798	phthcl	phthiocol (oxidized)
+1323800	phthclh2	phthiocol (reduced)
+1323802	phthdl	phthiodolone
+1323805	phthiocerol	phthiocerol A
+1323808	phthr	O-Phospho-4-hydroxy-L-threonine
+1323809	phyQ	Phylloquinone
+1323810	phyt	phytanic acid
+1323811	phyt2ohcoa	2-Hydroxyphytanoyl-CoA
+1323812	phytcoa	phytanyl coa
+1323814	pi	Phosphate
+1323815	pime	Pimelate
+1323816	pleu_SA	Phosphatidylleucine_SA
+1323819	pleu_SA2	Phosphatidylleucine_SA2
+1323822	plys_SA	Phosphatidyllysine_SA
+1323825	plys_SA2	Phosphatidyllysine_SA2
+1323828	pmcoa	Pimeloyl-CoA
+1323829	pmhexc	penta-methyl hexacosanoate
+1323832	pmocta	penta-methyl octacosanoate
+1323835	pmtcoa	Palmitoyl-CoA (n-C16:0CoA)
+1323837	pmtcrn	L-Palmitoylcarnitine
+1323839	pnto-R	(R)-Pantothenate
+1323840	ppa	Propionate (n-C3:0)
+1323842	ppal	Propanal
+1323843	ppap	Propanoyl phosphate
+1323844	ppbng	Porphobilinogen
+1323845	ppcoa	Propanoyl-CoA
+1323846	ppdima	phenol phthiocerol dimycocerosate (Mtb)
+1323849	ppgpp	Guanosine 3',5'-bis(diphosphate)
+1323850	pphn	Prephenate
+1323851	pphthdl	phenolic phthiodiolone
+1323854	pphthiocerol	phenolphtiocerol
+1323857	ppi	Diphosphate
+1323858	ppmi12346p	5-Diphosphoinositol pentakisphosphate
+1323859	ppmi1346p	Diphosphoinositol tetrakisphosphate
+1323862	ppp9	Protoporphyrin
+1323863	pppg9	Protoporphyrinogen IX
+1323864	pppi	Inorganic triphosphate
+1323865	pppn	Phenylpropanoate
+1323866	pprdn	Piperideine
+1323867	ppt	Phosphonate
+1323868	pqq	Pyrroloquinoline-quinone
+1323869	pqqh2	Reduced pyrroloquinoline-quinone
+1323870	pram	5-Phospho-beta-D-ribosylamine
+1323871	pran	N-(5-Phospho-D-ribosyl)anthranilate
+1323872	prbamp	1-(5-Phosphoribosyl)-AMP
+1323873	prbatp	1-(5-Phosphoribosyl)-ATP
+1323874	pre2	dihydrosirohydrochlorin
+1323876	pre3a	Precorrin 3 A
+1323878	pre3b	Precorrin 3B
+1323879	pre4	Precorrin 4
+1323880	pre5	Precorrin 5
+1323881	pre6a	Precorrin 6A
+1323882	pre6b	Precorrin 6B
+1323884	pre8	Precorrin 8
+1323885	pre_prot	glycophosphatidylinositol (GPI)-anchored protein precursor
+1323888	prephth	phthiocerol precursor
+1323891	prephthACP	phthiocerol precursor bound ACP
+1323894	prephthcoa	phthiocerol precursor bound coenzyme A
+1323897	prepphth	phenolic phthiocerol precursor
+1323900	prepphthACP	phenolic phthiocerol precursor bound ACP
+1323903	prfp	1-(5-Phosphoribosyl)-5-[(5-phosphoribosylamino)methylideneamino]imidazole-4-carboxamide
+1324608	xser	Xyl-L-Ser (protein)
+1324611	xtp	XTP
+1324612	xtsn	Xanthosine
+1324613	xu1p-D	D-Xylulose 1-phosphate
+1324615	xu5p-D	D-Xylulose 5-phosphate
+1324616	xu5p-L	L-Xylulose 5-phosphate
+1324617	xyl-D	D-Xylose
+1324618	xylnt	L-Xylonate
+1324619	xylt	Xylitol
+1324620	xylu-D	D-Xylulose
+1324621	xylu-L	L-Xylulose
+1324622	yvite	gamma-Tocopherol
+1324623	zn2	Zinc
+1324624	zym_int1	zymosterol intermediate 1
+1324626	zym_int2	zymosterol intermediate 2
+1324627	zymst	zymosterol
+1324628	zymstnl	Zymostenol
+1324577	whtststerone	w hydroxy testosterone
+1324579	whttdca	omega hydroxy tetradecanoate (n-C14:0)
+1324581	xan	Xanthine
+1324582	xdp	XDP
+1324583	xmp	Xanthosine 5'-phosphate
+1324584	xol24oh	24-Hydroxycholesterol
+1324585	xol25oh	25-Hydroxycholesterol
+1324586	xol27oh	27-Hydroxycholesterol
+1324587	xol7a	7 alpha-Hydroxycholesterol
+1324589	xol7ah	7alpha-Hydroxy-5beta-cholestan-3-one
+1324590	xol7ah2	3alpha,7alpha-Dihydroxy-5beta-cholestane
+1324591	xol7ah2al	3alpha,7alpha-Dihydroxy-5beta-cholestan-26-al
+1324592	xol7ah3	3alpha,7alpha,26-Trihydroxy-5beta-cholestane
+1324593	xol7aone	7alpha-Hydroxycholest-4-en-3-one
+1324594	xoldiolone	7alpha,12alpha-Dihydroxycholest-4-en-3-one
+1324595	xoldioloneh	7alpha,12alpha-Dihydroxy-5beta-cholestan-3-one
+1324596	xolest2_hs	cholesterol ester (from FULLR2)
+1324599	xolest_hs	cholesterol ester
+1324601	xoltetrol	3alpha,7alpha,12alpha,26-Tetrahydroxy-5beta-cholestane
+1324602	xoltri24	7-alpha,24(S)-Dihydroxycholesterol
+1324604	xoltri25	7-alpha,25-Dihydroxycholesterol
+1324606	xoltri27	7-alpha,27-Dihydroxycholesterol
+1324607	xoltriol	3alpha,7alpha,12alpha-Trihydroxy-5beta-cholestane

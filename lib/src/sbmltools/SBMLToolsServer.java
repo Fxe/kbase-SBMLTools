@@ -40,6 +40,7 @@ import us.kbase.workspace.ListAllTypesParams;
 import us.kbase.workspace.ListObjectsParams;
 import us.kbase.workspace.WorkspaceClient;
 import pt.uminho.sysbio.biosynthframework.kbase.AutoPropagateGenomeFacade;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
@@ -197,7 +198,7 @@ public class SBMLToolsServer extends JsonServerServlet {
     returnVal = new KBaseModelIntegrationFacade(wspClient, 
                                 dfuClient, gaClient, kbrClient,
                                 geneIntegration,
-                                "/data/integration/export",
+                                KBaseConfig.DATA_EXPORT_PATH,
                                 scratch).kbaseIntegrate(params, workspaceName);
         //END integrate_model
         return returnVal;

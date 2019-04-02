@@ -1,0 +1,814 @@
+C15816@LigandCompound	4mzym_int2@BiGG
+META:PROPIONYL-P@MetaCyc	C02876@LigandCompound	ppap@BiGG
+C00544@LigandCompound	META:HOMOGENTISATE@MetaCyc	hgentis@BiGG
+C01107@LigandCompound	META:CPD-499@MetaCyc	5pmev@BiGG
+META:FRUCTURONATE@MetaCyc	C00905@LigandCompound	fruur@BiGG
+u23ga@BiGG	META:OH-MYRISTOYL@MetaCyc	C04652@LigandCompound
+mi134p@BiGG	C01243@LigandCompound	META:INOSITOL-1-3-4-TRIPHOSPHATE@MetaCyc
+C00229@LigandCompound	ACP@BiGG	META:ACP@MetaCyc
+h2co3@BiGG	META:H2CO3@MetaCyc	C01353@LigandCompound
+hisp@BiGG	C01100@LigandCompound	META:L-HISTIDINOL-P@MetaCyc
+META:5-AMINOPENTANAMIDE@MetaCyc	C00990@LigandCompound	5apentam@BiGG
+META:MI-HEXAKISPHOSPHATE@MetaCyc	C01204@LigandCompound	minohp@BiGG
+fmnh2@BiGG	META:FMNH2@MetaCyc	C01847@LigandCompound
+C00044@LigandCompound	gtp@BiGG	15996@ChEBI	META:GTP@MetaCyc
+META:CPD-234@MetaCyc	C04604@LigandCompound
+META:DMSO@MetaCyc	C11143@LigandCompound	dmso@BiGG
+C20782@LigandCompound	META:CPD-13773@MetaCyc
+C15489@LigandCompound	indaccoa@BiGG	META:S-2-INDOL-3-YLACETYL-COA@MetaCyc
+fprica@BiGG	C04734@LigandCompound	META:PHOSPHORIBOSYL-FORMAMIDO-CARBOXAMIDE@MetaCyc
+ara5p@BiGG	C01112@LigandCompound	META:ARABINOSE-5P@MetaCyc
+C01220@LigandCompound	META:INOSITOL-1-4-BISPHOSPHATE@MetaCyc	mi14p@BiGG
+C00031@LigandCompound	glc-D@BiGG
+C00230@LigandCompound	META:3-4-DIHYDROXYBENZOATE@MetaCyc	34dhbz@BiGG
+C02083@LigandCompound	META:2-Phenyloxirane@MetaCyc
+sl-L@BiGG	META:CPD-11799@MetaCyc	C11499@LigandCompound
+META:CPD-12810@MetaCyc	sbt-L@BiGG	C01722@LigandCompound
+ribflv@BiGG	C00255@LigandCompound	META:RIBOFLAVIN@MetaCyc
+prbatp@BiGG	META:PHOSPHORIBOSYL-ATP@MetaCyc	C02739@LigandCompound
+C00018@LigandCompound	cpd00016@Seed	pydx5p@BiGG	META:PYRIDOXAL_PHOSPHATE@MetaCyc
+C06554@LigandCompound	META:CYANURIC-ACID@MetaCyc
+C00194@LigandCompound	META:ADENOSYLCOBALAMIN@MetaCyc	adocbl@BiGG
+3hpcoa@BiGG	META:3-HYDROXY-PROPIONYL-COA@MetaCyc	C05668@LigandCompound
+C00155@LigandCompound	META:HOMO-CYS@MetaCyc	hcys-L@BiGG
+META:CPD-383@MetaCyc	C06051@LigandCompound
+META:Palmitoyl-ACPs@MetaCyc	C05764@LigandCompound	palmACP@BiGG
+gmhep1p@BiGG	C07838@LigandCompound	META:D-BETA-D-HEPTOSE-1-P@MetaCyc
+META:CDP@MetaCyc	C00112@LigandCompound	cdp@BiGG
+META:CPD-1282@MetaCyc	hsfd@BiGG	C04832@LigandCompound
+C00095@LigandCompound	fru@BiGG
+META:3-5-ADP@MetaCyc	C00054@LigandCompound	pap@BiGG
+C01269@LigandCompound	3psme@BiGG	META:3-ENOLPYRUVYL-SHIKIMATE-5P@MetaCyc
+META:CPD-418@MetaCyc	2tcc@BiGG
+C01213@LigandCompound	META:METHYL-MALONYL-COA@MetaCyc	mmcoa-R@BiGG
+C01494@LigandCompound	META:FERULIC-ACID@MetaCyc	fer@BiGG
+tma@BiGG	META:TRIMETHYLAMINE@MetaCyc	C00565@LigandCompound
+C00090@LigandCompound	META:CATECHOL@MetaCyc	catechol@BiGG
+C00254@LigandCompound	META:PREPHENATE@MetaCyc	pphn@BiGG
+aspsa@BiGG	C00441@LigandCompound	META:L-ASPARTATE-SEMIALDEHYDE@MetaCyc
+3hmp@BiGG	META:CPD-12175@MetaCyc	C06001@LigandCompound
+uppg3@BiGG	C01051@LigandCompound	META:UROPORPHYRINOGEN-III@MetaCyc
+META:S-PHOSPHOLACTATE@MetaCyc	2plac-L@BiGG	C19156@LigandCompound
+META:P3I@MetaCyc	C00536@LigandCompound	pppi@BiGG
+cholcoa@BiGG	META:CPD-202@MetaCyc	C01794@LigandCompound
+META:FUM@MetaCyc	C00122@LigandCompound	fum@BiGG
+C05275@LigandCompound	META:T2-DECENOYL-COA@MetaCyc	dc2coa@BiGG
+alac-S@BiGG	C06010@LigandCompound	META:2-ACETO-LACTATE@MetaCyc
+META:PYRUVATE@MetaCyc	pyr@BiGG	C00022@LigandCompound
+C06232@LigandCompound	mobd@BiGG	META:CPD-3@MetaCyc	cpd11574@Seed
+META:CIS-CIS-MUCONATE@MetaCyc	C02480@LigandCompound	ccmuac@BiGG
+C02938@LigandCompound	ind3acnl@BiGG	META:INDOLEYL-CPD@MetaCyc
+acald@BiGG	META:ACETALD@MetaCyc	C00084@LigandCompound
+META:PHOSPHORIBULOSYL-FORMIMINO-AICAR-P@MetaCyc	prlp@BiGG	C04916@LigandCompound
+sl2a6o@BiGG	C04462@LigandCompound	META:N-SUCCINYL-2-AMINO-6-KETOPIMELATE@MetaCyc
+C05747@LigandCompound	META:R-3-hydroxyhexanoyl-ACPs@MetaCyc	3hhexACP@BiGG
+META:CHORISMATE@MetaCyc	chor@BiGG	C00251@LigandCompound
+META:UDP-GLUCURONATE@MetaCyc	udpglcur@BiGG	C00167@LigandCompound
+C00506@LigandCompound	Lcyst@BiGG	META:L-CYSTEATE@MetaCyc
+META:CPD-506@MetaCyc	mi1345p@BiGG	C01272@LigandCompound
+C04257@LigandCompound	acmanap@BiGG	META:N-ACETYL-D-MANNOSAMINE-6P@MetaCyc
+META:GUANOSINE@MetaCyc	gsn@BiGG	C00387@LigandCompound
+C06196@LigandCompound	META:DIMP@MetaCyc	dimp@BiGG
+C00136@LigandCompound	btcoa@BiGG	META:BUTYRYL-COA@MetaCyc
+C00887@LigandCompound	n2o@BiGG	META:NITROUS-OXIDE@MetaCyc
+META:SIROHYDROCHLORIN@MetaCyc	C05778@LigandCompound	scl@BiGG
+34hpp@BiGG	C01179@LigandCompound	META:P-HYDROXY-PHENYLPYRUVATE@MetaCyc
+2ahbut@BiGG	META:2-ACETO-2-HYDROXY-BUTYRATE@MetaCyc	C06006@LigandCompound
+C00345@LigandCompound	6pgc@BiGG	META:CPD-2961@MetaCyc
+META:CPD-8646@MetaCyc	C05107@LigandCompound	ddsmsterol@BiGG
+C04574@LigandCompound	META:UNDECAPRENYL-DIPHOSPHATE@MetaCyc	udcpdp@BiGG
+C00286@LigandCompound	dgtp@BiGG	META:DGTP@MetaCyc
+gthrd@BiGG	META:GLUTATHIONE@MetaCyc	C00051@LigandCompound
+bz@BiGG	META:BENZOATE@MetaCyc	C00180@LigandCompound
+kdo8p@BiGG	C04478@LigandCompound	META:KDO-8P@MetaCyc
+3ophb@BiGG	META:3-OCTAPRENYL-4-HYDROXYBENZOATE@MetaCyc	C05809@LigandCompound
+C11514@LigandCompound	META:MONOMETHYL-ESTER-OF-TRANS-ACONITATE@MetaCyc	aconm@BiGG
+C00116@LigandCompound	glyc@BiGG	META:GLYCEROL@MetaCyc
+1pyr5c@BiGG	META:L-DELTA1-PYRROLINE_5-CARBOXYLATE@MetaCyc	C03912@LigandCompound
+META:2-METHYL-BUTYRYL-COA@MetaCyc	C15980@LigandCompound	2mbcoa@BiGG
+META:GLUTARYL-COA@MetaCyc	C00527@LigandCompound	glutcoa@BiGG
+C04079@LigandCompound	ptcys@BiGG	META:CPD-46@MetaCyc
+C11811@LigandCompound	h2mb4p@BiGG	META:HYDROXY-METHYL-BUTENYL-DIP@MetaCyc
+raffin@BiGG	C00492@LigandCompound	META:CPD-1099@MetaCyc
+lipidA@BiGG	META:LIPID-IV-A@MetaCyc	C04919@LigandCompound
+META:PHE@MetaCyc	phe-L@BiGG	C00079@LigandCompound
+q8h2@BiGG	META:CPD-9956@MetaCyc	C17569@LigandCompound
+C20225@LigandCompound	META:CPD-9875@MetaCyc
+META:DEOXYXYLULOSE-5P@MetaCyc	C11437@LigandCompound	dxyl5p@BiGG
+5aptn@BiGG	C00431@LigandCompound	META:5-AMINOPENTANOATE@MetaCyc
+butso3@BiGG	META:CPD-3744@MetaCyc
+L2aadp@BiGG	META:CPD-468@MetaCyc	C00956@LigandCompound
+META:AMP@MetaCyc	D02769@LigandDrug	C00020@LigandCompound	amp@BiGG
+C03373@LigandCompound	air@BiGG	META:5-PHOSPHORIBOSYL-5-AMINOIMIDAZOLE@MetaCyc
+META:DCDP@MetaCyc	C00705@LigandCompound	dcdp@BiGG
+b2coa@BiGG	META:CROTONYL-COA@MetaCyc	C00877@LigandCompound
+C00458@LigandCompound	META:DCTP@MetaCyc	dctp@BiGG
+C00906@LigandCompound	56dthm@BiGG	META:DIHYDRO-THYMINE@MetaCyc
+META:3-oxo-hexanoyl-ACPs@MetaCyc	3ohexACP@BiGG	C05746@LigandCompound
+duri@BiGG	C00526@LigandCompound	META:DEOXYURIDINE@MetaCyc
+C01120@LigandCompound	sph1p@BiGG	META:CPD-649@MetaCyc
+2tpr3dpcoa@BiGG	C19771@LigandCompound	META:2-5-TRIPHOSPHORIBOSYL-3-DEPHOSPHO-@MetaCyc
+3odecACP@BiGG	META:3-oxo-decanoyl-ACPs@MetaCyc	C05753@LigandCompound
+META:D-METHYL-MALONYL-COA@MetaCyc	mmcoa-S@BiGG	C00683@LigandCompound
+META:CPD-10261@MetaCyc	C16217@LigandCompound	3hodcoa@BiGG
+META:TYR@MetaCyc	tyr-L@BiGG	C00082@LigandCompound
+4hbald@BiGG	META:4-HYDROXYBENZALDEHYDE@MetaCyc	C00633@LigandCompound
+META:LANOSTEROL@MetaCyc	C01724@LigandCompound	lanost@BiGG
+C00508@LigandCompound	META:L-RIBULOSE@MetaCyc	rbl-L@BiGG
+C00169@LigandCompound	cbp@BiGG	META:CARBAMOYL-P@MetaCyc
+META:HYPOTAURINE@MetaCyc	C00519@LigandCompound	hyptaur@BiGG
+META:3-HYDROXY-3-METHYL-GLUTARYL-COA@MetaCyc	C00356@LigandCompound	hmgcoa@BiGG
+toctd2eACP@BiGG	C16221@LigandCompound	META:Octadec-2-enoyl-ACPs@MetaCyc
+C00100@LigandCompound	ppcoa@BiGG	META:PROPIONYL-COA@MetaCyc
+C03910@LigandCompound	META:CPD-51@MetaCyc
+C01251@LigandCompound	hcit@BiGG	META:HOMO-CIT@MetaCyc
+fe2@BiGG	META:FE+2@MetaCyc	29033@ChEBI	C14818@LigandCompound
+META:SEROTONIN@MetaCyc	C00780@LigandCompound	srtn@BiGG
+META:CPD0-2123@MetaCyc	C05265@LigandCompound	3odcoa@BiGG
+C01177@LigandCompound	META:D-MYO-INOSITOL-1-MONOPHOSPHATE@MetaCyc	mi1p-D@BiGG
+ind3ac@BiGG	C00954@LigandCompound	META:INDOLE_ACETATE_AUXIN@MetaCyc
+fad@BiGG	META:FAD@MetaCyc	C00016@LigandCompound
+META:BUTANAL@MetaCyc	btal@BiGG	C01412@LigandCompound
+C04006@LigandCompound	mi3p-D@BiGG	META:1-L-MYO-INOSITOL-1-P@MetaCyc
+META:PROTOPORPHYRINOGEN@MetaCyc	pppg9@BiGG	C01079@LigandCompound
+C01302@LigandCompound	META:CARBOXYPHENYLAMINO-DEOXYRIBULOSE-P@MetaCyc	2cpr5p@BiGG
+META:D-ALTRONATE@MetaCyc	altrn@BiGG	C00817@LigandCompound
+26dap-LL@BiGG	META:LL-DIAMINOPIMELATE@MetaCyc	C00666@LigandCompound
+C04688@LigandCompound	META:R-3-hydroxymyristoyl-ACPs@MetaCyc	3hmrsACP@BiGG
+mma@BiGG	META:METHYLAMINE@MetaCyc	C00218@LigandCompound
+glyclt@BiGG	C00160@LigandCompound	META:GLYCOLLATE@MetaCyc
+META:TRP@MetaCyc	trp-L@BiGG	C00078@LigandCompound
+META:CL-@MetaCyc	cl@BiGG	C00698@LigandCompound
+META:O-PHOSPHO-L-HOMOSERINE@MetaCyc	phom@BiGG	C01102@LigandCompound
+psphings@BiGG	META:PHYTOSPINGOSINE@MetaCyc	C12144@LigandCompound
+C00275@LigandCompound	META:MANNOSE-6P@MetaCyc	man6p@BiGG
+C19714@LigandCompound	META:CPD-13031@MetaCyc
+C03794@LigandCompound	dcamp@BiGG	META:ADENYLOSUCC@MetaCyc
+C00279@LigandCompound	e4p@BiGG	META:ERYTHROSE-4P@MetaCyc
+META:GLY@MetaCyc	C00037@LigandCompound	gly@BiGG
+C01061@LigandCompound	META:4-FUMARYL-ACETOACETATE@MetaCyc	4fumacac@BiGG
+23ddhb@BiGG	C04171@LigandCompound	META:DIHYDRO-DIOH-BENZOATE@MetaCyc
+chsterols@BiGG	C18043@LigandCompound
+3ocvac11eACP@BiGG	META:3-oxo-cis-vaccenoyl-ACPs@MetaCyc
+META:CAFFEOYL-COA@MetaCyc	caffcoa@BiGG	C00323@LigandCompound
+C05841@LigandCompound	nicrns@BiGG	META:CPD-8259@MetaCyc
+zymst@BiGG	META:ZYMOSTEROL@MetaCyc	C05437@LigandCompound
+C00222@LigandCompound	msa@BiGG	META:MALONATE-S-ALD@MetaCyc
+2ddglcn@BiGG	META:2-DEHYDRO-3-DEOXY-D-GLUCONATE@MetaCyc	C00204@LigandCompound
+META:Ox-Thioredoxin@MetaCyc	C00343@LigandCompound	trdox@BiGG
+C01304@LigandCompound	META:DIAMINO-OH-PHOSPHORIBOSYLAMINO-PYR@MetaCyc	25dhpp@BiGG
+D00003@LigandDrug	META:OXYGEN-MOLECULE@MetaCyc	C00007@LigandCompound	o2@BiGG
+pac@BiGG	META:PHENYLACETATE@MetaCyc	C07086@LigandCompound
+xmp@BiGG	META:XANTHOSINE-5-PHOSPHATE@MetaCyc	C00655@LigandCompound
+C00217@LigandCompound	glu-D@BiGG	META:D-GLT@MetaCyc
+C01134@LigandCompound	pan4p@BiGG	META:PANTETHEINE-P@MetaCyc
+META:COPROPORPHYRINOGEN_III@MetaCyc	cpppg3@BiGG	C03263@LigandCompound
+3hcvac11eACP@BiGG	META:R-3-hydroxy-cis-vaccenoyl-ACPs@MetaCyc
+META:S-ALLANTOIN@MetaCyc	alltn@BiGG	C02350@LigandCompound
+META:UDP-MANNAC@MetaCyc	uacmam@BiGG	C01170@LigandCompound
+C04332@LigandCompound	dmlz@BiGG	META:DIMETHYL-D-RIBITYL-LUMAZINE@MetaCyc
+META:VANILLATE@MetaCyc	vanlt@BiGG	C06672@LigandCompound
+C16155@LigandCompound	udpLa4o@BiGG	META:5-BETA-L-THREO-PENTAPYRANOSYL-4-ULOSE-@MetaCyc
+META:HS@MetaCyc	h2s@BiGG	C00283@LigandCompound
+5caiz@BiGG	META:CPD0-181@MetaCyc	C15667@LigandCompound
+C00262@LigandCompound	META:HYPOXANTHINE@MetaCyc	hxan@BiGG
+ac@BiGG	C00033@LigandCompound	META:ACET@MetaCyc
+epist@BiGG	C15777@LigandCompound	META:EPISTEROL@MetaCyc
+5apru@BiGG	META:CPD-602@MetaCyc	C01268@LigandCompound
+META:CPD-3725@MetaCyc	23cump@BiGG	C02355@LigandCompound
+META:EPOXYSQUALENE@MetaCyc	Ssq23epx@BiGG	C01054@LigandCompound
+3hcmrs7eACP@BiGG	META:3-hydroxy-cis-D7-tetraecenoyl-ACPs@MetaCyc
+C05274@LigandCompound	META:CPD-10267@MetaCyc	dcacoa@BiGG
+C00704@LigandCompound	o2s@BiGG	META:SUPER-OXIDE@MetaCyc
+C00380@LigandCompound	csn@BiGG	META:CYTOSINE@MetaCyc
+mal-L@BiGG	C00149@LigandCompound	META:MAL@MetaCyc
+24dab@BiGG	C03283@LigandCompound	META:CPD-470@MetaCyc
+C05762@LigandCompound	3opalmACP@BiGG	META:3-oxo-palmitoyl-ACPs@MetaCyc
+META:2-AMINOMALONATE-SEMIALDEHYDE@MetaCyc	2amsa@BiGG	C11822@LigandCompound
+META:ADENOSYL-HOMO-CYS@MetaCyc	16680@ChEBI	ahcys@BiGG	cpd00019@Seed	C00021@LigandCompound
+C00469@LigandCompound	META:ETOH@MetaCyc	etoh@BiGG
+C01416@LigandCompound	coke@BiGG	META:CPD-9776@MetaCyc
+META:K-HEXANOYL-COA@MetaCyc	3ohcoa@BiGG	C05269@LigandCompound
+META:INDOLE_PYRUVATE@MetaCyc	indpyr@BiGG	C00331@LigandCompound
+T4hcinnm@BiGG	META:COUMARATE@MetaCyc	C00811@LigandCompound
+C05763@LigandCompound	tpalm2eACP@BiGG	META:2-Hexadecenoyl-ACPs@MetaCyc
+META:FRUCTOSE-6P@MetaCyc	f6p@BiGG	C00085@LigandCompound
+ins@BiGG	META:INOSINE@MetaCyc	C00294@LigandCompound
+C19153@LigandCompound	META:CPD-10333@MetaCyc	f420-0@BiGG
+META:CPD-178@MetaCyc	mi3456p@BiGG	C04520@LigandCompound
+META:ANTHRANILATE@MetaCyc	anth@BiGG	C00108@LigandCompound
+C00024@LigandCompound	META:ACETYL-COA@MetaCyc	accoa@BiGG
+3hibutcoa@BiGG	C06000@LigandCompound	META:CPD-12173@MetaCyc
+stcoa@BiGG	C00412@LigandCompound	META:STEAROYL-COA@MetaCyc
+C05266@LigandCompound	META:CPD0-2224@MetaCyc	3hocoa@BiGG
+g6p@BiGG	C00092@LigandCompound
+META:CPD-13576@MetaCyc	C20247@LigandCompound
+C01245@LigandCompound	mi145p@BiGG	META:INOSITOL-1-4-5-TRISPHOSPHATE@MetaCyc
+META:Elemental-Sulfur@MetaCyc	C00087@LigandCompound	s@BiGG
+dad-2@BiGG	META:DEOXYADENOSINE@MetaCyc	C00559@LigandCompound
+META:PHENYLETHYLAMINE@MetaCyc	C05332@LigandCompound	peamn@BiGG
+C14610@LigandCompound	META:CPD-15124@MetaCyc
+C01267@LigandCompound	imacp@BiGG	META:IMIDAZOLE-ACETOL-P@MetaCyc
+ura@BiGG	META:URACIL@MetaCyc	C00106@LigandCompound
+C04751@LigandCompound	5aizc@BiGG	META:PHOSPHORIBOSYL-CARBOXY-AMINOIMIDAZOLE@MetaCyc
+C01236@LigandCompound	META:D-6-P-GLUCONO-DELTA-LACTONE@MetaCyc	6pgl@BiGG
+META:UMP@MetaCyc	ump@BiGG	C00105@LigandCompound
+C00847@LigandCompound	4pyrdx@BiGG	META:CPD-1112@MetaCyc
+META:CPD-290@MetaCyc	bz12diol@BiGG	C06321@LigandCompound
+rbflvrd@BiGG	C01007@LigandCompound	META:CPD-316@MetaCyc
+META:N-ACETYL-D-GLUCOSAMINE@MetaCyc	acgam@BiGG	C00140@LigandCompound
+C00385@LigandCompound	xan@BiGG	META:XANTHINE@MetaCyc
+3ocmrs7eACP@BiGG	META:3-oxo-cis-D7-tetradecenoyl-ACPs@MetaCyc
+C02325@LigandCompound	META:SINAPYL-ALCOHOL@MetaCyc
+2ombzl@BiGG	META:OCTAPRENYL-METHOXY-BENZOQUINONE@MetaCyc	C05813@LigandCompound
+C11145@LigandCompound	mso3@BiGG	META:CPD-3746@MetaCyc
+META:THYMINE@MetaCyc	thym@BiGG	C00178@LigandCompound
+fald@BiGG	META:FORMALDEHYDE@MetaCyc	C00067@LigandCompound
+hx2coa@BiGG	META:CPD0-2121@MetaCyc	C05271@LigandCompound
+3php@BiGG	META:3-P-HYDROXYPYRUVATE@MetaCyc	C03232@LigandCompound
+META:CPD-1092@MetaCyc	C07083@LigandCompound
+pser-L@BiGG	C01005@LigandCompound	META:3-P-SERINE@MetaCyc
+ala-L@BiGG	META:L-ALPHA-ALANINE@MetaCyc	C00041@LigandCompound
+META:MANNOSE-1P@MetaCyc	C00636@LigandCompound	man1p@BiGG
+cit@BiGG	META:CIT@MetaCyc	C00158@LigandCompound
+META:PROTOPORPHYRIN_IX@MetaCyc	ppp9@BiGG	C02191@LigandCompound
+C11434@LigandCompound	META:2-C-METHYL-D-ERYTHRITOL-4-PHOSPHATE@MetaCyc	2me4p@BiGG
+C06022@LigandCompound	META:UDP-OHMYR-GLUCOSAMINE@MetaCyc	u3hga@BiGG
+hom-L@BiGG	META:HOMO-SER@MetaCyc	C00263@LigandCompound
+META:4-PHOSPHONOOXY-THREONINE@MetaCyc	C06055@LigandCompound	phthr@BiGG
+C00310@LigandCompound	META:D-XYLULOSE@MetaCyc	xylu-D@BiGG
+META:METOH@MetaCyc	C00132@LigandCompound	meoh@BiGG
+23ccmp@BiGG	META:CPD-3713@MetaCyc	C02354@LigandCompound
+egme@BiGG	C12448@LigandCompound	META:CPD-9777@MetaCyc
+pro-L@BiGG	C00148@LigandCompound	META:PRO@MetaCyc
+2mecdp@BiGG	META:2C-METH-D-ERYTHRITOL-CYCLODIPHOSPHATE@MetaCyc	C11453@LigandCompound
+na1@BiGG	META:NA+@MetaCyc
+META:Butanoyl-ACPs@MetaCyc	C05745@LigandCompound	butACP@BiGG
+orot@BiGG	META:OROTATE@MetaCyc	C00295@LigandCompound
+itaccoa@BiGG	META:CPD-1137@MetaCyc	C00531@LigandCompound
+thr-L@BiGG	C00188@LigandCompound	META:THR@MetaCyc
+C00631@LigandCompound	META:2-PG@MetaCyc	2pg@BiGG
+C00055@LigandCompound	cmp@BiGG	META:CMP@MetaCyc
+META:Thiocarboxyadenylated-ThiS-Proteins@MetaCyc	C15814@LigandCompound
+sphgn@BiGG	META:CPD-13612@MetaCyc	C00836@LigandCompound
+val-L@BiGG	META:VAL@MetaCyc	C00183@LigandCompound
+META:THIAMINE-PYROPHOSPHATE@MetaCyc	thmpp@BiGG	C00068@LigandCompound	cpd00056@Seed
+ddhrb@BiGG	C19154@LigandCompound	META:CPD-7602@MetaCyc
+C05758@LigandCompound	META:Dodec-2-enoyl-ACPs@MetaCyc	tddec2eACP@BiGG
+META:L-CYSTATHIONINE@MetaCyc	C02291@LigandCompound	cyst-L@BiGG
+C01094@LigandCompound	META:FRU1P@MetaCyc	f1p@BiGG
+rnam@BiGG	META:NICOTINAMIDE_RIBOSE@MetaCyc	C03150@LigandCompound
+META:PALMITALDEHYDE@MetaCyc	C00517@LigandCompound	hxdcal@BiGG
+C05338@LigandCompound	hphaccoa@BiGG
+META:DEHYDROSPHINGANINE@MetaCyc	C02934@LigandCompound	3dsphgn@BiGG
+so3@BiGG	META:SO3@MetaCyc	C00094@LigandCompound
+META:CPD-7257@MetaCyc	C05467@LigandCompound	cholcoaone@BiGG
+C00322@LigandCompound	2oxoadp@BiGG	META:2K-ADIPATE@MetaCyc
+C06153@LigandCompound	META:CPD-8050@MetaCyc
+C05261@LigandCompound	META:CPD-10284@MetaCyc	3otdcoa@BiGG
+pydam@BiGG	META:PYRIDOXAMINE@MetaCyc	C00534@LigandCompound
+selhcys@BiGG	C05698@LigandCompound
+dtmp@BiGG	META:TMP@MetaCyc	C00364@LigandCompound
+C00032@LigandCompound	pheme@BiGG	META:Heme-b@MetaCyc
+3oxoadp@BiGG	META:3-KETO-ADIPATE@MetaCyc	C00846@LigandCompound
+META:SULFOACETALDEHYDE@MetaCyc	C00593@LigandCompound	2saa@BiGG
+dhpmp@BiGG	META:DIHYDRONEOPTERIN-P@MetaCyc	C05925@LigandCompound
+META:CPD-722@MetaCyc	btnso@BiGG	C20386@LigandCompound
+3hcpalm9eACP@BiGG	META:3-hydroxy-cis-D9-hexaecenoyl-ACPs@MetaCyc
+META:5-PHOSPHORIBOSYL-N-FORMYLGLYCINEAMIDINE@MetaCyc	C04640@LigandCompound	fpram@BiGG
+2ahhmp@BiGG	C01300@LigandCompound
+META:PALMITATE@MetaCyc	hdca@BiGG	C00249@LigandCompound
+META:HCO3@MetaCyc	C00288@LigandCompound	hco3@BiGG
+META:MESO-DIAMINOPIMELATE@MetaCyc	C00680@LigandCompound	26dap-M@BiGG
+C04002@LigandCompound	META:HOMO-CIS-ACONITATE@MetaCyc	b124tc@BiGG
+C04121@LigandCompound	ckdo@BiGG	META:CMP-KDO@MetaCyc
+pmtcoa@BiGG	META:PALMITYL-COA@MetaCyc	C00154@LigandCompound
+META:3-OXOPALMITOYL-COA@MetaCyc	3ohdcoa@BiGG	C05259@LigandCompound
+META:CIS-ACONITATE@MetaCyc	C00417@LigandCompound	acon-C@BiGG
+META:ALLYSINE@MetaCyc	C04076@LigandCompound	L2aadp6sa@BiGG
+C00019@LigandCompound	amet@BiGG	cpd00017@Seed	META:S-ADENOSYLMETHIONINE@MetaCyc
+META:S-CITRAMALATE@MetaCyc	C02614@LigandCompound
+C01152@LigandCompound	NPmehis@BiGG	META:CPD-1823@MetaCyc
+META:CPD-7671@MetaCyc	ch4s@BiGG	C00409@LigandCompound
+C00147@LigandCompound	META:ADENINE@MetaCyc	ade@BiGG
+META:SN-GLYCEROL-1-PHOSPHATE@MetaCyc	C00623@LigandCompound	glyc1p@BiGG
+META:CPD-13717@MetaCyc	selcyst@BiGG	C05699@LigandCompound
+META:COBINAMIDE@MetaCyc	cbi@BiGG	C05774@LigandCompound
+C00415@LigandCompound	dhf@BiGG	META:DIHYDROFOLATE@MetaCyc
+4r5au@BiGG	META:AMINO-RIBOSYLAMINO-1H-3H-PYR-DIONE@MetaCyc	C04732@LigandCompound
+META:CPD-11495@MetaCyc	2hyoxplac@BiGG	C05852@LigandCompound
+mi13456p@BiGG	META:CPD-1107@MetaCyc	C01284@LigandCompound
+META:ACETOACETYL-COA@MetaCyc	aacoa@BiGG	C00332@LigandCompound
+3ohodcoa@BiGG	META:CPD-10260@MetaCyc	C16216@LigandCompound
+META:CPD-1091@MetaCyc	urdglyc@BiGG	C00603@LigandCompound
+dhor-S@BiGG	C00337@LigandCompound	META:DI-H-OROTATE@MetaCyc
+C00083@LigandCompound	META:MALONYL-COA@MetaCyc	malcoa@BiGG
+thmmp@BiGG	C01081@LigandCompound	META:THIAMINE-P@MetaCyc
+C00794@LigandCompound	META:SORBITOL@MetaCyc	sbt-D@BiGG
+C00378@LigandCompound	thm@BiGG	META:THIAMINE@MetaCyc
+META:DELTA1-PIPERIDEINE-2-6-DICARBOXYLATE@MetaCyc	thdp@BiGG	C03972@LigandCompound
+C01672@LigandCompound	META:CADAVERINE@MetaCyc	15dap@BiGG
+udpLa4fn@BiGG	META:UDP-L-ARA4-FORMYL-N@MetaCyc	C16154@LigandCompound
+od2coa@BiGG	META:CPD-10262@MetaCyc	C16218@LigandCompound
+C03393@LigandCompound	4per@BiGG	META:ERYTHRONATE-4P@MetaCyc
+C06054@LigandCompound	META:3OH-4P-OH-ALPHA-KETOBUTYRATE@MetaCyc	ohpb@BiGG
+C00993@LigandCompound	alaala@BiGG	META:D-ALA-D-ALA@MetaCyc
+apoACP@BiGG	C03688@LigandCompound	META:apo-ACP@MetaCyc
+META:57222428-ERGOSTATETRAENOL@MetaCyc	ergtetrol@BiGG	C05440@LigandCompound
+META:COB-I-ALAMIN@MetaCyc	C00853@LigandCompound	cbl1@BiGG
+META:Adenylated-ThiS-Proteins@MetaCyc	C15813@LigandCompound
+META:BISOHMYR-GLC@MetaCyc	C04932@LigandCompound	lipidAds@BiGG
+META:N-ACETYL-D-GLUCOSAMINE-6-P@MetaCyc	C00357@LigandCompound	acgam6p@BiGG
+C15778@LigandCompound	ergtrol@BiGG	META:CPD-700@MetaCyc
+orot5p@BiGG	C01103@LigandCompound	META:OROTIDINE-5-PHOSPHATE@MetaCyc
+td2coa@BiGG	META:CPD-15568@MetaCyc	C05273@LigandCompound
+META:UDP-4-AMINO-4-DEOXY-L-ARABINOSE@MetaCyc	C16153@LigandCompound	udpLa4n@BiGG
+META:Palmitoleoyl-ACPs@MetaCyc	hdeACP@BiGG
+C00029@LigandCompound	META:CPD-12575@MetaCyc	udpg@BiGG
+C06007@LigandCompound	23dhmp@BiGG	META:1-KETO-2-METHYLVALERATE@MetaCyc
+C06181@LigandCompound	pprdn@BiGG	META:CPD-11764@MetaCyc
+META:PYRIDOXAMINE-5P@MetaCyc	pyam5p@BiGG	C00647@LigandCompound
+C00235@LigandCompound	dmpp@BiGG	META:CPD-4211@MetaCyc
+thex2eACP@BiGG	C05748@LigandCompound	META:Hex-2-enoyl-ACPs@MetaCyc
+C15810@LigandCompound	META:Thi-S@MetaCyc
+C00366@LigandCompound	META:URATE@MetaCyc	urate@BiGG
+META:ADENOSYLCOBINAMIDE@MetaCyc	adocbi@BiGG	C06508@LigandCompound
+bhb@BiGG	META:CPD-335@MetaCyc	C01089@LigandCompound
+C04294@LigandCompound	META:THZ@MetaCyc	4mhetz@BiGG
+xtsn@BiGG	META:XANTHOSINE@MetaCyc	C01762@LigandCompound
+3cmp@BiGG	META:CPD-3711@MetaCyc	C05822@LigandCompound
+nadp@BiGG	C00006@LigandCompound	META:NADP@MetaCyc
+C00062@LigandCompound	arg-L@BiGG	META:ARG@MetaCyc
+META:D-TAGATURONATE@MetaCyc	C00558@LigandCompound	tagur@BiGG
+C12449@LigandCompound	pecgon@BiGG
+META:PROPANE-1-2-DIOL@MetaCyc	12ppd-S@BiGG
+META:CPD-6482@MetaCyc	C10454@LigandCompound
+hspmd@BiGG	META:CPD-1821@MetaCyc	C06366@LigandCompound
+C15811@LigandCompound	META:Cysteine-Desulfurase-L-cysteine@MetaCyc
+C06056@LigandCompound	4hthr@BiGG	META:CPD0-2189@MetaCyc
+META:CPD0-2117@MetaCyc	hdd2coa@BiGG	C05272@LigandCompound
+C00008@LigandCompound	META:ADP@MetaCyc	G11113@LigandGlycan	adp@BiGG
+pep@BiGG	META:PHOSPHO-ENOL-PYRUVATE@MetaCyc	C00074@LigandCompound
+META:PAPS@MetaCyc	paps@BiGG	C00053@LigandCompound
+META:D-ALANINE@MetaCyc	ala-D@BiGG	C00133@LigandCompound
+t3c7mrseACP@BiGG	META:Trans-D3-cis-D7-tetradecenoyl-ACPs@MetaCyc
+META:Acetoacetyl-ACPs@MetaCyc	C05744@LigandCompound	actACP@BiGG
+C05402@LigandCompound	melib@BiGG	META:MELIBIOSE@MetaCyc
+C11355@LigandCompound	META:4-AMINO-4-DEOXYCHORISMATE@MetaCyc	4adcho@BiGG
+C12147@LigandCompound	thrp@BiGG	META:L-THREONINE-O-3-PHOSPHATE@MetaCyc
+META:R-3-hydroxydodecanoyl-ACPs@MetaCyc	3hddecACP@BiGG	C05757@LigandCompound
+META:ACETONE@MetaCyc	acetone@BiGG	C00207@LigandCompound
+C00063@LigandCompound	ctp@BiGG	META:CTP@MetaCyc
+META:DCMP@MetaCyc	C00239@LigandCompound	dcmp@BiGG
+META:VANILLYL-ALCOHOL@MetaCyc	C06317@LigandCompound
+C04411@LigandCompound	3c2hmp@BiGG	META:2-D-THREO-HYDROXY-3-CARBOXY-ISOCAPROATE@MetaCyc
+atp@BiGG	C00002@LigandCompound	META:ATP@MetaCyc	D08646@LigandDrug
+C01045@LigandCompound	Nforglu@BiGG	META:CPD-600@MetaCyc
+META:LACTALD@MetaCyc	C00424@LigandCompound	lald-L@BiGG
+C00214@LigandCompound	thymd@BiGG	META:THYMIDINE@MetaCyc
+C06257@LigandCompound	dxyl@BiGG	META:CPD-1093@MetaCyc
+C01909@LigandCompound	dtbt@BiGG	META:DETHIOBIOTIN@MetaCyc
+C01732@LigandCompound	mescon@BiGG	META:MESACONATE@MetaCyc
+coa@BiGG	META:CO-A@MetaCyc	cpd00010@Seed	C00010@LigandCompound
+C00064@LigandCompound	gln-L@BiGG	META:GLN@MetaCyc
+prbamp@BiGG	C02741@LigandCompound	META:PHOSPHORIBOSYL-AMP@MetaCyc
+C00301@LigandCompound	adprib@BiGG	META:ADENOSINE_DIPHOSPHATE_RIBOSE@MetaCyc
+META:CPD-558@MetaCyc	pmcoa@BiGG	C01063@LigandCompound
+cddec5eACP@BiGG	META:Cis-Delta5-dodecenoyl-ACPs@MetaCyc
+C00590@LigandCompound	confrl@BiGG	META:CONIFERYL-ALCOHOL@MetaCyc
+pydxn@BiGG	C00314@LigandCompound	META:PYRIDOXINE@MetaCyc
+C02532@LigandCompound	pser-D@BiGG
+META:L-XYLULOSE@MetaCyc	C00312@LigandCompound	xylu-L@BiGG
+inost@BiGG	META:MYO-INOSITOL@MetaCyc	C00137@LigandCompound
+C05815@LigandCompound	2omhmbl@BiGG	META:OCTAPRENYL-METHYL-OH-METHOXY-BENZQ@MetaCyc
+META:CPD-62@MetaCyc	23dhba@BiGG	C04030@LigandCompound
+oxur@BiGG	META:CPD-389@MetaCyc	C00802@LigandCompound
+2ins@BiGG	META:CPD-14808@MetaCyc	C00691@LigandCompound
+C04666@LigandCompound	eig3p@BiGG	META:D-ERYTHRO-IMIDAZOLE-GLYCEROL-P@MetaCyc
+META:CPD-160@MetaCyc	C04308@LigandCompound	ptd2meeta_SC@BiGG
+C03506@LigandCompound	META:INDOLE-3-GLYCEROL-P@MetaCyc	3ig3p@BiGG
+C19848@LigandCompound	META:CPD-8122@MetaCyc
+octdp@BiGG	META:OCTAPRENYL-DIPHOSPHATE@MetaCyc	C04146@LigandCompound
+META:DITP@MetaCyc	C01345@LigandCompound	ditp@BiGG
+iasp@BiGG	C05840@LigandCompound	META:IMINOASPARTATE@MetaCyc
+C01165@LigandCompound	glu5sa@BiGG	META:L-GLUTAMATE_GAMMA-SEMIALDEHYDE@MetaCyc
+Lfmkynr@BiGG	C02700@LigandCompound	META:N-FORMYLKYNURENINE@MetaCyc
+sbzcoa@BiGG	C03160@LigandCompound	META:CPD-6972@MetaCyc
+C00882@LigandCompound	dpcoa@BiGG	META:DEPHOSPHO-COA@MetaCyc
+2omph@BiGG	META:2-OCTAPRENYL-6-METHOXYPHENOL@MetaCyc	C05812@LigandCompound
+META:SQUALENE@MetaCyc	sql@BiGG	C00751@LigandCompound
+META:D-BETA-D-HEPTOSE-17-DIPHOSPHATE@MetaCyc	C11472@LigandCompound	gmhep17bp@BiGG
+META:CPD0-2105@MetaCyc	3oddcoa@BiGG	C05263@LigandCompound
+C05760@LigandCompound	tmrs2eACP@BiGG	META:Tetradec-2-enoyl-ACPs@MetaCyc
+xdp@BiGG	META:XDP@MetaCyc
+C00446@LigandCompound	META:GALACTOSE-1P@MetaCyc	gal1p@BiGG
+ethamp@BiGG	C00346@LigandCompound	META:PHOSPHORYL-ETHANOLAMINE@MetaCyc
+C00242@LigandCompound	gua@BiGG	META:GUANINE@MetaCyc
+3hcddec5eACP@BiGG	META:b-Hydroxy-cis-D5-dodecenoyl-ACPs@MetaCyc
+C00620@LigandCompound	r1p@BiGG	META:RIBOSE-1P@MetaCyc
+chitos@BiGG	META:Chitosan@MetaCyc	C00734@LigandCompound
+META:Cis-vaccenoyl-ACPs@MetaCyc	octeACP@BiGG
+ncam@BiGG	C00153@LigandCompound	META:NIACINAMIDE@MetaCyc
+C00311@LigandCompound	META:THREO-DS-ISO-CITRATE@MetaCyc	icit@BiGG
+acetol@BiGG	C05235@LigandCompound	META:ACETOL@MetaCyc
+META:CPD-546@MetaCyc	C02170@LigandCompound
+lpam@BiGG	C15972@LigandCompound
+C02730@LigandCompound	META:O-SUCCINYLBENZOATE@MetaCyc	sucbz@BiGG
+r15bp@BiGG	C01151@LigandCompound	META:RIBOSE-15-BISPHOSPHATE@MetaCyc
+ser-L@BiGG	META:SER@MetaCyc	C00065@LigandCompound
+META:CPD-405@MetaCyc	C01241@LigandCompound	ptdmeeta_SC@BiGG
+C01832@LigandCompound	ddcacoa@BiGG	META:LAUROYLCOA-CPD@MetaCyc
+C00438@LigandCompound	cbasp@BiGG	META:CARBAMYUL-L-ASPARTATE@MetaCyc
+C03657@LigandCompound	META:DIHYDROXYNAPHTHOATE@MetaCyc	dhna@BiGG
+C00445@LigandCompound	methf@BiGG
+C00341@LigandCompound	grdp@BiGG	META:GERANYL-PP@MetaCyc
+META:L-ORNITHINE@MetaCyc	C00077@LigandCompound	orn@BiGG
+META:3-SULFINYL-PYRUVATE@MetaCyc	3snpyr@BiGG	C05527@LigandCompound
+META:CPD-7222@MetaCyc	dd2coa@BiGG	C03221@LigandCompound
+C00398@LigandCompound	trypta@BiGG	META:TRYPTAMINE@MetaCyc
+lppg@BiGG	META:CPD-7601@MetaCyc	C19155@LigandCompound
+C06555@LigandCompound	META:CPD-809@MetaCyc
+no3@BiGG	C00244@LigandCompound	META:NITRATE@MetaCyc
+kdolipid4@BiGG	META:KDO-LIPID-IVA@MetaCyc	C06024@LigandCompound
+META:N-5-PHOSPHORIBOSYL-ANTHRANILATE@MetaCyc	C04302@LigandCompound	pran@BiGG
+META:DGMP@MetaCyc	C00362@LigandCompound	dgmp@BiGG
+META:3-DEOXY-D-ARABINO-HEPTULOSONATE-7-P@MetaCyc	2dda7p@BiGG	C04691@LigandCompound
+phpyr@BiGG	META:PHENYL-PYRUVATE@MetaCyc	C00166@LigandCompound
+META:CPD-12279@MetaCyc	C15809@LigandCompound
+C01144@LigandCompound	3hbcoa@BiGG	META:S-3-HYDROXYBUTANOYL-COA@MetaCyc
+META:CPD-7836@MetaCyc	C06424@LigandCompound	ttdca@BiGG
+META:XYLITOL@MetaCyc	xylt@BiGG	C00379@LigandCompound
+glucys@BiGG	C00669@LigandCompound	META:L-GAMMA-GLUTAMYLCYSTEINE@MetaCyc
+META:CPD-365@MetaCyc	C20251@LigandCompound
+mthgxl@BiGG	META:METHYL-GLYOXAL@MetaCyc	C00546@LigandCompound
+btamp@BiGG	C05921@LigandCompound
+META:CPD-14205@MetaCyc	C18323@LigandCompound
+META:CPD-328@MetaCyc	C01993@LigandCompound
+tdcoa@BiGG	C02593@LigandCompound	META:TETRADECANOYL-COA@MetaCyc
+META:TOLUENECISDHDIOL@MetaCyc	C04592@LigandCompound
+C15556@LigandCompound	META:DIHYDROXY-BUTANONE-P@MetaCyc	db4p@BiGG
+indole@BiGG	META:INDOLE@MetaCyc	C00463@LigandCompound
+3c3hmp@BiGG	C02504@LigandCompound	META:3-CARBOXY-3-HYDROXY-ISOCAPROATE@MetaCyc
+C18237@LigandCompound	META:CPD-8123@MetaCyc
+C02892@LigandCompound	META:CPD-7101@MetaCyc
+4mop@BiGG	C00233@LigandCompound	META:2K-4CH3-PENTANOATE@MetaCyc
+C12205@LigandCompound	META:5-HYDROXY-CONIFERYL-ALCOHOL@MetaCyc
+C00748@LigandCompound	META:SIROHEME@MetaCyc	sheme@BiGG
+3pg@BiGG	META:G3P@MetaCyc	C00197@LigandCompound
+C06735@LigandCompound	aacald@BiGG	META:CPD-1772@MetaCyc
+ppmi12346p@BiGG	C11526@LigandCompound	META:5-DIPHOSPHO-1D-MYO-INOSITOL-12346P@MetaCyc
+C04824@LigandCompound	META:BISOHMYR-GLUCOSAMINYL-1P@MetaCyc	lipidX@BiGG
+META:CPD-467@MetaCyc	sec@BiGG
+META:KDO2-LIPID-IVA@MetaCyc	kdo2lipid4@BiGG	C06025@LigandCompound
+META:AICAR@MetaCyc	C04677@LigandCompound	aicar@BiGG
+META:CPD-225@MetaCyc	C02341@LigandCompound	acon-T@BiGG
+glx@BiGG	C00048@LigandCompound	META:GLYOX@MetaCyc
+META:4-METHYL-824-CHOLESTADIENOL@MetaCyc	C05103@LigandCompound	4mzym@BiGG
+META:ACRYLYL-COA@MetaCyc	C00894@LigandCompound	prpncoa@BiGG
+META:ISOBUTYRYL-COA@MetaCyc	C00630@LigandCompound	ibcoa@BiGG
+META:CYS@MetaCyc	C00097@LigandCompound	cys-L@BiGG
+dsmsterol@BiGG	META:DESMOSTEROL-CPD@MetaCyc	C01802@LigandCompound
+uacgam@BiGG	C00043@LigandCompound	META:UDP-N-ACETYL-D-GLUCOSAMINE@MetaCyc
+META:GLYCERALD@MetaCyc	glyald@BiGG	C00577@LigandCompound
+k@BiGG	META:K+@MetaCyc
+META:CPD-9610@MetaCyc	C17432@LigandCompound	decdp@BiGG
+META:B-ALANINE@MetaCyc	C00099@LigandCompound	ala-B@BiGG
+META:TDP@MetaCyc	C00363@LigandCompound	dtdp@BiGG
+C01164@LigandCompound	7dhchsterol@BiGG	META:CPD-4187@MetaCyc
+ptth@BiGG	META:CPD-511@MetaCyc	C00831@LigandCompound
+3omrsACP@BiGG	C05759@LigandCompound	META:3-oxo-myristoyl-ACPs@MetaCyc
+C00407@LigandCompound	ile-L@BiGG	META:ILE@MetaCyc
+ppi@BiGG	C00013@LigandCompound	META:PPI@MetaCyc	18361@ChEBI
+f420-2@BiGG	C00876@LigandCompound	META:OX-COENZYME-F420@MetaCyc
+META:L-SELENOCYSTEINE@MetaCyc	C05688@LigandCompound	selcys@BiGG
+ps_SC@BiGG	ps_hs@BiGG	ps_SA@BiGG	ps_EC@BiGG	ps_HP@BiGG
+META:NITRIC-OXIDE@MetaCyc	no@BiGG	C00533@LigandCompound
+META:Trans-D3-cis-D9-hexadecenoyl-ACPs@MetaCyc	t3c9palmeACP@BiGG
+META:4-HYDROXYPHENYLACETATE@MetaCyc	C00642@LigandCompound	4hphac@BiGG
+C03586@LigandCompound	META:3-OXOADIPATE-ENOL-LACTONE@MetaCyc	5odhf2a@BiGG
+3htdcoa@BiGG	META:CPD0-2171@MetaCyc	C05260@LigandCompound
+META:CARBON-DIOXIDE@MetaCyc	C00011@LigandCompound	D00004@LigandDrug	co2@BiGG
+h@BiGG	C00080@LigandCompound	META:PROTON@MetaCyc
+META:SHIKIMATE@MetaCyc	skm@BiGG	C00493@LigandCompound
+META:L-GLUTAMATE-5-P@MetaCyc	C03287@LigandCompound	glu5p@BiGG
+C04633@LigandCompound	META:R-3-Hydroxypalmitoyl-ACPs@MetaCyc	3hpalmACP@BiGG
+META:E-2-METHOXYCARBONYLMETHYLBUTENEDIOAT@MetaCyc	C11515@LigandCompound
+C19152@LigandCompound	f420-1@BiGG	META:CPD-7607@MetaCyc
+C02631@LigandCompound	META:CPD-9451@MetaCyc	2ippm@BiGG
+xu5p-L@BiGG	META:L-XYLULOSE-5-P@MetaCyc	C03291@LigandCompound
+META:CPD-238@MetaCyc	C02505@LigandCompound	pad@BiGG
+3hoctaACP@BiGG	C16220@LigandCompound	META:R-3-hydroxystearoyl-ACPs@MetaCyc
+META:AMMONIUM@MetaCyc	C00014@LigandCompound	cpd00013@Seed	nh4@BiGG	nh4@BiGGMetabolite
+dms@BiGG	META:CPD-7670@MetaCyc	C00580@LigandCompound
+META:CPD-4577@MetaCyc	4mzym_int1@BiGG	C15808@LigandCompound
+META:CPD-7737@MetaCyc	C01278@LigandCompound	4cml@BiGG
+META:BIOTIN@MetaCyc	btn@BiGG	C00120@LigandCompound
+4ampm@BiGG	META:AMINO-HYDROXYMETHYL-METHYL-PYR-P@MetaCyc	C04556@LigandCompound
+C01944@LigandCompound	occoa@BiGG	META:CPD-196@MetaCyc
+C00130@LigandCompound	cpd00114@Seed	META:IMP@MetaCyc	imp@BiGG
+C00483@LigandCompound	META:TYRAMINE@MetaCyc	tym@BiGG
+META:INOSITOL-1456-TETRAKISPHOSPHATE@MetaCyc	C11555@LigandCompound	mi1456p@BiGG
+META:THZ-P@MetaCyc	4mpetz@BiGG	C04327@LigandCompound
+META:7-METHYLXANTHOSINE@MetaCyc	C16352@LigandCompound
+C05267@LigandCompound	3oocoa@BiGG	META:CPD0-2106@MetaCyc
+META:Trans-D2-decenoyl-ACPs@MetaCyc	C05754@LigandCompound	tdec2eACP@BiGG
+META:3-SULFINOALANINE@MetaCyc	C00606@LigandCompound	3sala@BiGG
+citmcoa-L@BiGG	META:CPD-627@MetaCyc	C01011@LigandCompound
+4ppcys@BiGG	META:R-4-PHOSPHOPANTOTHENOYL-L-CYSTEINE@MetaCyc	C04352@LigandCompound
+C01694@LigandCompound	META:ERGOSTEROL@MetaCyc	ergst@BiGG
+C10469@LigandCompound	META:ISOEUGENOL@MetaCyc
+ppbng@BiGG	C00931@LigandCompound	META:PORPHOBILINOGEN@MetaCyc
+C05268@LigandCompound	3hhcoa@BiGG	META:OH-HEXANOYL-COA@MetaCyc
+C05223@LigandCompound	ddcaACP@BiGG	META:Dodecanoyl-ACPs@MetaCyc
+META:3-oxo-cis-D9-hexadecenoyl-ACPs@MetaCyc	3ocpalm9eACP@BiGG
+META:TAURINE@MetaCyc	taur@BiGG	C00245@LigandCompound
+META:3-oxo-stearoyl-ACPs@MetaCyc	3ooctdACP@BiGG	C16219@LigandCompound
+id3acald@BiGG	C00637@LigandCompound	META:INDOLE_ACETALDEHYDE@MetaCyc
+C01197@LigandCompound	META:CPD-676@MetaCyc	34dhcinm@BiGG
+C00815@LigandCompound	META:CPD-14325@MetaCyc
+META:PUTRESCINE@MetaCyc	ptrc@BiGG	C00134@LigandCompound
+META:PROPIONATE@MetaCyc	C00163@LigandCompound	ppa@BiGG
+C00979@LigandCompound	META:ACETYLSERINE@MetaCyc	acser@BiGG
+C00499@LigandCompound	alltt@BiGG	META:ALLANTOATE@MetaCyc
+C03231@LigandCompound	META:TRANS-3-METHYL-GLUTACONYL-COA@MetaCyc	3mgcoa@BiGG
+META:DGDP@MetaCyc	C00361@LigandCompound	dgdp@BiGG
+C03069@LigandCompound	META:3-METHYL-CROTONYL-COA@MetaCyc	3mb2coa@BiGG
+C16075@LigandCompound	META:PHENYLACETALDOXIME@MetaCyc
+C00025@LigandCompound	META:GLT@MetaCyc	glu-L@BiGG
+META:ACETYL-ACP@MetaCyc	C03939@LigandCompound	acACP@BiGG
+META:N-ACETYL-D-GLUCOSAMINE-1-P@MetaCyc	acgam1p@BiGG	C04501@LigandCompound
+C01163@LigandCompound	CCbuttc@BiGG	META:CPD-245@MetaCyc
+conialdh@BiGG	META:CONIFERYL-ALDEHYDE@MetaCyc	C02666@LigandCompound
+C03765@LigandCompound	META:HYDRPHENYLAC-CPD@MetaCyc	4hoxpacd@BiGG
+C00826@LigandCompound	META:CPD-659@MetaCyc
+C01888@LigandCompound	META:AMINO-ACETONE@MetaCyc	aact@BiGG
+pe_EC@BiGG	pe_SA@BiGG	pe_hs@BiGG	pe_SC@BiGG	pe_HP@BiGG
+C02763@LigandCompound	META:ENOL-PHENYLPYRUVATE@MetaCyc
+4ppan@BiGG	C03492@LigandCompound	META:4-P-PANTOTHENATE@MetaCyc
+saccrp-L@BiGG	META:SACCHAROPINE@MetaCyc	C00449@LigandCompound
+META:FERULOYL-COA@MetaCyc	ferulcoa@BiGG	C00406@LigandCompound
+suchms@BiGG	META:O-SUCCINYL-L-HOMOSERINE@MetaCyc	C01118@LigandCompound
+mucl@BiGG	META:CPD-741@MetaCyc	C04105@LigandCompound
+META:MALONYL-ACP@MetaCyc	malACP@BiGG	C01209@LigandCompound
+ca2@BiGG	META:CA+2@MetaCyc
+C00123@LigandCompound	META:LEU@MetaCyc	leu-L@BiGG
+C01368@LigandCompound	META:CPD-3724@MetaCyc	3ump@BiGG
+META:HIS@MetaCyc	his-L@BiGG	C00135@LigandCompound
+2mp2coa@BiGG	META:METHACRYLYL-COA@MetaCyc	C03460@LigandCompound
+skm5p@BiGG	META:SHIKIMATE-5P@MetaCyc	C03175@LigandCompound
+META:NICOTINAMIDE_NUCLEOTIDE@MetaCyc	C00455@LigandCompound	nmn@BiGG
+3hdcoa@BiGG	META:CPD0-2244@MetaCyc	C05264@LigandCompound
+META:CPD-1281@MetaCyc	C04628@LigandCompound	cob@BiGG
+C04122@LigandCompound	applp@BiGG	META:R-1-AMINOPROPAN-2-YL-PHOSPHATE@MetaCyc
+META:3-HYDROXY-PROPIONATE@MetaCyc	3hpp@BiGG	C01013@LigandCompound
+pi@BiGG	D05467@LigandDrug	C00009@LigandCompound	META:Pi@MetaCyc
+C04405@LigandCompound	META:2-METHYL-3-HYDROXY-BUTYRYL-COA@MetaCyc	3hmbcoa@BiGG
+C05662@LigandCompound	META:HOMO-I-CIT@MetaCyc	hicit@BiGG
+META:2-KETO-3-METHYL-VALERATE@MetaCyc	C00671@LigandCompound	3mop@BiGG
+C06002@LigandCompound	META:CH3-MALONATE-S-ALD@MetaCyc	mmtsa@BiGG
+META:SUCROSE@MetaCyc	C00089@LigandCompound	sucr@BiGG
+C00327@LigandCompound	citr-L@BiGG	META:L-CITRULLINE@MetaCyc
+META:MET@MetaCyc	met-L@BiGG	C00073@LigandCompound
+META:OCTAPRENYL-METHYL-METHOXY-BENZQ@MetaCyc	C05814@LigandCompound	2ommbl@BiGG
+META:FECOSTEROL@MetaCyc	C04525@LigandCompound	fecost@BiGG
+META:FADH2@MetaCyc	fadh2@BiGG	C01352@LigandCompound
+C00186@LigandCompound	lac-L@BiGG	META:L-LACTATE@MetaCyc
+C12450@LigandCompound	pecgoncoa@BiGG
+C11638@LigandCompound	META:1-AMINO-PROPAN-2-ONE-3-PHOSPHATE@MetaCyc
+C05528@LigandCompound	META:CPD-380@MetaCyc	3spyr@BiGG
+C00921@LigandCompound	dhpt@BiGG	META:7-8-DIHYDROPTEROATE@MetaCyc
+acac@BiGG	META:3-KETOBUTYRATE@MetaCyc	C00164@LigandCompound
+C00299@LigandCompound	uri@BiGG	META:URIDINE@MetaCyc
+META:D-MYO-INOSITOL-4-PHOSPHATE@MetaCyc	mi4p-D@BiGG	C03546@LigandCompound
+C03508@LigandCompound	2aobut@BiGG	META:AMINO-OXOBUT@MetaCyc
+pime@BiGG	META:CPD-205@MetaCyc	C02656@LigandCompound
+META:4-HYDROXYPHENYLLACTATE@MetaCyc	34hpl@BiGG	C03672@LigandCompound
+lgt-S@BiGG	META:S-LACTOYL-GLUTATHIONE@MetaCyc	C03451@LigandCompound
+acmana@BiGG	META:N-ACETYL-D-MANNOSAMINE@MetaCyc	C00645@LigandCompound
+META:ISOMETHYLEUGENOL@MetaCyc	C10478@LigandCompound
+META:2-AMINO-3-OXO-4-PHOSPHONOOXYBUTYRATE@MetaCyc	C07335@LigandCompound
+2mahmp@BiGG	C04752@LigandCompound	META:AMINO-HYDROXYMETHYL-METHYLPYRIMIDINE-PP@MetaCyc
+C16254@LigandCompound	sdhlam@BiGG
+C00117@LigandCompound	META:RIBOSE-5P@MetaCyc	r5p@BiGG
+C05108@LigandCompound	META:44-DIMETHYL-824-CHOLESTADIENOL@MetaCyc	44mzym@BiGG
+META:23-DIPHOSPHOGLYCERATE@MetaCyc	C01159@LigandCompound	23dpg@BiGG
+META:3-UREIDO-ISOBUTYRATE@MetaCyc	3uib@BiGG	C05100@LigandCompound
+META:DODECANOATE@MetaCyc	C02679@LigandCompound	ddca@BiGG
+META:CPD-1116@MetaCyc	C04546@LigandCompound
+C00755@LigandCompound	vanln@BiGG	META:VANILLIN@MetaCyc
+META:PANTOTHENATE@MetaCyc	pnto-R@BiGG	C00864@LigandCompound
+META:CPD-15104@MetaCyc	C14463@LigandCompound
+META:HISTIDINOL@MetaCyc	C00860@LigandCompound	histd@BiGG
+C00111@LigandCompound	dhap@BiGG	META:DIHYDROXY-ACETONE-PHOSPHATE@MetaCyc
+META:3-Hydroxy-octanoyl-ACPs@MetaCyc	3hoctACP@BiGG	C04620@LigandCompound
+C10858@LigandCompound	ecgon@BiGG
+appl@BiGG	META:1-AMINO-PROPAN-2-OL@MetaCyc	C03194@LigandCompound
+C01444@LigandCompound	oxam@BiGG	META:OXAMATE@MetaCyc
+META:D-ALPHABETA-D-HEPTOSE-7-PHOSPHATE@MetaCyc	C07836@LigandCompound	gmhep7p@BiGG
+C01143@LigandCompound	5dpmev@BiGG	META:CPD-641@MetaCyc
+C01187@LigandCompound	META:KDO@MetaCyc	kdo@BiGG
+succ@BiGG	C00042@LigandCompound	META:SUC@MetaCyc
+5aprbu@BiGG	META:CPD-1086@MetaCyc	C04454@LigandCompound
+META:2-OXOBUTANOATE@MetaCyc	2obut@BiGG	C00109@LigandCompound
+C00360@LigandCompound	META:DAMP@MetaCyc	damp@BiGG
+cpd00201@Seed	META:10-FORMYL-THF@MetaCyc	C00234@LigandCompound	10fthf@BiGG
+C02637@LigandCompound	3dhsk@BiGG	META:3-DEHYDRO-SHIKIMATE@MetaCyc
+C03082@LigandCompound	4pasp@BiGG	META:L-BETA-ASPARTYL-P@MetaCyc
+C11435@LigandCompound	META:4-CYTIDINE-5-DIPHOSPHO-2-C@MetaCyc	4c2me@BiGG
+META:Octanoyl-ACPs@MetaCyc	ocACP@BiGG	C05752@LigandCompound
+META:CPD-10437@MetaCyc	C11142@LigandCompound
+C04738@LigandCompound	META:UDP-OHMYR-ACETYLGLUCOSAMINE@MetaCyc	u3aga@BiGG
+oxag@BiGG	C05533@LigandCompound
+ch4@BiGG	C01438@LigandCompound	META:CH4@MetaCyc
+acnam@BiGG	META:N-ACETYLNEURAMINATE@MetaCyc	C00270@LigandCompound
+C05810@LigandCompound	2oph@BiGG	META:2-OCTAPRENYLPHENOL@MetaCyc
+prpp@BiGG	META:PRPP@MetaCyc	C00119@LigandCompound
+C19891@LigandCompound	META:CPD-8052@MetaCyc
+4izp@BiGG	C03680@LigandCompound	META:4-IMIDAZOLONE-5-PROPIONATE@MetaCyc
+META:BENZYL-ALCOHOL@MetaCyc	bzalc@BiGG	C00556@LigandCompound
+META:CPD-11881@MetaCyc	C07303@LigandCompound
+chlstol@BiGG	C05439@LigandCompound	META:5-ALPHA-CHOLESTA-724-DIEN-3-BETA-OL@MetaCyc
+C01571@LigandCompound	META:CPD-3617@MetaCyc	dca@BiGG
+zymstnl@BiGG	META:CPD-8621@MetaCyc	C03845@LigandCompound
+achms@BiGG	C01077@LigandCompound	META:CPD-667@MetaCyc
+META:ISOCHORISMATE@MetaCyc	C00885@LigandCompound	ichor@BiGG
+C04442@LigandCompound	2ddg6p@BiGG	META:2-KETO-3-DEOXY-6-P-GLUCONATE@MetaCyc
+pant-R@BiGG	C00522@LigandCompound	META:L-PANTOATE@MetaCyc
+META:CPD-6481@MetaCyc	C10453@LigandCompound
+META:ITACONATE@MetaCyc	C00490@LigandCompound	itacon@BiGG
+META:CPD-233@MetaCyc	C01142@LigandCompound	36dahx@BiGG
+C02693@LigandCompound	iad@BiGG	META:CPD-237@MetaCyc
+C01024@LigandCompound	hmbil@BiGG	META:HYDROXYMETHYLBILANE@MetaCyc
+2dr1p@BiGG	META:DEOXY-D-RIBOSE-1-PHOSPHATE@MetaCyc	C00672@LigandCompound
+META:PHENYLACETONITRILE@MetaCyc	C16074@LigandCompound
+META:CYTIDINE@MetaCyc	cytd@BiGG	C00475@LigandCompound
+glyc-R@BiGG	C00258@LigandCompound	META:GLYCERATE@MetaCyc
+2amac@BiGG	C02218@LigandCompound	META:2-AMINOACRYLATE@MetaCyc
+oaa@BiGG	META:OXALACETIC_ACID@MetaCyc	C00036@LigandCompound
+META:DIHYDRONEOPTERIN-P3@MetaCyc	C04895@LigandCompound	ahdt@BiGG
+META:CPD-239@MetaCyc	C01678@LigandCompound	cysam@BiGG
+C04823@LigandCompound	25aics@BiGG	META:P-RIBOSYL-4-SUCCCARB-AMINOIMIDAZOLE@MetaCyc
+utp@BiGG	C00075@LigandCompound	META:UTP@MetaCyc
+C05756@LigandCompound	3oddecACP@BiGG	META:3-oxo-dodecanoyl-ACPs@MetaCyc
+C07111@LigandCompound	META:ETHYLBENZENE@MetaCyc
+C01215@LigandCompound	META:CPD-565@MetaCyc
+META:CPD-4186@MetaCyc	C01189@LigandCompound	lthstrl@BiGG
+C05933@LigandCompound	nwharg@BiGG	META:CPD-13518@MetaCyc
+META:2-METHYL-ACETO-ACETYL-COA@MetaCyc	2maacoa@BiGG	C03344@LigandCompound
+C20258@LigandCompound	META:CPD-14443@MetaCyc	23dhdp@BiGG
+C00058@LigandCompound	for@BiGG	META:FORMATE@MetaCyc
+C00354@LigandCompound	META:FRUCTOSE-16-DIPHOSPHATE@MetaCyc	fdp@BiGG
+succoa@BiGG	C00091@LigandCompound	META:SUC-COA@MetaCyc
+C00005@LigandCompound	META:NADPH@MetaCyc	nadph@BiGG
+META:DADP@MetaCyc	C00206@LigandCompound	dadp@BiGG
+C00131@LigandCompound	datp@BiGG	META:DATP@MetaCyc
+C15812@LigandCompound	META:L-Cysteine-Desulfurase-persulfide@MetaCyc
+oh1@BiGG	META:OH@MetaCyc	C01328@LigandCompound
+META:CPD-280@MetaCyc	C03273@LigandCompound	oxptn@BiGG
+C06142@LigandCompound	META:BUTANOL@MetaCyc
+C11631@LigandCompound	META:CPD-7102@MetaCyc
+META:L-ARGININO-SUCCINATE@MetaCyc	argsuc@BiGG	C03406@LigandCompound
+4ahmmp@BiGG	META:HMP@MetaCyc	C01279@LigandCompound
+META:CPD-16663@MetaCyc	tres@BiGG
+C04896@LigandCompound	META:PHOSPHORIBOSYL-FORMIMINO-AICAR-P@MetaCyc	prfp@BiGG
+C00141@LigandCompound	META:2-KETO-ISOVALERATE@MetaCyc	3mob@BiGG
+C00049@LigandCompound	asp-L@BiGG	META:L-ASPARTATE@MetaCyc
+h2o@BiGG	C00001@LigandCompound	D00001@LigandDrug	META:WATER@MetaCyc	cpd00001@Seed	cpd00001@ModelSeed
+META:HYDROGEN-PEROXIDE@MetaCyc	h2o2@BiGG	C00027@LigandCompound
+C00256@LigandCompound	lac-D@BiGG	META:D-LACTATE@MetaCyc
+C00190@LigandCompound	udpxyl@BiGG	META:UDP-D-XYLOSE@MetaCyc
+pydx@BiGG	C00250@LigandCompound	META:PYRIDOXAL@MetaCyc
+META:TREHALOSE@MetaCyc	C01083@LigandCompound	tre@BiGG
+C00514@LigandCompound	META:D-MANNONATE@MetaCyc	mana@BiGG
+META:GDP@MetaCyc	gdp@BiGG	58189@ChEBI	C00035@LigandCompound
+C00246@LigandCompound	but@BiGG	META:BUTYRIC_ACID@MetaCyc
+C06509@LigandCompound	META:ADENOSYLCOBINAMIDE-P@MetaCyc	adocbip@BiGG
+META:DIHYDRO-NEO-PTERIN@MetaCyc	C04874@LigandCompound	dhnpt@BiGG
+META:D-MYO-INOSITOL-13-BISPHOSPHATE@MetaCyc	C04062@LigandCompound	mi13p@BiGG
+dscl@BiGG	C02463@LigandCompound	META:DIHYDROSIROHYDROCHLORIN@MetaCyc
+C04877@LigandCompound	uggmd@BiGG
+toct2eACP@BiGG	META:2-Octenoyl-ACPs@MetaCyc	C05751@LigandCompound
+pacald@BiGG	META:PHENYLACETALDEHYDE@MetaCyc	C00601@LigandCompound
+META:cis-vaccen-2-enoyl-ACPs@MetaCyc	t3c11vaceACP@BiGG
+xtp@BiGG	META:XTP@MetaCyc	C00700@LigandCompound
+nad@BiGG	D00002@LigandDrug	META:NAD@MetaCyc	C00003@LigandCompound
+C05519@LigandCompound	athr-L@BiGG	META:L-ALLO-THREONINE@MetaCyc
+META:Myristoyl-ACPs@MetaCyc	myrsACP@BiGG	C05761@LigandCompound
+C06157@LigandCompound	S-gtrdhdlp@BiGG
+C01455@LigandCompound	META:TOLUENE@MetaCyc	tol@BiGG
+3dhq@BiGG	META:DEHYDROQUINATE@MetaCyc	C00944@LigandCompound
+META:CPD-1083@MetaCyc	C03345@LigandCompound	2mb2coa@BiGG
+C00543@LigandCompound	META:DIMETHYLAMINE@MetaCyc	dma@BiGG
+t3c5ddeceACP@BiGG	META:Trans-D3-cis-D5-dodecenoyl-ACPs@MetaCyc
+com@BiGG	META:CoM@MetaCyc
+oc2coa@BiGG	META:CPD0-2108@MetaCyc	C05276@LigandCompound
+f420-3@BiGG	C19151@LigandCompound	META:CPD-7613@MetaCyc
+C04272@LigandCompound	META:CPD-13357@MetaCyc	23dhmb@BiGG
+C20246@LigandCompound	META:CPD-13575@MetaCyc
+2ohph@BiGG	C05811@LigandCompound	META:2-OCTAPRENYL-6-HYDROXYPHENOL@MetaCyc
+META:CPD-9923@MetaCyc	C05817@LigandCompound	2shchc@BiGG
+C00261@LigandCompound	META:BENZALDEHYDE@MetaCyc	bzal@BiGG
+META:2-KETOGLUTARATE@MetaCyc	C00026@LigandCompound	akg@BiGG
+META:TREHALOSE-6P@MetaCyc	C00689@LigandCompound	tre6p@BiGG
+META:SINAPALDEHYDE@MetaCyc	C05610@LigandCompound
+glcur@BiGG	C00191@LigandCompound
+C05262@LigandCompound	3hddcoa@BiGG
+META:ZN+2@MetaCyc	zn2@BiGG
+44mctr@BiGG	META:44-DIMETHYL-CHOLESTA-812-24-TRIENOL@MetaCyc	C11455@LigandCompound
+dudp@BiGG	META:DUDP@MetaCyc	C01346@LigandCompound
+urcan@BiGG	META:UROCANATE@MetaCyc	C00785@LigandCompound
+dttp@BiGG	C00459@LigandCompound	META:TTP@MetaCyc
+META:D-SEDOHEPTULOSE-7-P@MetaCyc	s7p@BiGG	C05382@LigandCompound
+C00555@LigandCompound	META:4-AMINO-BUTYRALDEHYDE@MetaCyc	4abutn@BiGG
+C00212@LigandCompound	adn@BiGG	META:ADENOSINE@MetaCyc
+C04063@LigandCompound	META:D-MYO-INOSITOL-34-BISPHOSPHATE@MetaCyc	mi34p@BiGG
+C01101@LigandCompound	META:L-RIBULOSE-5-P@MetaCyc	ru5p-L@BiGG
+META:D-RIBULOSE-15-P2@MetaCyc	rb15bp@BiGG	C01182@LigandCompound
+C00199@LigandCompound	META:RIBULOSE-5P@MetaCyc	ru5p-D@BiGG
+META:GMP@MetaCyc	C00144@LigandCompound	gmp@BiGG
+C00353@LigandCompound	META:GERANYLGERANYL-PP@MetaCyc	ggdp@BiGG
+META:UDP@MetaCyc	C00015@LigandCompound	udp@BiGG
+META:CPD-7100@MetaCyc	C04236@LigandCompound	3c4mop@BiGG
+META:FARNESYL-PP@MetaCyc	frdp@BiGG	C00448@LigandCompound
+META:CPD-10809@MetaCyc	25dthpp@BiGG	C18910@LigandCompound
+META:CPD-665@MetaCyc	ppal@BiGG	C00479@LigandCompound
+dcyt@BiGG	C00881@LigandCompound	META:DEOXYCYTIDINE@MetaCyc
+acoa@BiGG	META:ACYL-COA@MetaCyc	C00040@LigandCompound
+META:CPD-14553@MetaCyc	udpgal@BiGG	C00052@LigandCompound
+whhdca@BiGG	C18218@LigandCompound	META:16-HYDROXYPALMITATE@MetaCyc
+META:Me-CoM@MetaCyc	mcom@BiGG	C03920@LigandCompound
+23dhb@BiGG	META:2-3-DIHYDROXYBENZOATE@MetaCyc	C00196@LigandCompound
+din@BiGG	META:DEOXYINOSINE@MetaCyc	C05512@LigandCompound
+glyc3p@BiGG	C00093@LigandCompound	META:GLYCEROL-3P@MetaCyc
+META:N-FORMIMINO-L-GLUTAMATE@MetaCyc	C00439@LigandCompound	forglu@BiGG
+C00489@LigandCompound	META:GLUTARATE@MetaCyc	glutar@BiGG
+C01270@LigandCompound	META:CPD-1071@MetaCyc
+1mncam@BiGG	C02918@LigandCompound	META:CPD-396@MetaCyc
+etha@BiGG	C00189@LigandCompound	META:ETHANOL-AMINE@MetaCyc
+C00209@LigandCompound	oxa@BiGG	META:OXALATE@MetaCyc
+C12204@LigandCompound	META:5-HYDROXY-CONIFERALDEHYDE@MetaCyc
+C00187@LigandCompound	chsterol@BiGG	META:CHOLESTEROL@MetaCyc
+C06423@LigandCompound	META:CPD-195@MetaCyc	octa@BiGG
+2dhp@BiGG	C00966@LigandCompound	META:2-DEHYDROPANTOATE@MetaCyc
+C00447@LigandCompound	META:D-SEDOHEPTULOSE-1-7-P2@MetaCyc	s17bp@BiGG
+C00740@LigandCompound	META:D-SERINE@MetaCyc	ser-D@BiGG
+META:b-Keto-cis-D5-dodecenoyl-ACPs@MetaCyc	3ocddec5eACP@BiGG
+xu5p-D@BiGG	C00231@LigandCompound	META:XYLULOSE-5-PHOSPHATE@MetaCyc
+META:CPD-578@MetaCyc	allphn@BiGG	C01010@LigandCompound
+META:Red-Thioredoxin@MetaCyc	C00342@LigandCompound	trdrd@BiGG
+nh3@BiGGMetabolite	META:AMMONIA@MetaCyc	nh3@BiGG
+dump@BiGG	META:DUMP@MetaCyc	C00365@LigandCompound
+C03479@LigandCompound	5fthf@BiGG
+2p4c2me@BiGG	META:2-PHOSPHO-4-CYTIDINE-5-DIPHOSPHO-2-C-MET@MetaCyc	C11436@LigandCompound
+3hhdcoa@BiGG	META:CPD0-2232@MetaCyc	C05258@LigandCompound
+C00004@LigandCompound	nadh@BiGG	META:NADH@MetaCyc
+META:CPD-505@MetaCyc	mi1346p@BiGG	C04477@LigandCompound
+ocdca@BiGG	C01530@LigandCompound	META:STEARIC_ACID@MetaCyc
+C01037@LigandCompound	META:DIAMINONONANOATE@MetaCyc	dann@BiGG
+C01344@LigandCompound	didp@BiGG	META:CPD0-2231@MetaCyc
+META:FMN@MetaCyc	C00061@LigandCompound	fmn@BiGG
+hemeO@BiGG	META:HEME_O@MetaCyc	C15672@LigandCompound
+META:CPD-108@MetaCyc	C01468@LigandCompound
+phaccoa@BiGG	C00582@LigandCompound	META:CPD-207@MetaCyc
+C08362@LigandCompound	hdcea@BiGG	META:CPD-9245@MetaCyc
+C00143@LigandCompound	mlthf@BiGG
+C06507@LigandCompound	META:CPD-691@MetaCyc	adcobhex@BiGG
+sl26da@BiGG	META:N-SUCCINYLLL-2-6-DIAMINOPIMELATE@MetaCyc	C04421@LigandCompound
+META:DPG@MetaCyc	13dpg@BiGG	C00236@LigandCompound
+META:LYS@MetaCyc	C00047@LigandCompound	lys-L@BiGG
+C00937@LigandCompound	lald-D@BiGG	META:CPD-358@MetaCyc
+META:CPD-9247@MetaCyc	ocdcea@BiGG
+C00986@LigandCompound	13dampp@BiGG	META:CPD-313@MetaCyc
+3hdecACP@BiGG	META:Beta-hydroxydecanoyl-ACPs@MetaCyc	C04619@LigandCompound
+dgsn@BiGG	C00330@LigandCompound	META:DEOXYGUANOSINE@MetaCyc
+C00118@LigandCompound	g3p@BiGG	META:GAP@MetaCyc
+META:GLYCOLALDEHYDE@MetaCyc	gcald@BiGG	C00266@LigandCompound
+META:UREA@MetaCyc	urea@BiGG	C00086@LigandCompound
+META:Cis-delta-3-decenoyl-ACPs@MetaCyc	cdec3eACP@BiGG
+C00175@LigandCompound	cobalt2@BiGG	48828@ChEBI
+META:D-Xylose@MetaCyc	C00181@LigandCompound	xyl-D@BiGG
+pdx5p@BiGG	META:PYRIDOXINE-5P@MetaCyc	C00627@LigandCompound
+META:CPD-375@MetaCyc	C00971@LigandCompound
+dutp@BiGG	C00460@LigandCompound	META:DUTP@MetaCyc
+cu2@BiGG	C00070@LigandCompound	cpd00058@Seed	META:CU+2@MetaCyc	29036@ChEBI
+4mlacac@BiGG	C01036@LigandCompound	META:4-MALEYL-ACETOACETATE@MetaCyc
+META:HEXANOYL-COA@MetaCyc	C05270@LigandCompound	hxcoa@BiGG
+fol@BiGG	META:CPD-12826@MetaCyc	C00504@LigandCompound
+C00129@LigandCompound	META:DELTA3-ISOPENTENYL-PP@MetaCyc	ipdp@BiGG
+29034@ChEBI	fe3@BiGG	META:FE+3@MetaCyc	C14819@LigandCompound
+ivcoa@BiGG	META:ISOVALERYL-COA@MetaCyc	C02939@LigandCompound
+C05749@LigandCompound	META:Hexanoyl-ACPs@MetaCyc	hexACP@BiGG
+C05755@LigandCompound	META:Decanoyl-ACPs@MetaCyc	dcaACP@BiGG
+C05750@LigandCompound	3ooctACP@BiGG	META:3-Oxo-octanoyl-ACPs@MetaCyc
+META:QUINOLINATE@MetaCyc	C03722@LigandCompound	quln@BiGG
+C02949@LigandCompound	4hbzcoa@BiGG	META:CPD-201@MetaCyc
+nac@BiGG	META:NIACINE@MetaCyc	C00253@LigandCompound
+C04882@LigandCompound	uggmda@BiGG
+META:MEVALONATE@MetaCyc	C00418@LigandCompound	mev-R@BiGG
+C00156@LigandCompound	META:4-hydroxybenzoate@MetaCyc	4hbz@BiGG
+META:CHITIN@MetaCyc	chitin@BiGG	C00461@LigandCompound
+C15973@LigandCompound	dhlam@BiGG
+mn2@BiGG	cpd00030@Seed	META:MN+2@MetaCyc	C00034@LigandCompound
+nicrnt@BiGG	META:NICOTINATE_NUCLEOTIDE@MetaCyc	C01185@LigandCompound
+C00103@LigandCompound	META:GLC-1-P@MetaCyc	g1p@BiGG
+META:DIHYDROXYACETONE@MetaCyc	dha@BiGG	C00184@LigandCompound

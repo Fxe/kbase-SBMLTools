@@ -18,8 +18,8 @@ public class KBaseConfig {
   public static final String REF_TEMPLATE_G_POS = TEMPLATE_WORKSPACE + "/" + T_G_POS;
   public static final String REF_TEMPLATE_CORE =  TEMPLATE_WORKSPACE + "/" + T_CORE;
   
-  public static String DATA_EXPORT_PATH = "/data/integration/export";
-  public static String CURATION_DATA = "/data/integration/cc/cpd_curation.tsv";
+  public static String DATA_EXPORT_PATH = "/kb/module/data/export";
+  public static String CURATION_DATA = "/kb/module/data/cpd_curation.tsv";
   
   public static String REPORT_OUTPUT_FILE = "/kb/module/data/readerData.json";
   public static String REPORT_OUTPUT_PATH = "/kb/module/data/";
