@@ -1,2 +1,7 @@
 test_local
 sdk.cfg
+
+.classpath
+.project
+.settings
+WebContent/
