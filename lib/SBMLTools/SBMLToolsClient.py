@@ -23,7 +23,7 @@ class SBMLTools(object):
             self, url=None, timeout=30 * 60, user_id=None,
             password=None, token=None, ignore_authrc=False,
             trust_all_ssl_certificates=False,
-            auth_svc='https://kbase.us/services/authorization/Sessions/Login'):
+            auth_svc='https://ci.kbase.us/services/auth/api/legacy/KBase/Sessions/Login'):
         if url is None:
             raise ValueError('A url is required')
         self._service_ver = None
@@ -37,12 +37,12 @@ class SBMLTools(object):
         """
         :param params: instance of type "SbmlImporterParams" -> structure:
            parameter "sbml_url" of String, parameter "sbml_local_path" of
-           String, parameter "file_type" of String, parameter
-           "workspace_name" of String, parameter "genome_ref" of String,
-           parameter "biomass" of list of String, parameter "model_name" of
-           String, parameter "automatically_integrate" of Long, parameter
-           "remove_boundary" of Long, parameter "conflict_resolution" of
-           String
+           String, parameter "input_staging_file_path" of String, parameter
+           "file_type" of String, parameter "workspace_name" of String,
+           parameter "genome_ref" of String, parameter "biomass" of list of
+           String, parameter "model_name" of String, parameter
+           "automatically_integrate" of Long, parameter "remove_boundary" of
+           Long, parameter "conflict_resolution" of String
         :returns: instance of type "SbmlImporterResults" -> structure:
            parameter "report_name" of String, parameter "report_ref" of
            String, parameter "fbamodel_id" of String

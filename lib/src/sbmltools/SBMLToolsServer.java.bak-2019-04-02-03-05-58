@@ -51,7 +51,6 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
 //END_HEADER
-
 /**
  * <p>Original spec-file module name: SBMLTools</p>
  * <pre>
@@ -62,8 +61,8 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
 public class SBMLToolsServer extends JsonServerServlet {
     private static final long serialVersionUID = 1L;
     private static final String version = "0.0.1";
-    private static final String gitUrl = "git@github.com:Fxe/kbase-SBMLTools.git";
-    private static final String gitCommitHash = "30312590ff608e4d974b401ac4c319f75230f1f3";
+    private static final String gitUrl = "https://fxe@github.com/Fxe/kbase-SBMLTools.git";
+    private static final String gitCommitHash = "70b8692ac482ee04b4c29b02bf90b1d306d35063";
 
     //BEGIN_CLASS_HEADER
   private static final Logger logger = LoggerFactory.getLogger(SBMLToolsServer.class);

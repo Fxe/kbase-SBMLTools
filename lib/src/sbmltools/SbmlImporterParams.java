@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "sbml_url",
     "sbml_local_path",
+    "input_staging_file_path",
     "file_type",
     "workspace_name",
     "genome_ref",
@@ -35,14 +36,10 @@ public class SbmlImporterParams {
 
     @JsonProperty("sbml_url")
     private java.lang.String sbmlUrl;
-    
-    @JsonProperty("input_staging_file_path")
-    private java.lang.String inputStagingFilePath;
-    
-
-
     @JsonProperty("sbml_local_path")
     private java.lang.String sbmlLocalPath;
+    @JsonProperty("input_staging_file_path")
+    private java.lang.String inputStagingFilePath;
     @JsonProperty("file_type")
     private java.lang.String fileType;
     @JsonProperty("workspace_name")
@@ -75,21 +72,6 @@ public class SbmlImporterParams {
         this.sbmlUrl = sbmlUrl;
         return this;
     }
-    
-    @JsonProperty("input_staging_file_path")
-    public java.lang.String getInputStagingFilePath() {
-      return inputStagingFilePath;
-    }
-
-    @JsonProperty("input_staging_file_path")
-    public void setInputStagingFilePath(java.lang.String inputStagingFilePath) {
-      this.inputStagingFilePath = inputStagingFilePath;
-    }
-    
-    public SbmlImporterParams withInputStagingFilePath(java.lang.String inputStagingFilePath) {
-      this.inputStagingFilePath = inputStagingFilePath;
-      return this;
-  }
 
     @JsonProperty("sbml_local_path")
     public java.lang.String getSbmlLocalPath() {
@@ -103,6 +85,21 @@ public class SbmlImporterParams {
 
     public SbmlImporterParams withSbmlLocalPath(java.lang.String sbmlLocalPath) {
         this.sbmlLocalPath = sbmlLocalPath;
+        return this;
+    }
+
+    @JsonProperty("input_staging_file_path")
+    public java.lang.String getInputStagingFilePath() {
+        return inputStagingFilePath;
+    }
+
+    @JsonProperty("input_staging_file_path")
+    public void setInputStagingFilePath(java.lang.String inputStagingFilePath) {
+        this.inputStagingFilePath = inputStagingFilePath;
+    }
+
+    public SbmlImporterParams withInputStagingFilePath(java.lang.String inputStagingFilePath) {
+        this.inputStagingFilePath = inputStagingFilePath;
         return this;
     }
 
@@ -238,7 +235,7 @@ public class SbmlImporterParams {
 
     @Override
     public java.lang.String toString() {
-        return ((((((((((((((((((((((("SbmlImporterParams"+" [sbmlUrl=")+ sbmlUrl)+", sbmlLocalPath=")+ sbmlLocalPath)+", fileType=")+ fileType)+", workspaceName=")+ workspaceName)+", genomeRef=")+ genomeRef)+", biomass=")+ biomass)+", modelName=")+ modelName)+", automaticallyIntegrate=")+ automaticallyIntegrate)+", removeBoundary=")+ removeBoundary)+", conflictResolution=")+ conflictResolution)+", additionalProperties=")+ additionalProperties)+"]");
+        return ((((((((((((((((((((((((("SbmlImporterParams"+" [sbmlUrl=")+ sbmlUrl)+", sbmlLocalPath=")+ sbmlLocalPath)+", inputStagingFilePath=")+ inputStagingFilePath)+", fileType=")+ fileType)+", workspaceName=")+ workspaceName)+", genomeRef=")+ genomeRef)+", biomass=")+ biomass)+", modelName=")+ modelName)+", automaticallyIntegrate=")+ automaticallyIntegrate)+", removeBoundary=")+ removeBoundary)+", conflictResolution=")+ conflictResolution)+", additionalProperties=")+ additionalProperties)+"]");
     }
 
 }
