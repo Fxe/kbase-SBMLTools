@@ -147,7 +147,7 @@ public class KBaseUtils {
   }
   
   public static String getNameFromUrl(String urlStr) {
-    String[] strs = urlStr.split("/");
+    String[] strs = urlStr.split("[/\\]");
     String last = strs[strs.length - 1];
     if (last.contains(".")) {
       last = last.substring(0, last.indexOf('.'));

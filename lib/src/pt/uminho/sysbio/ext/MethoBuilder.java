@@ -568,7 +568,7 @@ public class MethoBuilder {
     }
   }
   
-  public KBaseIntegrationEngine buildKBaseIntegrationEngine() {
+  public static KBaseIntegrationEngine buildKBaseIntegrationEngine() {
     KBaseIntegrationEngine e = new KBaseIntegrationEngine();
     
     Set<String> ids = new HashSet<>();

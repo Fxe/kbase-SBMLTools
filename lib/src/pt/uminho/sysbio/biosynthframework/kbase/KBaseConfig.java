@@ -30,7 +30,7 @@ public class KBaseConfig {
   public static final String REF_PMODEL_WORLSPACE = "filipeliu:narrative_1504796314698";
  
   public static final String version = "48c089f4f0128ed3c06ce716750693b4feccb623";
-  public static final String dbPath = "/kb/module/data/modelseed";
+  public static String dbPath = "/kb/module/data/modelseed";
   public static final String dbPathLocal = "/home/fliu/workspace/java/kbase-SBMLTools-auth2/data/modelseed";
   public static boolean production = true;
   
