@@ -205,7 +205,8 @@ public class KBaseModelIntegrationFacade {
     integration.integrate();
     
     kir.genomeReport.status = "auto_genome_get_fail";
-    if (genome == null) {
+    boolean skipGenomeIntegration = true;
+    if (!skipGenomeIntegration && genome == null) {
       logger.info("auto detect genome...");
       String geneData = "";
       if (geneIntegration != null) {
