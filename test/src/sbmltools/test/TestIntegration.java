@@ -78,7 +78,7 @@ public class TestIntegration {
     DataFileUtilClient dfuClient = null;
     WorkspaceClient wsClient = null;
     try {
-      KBaseSbmlImporter importer = new KBaseSbmlImporter(workspace, dfuClient, wsClient);
+      KBaseSbmlImporter importer = new KBaseSbmlImporter(workspace, null, dfuClient, wsClient);
       FileInputStream fis = new FileInputStream(path);
       ImportModelResult result = new ImportModelResult();
       IntegrationByDatabase spiIntegrationAll = new IntegrationByDatabase();

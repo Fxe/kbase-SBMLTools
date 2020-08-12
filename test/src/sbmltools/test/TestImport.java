@@ -42,7 +42,7 @@ public class TestImport {
       }
       
       KBaseAPI api = new KBaseAPI(TestData.TOKEN, KBaseAPI.getConfigProd(), true);
-      KBaseSbmlImporter importer = new KBaseSbmlImporter("", null, api.wsClient);
+      KBaseSbmlImporter importer = new KBaseSbmlImporter("", null, null, api.wsClient);
       
       for (String u : inputStreams.keySet()) {
         InputStream is = inputStreams.get(u);

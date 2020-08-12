@@ -109,7 +109,7 @@ public class IntegrationLocalRun {
           .withGeneMappings("")
           .withCompoundMappings("")
           .withTemplateId(""),
-          wsName);
+          wsName, null);
       
       
       KBaseConfig.DATA_EXPORT_PATH = "/var/biobase/export";

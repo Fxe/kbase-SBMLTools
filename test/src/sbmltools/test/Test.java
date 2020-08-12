@@ -105,7 +105,7 @@ public class Test {
     
     try {
 
-      KBaseSbmlImporter importer = new KBaseSbmlImporter(null, null, null);
+      KBaseSbmlImporter importer = new KBaseSbmlImporter(null, null, null, null);
 //      kbase_published_models
       Map<String, InputStream> z = zip("/var/argonne/importer_test_input/test.zip");
 //      Map<String, InputStream> z = zip("/var/argonne/kbase_published_models.zip");
