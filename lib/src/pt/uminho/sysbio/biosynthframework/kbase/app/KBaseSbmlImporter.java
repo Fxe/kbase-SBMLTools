@@ -77,6 +77,7 @@ public class KBaseSbmlImporter {
   //  public final RpcContext jsonRpcContext;
   //  public final URL callbackURL;
   public final String workspace;
+  public final Long workspaceId;
   private final DataFileUtilClient dfuClient;
   private final WorkspaceClient wsClient;
   public KBaseModelSeedIntegration modelSeedIntegration = null;
@@ -84,8 +85,9 @@ public class KBaseSbmlImporter {
   public final KBaseBiodbContainer biodbContainer;
 
   public KBaseSbmlImporter(
-      String workspace, DataFileUtilClient dfuClient, WorkspaceClient wsClient) throws UnauthorizedException, IOException {
+      String workspace, Long workspaceId, DataFileUtilClient dfuClient, WorkspaceClient wsClient) throws UnauthorizedException, IOException {
     this.workspace = workspace;
+    this.workspaceId = workspaceId;
     this.dfuClient = dfuClient;
     this.wsClient = wsClient;
     this.biodbContainer = new KBaseBiodbContainer(KBaseConfig.DATA_EXPORT_PATH);
@@ -461,7 +463,7 @@ public class KBaseSbmlImporter {
                 objects.add(new ObjectSaveData().withName(fbaModel.getId())
                                                 .withType(KBaseType.FBAModel.value())
                                                 .withData(new UObject(fbaModel)));
-                List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> lol = dfuClient.saveObjects(new SaveObjectsParams().withObjects(objects));
+                List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> lol = dfuClient.saveObjects(new SaveObjectsParams().withId(workspaceId).withObjects(objects));
                 KBaseId kid = null;
                 for (Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>> info : lol) {
                   String ref = KBaseIOUtils.getRefFromObjectInfo(info);

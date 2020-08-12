@@ -1,14 +1,6 @@
 package sbmltools;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import us.kbase.auth.AuthToken;
-import us.kbase.common.service.JsonServerMethod;
-import us.kbase.common.service.JsonServerServlet;
-import us.kbase.common.service.JsonServerSyslog;
-import us.kbase.common.service.RpcContext;
-
 //BEGIN_HEADER
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,7 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,33 +18,29 @@ import org.slf4j.LoggerFactory;
 import datafileutil.DataFileUtilClient;
 //import genomeannotationapi.GenomeAnnotationAPIClient;
 import genomefileutil.GenomeFileUtilClient;
-import kbasereport.CreateParams;
 import kbasereport.KBaseReportClient;
-import kbasereport.Report;
 import kbasereport.ReportInfo;
 import kbasereport.WorkspaceObject;
 import kbsolrutil.KBSolrUtilClient;
-
+import pt.uminho.sysbio.biosynthframework.kbase.AutoPropagateGenomeFacade;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
+import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
+//END_HEADER
+import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
+import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter.ImportModelResult;
 import us.kbase.auth.AuthToken;
 import us.kbase.common.service.JsonServerMethod;
 import us.kbase.common.service.JsonServerServlet;
 import us.kbase.common.service.JsonServerSyslog;
 import us.kbase.common.service.RpcContext;
-import us.kbase.workspace.ListAllTypesParams;
-import us.kbase.workspace.ListObjectsParams;
+import us.kbase.common.service.Tuple9;
 import us.kbase.workspace.WorkspaceClient;
-import pt.uminho.sysbio.biosynthframework.kbase.AutoPropagateGenomeFacade;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseConfig;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGeneIntegration;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseGenome;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
-import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
-import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter.ImportModelResult;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
-import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
-//END_HEADER
+import us.kbase.workspace.WorkspaceIdentity;
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
@@ -105,7 +95,7 @@ public class SBMLToolsServer extends JsonServerServlet {
 //    System.out.println("Xmx: " + Runtime.getRuntime().maxMemory());
 //    System.out.println("Total: " + Runtime.getRuntime().totalMemory());
     final String workspaceName = params.getWorkspaceName();
-
+    
     final WorkspaceClient    wspClient = new WorkspaceClient(new URL(config.get("workspace-url")), authPart);
     final DataFileUtilClient dfuClient = new DataFileUtilClient(callbackURL, authPart);
     final KBaseReportClient  kbrClient = new KBaseReportClient(callbackURL, authPart);
@@ -115,7 +105,9 @@ public class SBMLToolsServer extends JsonServerServlet {
     kbrClient.setIsInsecureHttpConnectionAllowed(true);
     wspClient.setIsInsecureHttpConnectionAllowed(true);
 
-    KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(workspaceName, dfuClient, wspClient);
+    Tuple9<Long, String, String, String, Long, String, String, String, Map<String, String>> wsInfo = wspClient.getWorkspaceInfo(new WorkspaceIdentity().withWorkspace(workspaceName));
+    Long workspaceId = wsInfo.getE1();
+    KBaseSbmlImporter sbmlTools = new KBaseSbmlImporter(workspaceName, workspaceId, dfuClient, wspClient);
 
     ImportModelResult result = sbmlTools.importModel(params);
     List<WorkspaceObject> objs = new ArrayList<WorkspaceObject> (result.objects);
@@ -193,6 +185,9 @@ public class SBMLToolsServer extends JsonServerServlet {
     solrClient.setServiceVersion("beta");
     solrClient.setIsInsecureHttpConnectionAllowed(true);
 
+    Tuple9<Long, String, String, String, Long, String, String, String, Map<String, String>> wsInfo = wspClient.getWorkspaceInfo(new WorkspaceIdentity().withWorkspace(workspaceName));
+    Long workspaceId = wsInfo.getE1();
+    
     KBaseGeneIntegration geneIntegration = new KBaseGeneIntegration(wspClient, dfuClient, solrClient);
 
     //    KBaseIOUtils.getFBAModel2(params.getModelName(), workspaceName, null, wspClient);
@@ -200,7 +195,7 @@ public class SBMLToolsServer extends JsonServerServlet {
                                 dfuClient, gaClient, kbrClient,
                                 geneIntegration,
                                 KBaseConfig.DATA_EXPORT_PATH,
-                                scratch).kbaseIntegrate(params, workspaceName);
+                                scratch).kbaseIntegrate(params, workspaceName, workspaceId);
         //END integrate_model
         return returnVal;
     }

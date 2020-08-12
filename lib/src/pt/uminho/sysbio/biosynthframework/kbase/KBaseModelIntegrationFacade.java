@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import datafileutil.DataFileUtilClient;
+import datafileutil.ObjectSaveData;
+import datafileutil.SaveObjectsParams;
 //import genomeannotationapi.GenomeAnnotationAPIClient;
 //import genomeannotationapi.SaveGenomeResultV1;
 //import genomeannotationapi.SaveOneGenomeParamsV1;
@@ -37,6 +39,8 @@ import sbmltools.CompartmentMapping;
 import sbmltools.IntegrateModelParams;
 import sbmltools.KBaseType;
 import sbmltools.SbmlImporterResults;
+import us.kbase.common.service.Tuple11;
+import us.kbase.common.service.UObject;
 import us.kbase.workspace.CopyObjectParams;
 import us.kbase.workspace.ObjectIdentity;
 import us.kbase.workspace.WorkspaceClient;
@@ -134,7 +138,7 @@ public class KBaseModelIntegrationFacade {
     return null;
   }
   
-  public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName) throws Exception {
+  public SbmlImporterResults kbaseIntegrate(IntegrateModelParams params, String workspaceName, Long workspaceId) throws Exception {
     //validate params
     //System.out.println(params);
     Map<String, String> gprOverride = new HashMap<> ();
@@ -267,12 +271,35 @@ public class KBaseModelIntegrationFacade {
     KBaseId mediaKid = null;
     if (!DataUtils.empty(params.getOutputMediaName())&&
         integration.defaultMedia != null) {
-      mediaKid = KBaseIOUtils.saveData(params.getOutputMediaName(), KBaseType.KBaseBiochemMedia.value(), integration.defaultMedia, workspaceName, wspClient);
+      List<ObjectSaveData> objects = new ArrayList<>();
+      objects.add(new ObjectSaveData().withName(params.getOutputMediaName())
+                                      .withType(KBaseType.KBaseBiochemMedia.value())
+                                      .withData(new UObject(integration.defaultMedia)));
+      List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> lol = 
+          dfuClient.saveObjects(new SaveObjectsParams().withId(workspaceId).withObjects(objects));
+      for (Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>> info : lol) {
+        String ref = KBaseIOUtils.getRefFromObjectInfo(info);
+        mediaKid = new KBaseId(info.getE2(), info.getE8(), ref);
+      }
+      //mediaKid = KBaseIOUtils.saveData(params.getOutputMediaName(), KBaseType.KBaseBiochemMedia.value(), integration.defaultMedia, workspaceName, wspClient);
       outputObjects.put(mediaKid.reference, "detected media");
     }
     
-    KBaseId integratedModelKid = KBaseIOUtils.saveData(outputName, KBaseType.FBAModel.value(), fbaModel, workspaceName, wspClient);
-    outputObjects.put(integratedModelKid.reference, "integrated model");
+    //##
+    List<ObjectSaveData> objects = new ArrayList<>();
+    objects.add(new ObjectSaveData().withName(outputName)
+                                    .withType(KBaseType.FBAModel.value())
+                                    .withData(new UObject(fbaModel)));
+    List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> lol = 
+        dfuClient.saveObjects(new SaveObjectsParams().withId(workspaceId).withObjects(objects));
+    KBaseId integratedModelKid = null;
+    for (Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>> info : lol) {
+      String ref = KBaseIOUtils.getRefFromObjectInfo(info);
+      integratedModelKid = new KBaseId(info.getE2(), info.getE8(), ref);
+      outputObjects.put(integratedModelKid.reference, "integrated model");
+    }
+    //KBaseId integratedModelKid = KBaseIOUtils.saveData(outputName, KBaseType.FBAModel.value(), fbaModel, workspaceName, wspClient);
+    
 //    String ref = KBaseIOUtils.saveDataSafe(outputName, KBaseType.FBAModel, fbaModel, workspaceName, dfuClient);
     
 //    String uuString = UUID.randomUUID().toString();
