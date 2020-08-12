@@ -1,7 +1,7 @@
 package sbmltools;
 
-import java.io.File;
 //BEGIN_HEADER
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
@@ -30,7 +30,6 @@ import pt.uminho.sysbio.biosynthframework.kbase.KBaseHtmlReport.ReportFiles;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseIOUtils;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseModelIntegrationFacade;
 import pt.uminho.sysbio.biosynthframework.kbase.KBaseReporter;
-//END_HEADER
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter;
 import pt.uminho.sysbio.biosynthframework.kbase.app.KBaseSbmlImporter.ImportModelResult;
 import us.kbase.auth.AuthToken;
@@ -41,6 +40,8 @@ import us.kbase.common.service.RpcContext;
 import us.kbase.common.service.Tuple9;
 import us.kbase.workspace.WorkspaceClient;
 import us.kbase.workspace.WorkspaceIdentity;
+//END_HEADER
+
 
 /**
  * <p>Original spec-file module name: SBMLTools</p>
