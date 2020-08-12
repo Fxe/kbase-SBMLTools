@@ -3,7 +3,7 @@ subtitle : none
 tooltip  : Integrates imported models from original imported namespace to the KBase namespace to aid in comparison, gapfilling, and community modeling
 
 screenshots : []
-icon: null
+icon: icon.png
 
 method-suggestions :
     related :
