@@ -6,3 +6,4 @@ sdk.cfg
 .settings
 WebContent/
 /build/
+/jars

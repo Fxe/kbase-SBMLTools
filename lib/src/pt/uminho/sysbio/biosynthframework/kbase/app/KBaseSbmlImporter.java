@@ -1,10 +1,8 @@
 package pt.uminho.sysbio.biosynthframework.kbase.app;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
@@ -14,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Joiner;
 
 import datafileutil.DataFileUtilClient;
-import datafileutil.DownloadStagingFileParams;
-import kbasefba.Biomass;
+import datafileutil.ObjectSaveData;
+import datafileutil.SaveObjectsParams;
 import kbasefba.FBAModel;
 import kbasegenomes.Genome;
 import kbasereport.WorkspaceObject;
@@ -31,7 +28,6 @@ import me.fxe.kbase.KBaseFBAModelFactory;
 import me.fxe.kbase.KBaseModelAdapter;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.MetaboliteMajorLabel;
 import pt.uminho.sysbio.biosynth.integration.io.dao.neo4j.ReactionMajorLabel;
-import pt.uminho.sysbio.biosynthframework.ModelAdapter;
 import pt.uminho.sysbio.biosynthframework.SubcellularCompartment;
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentDetectorFlatString;
 import pt.uminho.sysbio.biosynthframework.integration.model.CompartmentDetectorKBase;
@@ -57,7 +53,6 @@ import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModel;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAdapter;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelAutofix;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlModelValidator;
-import pt.uminho.sysbio.biosynthframework.sbml.XmlSbmlReaction;
 import pt.uminho.sysbio.biosynthframework.sbml.XmlStreamSbmlReader;
 import pt.uminho.sysbio.biosynthframework.util.AutoFileReader;
 import pt.uminho.sysbio.biosynthframework.util.CollectionUtils;
@@ -66,6 +61,8 @@ import pt.uminho.sysbio.biosynthframework.util.FileType;
 import sbmltools.KBaseType;
 import sbmltools.SbmlImportParams;
 import sbmltools.SbmlImporterParams;
+import us.kbase.common.service.Tuple11;
+import us.kbase.common.service.UObject;
 import us.kbase.common.service.UnauthorizedException;
 import us.kbase.workspace.WorkspaceClient;
 
@@ -458,10 +455,19 @@ public class KBaseSbmlImporter {
             if (result.modelName == null || result.modelName.isEmpty()) {
               result.modelName = fbaModel.getId();
             }
-
             try {
               if (KBaseConfig.production) {
-                KBaseId kid = KBaseIOUtils.saveData(fbaModel.getId(), KBaseType.FBAModel, fbaModel, workspace, wsClient);
+                List<ObjectSaveData> objects = new ArrayList<>();
+                objects.add(new ObjectSaveData().withName(fbaModel.getId())
+                                                .withType(KBaseType.FBAModel.value())
+                                                .withData(new UObject(fbaModel)));
+                List<Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>>> lol = dfuClient.saveObjects(new SaveObjectsParams().withObjects(objects));
+                KBaseId kid = null;
+                for (Tuple11<Long, String, String, String, Long, String, Long, String, String, Long, Map<String, String>> info : lol) {
+                  String ref = KBaseIOUtils.getRefFromObjectInfo(info);
+                  kid = new KBaseId(info.getE2(), info.getE8(), ref);
+                }
+                //KBaseId kid = KBaseIOUtils.saveData(fbaModel.getId(), KBaseType.FBAModel, fbaModel, workspace, wsClient);
                 result.objects.add(new WorkspaceObject()
                     .withDescription(u)
                     .withRef(kid.toString()));
