@@ -392,6 +392,8 @@ public class KBaseSbmlImporter {
         inputStreams.remove(prev);
       }
       
+      logger.info("filetype: {}, streams: {}", fileType, inputStreams.size());
+      
       boolean runIntegration = params.getAutomaticallyIntegrate() == 1;
       String modelId = params.getModelName();
       List<String> biomass = params.getBiomass();

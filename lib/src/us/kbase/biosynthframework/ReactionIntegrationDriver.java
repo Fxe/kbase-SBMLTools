@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,10 +112,21 @@ public class ReactionIntegrationDriver {
     
     for (String mrxnId : model.getReactionIds()) {
       CompartmentalizedStoichiometry<String, String> cstoich = model.getCompartmentalizedStoichiometry(mrxnId);
-      if (model.isTranslocation(mrxnId)) {
-        reactionIntegration.aaa(mrxnId, cstoich, tmatcher, null, reactionIntegration.treport);
+      boolean valid = true;
+      for (Pair<String, String> p : cstoich.stoichiometry.keySet()) {
+        if (p.getLeft() == null || p.getRight() == null) {
+          valid = false;
+        }
+      }
+      
+      if (valid) {
+        if (model.isTranslocation(mrxnId)) {
+          reactionIntegration.aaa(mrxnId, cstoich, tmatcher, null, reactionIntegration.treport);
+        } else {
+          reactionIntegration.aaa(mrxnId, cstoich, mmatcher, reactionIntegration.excludeIds, reactionIntegration.mreport);        
+        }
       } else {
-        reactionIntegration.aaa(mrxnId, cstoich, mmatcher, reactionIntegration.excludeIds, reactionIntegration.mreport);        
+        logger.warn("[{}] Bad stoichiometry skip integration", mrxnId);
       }
     }
     

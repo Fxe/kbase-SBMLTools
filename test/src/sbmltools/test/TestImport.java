@@ -25,10 +25,47 @@ import sbmltools.KBaseType;
 import us.kbase.common.service.UnauthorizedException;
 
 public class TestImport {
+  public static void main2(String[] args) {
+    AutoFileReader freader = null;
+    String urlPath = "https://raw.githubusercontent.com/Fxe/biomodels/master/dirty/biot_201300539_sm_suppinfo2.xml";
+    try {
+      final String LOCAL_CACHE = "/tmp/argonne";
+      String localPath = KBaseIOUtils.fetchAndCache(urlPath, LOCAL_CACHE);
+      FileType fileType = FileType.AUTO;
+      fileType = AutoFileReader.getFileType(localPath);
+      System.out.println(fileType);
+      
+      freader = new AutoFileReader(localPath, fileType);
+      
+      Map<String, InputStream> inputStreams = freader.getStreams().streams;
+      if (FileType.XML.equals(fileType)) {
+        String prev = inputStreams.keySet().iterator().next();
+        inputStreams.put(urlPath, inputStreams.get(prev));
+        inputStreams.remove(prev);
+        
+      }
+      
+      for (String u : inputStreams.keySet()) {
+        InputStream is = inputStreams.get(u);
+        System.out.println(is + " " + u);
+      }
+      
+    } catch (Exception e) {
+      
+    } finally {
+      try {
+        freader.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+  }
   public static void main(String[] args) {
     KBaseConfig.setupLocalPaths();
 //    String localPath = "/var/biomodels/sbml/Ecoli_K12_MG1655.xml";
-    String localPath = "/var/biomodels/joana_set.zip";
+    //String localPath = "/var/biomodels/joana_set.zip";
+    String localPath = "D:\\tmp\\argonne\\9bb16a10-70dd-4157-bacf-a0f52850dda2/9bb16a10-70dd-4157-bacf-a0f52850dda2";
     
     FileType fileType = FileType.AUTO;
     fileType = AutoFileReader.getFileType(localPath);

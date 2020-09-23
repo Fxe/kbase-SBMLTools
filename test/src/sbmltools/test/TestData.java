@@ -1,5 +1,5 @@
 package sbmltools.test;
 
 public class TestData {
-  public static final String TOKEN = "4WH3OXCP54I2ZKAQHXSSK2LNNQMKJ4I3";
+  public static final String TOKEN = "B7DILTFRVH5ONJ5XSWG5XR2P5UBLAZKG";
 }
